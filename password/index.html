@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>パスワード生成ツール</title>
+<style>
+  body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background: #f0f4f8;
+    color: #333;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+  }
+  .container {
+    max-width: 700px;
+    width: 100%;
+    background: #fff;
+    border-radius: 12px;
+    padding: 24px 30px;
+    box-shadow: 0 5px 20px rgb(0 0 0 / 0.1);
+    display: flex;
+    flex-direction: column;
+  }
+  h1 {
+    margin-top: 0;
+    margin-bottom: 24px;
+    text-align: center;
+    font-weight: 700;
+    color: #222;
+  }
+
+  .checkbox-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(180px,1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  label.checkbox-label {
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    cursor: pointer;
+    user-select: none;
+  }
+  label.checkbox-label input[type="checkbox"] {
+    width: 22px;
+    height: 22px;
+    margin-right: 10px;
+    cursor: pointer;
+  }
+
+  .slider-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(140px,1fr));
+    gap: 12px;
+    margin-bottom: 24px;
+    align-items: center;
+  }
+  .slider-label {
+    font-weight: 600;
+  }
+  input[type="range"] {
+    width: 100%;
+    cursor: pointer;
+  }
+  input[type="number"] {
+    width: 60px;
+    padding: 6px 8px;
+    font-size: 1em;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    text-align: center;
+  }
+
+  .results {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  .result-item {
+    background: #f9faff;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: "Courier New", Courier, monospace;
+    font-size: 1.1em;
+    user-select: all;
+
+    word-break: break-all;
+    overflow-wrap: break-word;
+  }
+  .copy-btn {
+    background: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    flex-shrink: 0;
+  }
+  .copy-btn:hover {
+    background: #357abd;
+  }
+
+  .buttons {
+    display: flex;
+    justify-content: center;
+  }
+  button#saveBtn {
+    background: #4a90e2;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgb(74 144 226 / 0.5);
+    transition: background-color 0.3s ease;
+  }
+  button#saveBtn:hover {
+    background: #357abd;
+  }
+
+  @media (max-width: 600px) {
+    .checkbox-group {
+      grid-template-columns: 1fr;
+    }
+    .slider-group {
+      grid-template-columns: 1fr;
+    }
+    .results {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>パスワード生成ツール</h1>
+
+    <div class="checkbox-group">
+      <label class="checkbox-label" for="chkLower">
+        <input type="checkbox" id="chkLower" checked />英字（小文字）
+      </label>
+      <label class="checkbox-label" for="chkUpper">
+        <input type="checkbox" id="chkUpper" checked />英字（大文字）
+      </label>
+      <label class="checkbox-label" for="chkNumber">
+        <input type="checkbox" id="chkNumber" checked />数字
+      </label>
+      <label class="checkbox-label" for="chkSymbol">
+        <input type="checkbox" id="chkSymbol" />記号 (!?#$%&=~/*-_+@)
+      </label>
+      <label class="checkbox-label" for="chkExcludeAmbiguous">
+        <input type="checkbox" id="chkExcludeAmbiguous" checked />判別しづらい文字 (Ilji1Oo0)を除く
+      </label>
+    </div>
+
+    <div class="slider-group">
+      <label class="slider-label" for="lengthRange">文字数</label>
+      <input type="range" id="lengthRange" min="8" max="64" value="16" />
+      <input type="number" id="lengthNumber" min="8" max="64" value="16" />
+    </div>
+
+    <div class="slider-group">
+      <label class="slider-label" for="countRange">生成個数</label>
+      <input type="range" id="countRange" min="1" max="20" value="5" />
+      <input type="number" id="countNumber" min="1" max="20" value="5" />
+    </div>
+
+    <div class="results" id="results"></div>
+
+    <div class="buttons">
+      <button id="saveBtn">保存（テキストファイル）</button>
+    </div>
+  </div>
+
+<script>
+  const sets = {
+    lower: "abcdefghijklmnopqrstuvwxyz",
+    upper: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+    number: "0123456789",
+    symbol: "!?#$%&=~/*-_+@",
+    ambiguous: "Ilji1Oo0"
+  };
+
+  const chkLower = document.getElementById("chkLower");
+  const chkUpper = document.getElementById("chkUpper");
+  const chkNumber = document.getElementById("chkNumber");
+  const chkSymbol = document.getElementById("chkSymbol");
+  const chkExcludeAmbiguous = document.getElementById("chkExcludeAmbiguous");
+  const lengthRange = document.getElementById("lengthRange");
+  const lengthNumber = document.getElementById("lengthNumber");
+  const countRange = document.getElementById("countRange");
+  const countNumber = document.getElementById("countNumber");
+  const resultsDiv = document.getElementById("results");
+  const saveBtn = document.getElementById("saveBtn");
+
+  function syncRangeAndNumber(rangeEl, numberEl) {
+    rangeEl.addEventListener("input", () => {
+      numberEl.value = rangeEl.value;
+      generateAndDisplay();
+    });
+    numberEl.addEventListener("input", () => {
+      let val = parseInt(numberEl.value);
+      if (isNaN(val)) return;
+      if (val < parseInt(numberEl.min)) val = numberEl.min;
+      if (val > parseInt(numberEl.max)) val = numberEl.max;
+      numberEl.value = val;
+      rangeEl.value = val;
+      generateAndDisplay();
+    });
+  }
+  syncRangeAndNumber(lengthRange, lengthNumber);
+  syncRangeAndNumber(countRange, countNumber);
+
+  [
+    chkLower,
+    chkUpper,
+    chkNumber,
+    chkSymbol,
+    chkExcludeAmbiguous
+  ].forEach((el) => {
+    el.addEventListener("change", generateAndDisplay);
+  });
+
+  function generatePassword(length, charSet) {
+    let result = "";
+    const array = new Uint32Array(length);
+    window.crypto.getRandomValues(array);
+    for (let i = 0; i < length; i++) {
+      result += charSet.charAt(array[i] % charSet.length);
+    }
+    return result;
+  }
+
+  function createCopyButton(text) {
+    const btn = document.createElement("button");
+    btn.textContent = "コピー";
+    btn.className = "copy-btn";
+    btn.addEventListener("click", () => {
+      navigator.clipboard.writeText(text).then(() => {
+        btn.textContent = "コピー完了！";
+        setTimeout(() => (btn.textContent = "コピー"), 1500);
+      });
+    });
+    return btn;
+  }
+
+  function generateAndDisplay() {
+    resultsDiv.innerHTML = "";
+    let charSet = "";
+    if (chkLower.checked) charSet += sets.lower;
+    if (chkUpper.checked) charSet += sets.upper;
+    if (chkNumber.checked) charSet += sets.number;
+    if (chkSymbol.checked) charSet += sets.symbol;
+    if (charSet === "") {
+      resultsDiv.textContent = "最低1種類の文字種を選んでください。";
+      return;
+    }
+    if (chkExcludeAmbiguous.checked) {
+      charSet = charSet
+        .split("")
+        .filter((c) => !sets.ambiguous.includes(c))
+        .join("");
+      if (charSet.length === 0) {
+        resultsDiv.textContent = "判別しづらい文字を除外しすぎて文字がありません。";
+        return;
+      }
+    }
+
+    const length = parseInt(lengthRange.value);
+    const count = parseInt(countRange.value);
+
+    for (let i = 0; i < count; i++) {
+      const pw = generatePassword(length, charSet);
+      const div = document.createElement("div");
+      div.className = "result-item";
+      const span = document.createElement("span");
+      span.textContent = pw;
+      div.appendChild(span);
+      div.appendChild(createCopyButton(pw));
+      resultsDiv.appendChild(div);
+    }
+  }
+
+  saveBtn.addEventListener("click", () => {
+    const pwElements = resultsDiv.querySelectorAll(".result-item > span");
+    if (pwElements.length === 0) {
+      alert("パスワードが生成されていません。");
+      return;
+    }
+    const text = Array.from(pwElements).map((el) => el.textContent).join("\n");
+    const now = new Date();
+    const y = now.getFullYear();
+    const mo = String(now.getMonth() + 1).padStart(2, "0");
+    const d = String(now.getDate()).padStart(2, "0");
+    const h = String(now.getHours()).padStart(2, "0");
+    const mi = String(now.getMinutes()).padStart(2, "0");
+    const filename = `password_${y}${mo}${d}${h}${mi}.txt`;
+
+    const blob = new Blob([text], { type: "text/plain" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(a.href);
+  });
+
+  generateAndDisplay();
+</script>
+</body>
+</html>
