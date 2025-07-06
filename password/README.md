@@ -19,13 +19,6 @@
 - PCでは2列、モバイルでは1列のレスポンシブデザイン
 
 ---
-/password/
-├── index.html 
-├── style.css 
-└── script.js 
-
-
----
 
 ## localPCでの使い方
 
