@@ -6,18 +6,28 @@
   <title>Hamuzon Link Portal</title>
   <link rel="icon" href="icon-light.svg" type="image/svg+xml" />
   <style>
-    body {
+    html, body {
       margin: 0;
+      padding: 0;
+      height: 100%;
       font-family: 'Segoe UI', 'Hiragino Kaku Gothic ProN', sans-serif;
       background: linear-gradient(to bottom, #ffcf91, #a96bf8);
       color: #fff;
       text-align: center;
-      padding: 30px 10px;
+    }
+
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      padding: 20px 10px 0;
+      box-sizing: border-box;
     }
 
     .container {
+      width: 100%;
       max-width: 640px;
-      margin: auto;
       padding: 24px;
       background-color: rgba(0, 0, 0, 0.25);
       border-radius: 20px;
@@ -41,7 +51,8 @@
       padding: 16px 24px;
       border-radius: 14px;
       font-weight: 600;
-      max-width: 90%;
+      width: 90%;
+      max-width: 500px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.15);
       transition: all 0.3s ease;
     }
@@ -53,7 +64,7 @@
     }
 
     footer {
-      margin-top: 50px;
+      margin-top: 30px;
       font-size: 0.9em;
       color: #ffeedd;
     }
