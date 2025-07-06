@@ -119,7 +119,8 @@ saveBtn.addEventListener("click", () => {
   const d = String(now.getDate()).padStart(2, "0");
   const h = String(now.getHours()).padStart(2, "0");
   const mi = String(now.getMinutes()).padStart(2, "0");
-  const filename = `password_${y}${mo}${d}${h}${mi}.txt`;
+  const s = String(now.getSeconds()).padStart(2, "0");
+  const filename = `password_${y}${mo}${d}${h}${mi}${s}.txt`;
 
   const blob = new Blob([text], { type: "text/plain" });
   const a = document.createElement("a");
