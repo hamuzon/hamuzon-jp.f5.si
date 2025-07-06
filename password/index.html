@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>🔑Password Generator Tool🗝️</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="wrapper">
+    <div class="container">
+      <h1>🔑Password Generator Tool🗝️</h1>
+
+      <div class="checkbox-group">
+        <label class="checkbox-label" for="chkLower">
+          <input type="checkbox" id="chkLower" checked />英字（小文字）
+        </label>
+        <label class="checkbox-label" for="chkUpper">
+          <input type="checkbox" id="chkUpper" checked />英字（大文字）
+        </label>
+        <label class="checkbox-label" for="chkNumber">
+          <input type="checkbox" id="chkNumber" checked />数字
+        </label>
+        <label class="checkbox-label" for="chkSymbol">
+          <input type="checkbox" id="chkSymbol" />記号 (!?#$%&=~/*-_+@)
+        </label>
+        <label class="checkbox-label" for="chkExcludeAmbiguous">
+          <input type="checkbox" id="chkExcludeAmbiguous" checked />判別しづらい文字 (Ilji1Oo0)を除く
+        </label>
+      </div>
+
+      <div class="slider-group">
+        <label class="slider-label" for="lengthRange">文字数</label>
+        <input type="range" id="lengthRange" min="8" max="64" value="16" />
+        <input type="number" id="lengthNumber" min="8" max="64" value="16" />
+      </div>
+
+      <div class="slider-group">
+        <label class="slider-label" for="countRange">生成個数</label>
+        <input type="range" id="countRange" min="1" max="20" value="5" />
+        <input type="number" id="countNumber" min="1" max="20" value="5" />
+      </div>
+
+      <div class="results" id="results"></div>
+
+      <div class="buttons">
+        <button id="saveBtn">保存（テキストファイル）</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,164 @@
+/* 基本リセットとボックス調整 */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+/* FC2広告の影響を防ぐラッパー */
+#wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+  background: linear-gradient(135deg, #A0E9D5, #F0F4F8);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: #3B2F2F;
+}
+
+/* メインコンテンツ */
+.container {
+  max-width: 700px;
+  width: 100%;
+  background: #F0F4F8;
+  border-radius: 12px;
+  padding: 24px 30px;
+  box-shadow: 0 5px 20px rgb(58 47 47 / 0.2);
+  display: flex;
+  flex-direction: column;
+}
+
+/* タイトル */
+h1 {
+  margin-top: 0;
+  margin-bottom: 24px;
+  text-align: center;
+  font-weight: 700;
+  color: #3B2F2F;
+}
+
+/* チェックボックスグループ */
+.checkbox-group {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+label.checkbox-label {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+  color: #3B2F2F;
+}
+label.checkbox-label input[type="checkbox"] {
+  width: 22px;
+  height: 22px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+/* スライダー調整 */
+.slider-group {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+  align-items: center;
+}
+.slider-label {
+  font-weight: 600;
+  color: #3B2F2F;
+}
+input[type="range"] {
+  width: 100%;
+  cursor: pointer;
+  accent-color: #68D391;
+}
+input[type="number"] {
+  width: 60px;
+  padding: 6px 8px;
+  font-size: 1em;
+  border-radius: 6px;
+  border: 1px solid #68D391;
+  text-align: center;
+  color: #3B2F2F;
+}
+
+/* 結果表示 */
+.results {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 14px;
+  margin-bottom: 24px;
+}
+.result-item {
+  background: #A0E9D5;
+  border: 1px solid #68D391;
+  border-radius: 10px;
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 1.1em;
+  user-select: all;
+  word-break: break-word;
+  color: #3B2F2F;
+  box-shadow: 0 2px 8px rgb(58 47 47 / 0.1);
+}
+
+/* コピー・保存ボタン */
+.copy-btn {
+  background: #68D391;
+  color: #3B2F2F;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  flex-shrink: 0;
+  box-shadow: 0 2px 5px rgb(58 47 47 / 0.15);
+}
+.copy-btn:hover {
+  background: #5A4238;
+  color: #F0F4F8;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+}
+button#saveBtn {
+  background: #68D391;
+  color: #3B2F2F;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgb(104 211 145 / 0.5);
+  transition: background-color 0.3s ease;
+}
+button#saveBtn:hover {
+  background: #5A4238;
+  color: #F0F4F8;
+}
+
+/* スマホ対応 */
+@media (max-width: 600px) {
+  .checkbox-group,
+  .slider-group,
+  .results {
+    grid-template-columns: 1fr;
+  }
+}
