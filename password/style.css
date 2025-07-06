@@ -51,6 +51,7 @@ h1 {
   gap: 16px;
   margin-bottom: 24px;
 }
+
 label.checkbox-label {
   display: flex;
   align-items: center;
@@ -59,6 +60,7 @@ label.checkbox-label {
   user-select: none;
   color: #3B2F2F;
 }
+
 label.checkbox-label input[type="checkbox"] {
   width: 22px;
   height: 22px;
@@ -74,15 +76,18 @@ label.checkbox-label input[type="checkbox"] {
   margin-bottom: 24px;
   align-items: center;
 }
+
 .slider-label {
   font-weight: 600;
   color: #3B2F2F;
 }
+
 input[type="range"] {
   width: 100%;
   cursor: pointer;
   accent-color: #68D391;
 }
+
 input[type="number"] {
   width: 60px;
   padding: 6px 8px;
@@ -100,6 +105,7 @@ input[type="number"] {
   gap: 14px;
   margin-bottom: 24px;
 }
+
 .result-item {
   background: #A0E9D5;
   border: 1px solid #68D391;
@@ -116,7 +122,34 @@ input[type="number"] {
   box-shadow: 0 2px 8px rgb(58 47 47 / 0.1);
 }
 
-/* コピー・保存ボタン */
+/* コピー・保存・再生成ボタン統一 */
+.buttons {
+  display: flex;
+  justify-content: center; /* 横中央揃え */
+  gap: 12px;
+  flex-wrap: wrap; /* 狭い画面で折り返し対応 */
+  margin-bottom: 24px;
+}
+
+.buttons button {
+  background: #68D391;
+  color: #3B2F2F;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgb(104 211 145 / 0.5);
+  transition: background-color 0.3s ease;
+  flex-shrink: 0;
+}
+
+.buttons button:hover {
+  background: #5A4238;
+  color: #F0F4F8;
+}
+
+/* コピーボタン */
 .copy-btn {
   background: #68D391;
   color: #3B2F2F;
@@ -129,27 +162,8 @@ input[type="number"] {
   flex-shrink: 0;
   box-shadow: 0 2px 5px rgb(58 47 47 / 0.15);
 }
-.copy-btn:hover {
-  background: #5A4238;
-  color: #F0F4F8;
-}
 
-.buttons {
-  display: flex;
-  justify-content: center;
-}
-button#saveBtn {
-  background: #68D391;
-  color: #3B2F2F;
-  border: none;
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-weight: 700;
-  cursor: pointer;
-  box-shadow: 0 4px 12px rgb(104 211 145 / 0.5);
-  transition: background-color 0.3s ease;
-}
-button#saveBtn:hover {
+.copy-btn:hover {
   background: #5A4238;
   color: #F0F4F8;
 }
@@ -160,5 +174,14 @@ button#saveBtn:hover {
   .slider-group,
   .results {
     grid-template-columns: 1fr;
+  }
+
+  .buttons {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .buttons button {
+    width: 100%;
   }
 }

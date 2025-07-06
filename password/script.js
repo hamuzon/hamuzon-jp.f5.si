@@ -17,7 +17,9 @@ const countRange = document.getElementById("countRange");
 const countNumber = document.getElementById("countNumber");
 const resultsDiv = document.getElementById("results");
 const saveBtn = document.getElementById("saveBtn");
+const regenBtn = document.getElementById("regenBtn");
 
+// スライダーと数値入力を連動させる関数
 function syncRangeAndNumber(rangeEl, numberEl) {
   rangeEl.addEventListener("input", () => {
     numberEl.value = rangeEl.value;
@@ -33,16 +35,12 @@ function syncRangeAndNumber(rangeEl, numberEl) {
     generateAndDisplay();
   });
 }
+
 syncRangeAndNumber(lengthRange, lengthNumber);
 syncRangeAndNumber(countRange, countNumber);
 
-[
-  chkLower,
-  chkUpper,
-  chkNumber,
-  chkSymbol,
-  chkExcludeAmbiguous
-].forEach((el) => {
+// チェックボックスの変化で再生成
+[chkLower, chkUpper, chkNumber, chkSymbol, chkExcludeAmbiguous].forEach(el => {
   el.addEventListener("change", generateAndDisplay);
 });
 
@@ -76,14 +74,16 @@ function generateAndDisplay() {
   if (chkUpper.checked) charSet += sets.upper;
   if (chkNumber.checked) charSet += sets.number;
   if (chkSymbol.checked) charSet += sets.symbol;
+
   if (charSet === "") {
     resultsDiv.textContent = "最低1種類の文字種を選んでください。";
     return;
   }
+
   if (chkExcludeAmbiguous.checked) {
     charSet = charSet
       .split("")
-      .filter((c) => !sets.ambiguous.includes(c))
+      .filter(c => !sets.ambiguous.includes(c))
       .join("");
     if (charSet.length === 0) {
       resultsDiv.textContent = "判別しづらい文字を除外しすぎて文字がありません。";
@@ -98,8 +98,10 @@ function generateAndDisplay() {
     const pw = generatePassword(length, charSet);
     const div = document.createElement("div");
     div.className = "result-item";
+
     const span = document.createElement("span");
     span.textContent = pw;
+
     div.appendChild(span);
     div.appendChild(createCopyButton(pw));
     resultsDiv.appendChild(div);
@@ -112,7 +114,7 @@ saveBtn.addEventListener("click", () => {
     alert("パスワードが生成されていません。");
     return;
   }
-  const text = Array.from(pwElements).map((el) => el.textContent).join("\n");
+  const text = Array.from(pwElements).map(el => el.textContent).join("\n");
   const now = new Date();
   const y = now.getFullYear();
   const mo = String(now.getMonth() + 1).padStart(2, "0");
@@ -130,4 +132,8 @@ saveBtn.addEventListener("click", () => {
   URL.revokeObjectURL(a.href);
 });
 
+// 「再生成」ボタンで生成
+regenBtn.addEventListener("click", generateAndDisplay);
+
+// 最初の生成
 generateAndDisplay();
