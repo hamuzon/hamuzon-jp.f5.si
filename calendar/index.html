@@ -207,7 +207,7 @@
         <p>
           v1.0 と v2.0（v3.0、v4.0）はファイル名やJSON内容が異なります。<br />
           ただし、v3.0 と v4.0 は v2.0 のJSON形式と互換性があります。<br />
-          v4.0 は v1.0～v4.0 のJSON形式を読み込み可能で、開始時間に簡易警告を表示します。
+          v4.0 は v1.0～v4.0 のJSON形式を読み込み可能で通知時間にに簡易警告を表示します。
         </p>
 
         <div class="notice" role="alert">
@@ -247,11 +247,11 @@
         <p><code>Calendar-[CURRENT_SAVE_VERSION]_[YYYY]-[MM]-[DD]_[HH]-[mm]-[ss].json</code></p>
         <p><code>Example: Calendar-4.0_2025-07-10_18-30-15.json</code></p>
 
-        <p>
-          Filenames and JSON contents differ between v1.0 and v2.0/v3.0/v4.0.<br />
-          However, v3.0 and v4.0 are backward compatible with the JSON format of v2.0.<br />
-          v4.0 supports reading JSON from v1.0 to v4.0 and displays a simple warning for start times.
-        </p>
+<p>
+  The filenames and JSON structures of v1.0 differ from those of v2.0, v3.0, and v4.0.<br />
+  However, v3.0 and v4.0 are compatible with the JSON format used in v2.0.<br />
+  v4.0 can read JSON files from v1.0 to v4.0 and displays a simple warning at the notification time.
+</p>
 
         <div class="notice" role="alert">
 ⚠️ Caution: Using v1.0 and v2.0 at the same time may result in distorted rendering of one of the versions. <br />
