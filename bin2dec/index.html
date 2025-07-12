@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<title>2進数 ⇔ 10進数 変換ツール</title>
+<meta name="description" content="2進数 ⇔ 10進数 変換ツール 相互の変換ができます 符号付き対応" />
+<link id="favicon" rel="icon" href="icon-light.png" type="image/png" />
+<link href="https://fonts.googleapis.com/css2?family=Orbitron&family=Roboto+Mono&display=swap" rel="stylesheet" />
+<style>
+  /* 共通 */
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+  body {
+    font-family: 'Orbitron', 'Roboto Mono', monospace;
+    margin: 0;
+    padding: 20px;
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+    user-select: none;
+    transition: background-color 0.4s, color 0.4s;
+  }
+
+  h1 {
+    text-align: center;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    text-shadow: 0 0 8px var(--primary-glow);
+  }
+
+  /* モードセレクト共通スタイル */
+  .mode-select {
+    text-align: center;
+    margin-bottom: 25px;
+  }
+  select#colorModeSelect {
+    font-size: 1.1rem;
+    padding: 12px 22px;
+    border-radius: 15px;
+    border: 2px solid var(--primary-color);
+    background-color: var(--select-bg);
+    color: var(--text-color);
+    cursor: pointer;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    user-select: none;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg width='14' height='8' viewBox='0 0 14 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L7 7L13 1' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    background-size: 14px 8px;
+  }
+  select#colorModeSelect:hover,
+  select#colorModeSelect:focus {
+    border-color: var(--primary-glow);
+    outline: none;
+    box-shadow: 0 0 15px var(--primary-glow);
+  }
+
+  /* タブ */
+  .tab {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 25px;
+  }
+  .tab button {
+    flex: 1;
+    max-width: 160px;
+    margin: 0 8px;
+    padding: 14px 0;
+    border-radius: 20px 20px 0 0;
+    cursor: pointer;
+    user-select: none;
+    font-weight: 900;
+    font-size: 1.1rem;
+    text-shadow: 0 0 6px var(--primary-glow);
+    transition: background 0.35s ease, box-shadow 0.3s ease, color 0.3s ease;
+    border: none;
+    background: linear-gradient(135deg, var(--primary-color), #2b8aff);
+    color: #e0f7ff;
+  }
+  .tab button.active {
+    box-shadow: 0 0 20px var(--primary-glow);
+    background: linear-gradient(135deg, #1c74ff, #0c50d9);
+    color: #d9f9ff;
+  }
+  .tab button:hover:not(.active),
+  .tab button:focus-visible:not(.active) {
+    outline: none;
+    box-shadow: 0 0 15px var(--primary-glow-light);
+  }
+
+  /* 入力カード */
+  .content {
+    border-radius: 20px;
+    padding: 25px 20px 35px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 0 20px var(--shadow-color);
+    transition: background-color 0.4s, color 0.4s;
+  }
+  input[type="text"], input[type="number"] {
+    width: 100%;
+    padding: 15px 18px;
+    font-size: 1.2rem;
+    border-radius: 15px;
+    border: 2px solid var(--input-border);
+    background-color: var(--input-bg);
+    color: var(--input-text);
+    font-family: 'Roboto Mono', monospace;
+    box-shadow: inset 0 0 8px var(--input-shadow);
+    transition: border-color 0.3s ease;
+    user-select: text;
+    display: block;
+    margin: 0 auto;
+  }
+  input[type="text"]:focus,
+  input[type="number"]:focus {
+    border-color: var(--primary-glow);
+    outline: none;
+    box-shadow: 0 0 10px var(--primary-glow) inset;
+  }
+
+  button.convert {
+    width: 100%;
+    margin-top: 12px;
+    padding: 14px;
+    font-size: 1.2rem;
+    font-weight: 900;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
+    box-shadow: 0 0 20px var(--primary-glow);
+    background: linear-gradient(135deg, #1c74ff, #0c50d9);
+    color: #e0f7ff;
+  }
+  button.convert:hover,
+  button.convert:focus-visible {
+    outline: none;
+    background: linear-gradient(135deg, #3398ff, #1a58c7);
+    box-shadow: 0 0 25px #3398ffdd;
+  }
+
+  /* 結果表示 */
+  .result {
+    margin-top: 20px;
+    font-weight: 900;
+    font-size: 1.3rem;
+    text-align: center;
+    text-shadow: 0 0 8px var(--primary-glow-light);
+    user-select: text;
+    transition: color 0.4s ease;
+  }
+
+  /* ライトモード */
+  body.light {
+    --primary-color: #33aaff;
+    --primary-glow: #33aaffcc;
+    --primary-glow-light: #66c3ffcc;
+    --secondary-color: #0077cc;
+    --border-color: #6bb3ff;
+    --shadow-color: #7ac0ff88;
+    --input-border: #4ba1ff;
+    --input-bg: #e5f2ff;
+    --input-text: #004a99;
+    --input-shadow: #8fcaffbb;
+    --select-bg: #d9f0ff;
+    --text-color: #004a99;
+    background: linear-gradient(135deg, #e0f7ff 0%, #c1e9ff 100%);
+    color: var(--text-color);
+  }
+
+  /* ダークモード */
+  body.dark {
+    --primary-color: #6699ff;
+    --primary-glow: #6699ffcc;
+    --primary-glow-light: #99bbffcc;
+    --secondary-color: #a3baff;
+    --border-color: #4f6cbf;
+    --shadow-color: #4466bb88;
+    --input-border: #334b8f;
+    --input-bg: #1b2650;
+    --input-text: #cfdcff;
+    --input-shadow: #5971bfbb;
+    --select-bg: #24355f;
+    --text-color: #99bbff;
+    background: linear-gradient(135deg, #12182c 0%, #28365f 100%);
+    color: var(--text-color);
+  }
+
+  /* スマホ対応 */
+  @media (max-width: 520px) {
+    body {
+      padding: 15px 12px;
+    }
+    h1 {
+      font-size: 1.5rem;
+    }
+    .tab button {
+      max-width: 120px;
+      font-size: 1rem;
+      padding: 12px 0;
+      margin: 0 6px;
+      border-radius: 16px 16px 0 0;
+    }
+    input[type="text"], input[type="number"] {
+      font-size: 1.1rem;
+      padding: 12px 15px;
+      border-radius: 12px;
+    }
+    button.convert {
+      font-size: 1.1rem;
+      padding: 12px;
+      border-radius: 16px;
+    }
+  }
+</style>
+</head>
+<body>
+<h1>2進数 ⇔ 10進数 変換ツール</h1>
+
+<div class="mode-select" aria-label="カラーモード選択">
+  <select id="colorModeSelect" aria-label="カラーモード選択">
+    <option value="light">ライトモード</option>
+    <option value="dark">ダークモード</option>
+    <option value="system" selected>端末モード</option>
+  </select>
+</div>
+
+<div class="tab" role="tablist">
+  <button id="tabBinToDec" class="active" role="tab" aria-selected="true" aria-controls="binToDec">2進数 → 10進数</button>
+  <button id="tabDecToBin" role="tab" aria-selected="false" aria-controls="decToBin">10進数 → 2進数</button>
+</div>
+
+<div id="binToDec" class="content" role="tabpanel" tabindex="0">
+  <input
+    type="text"
+    id="binaryInput"
+    placeholder="2進数を入力してください (例: 01010)"
+    aria-label="2進数入力"
+    autocomplete="off"
+    autocorrect="off"
+    autocapitalize="none"
+    spellcheck="false"
+  />
+  <button class="convert" onclick="convertBinToDec()">変換</button>
+  <div class="result" id="binToDecResult" aria-live="polite"></div>
+</div>
+
+<div id="decToBin" class="content" role="tabpanel" tabindex="0" style="display:none;">
+  <input
+    type="number"
+    id="decimalInput"
+    placeholder="10進数を入力してください (例: -10)"
+    aria-label="10進数入力"
+    autocomplete="off"
+  />
+  <button class="convert" onclick="convertDecToBin()">変換</button>
+  <div class="result" id="decToBinResult" aria-live="polite"></div>
+</div>
+
+<script>
+  // ファビコン画像変更
+  function setFavicon(mode) {
+    const favicon = document.getElementById('favicon');
+    if (mode === 'dark') {
+      favicon.href = 'icon-dark.png';
+    } else {
+      favicon.href = 'icon-light.png';
+    }
+  }
+
+  // カラーモードの初期化と適用
+  function initMode() {
+    const select = document.getElementById('colorModeSelect');
+    const saved = localStorage.getItem('colorMode');
+    if (saved) {
+      select.value = saved;
+    } else {
+      select.value = 'system';
+    }
+    applyMode(select.value);
+  }
+
+  // OSのカラーモード判定
+  function getSystemMode() {
+    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+
+  // モード適用
+  function applyMode(mode) {
+    const body = document.body;
+    if (mode === 'system') {
+      mode = getSystemMode();
+    }
+    body.classList.remove('light', 'dark');
+    body.classList.add(mode);
+    setFavicon(mode);
+  }
+
+  // モード変更時の処理
+  document.getElementById('colorModeSelect').addEventListener('change', (e) => {
+    const mode = e.target.value;
+    localStorage.setItem('colorMode', mode);
+    applyMode(mode);
+  });
+
+  // タブ切替
+  document.getElementById('tabBinToDec').addEventListener('click', () => {
+    showTab('binToDec', 'tabBinToDec');
+  });
+  document.getElementById('tabDecToBin').addEventListener('click', () => {
+    showTab('decToBin', 'tabDecToBin');
+  });
+  function showTab(contentId, tabId) {
+    ['binToDec', 'decToBin'].forEach(id => {
+      document.getElementById(id).style.display = (id === contentId) ? 'block' : 'none';
+    });
+    ['tabBinToDec', 'tabDecToBin'].forEach(id => {
+      const tab = document.getElementById(id);
+      if (id === tabId) {
+        tab.classList.add('active');
+        tab.setAttribute('aria-selected', 'true');
+      } else {
+        tab.classList.remove('active');
+        tab.setAttribute('aria-selected', 'false');
+      }
+    });
+  }
+
+  // 2進数→10進数変換
+  function bin2dec(binaryString) {
+    if (!/^[01]+$/.test(binaryString)) {
+      throw new Error('無効な2進数です。1と0のみを含む文字列を入力してください。');
+    }
+    const isNegative = binaryString[0] === '1';
+    let decimalNumber = 0;
+    for (let i = 0; i < binaryString.length; i++) {
+      decimalNumber = decimalNumber * 2 + (binaryString.charAt(i) === '1' ? 1 : 0);
+    }
+    if (isNegative) {
+      decimalNumber -= 2 ** binaryString.length;
+    }
+    return decimalNumber;
+  }
+
+  function convertBinToDec() {
+    const input = document.getElementById('binaryInput').value.trim();
+    const resultElem = document.getElementById('binToDecResult');
+    resultElem.textContent = '';
+    try {
+      const dec = bin2dec(input);
+      resultElem.textContent = `10進数: ${dec}`;
+    } catch (e) {
+      resultElem.textContent = e.message;
+    }
+  }
+
+  // 10進数→2進数変換
+  function dec2bin(num) {
+    if (!Number.isInteger(num)) {
+      throw new Error('整数を入力してください。');
+    }
+    if (num === 0) return '0';
+    const isNegative = num < 0;
+    if (!isNegative) {
+      return '0' + num.toString(2);
+    } else {
+      const bits = num.toString(2).length + 1;
+      const complement = (1 << bits) + num;
+      return '1' + complement.toString(2);
+    }
+  }
+
+  function convertDecToBin() {
+    const inputStr = document.getElementById('decimalInput').value.trim();
+    const resultElem = document.getElementById('decToBinResult');
+    resultElem.textContent = '';
+    try {
+      const num = Number(inputStr);
+      if (!Number.isInteger(num)) throw new Error('整数を入力してください。');
+      const bin = dec2bin(num);
+      resultElem.textContent = `2進数: ${bin}`;
+    } catch (e) {
+      resultElem.textContent = e.message;
+    }
+  }
+
+  // 初期設定
+  window.onload = () => {
+    initMode();
+    showTab('binToDec', 'tabBinToDec');
+  };
+</script>
+</body>
+</html>
