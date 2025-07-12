@@ -10,7 +10,7 @@
 <body>
 <header>
   <h1>📅 Calendar app 🗓️</h1>
-  <h6><em>(&beta;v4.0[一部操作いつの日か改良する（だから&beta;にしたけど、改良日は決めてないので忘れて永遠&beta;かもしれん）])</em></h6>
+
   <div class="nav-buttons">
     <div class="nav-group main-nav">
       <button id="prev-month">◀ 前月</button> 
@@ -32,7 +32,13 @@
   <table id="calendar" aria-label="カレンダー">
     <thead>
       <tr>
-        <th class="sunday">日</th><th>月</th><th>火</th><th>水</th><th>木</th><th>金</th><th class="saturday">土</th>
+        <th class="sunday">日</th>
+        <th>月</th>
+        <th>火</th>
+        <th>水</th>
+        <th>木</th>
+        <th>金</th>
+        <th class="saturday">土</th>
       </tr>
     </thead>
     <tbody id="calendar-body"></tbody>
@@ -47,9 +53,10 @@
     <div class="event-inputs">
       <label>開始時刻：<input type="time" id="new-event-start" /></label>
       <label>終了時刻：<input type="time" id="new-event-end" /></label>
-      <label>内容：<input type="text" id="new-event-text" placeholder="予定内容 #タグ" /></label>
+      <label>内容：<input type="text" id="new-event-text" placeholder="予定内容" /></label>
+      <label>タグ：<input type="text" id="new-event-tags" placeholder="#タグはスペースかカンマ区切り" /></label>
       <label>場所：<input type="text" id="new-event-location" placeholder="場所" /></label>
-      <label><input type="checkbox" id="new-event-notify" /> 通知する</label>
+      <label class="notify-label"><input type="checkbox" id="new-event-notify" /> 通知</label>
     </div>
     <div class="modal-buttons">
       <button id="add-event-btn">追加 / Add</button>

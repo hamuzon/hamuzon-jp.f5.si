@@ -66,33 +66,115 @@ header h6 {
   color: white;
 }
 
-/* ================= カレンダーコンテナ（横スクロール対応） ================= */
+/* ================= 今日 設定 保存 読込み ボタン配置 ================= */
+@media (min-width: 601px) {
+  .main-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+
+  .main-buttons button {
+    min-width: 120px;
+    padding: 8px 12px;
+    font-size: 16px;
+    flex-grow: 1;
+  }
+
+  .today-button-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  #today-button {
+    min-width: 120px;
+    padding: 8px 12px;
+    font-size: 16px;
+    border: 1px solid #888;
+    background-color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.3s ease;
+    text-align: center;
+  }
+
+  #today-button:hover {
+    background-color: #4a7c59;
+    color: white;
+  }
+}
+
+@media (max-width: 600px) {
+  .main-buttons {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px 12px;
+    width: 100%;
+    margin-bottom: 12px;
+  }
+
+  .main-buttons button {
+    font-size: 14px;
+    padding: 6px 8px;
+  }
+
+  .today-button-wrapper {
+    margin-top: 15px;
+    width: 100%;
+  }
+
+  #today-button {
+    width: 100%;
+    font-size: 14px;
+    padding: 8px 12px;
+  }
+
+  .nav-buttons {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .nav-group.extra-nav {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px 12px;
+    width: 100%;
+  }
+
+  .nav-group.extra-nav button {
+    font-size: 14px;
+    padding: 6px 8px;
+  }
+}
+
+/* ================= カレンダー ================= */
 #calendar-container {
   width: 100%;
   max-width: 720px;
   overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
   border-radius: 8px;
   box-shadow: 0 0 8px rgba(0,0,0,0.1);
   background: white;
 }
 
-/* ================= カレンダー ================= */
 #calendar {
   border-collapse: collapse;
-  width: 700px; /* 横スクロール出すため固定幅 */
+  width: 700px;
   min-width: 700px;
 }
 
 #calendar th,
 #calendar td {
   border: 1px solid #ccc;
-  width: 14.28%; /* 7分割 */
-  vertical-align: top;
+  width: 14.28%;
   padding: 6px;
   height: 80px;
   font-size: 14px;
-  position: relative;
+  vertical-align: top;
   user-select: none;
   overflow: hidden;
   word-break: break-word;
@@ -122,7 +204,6 @@ header h6 {
   border: 2px solid #4a7c59;
 }
 
-/* 日付数字 */
 td > div:first-child {
   font-weight: bold;
   margin-bottom: 4px;
@@ -163,7 +244,6 @@ td > div:first-child {
   margin-left: 4px;
 }
 
-/* イベントリスト内の編集・削除ボタン */
 .event > button {
   margin-left: auto;
   padding: 3px 8px;
@@ -173,14 +253,13 @@ td > div:first-child {
   cursor: pointer;
   background-color: #7c7c7c;
   color: white;
-  transition: background-color 0.2s ease;
 }
 
 .event > button:hover {
   background-color: #4a7c59;
 }
 
-/* ================= モーダル ================= */
+/* ================= モーダル（予定追加/編集） ================= */
 .modal-bg {
   position: fixed;
   top: 0;
@@ -198,14 +277,14 @@ td > div:first-child {
   background-color: white;
   border-radius: 12px;
   padding: 20px 25px;
-  max-width: 400px;
+  max-width: 480px;
   width: 90vw;
-  box-shadow: 0 0 15px rgb(0 0 0 / 0.2);
   max-height: 90vh;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 12px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
 }
 
 .modal h2 {
@@ -215,31 +294,40 @@ td > div:first-child {
 
 .event-inputs label {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 6px;
+  flex-direction: column;
+  margin-bottom: 10px;
   font-size: 0.95em;
+}
+
+.event-inputs label.notify-label {
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
 }
 
 .event-inputs input[type="text"],
 .event-inputs input[type="time"],
-.event-inputs input[type="color"] {
-  flex-grow: 1;
-  margin-left: 8px;
+.event-inputs input[type="color"],
+.event-inputs textarea {
+  width: 100%;
+  box-sizing: border-box;
   padding: 6px;
   font-size: 14px;
   border: 1px solid #aaa;
   border-radius: 5px;
-  box-sizing: border-box;
-  width: 100%;
+  resize: vertical;
+  min-height: 2em;
+  font-family: inherit;
 }
 
-.event-inputs input[type="checkbox"] {
-  margin-left: 8px;
-  transform: scale(1.1);
-  cursor: pointer;
+.event-inputs textarea {
+  min-height: 3em;
+  max-height: 10em;
+  overflow-y: auto;
+  font-family: inherit;
 }
 
+/* モーダルボタン */
 .modal-buttons {
   display: flex;
   justify-content: center;
@@ -254,8 +342,8 @@ td > div:first-child {
   font-weight: 600;
   background-color: #4a7c59;
   color: white;
-  transition: background-color 0.3s ease;
   font-size: 14px;
+  transition: background-color 0.3s ease;
 }
 
 .modal-buttons button:hover {
@@ -283,7 +371,6 @@ td > div:first-child {
 
 .tag-color-item input[type="color"] {
   cursor: pointer;
-  border: none;
   background: none;
   width: 40px;
   height: 30px;
@@ -293,21 +380,19 @@ td > div:first-child {
 }
 
 .tag-color-item button {
-  cursor: pointer;
   background-color: #cc4a4a;
-  border: none;
   color: white;
   padding: 4px 8px;
+  border: none;
   border-radius: 4px;
   font-size: 0.85em;
-  transition: background-color 0.2s ease;
+  cursor: pointer;
 }
 
 .tag-color-item button:hover {
   background-color: #a83232;
 }
 
-/* タグ追加エリア */
 .tag-add {
   display: flex;
   gap: 8px;
@@ -333,13 +418,13 @@ td > div:first-child {
 }
 
 .tag-add button {
-  cursor: pointer;
   background-color: #4a7c59;
-  border: none;
   color: white;
   padding: 6px 14px;
   font-weight: 600;
   border-radius: 6px;
+  border: none;
+  cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
@@ -347,109 +432,44 @@ td > div:first-child {
   background-color: #3d6646;
 }
 
-/* ================= サイズ調整機能（フォントサイズ・パディング・高さなど） ================= */
-#month-year {
-  font-size: 1.2rem;
-  min-width: 140px;
-  text-align: center;
-  font-weight: bold;
-}
-
-th, td {
-  padding: 6px;
-  height: 80px;
-  font-size: 14px;
-  vertical-align: top;
-  user-select: none;
-  overflow: hidden;
-  word-break: break-word;
-}
-
-.event {
-  font-size: 13px;
-}
-
-.event-tag {
-  font-size: 0.75em;
-}
-
-textarea, input[type="time"], input[type="color"], input[type="text"] {
-  font-size: 14px;
-  padding: 6px;
-  border-radius: 5px;
-  box-sizing: border-box;
-  width: 100%;
-  margin-top: 6px;
-  margin-bottom: 14px;
-  resize: vertical;
-}
-
-.modal-buttons button {
-  font-size: 14px;
-  margin-left: 8px;
-}
-
-#today-button {
-  width: 140px;
-  margin: 15px auto 30px auto;
-}
-
-#tag-color-list input[type="color"] {
-  width: 40px;
-  height: 30px;
-  border-radius: 4px;
-  cursor: pointer;
-  padding: 0;
-}
-
-.tag-row button {
-  font-size: 0.85em;
-  padding: 4px 8px;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
 /* ================= レスポンシブ（スマホ対応） ================= */
 @media (max-width: 600px) {
-  #calendar-container {
-    max-width: 100%;
-  }
+  /* カレンダー全体パディングをやや狭く */
   #calendar {
-    width: 600px;
-    min-width: 600px;
+    padding: 8px;
+    width: 100% !important;
+    min-width: 100% !important;
   }
-  th, td {
+
+  /* カレンダーテーブルのフォントサイズとセルサイズ縮小 */
+  #calendar th,
+  #calendar td {
     font-size: 12px;
     height: 60px;
     padding: 4px;
   }
+
+  /* 月年表示のフォントサイズを縮小 */
   #month-year {
     font-size: 1rem;
-    min-width: unset;
   }
+
+  /* ボタンのパディングとフォントサイズ調整 */
   button {
-    font-size: 14px;
     padding: 5px 8px;
+    font-size: 14px;
   }
-  textarea, input[type="time"], input[type="color"], input[type="text"] {
+
+  /* テキストエリアと時間入力のフォントサイズ縮小 */
+  textarea,
+  input[type="time"] {
     font-size: 13px;
   }
-  #today-button {
-    width: 100%;
-    margin: 15px 0 30px 0;
-  }
-  .nav-buttons {
-    flex-direction: column;
-    gap: 6px;
-  }
-  .nav-group {
-    justify-content: center;
-  }
-  .event {
-    font-size: 12px;
-  }
-  .modal-buttons button, .tag-add button {
-    padding: 6px 10px;
-    font-size: 0.9em;
+
+  /* モーダルの幅とパディング調整 */
+  .modal {
+    max-width: 100%;
+    height: 90vh;
+    padding: 16px 20px;
   }
 }
