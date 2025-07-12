@@ -1,4 +1,4 @@
-/* リセット・ベース */
+/* ベースリセット */
 * {
   box-sizing: border-box;
 }
@@ -95,23 +95,14 @@ main {
   font-size: 0.95rem;
   color: #555;
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 0.3rem;
-  align-items: center;
+  white-space: pre-wrap;
 }
 
 .todo-item.empty {
   font-style: italic;
   color: #999;
-}
-
-/* タグラベル */
-.tag-label {
-  font-size: 0.75rem;
-  padding: 0 0.3rem;
-  border-radius: 3px;
-  color: white;
-  user-select: none;
 }
 
 /* ダークモード */
@@ -177,6 +168,7 @@ main {
   margin: 0.5rem 0 1rem 0;
 }
 
+.modal input[type="date"],
 .modal input[type="time"],
 .modal textarea {
   width: 100%;
@@ -191,6 +183,7 @@ main {
 }
 
 @media (prefers-color-scheme: dark) {
+  .modal input[type="date"],
   .modal input[type="time"],
   .modal textarea {
     background-color: #333;

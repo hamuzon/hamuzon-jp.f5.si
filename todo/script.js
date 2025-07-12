@@ -10,8 +10,8 @@ let selectedDate = null;
 document.addEventListener("DOMContentLoaded", () => {
   const listContainer = document.getElementById("todo-list-container");
   const modalBg = document.getElementById("modal-bg");
-  const modal = document.getElementById("modal");
   const modalDate = document.getElementById("modal-date");
+  const todoDate = document.getElementById("todo-date");
   const todoTime = document.getElementById("todo-time");
   const todoText = document.getElementById("todo-text");
 
@@ -24,15 +24,18 @@ document.addEventListener("DOMContentLoaded", () => {
   const loadJsonBtn = document.getElementById("load-json-btn");
   const loadInput = document.getElementById("load-json-input");
 
+  // yyyy-mm-dd形式にフォーマット
   function formatDateKey(date) {
-    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2,"0")}-${String(date.getDate()).padStart(2,"0")}`;
   }
 
+  // 表示用：2025年7月11日 みたいな形式に変換
   function formatDateJP(dateKey) {
-    const [y, m, d] = dateKey.split("-");
+    const [y,m,d] = dateKey.split("-");
     return `${y}年${parseInt(m)}月${parseInt(d)}日`;
   }
 
+  // TODOリスト描画
   function renderTodoList() {
     listContainer.innerHTML = "";
     const keys = Object.keys(todos).sort();
@@ -50,7 +53,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const item = document.createElement("div");
       item.className = "todo-item";
-      item.textContent = todos[dateKey] || "(未入力)";
+
+      if (typeof todos[dateKey] === "string" && todos[dateKey].trim() !== "") {
+        // 改行も保持して表示
+        item.textContent = todos[dateKey];
+      } else {
+        item.textContent = "(未入力)";
+        item.classList.add("empty");
+      }
+
       block.appendChild(item);
 
       block.onclick = () => openModal(dateKey);
@@ -65,53 +76,70 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // モーダル開く
   function openModal(dateKey) {
     selectedDate = dateKey;
     modalDate.textContent = `📅 ${formatDateJP(dateKey)}`;
 
+    todoDate.value = dateKey;
+
     const raw = todos[dateKey] || "";
-    const [time, ...rest] = raw.split(" ");
-    if (/^\d{2}:\d{2}$/.test(time)) {
-      todoTime.value = time;
-      todoText.value = rest.join(" ").trim();
-    } else {
-      todoTime.value = "";
+
+    if (raw.trim() !== "") {
       todoText.value = raw;
+      // 時刻は任意なので、保存時に合わせて分離などしない限りはクリアでOK
+      todoTime.value = "";
+    } else {
+      todoText.value = "";
+      todoTime.value = "";
     }
 
     modalBg.hidden = false;
     todoText.focus();
   }
 
+  // モーダル閉じる
   function closeModal() {
     modalBg.hidden = true;
     selectedDate = null;
   }
 
+  // 新規追加ボタン
   addBtn.onclick = () => {
-    const today = new Date();
-    const dateKey = formatDateKey(today);
-    openModal(dateKey);
+    const todayKey = formatDateKey(new Date());
+    openModal(todayKey);
     todoTime.value = "";
     todoText.value = "";
   };
 
+  // 保存ボタン
   saveBtn.onclick = () => {
+    const date = todoDate.value;
     const time = todoTime.value.trim();
     const text = todoText.value.trim();
+
+    if (!date) {
+      alert("⚠️ 日付を選択してください。");
+      todoDate.focus();
+      return;
+    }
     if (!text) {
       alert("⚠️ TODO内容を入力してください。");
       todoText.focus();
       return;
     }
-    todos[selectedDate] = time ? `${time} ${text}` : text;
+
+    // 時刻が入力されていれば TODOテキストの先頭に付ける（任意）
+    todos[date] = time ? `${time} ${text}` : text;
+
     localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
     renderTodoList();
     closeModal();
   };
 
+  // 削除ボタン
   deleteBtn.onclick = () => {
-    if (todos[selectedDate]) {
+    if (selectedDate && todos[selectedDate]) {
       if (confirm("🗑️ このTODOを削除しますか？")) {
         delete todos[selectedDate];
         localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
@@ -122,10 +150,12 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   closeBtn.onclick = closeModal;
+
   modalBg.onclick = e => {
     if (e.target === modalBg) closeModal();
   };
 
+  // JSON保存
   saveJsonBtn.onclick = () => {
     const now = new Date();
     const y = now.getFullYear();
@@ -154,6 +184,7 @@ document.addEventListener("DOMContentLoaded", () => {
     URL.revokeObjectURL(url);
   };
 
+  // JSON読込
   loadJsonBtn.onclick = () => loadInput.click();
 
   loadInput.onchange = e => {
@@ -166,7 +197,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const json = JSON.parse(ev.target.result);
         loadFromJSON(json);
         alert("✅ 読み込み完了");
-      } catch (err) {
+      } catch {
         alert("❌ 読み込みエラー: 不正なJSONです");
       }
       loadInput.value = "";
@@ -174,6 +205,7 @@ document.addEventListener("DOMContentLoaded", () => {
     reader.readAsText(file);
   };
 
+  // JSONから復元
   function loadFromJSON(json) {
     if (!json || typeof json !== "object") throw new Error("不正なJSON");
 
@@ -206,6 +238,7 @@ document.addEventListener("DOMContentLoaded", () => {
     renderTodoList();
   }
 
+  // ローカルストレージから復元
   const stored = localStorage.getItem(STORAGE_KEY);
   if (stored) {
     try {
