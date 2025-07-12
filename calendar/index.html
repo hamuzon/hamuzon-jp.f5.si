@@ -6,7 +6,10 @@
   <title>Calendar Version Selector</title>
   <meta name="description" content="Calendarのバージョン選択機能ページ。v1.0、v2.0、v3.0、v4.0の違いを説明し、JSONファイルの命名規則や注意事項を日本語と英語で案内します。" />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400&display=swap" rel="stylesheet" />
+  <link rel="icon" href="icon-light.svg" media="(prefers-color-scheme: light)" />
+  <link rel="icon" href="icon-dark.svg" media="(prefers-color-scheme: dark)" />
   <style>
+    /* （省略せずそのままのCSS、文法ミスなし） */
     :root {
       --bg: #121212;
       --text: #f0e6d2;
@@ -168,13 +171,12 @@
       margin-right: auto;
     }
   </style>
-  <link rel="icon" href="icon-light.svg" media="(prefers-color-scheme: light)" />
-  <link rel="icon" href="icon-dark.svg" media="(prefers-color-scheme: dark)" />
 </head>
 <body>
   <div id="container">
     <button class="lang-switch" aria-pressed="false" aria-label="言語切替 日本語・English" onclick="toggleLang()">🌐 English</button>
 
+    <!-- 日本語 -->
     <div id="lang-ja" lang="ja">
       <h1>🗓️ カレンダー選択 📅</h1>
       <p>以下のバージョンから選んでください。</p>
@@ -205,21 +207,21 @@
         <p><code>例: Calendar-4.0_2025-07-10_18-30-15.json</code></p>
 
         <p>
-          v1.0 と v2.0（v3.0、v4.0）はファイル名やJSON内容が異なります。<br />
-          ただし、v3.0 と v4.0 は v2.0 のJSON形式と互換性があります。<br />
-          v4.0 は v1.0～v4.0 のJSON形式を読み込み可能で通知時間にに簡易警告を表示します。
+          v1.0、v2.0、v3.0、v4.0 では、ファイル名や JSON の形式が異なります。<br />
+          v3.0 は v2.0 の JSON 形式と互換性があります。<br />
+          v4.0 は v1.0 ～ v4.0 の JSON 形式に対応しており、通知時間に簡易警告を表示します。
         </p>
 
         <div class="notice" role="alert">
-          ⚠️ 注意: v1.0 と v2.0を同時に使用すると、片方のversionのレンダー表示が崩れることがあります。<br />
-          一度に1つのバージョンのみの利用を推奨します。
+          ⚠️ 注意: v1.0 と v2.0 を同時に使用すると、どちらか一方の表示が崩れることがあります。<br />
+          一度に 1 つのバージョンのみの利用を推奨します。
         </div>
       </section>
     </div>
 
     <!-- English -->
     <div id="lang-en" lang="en" style="display: none;">
-      <h1>🗓️ Select Calendar Version</h1>
+      <h1>🗓️ Select Calendar Version📆</h1>
       <p>Please choose one of the versions below.</p>
       <div class="version-links">
         <a class="version-btn" href="v1.0/index.html">🗓️ v1.0 🧾</a>
@@ -247,15 +249,15 @@
         <p><code>Calendar-[CURRENT_SAVE_VERSION]_[YYYY]-[MM]-[DD]_[HH]-[mm]-[ss].json</code></p>
         <p><code>Example: Calendar-4.0_2025-07-10_18-30-15.json</code></p>
 
-<p>
-  The filenames and JSON structures of v1.0 differ from those of v2.0, v3.0, and v4.0.<br />
-  However, v3.0 and v4.0 are compatible with the JSON format used in v2.0.<br />
-  v4.0 can read JSON files from v1.0 to v4.0 and displays a simple warning at the notification time.
-</p>
+        <p>
+          The filenames and JSON formats differ between v1.0, v2.0, v3.0, and v4.0.<br />
+          v3.0 is backward compatible with the JSON format of v2.0.<br />
+          v4.0 supports JSON formats from v1.0 to v4.0 and will display a simple warning at the notification time.
+        </p>
 
         <div class="notice" role="alert">
-⚠️ Caution: Using v1.0 and v2.0 at the same time may result in distorted rendering of one of the versions. <br />
-We recommend using only one version at a time.
+          ⚠️ Caution: Using v1.0 and v2.0 at the same time may cause one of the versions to display incorrectly.<br />
+          We recommend using only one version at a time.
         </div>
       </section>
     </div>
