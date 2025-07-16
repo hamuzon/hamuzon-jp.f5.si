@@ -2,165 +2,66 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Hamuzon Link Portal</title>
   <link rel="icon" href="icon-light.svg" type="image/svg+xml" />
+  <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* 全体のボックスサイズをpadding込みに */
-    *, *::before, *::after {
-      box-sizing: border-box;
-    }
-
-    html {
-      height: 100%;
+    html, body {
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
+      overflow-x: hidden;
     }
-
     body {
-      margin: 0;
-      padding: 0;
-      min-height: 100vh;
-      font-family: 'Segoe UI', 'Hiragino Kaku Gothic ProN', sans-serif;
+      font-family: 'Inter', 'Segoe UI', 'Hiragino Kaku Gothic ProN', sans-serif;
+    }
+    .bg-gradient-custom {
       background: linear-gradient(to bottom, #ffcf91 0%, #a96bf8 100%);
-      background-repeat: no-repeat;
-      background-size: cover;
-      background-position: center center;
-      background-attachment: fixed;
-      color: #fff;
-      text-align: center;
-
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 10px; /* 最小限のpaddingで余白確保 */
     }
-
-    .container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 12px;
-      width: 100%;
-      max-width: 640px;
-      padding: 20px 16px;
-      background-color: rgba(0, 0, 0, 0.25);
-      border-radius: 20px;
+    .backdrop-blur-custom {
       backdrop-filter: blur(8px);
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
-      overflow: visible;
-    }
-
-    h1 {
-      width: 100%;
-      font-size: 2.2em;
-      margin-bottom: 20px;
-      color: #fffdf9;
-      text-shadow: 1px 1px 4px rgba(0,0,0,0.2);
-      user-select: none;
-    }
-
-    h1 a.tpww {
-      color: inherit;
-      text-decoration: none;
-      cursor: pointer;
-      display: inline-block;
-    }
-
-    h1 a.tpww:hover {
-      text-decoration: underline;
-    }
-
-    .link {
-      flex: 1 1 calc(50% - 12px);
-      max-width: 300px;
-      min-width: 140px;
-      background: rgba(255, 255, 255, 0.9);
-      color: #222;
-      text-decoration: none;
-      padding: 14px 20px;
-      border-radius: 14px;
-      font-weight: 600;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-      transition: all 0.3s ease;
-      text-align: center;
-      margin: 0;
-      display: inline-block;
-      word-break: break-word;
-      box-sizing: border-box;
-    }
-
-    .link:hover {
-      background: #fff;
-      transform: translateY(-3px);
-      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
-    }
-
-    footer {
-      margin-top: 16px;
-      font-size: 0.9em;
-      color: #ffeedd;
-      width: 100%;
-      max-width: 640px;
-      text-align: center;
-      user-select: none;
-    }
-
-    footer a.tpww {
-      color: #fff6e0;
-      text-decoration: none;
-      font-weight: bold;
-      cursor: pointer;
-      display: inline-block;
-    }
-
-    footer a.tpww:hover {
-      text-decoration: underline;
-    }
-
-    /* スマホ・小画面対応 */
-    @media (max-width: 480px) {
-      .container {
-        gap: 8px;
-        padding: 12px 10px;
-      }
-
-      .link {
-        flex: 1 1 100%;
-        max-width: 100%;
-        min-width: auto;
-      }
-
-      h1 {
-        font-size: 1.8em;
-        margin-bottom: 16px;
-      }
     }
   </style>
 </head>
-<body>
-  <div class="container">
-    <h1>
-      <a href="./" class="tpww" onclick="location.reload()">Hamuzon Link Porta</a>
+<body class="flex flex-col items-center justify-center min-h-screen p-4 text-white text-center bg-gradient-custom bg-fixed bg-cover">
+
+  <!-- メインコンテナ -->
+  <div class="container w-full max-w-5xl px-4 py-6 bg-black bg-opacity-25 rounded-2xl shadow-xl backdrop-blur-custom">
+    <!-- タイトル -->
+    <h1 class="text-4xl font-extrabold mb-6 sm:text-3xl">
+      <a href="." onclick="location.reload()" class="text-white hover:underline">Hamuzon Link Portal</a>
     </h1>
 
-    <a class="link" href="https://scratch.mit.edu/users/hamusata/" target="_blank" rel="noopener noreferrer">🐱 Scratch user @hamusata</a>
-    <a class="link" href="https://scratch.mit.edu/users/hamuzon/" target="_blank" rel="noopener noreferrer">🐱 Scratch user @hamuzon</a>
-    <a class="link" href="https://hamuzon.github.io/hamuzon-jp.f5.si/Time-Zone_app/" target="_blank" rel="noopener noreferrer">🕰️ TimeZone - Hamuzon</a>
-    <a class="link" href="https://hamuzon.github.io/hamuzon-jp.f5.si/expo2025-counter/" target="_blank" rel="noopener noreferrer">⏳ Expo 2025 Countdown</a>
-    <a class="link" href="https://time-app.f5.si" target="_blank" rel="noopener noreferrer">⏰ 時計 / Clock</a>
-    <a class="link" href="https://hamuzon.github.io/hamuzon-jp.f5.si/bin2dec/" target="_blank" rel="noopener noreferrer">🔢 Binary⇔Decimal Converter</a>
-    <a class="link" href="https://hamuzon.github.io/hamuzon-jp.f5.si/text/" target="_blank" rel="noopener noreferrer">🔍 Text Enlarger</a>
-    <a class="link" href="https://hamuzon.github.io/hamuzon-jp.f5.si/Device-info/" target="_blank" rel="noopener noreferrer">📱 Device Info Viewer</a>
-    <a class="link" href="https://hamuzon.github.io/hamuzon-jp.f5.si/password/" target="_blank" rel="noopener noreferrer">🔑Password Generator Tool🗝️</a>
-    <a class="link" href="https://hamuzon.github.io/hamuzon-jp.f5.si/calculator/" target="_blank" rel="noopener noreferrer"> 計算機/ calculator Tool</a>
-    <a class="link" href="https://hamuzon.github.io/hamuzon-jp.f5.si/calendar/" target="_blank" rel="noopener noreferrer"> カレンダー / calendar</a>
-    <a class="link" href="https://hamuzon.github.io/hamuzon-jp.f5.si/todo/" target="_blank" rel="noopener noreferrer"> ToDo lists</a>
-
-    <footer>
-      <p>&copy; <a href="https://hamuzon-jp.f5.si/" class="tpww" onclick="location.reload()">@hamuzon</a></p>
-    </footer>
+    <!-- リンク群 -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+      <a class="link-btn" href="https://scratch.mit.edu/users/hamusata/" target="_blank" rel="noopener noreferrer">🐱 Scratch user @hamusata</a>
+      <a class="link-btn" href="https://scratch.mit.edu/users/hamuzon/" target="_blank" rel="noopener noreferrer">🐱 Scratch user @hamuzon</a>
+      <a class="link-btn" href="https://hamuzon.github.io/hamuzon-jp.f5.si/Time-Zone_app/" target="_blank" rel="noopener noreferrer">🕰️ TimeZone - Hamuzon</a>
+      <a class="link-btn" href="https://hamuzon.github.io/hamuzon-jp.f5.si/expo2025-counter/" target="_blank" rel="noopener noreferrer">⏳ Expo 2025 Countdown</a>
+      <a class="link-btn" href="https://time-app.f5.si" target="_blank" rel="noopener noreferrer">⏰ 時計 / Clock</a>
+      <a class="link-btn" href="https://hamuzon.github.io/hamuzon-jp.f5.si/bin2dec/" target="_blank" rel="noopener noreferrer">🔢 Binary⇔Decimal Converter</a>
+      <a class="link-btn" href="https://hamuzon.github.io/hamuzon-jp.f5.si/text/" target="_blank" rel="noopener noreferrer">🔍 Text Enlarger</a>
+      <a class="link-btn" href="https://hamuzon.github.io/hamuzon-jp.f5.si/Device-info/" target="_blank" rel="noopener noreferrer">📱 Device Info Viewer</a>
+      <a class="link-btn" href="https://hamuzon.github.io/hamuzon-jp.f5.si/password/" target="_blank" rel="noopener noreferrer">🔑Password Generator Tool🗝️</a>
+      <a class="link-btn" href="https://hamuzon.github.io/hamuzon-jp.f5.si/calculator/" target="_blank" rel="noopener noreferrer">🔢 計算機 / calculator 🧮</a>
+      <a class="link-btn" href="https://hamuzon.github.io/hamuzon-jp.f5.si/calendar/" target="_blank" rel="noopener noreferrer">📅 カレンダー / calendar 🗓️</a>
+      <a class="link-btn" href="https://hamuzon.github.io/hamuzon-jp.f5.si/todo/" target="_blank" rel="noopener noreferrer">📝 todo lists ✏️</a>
+    </div>
   </div>
+
+  <!-- フッター -->
+  <footer class="mt-6 text-sm text-orange-100 text-center w-full max-w-5xl select-none">
+    <p>&copy; 2025 
+      <a href="." onclick="location.reload()" class="text-orange-50 font-bold hover:underline">@hamuzon</a>
+    </p>
+  </footer>
+
+  <!-- Tailwind カスタムクラス定義 -->
+  <style>
+    .link-btn {
+      @apply block w-full bg-white text-gray-800 no-underline py-3 px-5 rounded-xl font-semibold shadow-md transition duration-300 ease-in-out text-center hover:bg-gray-100 hover:-translate-y-1 hover:shadow-lg break-words;
+    }
+  </style>
 </body>
 </html>
