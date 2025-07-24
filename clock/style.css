@@ -1,0 +1,78 @@
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+html, body {
+  min-height: 100vh;
+  width: 100vw;
+  overflow-x: hidden;
+  background: linear-gradient(135deg, #d9ead3, #e7f1e9);
+  color: #1a3d2f;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+.container {
+  width: 100%;
+  max-width: 960px;
+}
+h1 {
+  font-size: 2.2rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  color: #145214;
+}
+.zones {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+}
+.zone-card {
+  background-color: #c3e0c8;
+  border-radius: 12px;
+  padding: 1.5rem 2rem;
+  box-shadow: 0 4px 8px rgba(0, 121, 61, 0.25);
+  text-align: center;
+  width: 100%;
+  max-width: 440px;
+  min-height: 180px;
+}
+.zone-name {
+  font-size: 1.4rem;
+  margin-bottom: 0.2rem;
+  font-weight: 700;
+  color: #145214;
+}
+.zone-offset {
+  font-size: 1rem;
+  color: #405c33;
+  margin-bottom: 0.6rem;
+}
+.date {
+  font-size: 1rem;
+  color: #405c33;
+  margin-bottom: 0.4rem;
+}
+.time {
+  font-size: 2.2rem;
+  font-family: monospace;
+  font-weight: bold;
+  color: #264d25;
+}
+@media screen and (max-width: 768px) {
+  .zones {
+    grid-template-columns: 1fr;
+  }
+  .zone-card {
+    padding: 1rem 1.5rem;
+    min-height: 140px;
+  }
+  .time {
+    font-size: 1.6rem;
+  }
+}
