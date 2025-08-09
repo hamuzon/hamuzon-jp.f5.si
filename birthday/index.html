@@ -2,46 +2,52 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Birthday-counter</title>
-  <link rel="stylesheet" href="styles.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Birthday Counter 🎂</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
 </head>
 <body>
   <main>
-    <h1>Birthday-counter</h1>
-    <form id="birthdayForm" autocomplete="off" novalidate>
-      <label for="month">誕生月 (1〜12):</label>
-      <input type="number" id="month" name="month" min="1" max="12" required />
+    <h1>🎉 誕生日カウンター 🎉</h1>
 
-      <label for="day">誕生日 (1〜31):</label>
-      <input type="number" id="day" name="day" min="1" max="31" required />
-
-      <label>
-        <input type="checkbox" id="withAge" name="withAge" />
-        年齢を表示する（生まれ年を入力）
-      </label>
-
-      <div id="yearInput" class="hidden">
-        <label for="year">生まれ年 (1900〜2100):</label>
+    <!-- 入力フォーム -->
+    <form id="birthdayForm">
+      <label for="year">年（省略可）:</label>
+      <div id="yearInput" class="input-group hidden">
         <input type="number" id="year" name="year" min="1900" max="2100" />
       </div>
 
-      <label for="importFile">設定ファイルを読み込む（JSON）:</label>
-      <input type="file" id="importFile" accept="application/json" />
+      <label for="month">月:</label>
+      <input type="number" id="month" name="month" min="1" max="12" required />
+
+      <label for="day">日:</label>
+      <input type="number" id="day" name="day" min="1" max="31" required />
+
+      <label>
+        <input type="checkbox" id="withAge" />
+        年齢も表示する
+      </label>
 
       <div class="buttons">
-        <button type="submit">開始</button>
-        <button type="button" id="resetBtn">リセット</button>
-        <button type="button" id="exportBtn" class="hidden">設定をエクスポート</button>
+        <button type="submit">開始 🎬</button>
+        <input type="file" id="importFile" accept=".json" />
       </div>
     </form>
 
-    <div id="countdown" class="hidden">
-      残り <span id="time">--</span>
-    </div>
-    <div id="age"></div>
+    <!-- カウントダウン表示 -->
+    <section id="countdown" class="hidden">
+      <h2>🎈 次の誕生日まであと：</h2>
+      <div id="time"></div>
+      <div id="age"></div>
+      <div class="buttons">
+        <button id="resetBtn">リセット 🔁</button>
+        <button id="exportBtn">エクスポート 💾</button>
+      </div>
+    </section>
 
-    <div id="specialUI" class="hidden"></div>
+    <!-- 誕生日当日表示 -->
+    <section id="specialUI" class="hidden"></section>
   </main>
 
   <script src="script.js"></script>
