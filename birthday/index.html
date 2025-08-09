@@ -3,64 +3,47 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Birthday Counter</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>Birthday-counter</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <main>
-    <h1>Birthday Counter</h1>
-    <form id="birthdayForm" novalidate>
-      <label for="month">誕生日の月 (1-12)</label>
+    <h1>Birthday-counter</h1>
+    <form id="birthdayForm" autocomplete="off" novalidate>
+      <label for="month">誕生月 (1〜12):</label>
       <input type="number" id="month" name="month" min="1" max="12" required />
 
-      <label for="day">誕生日の日 (1-31)</label>
+      <label for="day">誕生日 (1〜31):</label>
       <input type="number" id="day" name="day" min="1" max="31" required />
 
-      <label id="labelYearInput" for="year" class="hidden">誕生日の年 (1900-2100)</label>
-      <input type="number" id="year" name="year" min="1900" max="2100" class="hidden" />
-
-      <label for="withAge" style="margin-top:1.5rem; display:flex; align-items:center; cursor:pointer;">
+      <label>
         <input type="checkbox" id="withAge" name="withAge" />
-        年齢も表示する
+        年齢を表示する（生まれ年を入力）
       </label>
 
-      <div class="buttons">
-        <button type="submit" id="submitBtn">開始</button>
-        <button type="button" id="resetBtn">リセット</button>
+      <div id="yearInput" class="hidden">
+        <label for="year">生まれ年 (1900〜2100):</label>
+        <input type="number" id="year" name="year" min="1900" max="2100" />
       </div>
 
-      <label for="importFile" style="margin-top: 1.5rem;">
-        JSONファイルから読み込み
-      </label>
-      <input type="file" id="importFile" accept=".json" />
+      <label for="importFile">設定ファイルを読み込む（JSON）:</label>
+      <input type="file" id="importFile" accept="application/json" />
+
+      <div class="buttons">
+        <button type="submit">開始</button>
+        <button type="button" id="resetBtn">リセット</button>
+        <button type="button" id="exportBtn" class="hidden">設定をエクスポート</button>
+      </div>
     </form>
 
     <div id="countdown" class="hidden">
-      <h2>次の誕生日まで</h2>
-      <div id="time">--日 --時間 --分 --秒</div>
-      <div id="age"></div>
+      残り <span id="time">--</span>
     </div>
+    <div id="age"></div>
 
     <div id="specialUI" class="hidden"></div>
-
-    <button id="exportBtn" class="hidden">データをJSONでエクスポート</button>
   </main>
 
-  <button id="settingsBtn" class="settings-btn" aria-label="設定">⚙️</button>
-
-  <div id="settingsModal" class="settings-modal hidden" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
-    <div class="settings-content">
-      <button id="closeSettingsBtn" aria-label="閉じる">×</button>
-      <h3 id="settingsTitle">設定</h3>
-
-      <label><input type="checkbox" id="toggleAgeDisplay" /> 年齢表示を有効にする</label>
-      <label><input type="checkbox" id="toggleConfetti" checked /> 紙吹雪を表示する</label>
-      <label><input type="checkbox" id="toggleSound" /> 音を鳴らす</label>
-    </div>
-  </div>
-
-  <div id="confettiContainer"></div>
-
-  <script src="script.js" defer></script>
+  <script src="script.js"></script>
 </body>
 </html>
