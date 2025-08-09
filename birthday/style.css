@@ -1,23 +1,23 @@
 :root {
-  --bg-color: #ffffff;
-  --text-color: #222222;
+  --bg-color: #fff;
+  --text-color: #222;
   --accent: #ff4081;
-  --input-bg: #f0f0f0;
-  --border: #cccccc;
+  --input-bg: #f9f9f9;
+  --border: #ddd;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg-color: #1e1e1e;
-    --text-color: #ffffff;
+    --bg-color: #121212;
+    --text-color: #eee;
     --accent: #ff80ab;
-    --input-bg: #2c2c2c;
-    --border: #444444;
+    --input-bg: #222;
+    --border: #444;
   }
 }
 
 body {
-  font-family: 'Segoe UI', sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   background: var(--bg-color);
   color: var(--text-color);
   margin: 0;
@@ -27,34 +27,35 @@ body {
 
 main {
   max-width: 600px;
-  margin: auto;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background: var(--input-bg);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
 }
 
-h1, h2, h3 {
+h1, h2 {
   text-align: center;
   color: var(--accent);
+  margin-bottom: 1rem;
 }
 
-form, #countdown, #specialUI {
-  background: var(--input-bg);
-  padding: 1.5rem;
-  border-radius: 8px;
-  border: 1px solid var(--border);
-  margin-top: 1rem;
-}
-
-label {
+form label {
   display: block;
-  margin: 1rem 0 0.2rem;
+  margin-top: 1rem;
+  font-weight: 600;
 }
 
-input[type="number"] {
+input[type="number"], input[type="file"] {
   width: 100%;
   padding: 0.5rem;
+  font-size: 1rem;
   border: 1px solid var(--border);
-  border-radius: 4px;
+  border-radius: 6px;
   background: var(--bg-color);
   color: var(--text-color);
+  box-sizing: border-box;
 }
 
 input[type="checkbox"] {
@@ -67,14 +68,15 @@ input[type="checkbox"] {
 }
 
 button {
-  padding: 0.6rem 1.2rem;
-  margin: 0.3rem;
-  border: none;
-  border-radius: 5px;
   background: var(--accent);
-  color: #fff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.7rem 1.4rem;
   font-size: 1rem;
   cursor: pointer;
+  margin: 0 0.5rem;
+  transition: opacity 0.2s ease;
 }
 
 button:hover {
@@ -85,53 +87,78 @@ button:hover {
   display: none;
 }
 
-.celebration {
-  font-size: 1.4rem;
-  text-align: center;
-  padding: 1rem;
-  animation: pop 1s ease-in-out infinite alternate;
+/* 設定ボタン */
+.settings-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  font-size: 2rem;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgb(0 0 0 / 0.2);
+  z-index: 10000;
 }
 
-@keyframes pop {
-  from { transform: scale(1); }
-  to { transform: scale(1.05); }
+/* 設定モーダル */
+.settings-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10001;
 }
 
-/* 🎊 花吹雪アニメーション */
+.settings-modal.hidden {
+  display: none;
+}
+
+.settings-content {
+  background: var(--input-bg);
+  color: var(--text-color);
+  padding: 2rem;
+  border-radius: 14px;
+  width: 320px;
+  box-shadow: 0 6px 18px rgb(0 0 0 / 0.25);
+}
+
+.settings-content label {
+  display: flex;
+  align-items: center;
+  margin: 1rem 0;
+  font-weight: 600;
+}
+
+/* お祝い用アニメーション（季節別紙吹雪） */
 body.birthday::before {
-  content: "🎊🎉🌸🎈✨🎂🎁🎉🌟";
+  content: var(--confetti-content, "🎊🎉🌸🎈✨🎂🎁🎉🌟");
   position: fixed;
   top: 0;
   left: 50%;
   transform: translateX(-50%);
   font-size: 2rem;
-  animation: confetti 5s ease-in-out infinite;
+  animation: confetti-fall 5s ease-in-out infinite;
   pointer-events: none;
   z-index: 9999;
 }
 
-@keyframes confetti {
+@keyframes confetti-fall {
   0% {
-    transform: translateX(-50%) translateY(-100%) rotate(0deg);
+    transform: translateY(-100%) rotate(0deg);
     opacity: 0;
   }
   50% {
     opacity: 1;
-    transform: translateX(-50%) translateY(40vh) rotate(180deg);
+    transform: translateY(40vh) rotate(180deg);
   }
   100% {
-    transform: translateX(-50%) translateY(100vh) rotate(360deg);
+    transform: translateY(100vh) rotate(360deg);
     opacity: 0;
-  }
-}
-
-@media (max-width: 600px) {
-  button {
-    width: 100%;
-    margin: 0.3rem 0;
-  }
-
-  input[type="number"] {
-    font-size: 1rem;
   }
 }
