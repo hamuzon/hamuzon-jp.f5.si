@@ -5,8 +5,6 @@
   --input-bg: #f9f9f9;
   --border: #ddd;
   --confetti-content: "🎊🎉🌸🎈✨🎂🎁🎉🌟";
-  --button-bg-hover: #e91e63;
-  --modal-bg: rgba(0, 0, 0, 0.5);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -16,14 +14,7 @@
     --accent: #ff80ab;
     --input-bg: #222;
     --border: #444;
-    --button-bg-hover: #ff4081;
-    --modal-bg: rgba(0, 0, 0, 0.7);
   }
-}
-
-/* ベース */
-* {
-  box-sizing: border-box;
 }
 
 body {
@@ -33,78 +24,50 @@ body {
   margin: 0;
   padding: 1rem;
   transition: background 0.3s, color 0.3s;
+  position: relative;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 
 main {
-  width: 100%;
-  max-width: 480px;
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 1.5rem;
   background: var(--input-bg);
   border-radius: 12px;
   border: 1px solid var(--border);
-  padding: 2rem 2.5rem;
-  box-shadow: 0 6px 18px rgb(0 0 0 / 0.1);
-  margin-top: 2rem;
-  flex-grow: 0;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
 }
 
-h1 {
-  text-align: center;
-  color: var(--accent);
-  font-weight: 700;
-  margin-bottom: 1rem;
-  font-size: 2rem;
-}
-
-h2 {
+h1, h2 {
   text-align: center;
   color: var(--accent);
   margin-bottom: 1rem;
-  font-weight: 600;
 }
 
-/* フォーム */
 form label {
   display: block;
-  margin-top: 1.25rem;
+  margin-top: 1rem;
   font-weight: 600;
-  font-size: 1rem;
 }
 
 input[type="number"], input[type="file"] {
   width: 100%;
-  padding: 0.55rem 0.75rem;
+  padding: 0.5rem;
   font-size: 1rem;
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: 6px;
   background: var(--bg-color);
   color: var(--text-color);
-  margin-top: 0.4rem;
-  transition: border-color 0.2s;
-}
-
-input[type="number"]:focus, input[type="file"]:focus {
-  outline: none;
-  border-color: var(--accent);
-  box-shadow: 0 0 6px var(--accent);
+  box-sizing: border-box;
 }
 
 input[type="checkbox"] {
-  margin-right: 0.6rem;
-  cursor: pointer;
+  margin-right: 0.5rem;
   vertical-align: middle;
 }
 
-.hidden {
-  display: none !important;
-}
-
-/* ボタン */
 .buttons {
-  margin-top: 2rem;
+  margin-top: 1.5rem;
   text-align: center;
 }
 
@@ -113,68 +76,87 @@ button {
   color: white;
   border: none;
   border-radius: 8px;
-  padding: 0.75rem 1.8rem;
-  font-size: 1.1rem;
+  padding: 0.7rem 1.4rem;
+  font-size: 1rem;
   cursor: pointer;
-  margin: 0 0.6rem;
-  font-weight: 600;
-  transition: background-color 0.3s, opacity 0.2s ease;
-  box-shadow: 0 3px 8px rgb(0 0 0 / 0.15);
-  user-select: none;
+  margin: 0 0.5rem;
+  transition: opacity 0.2s ease;
 }
 
-button:hover,
-button:focus {
-  background: var(--button-bg-hover);
-  opacity: 0.9;
-  outline: none;
+button:hover {
+  opacity: 0.85;
 }
 
-button:disabled {
-  opacity: 0.5;
-  cursor: default;
-  background: var(--border);
-  box-shadow: none;
+.hidden {
+  display: none;
 }
 
 /* カウントダウン表示 */
+
 #countdown {
   text-align: center;
-  margin-top: 2rem;
-  font-size: 1.4rem;
-  font-weight: 600;
-  color: var(--accent);
+  font-size: 1.8rem;
+  margin-top: 1.2rem;
+  font-weight: bold;
+  letter-spacing: 0.05em;
 }
 
 #age {
   text-align: center;
-  margin-top: 0.6rem;
-  font-size: 1.1rem;
-  color: var(--text-color);
-  font-weight: 500;
+  margin-top: 0.7rem;
+  font-size: 1.2rem;
+  color: var(--accent);
 }
 
-/* お祝いUI */
-.birthday::before {
-  content: var(--confetti-content);
-  position: fixed;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 2.2rem;
-  animation: confetti-fall 5s ease-in-out infinite;
-  pointer-events: none;
-  z-index: 9999;
+/* 誕生日特別メッセージ */
+
+#specialUI {
+  text-align: center;
+  font-size: 1.6rem;
+  margin-top: 1.5rem;
+  font-weight: 700;
+  color: var(--accent);
 }
+
+.celebration {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+/* 紙吹雪コンテナ */
+
+#confettiContainer {
+  position: fixed;
+  pointer-events: none;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: visible;
+  z-index: 9999;
+  mix-blend-mode: screen;
+}
+
+/* 紙吹雪一片 */
+
+.confetti {
+  position: absolute;
+  top: 0;
+  width: 8px;
+  height: 8px;
+  background-color: var(--accent);
+  opacity: 0.9;
+  border-radius: 2px;
+  animation: confetti-fall 4s linear forwards;
+  will-change: transform, opacity;
+}
+
+/* 紙吹雪落下アニメーション */
 
 @keyframes confetti-fall {
   0% {
-    transform: translateY(-100%) rotate(0deg);
-    opacity: 0;
-  }
-  50% {
+    transform: translateY(0) rotate(0deg);
     opacity: 1;
-    transform: translateY(40vh) rotate(180deg);
   }
   100% {
     transform: translateY(100vh) rotate(360deg);
@@ -182,159 +164,37 @@ button:disabled {
   }
 }
 
-.celebration {
-  font-size: 1.8rem;
-  text-align: center;
-  margin-top: 3rem;
-  color: var(--accent);
-  font-weight: 700;
+/* 誕生日時に body にクラス追加で装飾 */
+
+body.birthday {
+  background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);
+  color: #fff;
+  transition: background 0.8s ease;
 }
 
-/* 紙吹雪用コンテナ */
-#confettiContainer {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  pointer-events: none;
-  overflow: visible;
-  z-index: 9998;
-}
+/* 年入力フォーム */
 
-.confetti {
-  position: fixed;
-  width: 8px;
-  height: 8px;
-  background-color: red;
-  opacity: 0.9;
-  border-radius: 2px;
-  animation: confetti-fall-piece 4s linear forwards;
-}
-
-@keyframes confetti-fall-piece {
-  0% {
-    transform: translateY(-10px) rotate(0deg);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(100vh) rotate(720deg);
-    opacity: 0;
-  }
-}
-
-/* 設定ボタン（右下） */
-.settings-btn {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  background: var(--accent);
-  color: white;
-  font-size: 2.4rem;
-  cursor: pointer;
-  box-shadow: 0 5px 12px rgba(0,0,0,0.3);
-  z-index: 10000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  transition: background-color 0.3s;
-  user-select: none;
-}
-
-.settings-btn:hover {
-  background: var(--button-bg-hover);
-}
-
-/* 設定モーダル */
-.settings-modal {
-  position: fixed;
-  inset: 0;
-  background: var(--modal-bg);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 10001;
-}
-
-.settings-modal.hidden {
+#yearInput.hidden {
   display: none;
 }
 
-.settings-content {
-  background: var(--input-bg);
-  color: var(--text-color);
-  padding: 2rem 2.2rem;
-  border-radius: 14px;
-  width: 320px;
-  max-width: 90vw;
-  box-shadow: 0 6px 18px rgb(0 0 0 / 0.25);
-  position: relative;
-  font-weight: 500;
+/* ファイル選択ラベル調整 */
+
+#importFile {
+  margin-top: 1rem;
+  font-size: 0.9rem;
 }
 
-.settings-content h3 {
-  margin-top: 0;
-  margin-bottom: 1rem;
-  font-weight: 700;
-  font-size: 1.3rem;
-  color: var(--accent);
-  text-align: center;
-}
+/* スマホ対応 */
 
-.settings-content label {
-  display: flex;
-  align-items: center;
-  margin: 1rem 0;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.settings-content input[type="checkbox"] {
-  margin-right: 0.7rem;
-  transform: scale(1.2);
-  cursor: pointer;
-}
-
-/* モーダル閉じるボタン */
-#closeSettingsBtn {
-  position: absolute;
-  top: 12px;
-  right: 16px;
-  background: transparent;
-  border: none;
-  font-size: 1.6rem;
-  font-weight: 700;
-  color: var(--accent);
-  cursor: pointer;
-  user-select: none;
-  transition: color 0.2s;
-}
-
-#closeSettingsBtn:hover {
-  color: var(--button-bg-hover);
-}
-
-/* 年入力ラベル・非表示制御 */
-#labelYearInput.hidden {
-  display: none;
-}
-
-/* レスポンシブ */
 @media (max-width: 480px) {
   main {
-    padding: 1.5rem 1.8rem;
-  }
-
-  h1 {
-    font-size: 1.6rem;
+    margin: 1rem;
+    padding: 1rem;
   }
 
   button {
-    font-size: 1rem;
-    padding: 0.6rem 1.2rem;
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
   }
 }
