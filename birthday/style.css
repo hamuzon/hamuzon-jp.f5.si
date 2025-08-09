@@ -4,8 +4,8 @@
   --accent: #ff4081;
   --input-bg: #f9f9f9;
   --border: #ddd;
+  --confetti-content: "🎊🎉🌸🎈✨🎂🎁🎉🌟";
 }
-
 @media (prefers-color-scheme: dark) {
   :root {
     --bg-color: #121212;
@@ -15,7 +15,6 @@
     --border: #444;
   }
 }
-
 body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   background: var(--bg-color);
@@ -24,7 +23,6 @@ body {
   padding: 1rem;
   transition: background 0.3s, color 0.3s;
 }
-
 main {
   max-width: 600px;
   margin: 2rem auto;
@@ -34,19 +32,16 @@ main {
   border: 1px solid var(--border);
   box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
 }
-
 h1, h2 {
   text-align: center;
   color: var(--accent);
   margin-bottom: 1rem;
 }
-
 form label {
   display: block;
   margin-top: 1rem;
   font-weight: 600;
 }
-
 input[type="number"], input[type="file"] {
   width: 100%;
   padding: 0.5rem;
@@ -57,16 +52,13 @@ input[type="number"], input[type="file"] {
   color: var(--text-color);
   box-sizing: border-box;
 }
-
 input[type="checkbox"] {
   margin-right: 0.5rem;
 }
-
 .buttons {
   margin-top: 1.5rem;
   text-align: center;
 }
-
 button {
   background: var(--accent);
   color: white;
@@ -78,33 +70,31 @@ button {
   margin: 0 0.5rem;
   transition: opacity 0.2s ease;
 }
-
 button:hover {
   opacity: 0.85;
 }
-
 .hidden {
   display: none;
 }
-
-/* 設定ボタン */
 .settings-btn {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  font-size: 2rem;
-  background: var(--accent);
-  color: white;
-  border: none;
-  border-radius: 50%;
   width: 50px;
   height: 50px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: white;
+  font-size: 2rem;
   cursor: pointer;
-  box-shadow: 0 4px 8px rgb(0 0 0 / 0.2);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
   z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
 }
-
-/* 設定モーダル */
 .settings-modal {
   position: fixed;
   inset: 0;
@@ -114,11 +104,9 @@ button:hover {
   align-items: center;
   z-index: 10001;
 }
-
 .settings-modal.hidden {
   display: none;
 }
-
 .settings-content {
   background: var(--input-bg);
   color: var(--text-color);
@@ -127,17 +115,14 @@ button:hover {
   width: 320px;
   box-shadow: 0 6px 18px rgb(0 0 0 / 0.25);
 }
-
 .settings-content label {
   display: flex;
   align-items: center;
   margin: 1rem 0;
   font-weight: 600;
 }
-
-/* お祝い用アニメーション（季節別紙吹雪） */
 body.birthday::before {
-  content: var(--confetti-content, "🎊🎉🌸🎈✨🎂🎁🎉🌟");
+  content: var(--confetti-content);
   position: fixed;
   top: 0;
   left: 50%;
@@ -147,7 +132,6 @@ body.birthday::before {
   pointer-events: none;
   z-index: 9999;
 }
-
 @keyframes confetti-fall {
   0% {
     transform: translateY(-100%) rotate(0deg);
