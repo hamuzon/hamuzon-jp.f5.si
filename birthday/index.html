@@ -1,17 +1,15 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Birthday Counter 🎂</title>
-  <link rel="stylesheet" href="style.css" />
-  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Birthday Counter 🎂</title>
+<link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <main>
     <h1>🎉 誕生日カウンター 🎉</h1>
 
-    <!-- 入力フォーム -->
     <form id="birthdayForm">
       <label for="year">年（省略可）:</label>
       <div id="yearInput" class="input-group hidden">
@@ -24,10 +22,7 @@
       <label for="day">日:</label>
       <input type="number" id="day" name="day" min="1" max="31" required />
 
-      <label>
-        <input type="checkbox" id="withAge" />
-        年齢も表示する
-      </label>
+      <label><input type="checkbox" id="withAge" /> 年齢も表示する</label>
 
       <div class="buttons">
         <button type="submit">開始 🎬</button>
@@ -35,7 +30,6 @@
       </div>
     </form>
 
-    <!-- カウントダウン表示 -->
     <section id="countdown" class="hidden">
       <h2>🎈 次の誕生日まであと：</h2>
       <div id="time"></div>
@@ -46,10 +40,21 @@
       </div>
     </section>
 
-    <!-- 誕生日当日表示 -->
     <section id="specialUI" class="hidden"></section>
   </main>
 
-  <script src="script.js"></script>
+  <button id="settingsBtn" class="settings-btn" aria-label="設定を開く">⚙️</button>
+
+  <div id="settingsModal" class="settings-modal hidden" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+    <div class="settings-content">
+      <h2 id="settingsTitle">設定</h2>
+      <label><input type="checkbox" id="toggleAgeDisplay" /> 年齢を表示する</label>
+      <label><input type="checkbox" id="toggleConfetti" checked /> 紙吹雪アニメーション</label>
+      <label><input type="checkbox" id="toggleSound" /> 祝祭音を鳴らす</label>
+      <button id="closeSettingsBtn" aria-label="設定を閉じる">閉じる</button>
+    </div>
+  </div>
+
+<script src="script.js"></script>
 </body>
 </html>
