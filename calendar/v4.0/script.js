@@ -17,6 +17,7 @@ const eventList = document.getElementById("event-list");
 const newEventStart = document.getElementById("new-event-start");
 const newEventEnd = document.getElementById("new-event-end");
 const newEventText = document.getElementById("new-event-text");
+const newEventTagsInput = document.getElementById("new-event-tags");
 const newEventLocation = document.getElementById("new-event-location");
 const newEventNotify = document.getElementById("new-event-notify");
 const addEventBtn = document.getElementById("add-event-btn");
@@ -34,6 +35,12 @@ const saveJsonBtn = document.getElementById("save-json-btn");
 const loadJsonBtn = document.getElementById("load-json-btn");
 const loadJsonInput = document.getElementById("load-json-input");
 
+// 通知ポップアップ要素
+const notificationPopup = document.getElementById("notification-popup");
+const notificationTitle = document.getElementById("notification-title");
+const notificationBody = document.getElementById("notification-body");
+const notificationCloseBtn = document.getElementById("notification-close-btn");
+
 // --- 状態管理 ---
 let currentDate = new Date();
 currentDate.setHours(0, 0, 0, 0);
@@ -48,15 +55,27 @@ let calendarData = {
   }
 };
 
-// --- localStorageキー ---
 const STORAGE_KEY = "calendarData-v4";
 
-// --- 保存関数 ---
+// --- 通知済みイベント管理 ---
+const notifiedEvents = new Set();
+
+// --- 日付文字列フォーマット ---
+function formatDate(date) {
+  return date.toISOString().slice(0, 10);
+}
+function pad(n) {
+  return n.toString().padStart(2, "0");
+}
+// イベント固有キー（通知済み管理用）
+function eventUniqueKey(dateStr, startTime, text) {
+  return `${dateStr}|${startTime}|${text}`;
+}
+
+// --- ローカルストレージ読み書き ---
 function saveToLocalStorage() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(calendarData));
 }
-
-// --- 読み込み関数 ---
 function loadFromLocalStorage() {
   const stored = localStorage.getItem(STORAGE_KEY);
   if (stored) {
@@ -77,6 +96,7 @@ function convertDataToV4(data) {
   if (originalVersion === "2.0") return convertV2toV4(data);
   return convertV1toV4(data);
 }
+
 function convertV1toV4(data) {
   const convertedEvents = {};
   for (const dateKey in data.events) {
@@ -106,6 +126,7 @@ function convertV1toV4(data) {
     tagColors: data.settings?.tagColors || {}
   };
 }
+
 function convertV2toV4(data) {
   const convertedEvents = {};
   for (const dateKey in data.events) {
@@ -124,6 +145,7 @@ function convertV2toV4(data) {
     tagColors: data.tagColors || {}
   };
 }
+
 function convertV3toV4(data) {
   const convertedEvents = {};
   for (const dateKey in data.events) {
@@ -141,11 +163,6 @@ function convertV3toV4(data) {
     events: convertedEvents,
     tagColors: data.tagColors || {}
   };
-}
-
-// --- 日付フォーマット ---
-function formatDate(date) {
-  return date.toISOString().slice(0, 10);
 }
 
 // --- カレンダー描画 ---
@@ -202,12 +219,10 @@ function drawCalendar(date) {
         const evDiv = document.createElement("span");
         evDiv.className = "event";
 
-        // 時刻表示
         const timeText = ev.start && ev.end ? `${ev.start}〜${ev.end} ` : ev.start ? `${ev.start} ` : "";
         const textWithoutTags = ev.text.replace(/#\S+/g, "").trim();
         evDiv.textContent = timeText + textWithoutTags;
 
-        // タグ表示
         (ev.tags || []).forEach(tag => {
           const tagSpan = document.createElement("span");
           tagSpan.className = "event-tag";
@@ -216,7 +231,6 @@ function drawCalendar(date) {
           evDiv.appendChild(tagSpan);
         });
 
-        // 場所表示 (アイコン付き)
         if (ev.location) {
           const locSpan = document.createElement("span");
           locSpan.className = "event-location";
@@ -226,7 +240,6 @@ function drawCalendar(date) {
           evDiv.appendChild(locSpan);
         }
 
-        // 通知表示 (ベルアイコン)
         if (ev.notify) {
           const notifySpan = document.createElement("span");
           notifySpan.className = "event-notify";
@@ -249,7 +262,7 @@ function drawCalendar(date) {
   }
 }
 
-// --- モーダル操作 ---
+// --- モーダル処理 ---
 let selectedDate = null;
 let editingIndex = null;
 
@@ -260,6 +273,7 @@ function openModal(date) {
   newEventStart.value = "";
   newEventEnd.value = "";
   newEventText.value = "";
+  newEventTagsInput.value = "";
   newEventLocation.value = "";
   newEventNotify.checked = false;
   editingIndex = null;
@@ -267,11 +281,9 @@ function openModal(date) {
   modalBg.style.display = "flex";
   newEventText.focus();
 }
-
 function closeModal() {
   modalBg.style.display = "none";
 }
-
 modalBg.addEventListener("click", e => {
   if (e.target === modalBg) closeModal();
 });
@@ -325,6 +337,7 @@ function updateEventList() {
       newEventStart.value = ev.start || "";
       newEventEnd.value = ev.end || "";
       newEventText.value = ev.text;
+      newEventTagsInput.value = ev.tags ? ev.tags.join(" ") : "";
       newEventLocation.value = ev.location || "";
       newEventNotify.checked = !!ev.notify;
       editingIndex = i;
@@ -359,6 +372,7 @@ addEventBtn.addEventListener("click", () => {
   const start = newEventStart.value.trim();
   const end = newEventEnd.value.trim();
   const textRaw = newEventText.value.trim();
+  const tagsRaw = newEventTagsInput.value.trim();
   const location = newEventLocation.value.trim();
   const notify = newEventNotify.checked;
 
@@ -368,8 +382,16 @@ addEventBtn.addEventListener("click", () => {
     return;
   }
 
-  // タグ抽出 (#付きの単語)
-  const tags = (textRaw.match(/#\S+/g) || []).map(t => (t.startsWith("#") ? t : "#" + t));
+  // タグ入力欄があるので両方対応（textRaw内の#タグも含める）
+  const tagsFromText = (textRaw.match(/#\S+/g) || []);
+  const tagsFromInput = tagsRaw ? tagsRaw.split(/[\s,]+/).filter(t => t.length > 0) : [];
+  // #が無ければ付ける
+  const normalizedTags = new Set();
+  [...tagsFromText, ...tagsFromInput].forEach(t => {
+    if (t.startsWith("#")) normalizedTags.add(t);
+    else normalizedTags.add("#" + t);
+  });
+  const tags = Array.from(normalizedTags);
 
   // タグがある場合はtagColorsに登録（なければデフォルト色）
   tags.forEach(tag => {
@@ -397,11 +419,11 @@ addEventBtn.addEventListener("click", () => {
   updateEventList();
   drawCalendar(currentDate);
 
-  // 追加後に入力欄クリア（編集時は閉じる）
   if (editingIndex === null) {
     newEventStart.value = "";
     newEventEnd.value = "";
     newEventText.value = "";
+    newEventTagsInput.value = "";
     newEventLocation.value = "";
     newEventNotify.checked = false;
     newEventText.focus();
@@ -420,12 +442,13 @@ function renderTagColorList() {
     const colorInput = document.createElement("input");
     colorInput.type = "color";
     colorInput.value = calendarData.tagColors[tag];
-    colorInput.addEventListener("input", () => {
-      calendarData.tagColors[tag] = colorInput.value;
-      saveToLocalStorage();
-      drawCalendar(currentDate);
-      renderTagColorList();
-    });
+    colorInput.addEventListener("change", () => {
+  calendarData.tagColors[tag] = colorInput.value;
+  saveToLocalStorage();
+  drawCalendar(currentDate);
+  renderTagColorList();
+});
+
 
     const label = document.createElement("span");
     label.textContent = tag;
@@ -438,7 +461,6 @@ function renderTagColorList() {
     deleteBtn.addEventListener("click", () => {
       if (confirm(`${tag} をタグカラー設定から削除しますか？`)) {
         delete calendarData.tagColors[tag];
-        // そのタグをイベントからも削除（テキストからはそのまま）
         for (const date in calendarData.events) {
           calendarData.events[date].forEach(ev => {
             ev.tags = ev.tags.filter(t => t !== tag);
@@ -470,29 +492,37 @@ addTagBtn.addEventListener("click", () => {
     newTagName.focus();
     return;
   }
+
   calendarData.tagColors[tagName] = newTagColor.value;
+  newTagName.value = "";
   saveToLocalStorage();
   renderTagColorList();
-  newTagName.value = "";
-  newTagColor.value = "#4a7c59";
+  drawCalendar(currentDate);
   newTagName.focus();
+});
+
+settingsBtn.addEventListener("click", () => {
+  settingsModalBg.style.display = "flex";
+  renderTagColorList();
 });
 settingsCancelBtn.addEventListener("click", () => {
   settingsModalBg.style.display = "none";
 });
-
-// --- 設定モーダル開閉 ---
-settingsBtn.addEventListener("click", () => {
-  renderTagColorList();
-  settingsModalBg.style.display = "flex";
-});
 settingsModalBg.addEventListener("click", e => {
-  if (e.target === settingsModalBg) {
-    settingsModalBg.style.display = "none";
-  }
+  if (e.target === settingsModalBg) settingsModalBg.style.display = "none";
 });
 
-// --- 月切替 ---
+// --- ランダムカラー生成 ---
+function getRandomColor() {
+  const letters = "0123456789ABCDEF";
+  let color = "#";
+  for (let i=0; i<6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
+
+// --- ナビゲーション ---
 prevMonthBtn.addEventListener("click", () => {
   currentDate.setMonth(currentDate.getMonth() - 1);
   drawCalendar(currentDate);
@@ -507,74 +537,101 @@ todayBtn.addEventListener("click", () => {
   drawCalendar(currentDate);
 });
 
-// --- 保存ボタン処理 ---
+// --- JSON保存・読込 ---
 saveJsonBtn.addEventListener("click", () => {
   const jsonStr = JSON.stringify(calendarData, null, 2);
-  const blob = new Blob([jsonStr], { type: "application/json" });
-  const url = URL.createObjectURL(blob);
+  const blob = new Blob([jsonStr], {type: "application/json"});
   const a = document.createElement("a");
-  const now = new Date();
-  const filename = `Calendar-${CURRENT_SAVE_VERSION}_${formatDate(now)}_${pad(now.getHours())}-${pad(now.getMinutes())}-${pad(now.getSeconds())}.json`;
-  a.href = url;
-  a.download = filename;
+  a.href = URL.createObjectURL(blob);
+  a.download = `Calendar-${CURRENT_SAVE_VERSION}_${formatDate(new Date())}.json`;
   a.click();
-  URL.revokeObjectURL(url);
+  URL.revokeObjectURL(a.href);
 });
 
-function pad(n) {
-  return n.toString().padStart(2, "0");
-}
-
-// --- 読み込みボタン処理（元バージョン表示付き） ---
 loadJsonBtn.addEventListener("click", () => {
-  loadJsonInput.value = "";
   loadJsonInput.click();
 });
-loadJsonInput.addEventListener("change", e => {
-  const file = e.target.files[0];
+loadJsonInput.addEventListener("change", () => {
+  const file = loadJsonInput.files[0];
   if (!file) return;
   const reader = new FileReader();
-  reader.onload = ev => {
+  reader.onload = e => {
     try {
-      let data = JSON.parse(ev.target.result);
-      const originalVersion = data.version || "1.0";
-      data = convertDataToV4(data);
-      calendarData = data;
+      const data = JSON.parse(e.target.result);
+      calendarData = convertDataToV4(data);
       saveToLocalStorage();
       drawCalendar(currentDate);
-      alert(`✅ データを読み込みました！\n旧バージョン: v${originalVersion} → 現行バージョン: v${CURRENT_SAVE_VERSION}`);
+      alert("JSONファイルを読み込みました。");
     } catch {
-      alert("⚠️ ファイルの読み込みに失敗しました。");
+      alert("無効なJSONファイルです。");
     }
   };
   reader.readAsText(file);
+  loadJsonInput.value = "";
 });
 
-// --- ランダムカラー生成（タグ新規登録用） ---
-function getRandomColor() {
-  const letters = "0123456789ABCDEF";
-  let color = "#";
-  for (let i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * 16)];
-  }
-  return color;
+// --- 通知許可要求 ---
+if ("Notification" in window && Notification.permission !== "granted" && Notification.permission !== "denied") {
+  Notification.requestPermission();
 }
 
-// --- 通知機能サンプル（ブラウザ通知API利用） ---
-function notifyEvent(eventText) {
-  if (!("Notification" in window)) return;
-  if (Notification.permission === "granted") {
-    new Notification("予定の通知", { body: eventText });
-  } else if (Notification.permission !== "denied") {
-    Notification.requestPermission().then(permission => {
-      if (permission === "granted") {
-        new Notification("予定の通知", { body: eventText });
+// --- 画面内通知操作 ---
+notificationCloseBtn.addEventListener("click", () => {
+  notificationPopup.style.display = "none";
+});
+function showNotificationPopup(title, body) {
+  notificationTitle.textContent = title;
+  notificationBody.textContent = body;
+  notificationPopup.style.display = "block";
+}
+
+// --- 通知チェック ---
+function checkNotifications() {
+  if (Notification.permission !== "granted") return;
+
+  const now = new Date();
+  const todayStr = formatDate(now);
+  const nowStr = now.toTimeString().slice(0, 8);
+
+  const events = calendarData.events[todayStr] || [];
+
+  events.forEach(ev => {
+    if (!ev.notify || !ev.start) return;
+
+    let evStart = ev.start.length === 5 ? ev.start + ":00" : ev.start;
+
+    if (nowStr === evStart) {
+      const key = eventUniqueKey(todayStr, ev.start, ev.text);
+      if (!notifiedEvents.has(key)) {
+        new Notification("予定の時間です！", {
+          body: `${ev.start} - ${ev.text}`,
+          icon: "/icon.svg"
+        });
+
+        showNotificationPopup("予定の時間です！", `${ev.start} - ${ev.text}`);
+
+        notifiedEvents.add(key);
       }
-    });
+    }
+  });
+
+  for (const key of notifiedEvents) {
+    const [dateStr, startTime] = key.split("|");
+    if (dateStr !== todayStr) {
+      notifiedEvents.delete(key);
+      continue;
+    }
+    const [h, m, s] = startTime.split(":").map(Number);
+    const eventDateTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), h, m, s || 0);
+    if ((now - eventDateTime) > 60000) {
+      notifiedEvents.delete(key);
+    }
   }
 }
 
+// --- 毎秒通知チェック開始 ---
+setInterval(checkNotifications, 1000);
 
-// --- 初期処理 ---
+// --- 初期ロード ---
 loadFromLocalStorage();
 drawCalendar(currentDate);

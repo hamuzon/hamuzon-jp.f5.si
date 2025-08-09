@@ -175,20 +175,16 @@
         <h2>JSONファイル名の命名規則の違い</h2>
 
         <h3>v1.0 のファイル名</h3>
-        <p><code>calendar_events_[YYYY][MM][DD]_[HH][mm][ss].json</code></p>
-        <p><code>例: calendar_events_20250710_183015.json</code></p>
+        <p><code class="example-date-ja">例: calendar_events_20250710_183015.json</code></p>
 
         <h3>v2.0 のファイル名</h3>
-        <p><code>Calendar-[CALENDAR_VERSION]_[YYYY]_[MM]_[DD]_[HH]_[mm]_[ss].json</code></p>
-        <p><code>例: Calendar-2.0_2025_07_10_18_30_15.json</code></p>
+        <p><code class="example-date-ja">例: Calendar-2.0_2025_07_10_18_30_15.json</code></p>
 
         <h3>v3.0 のファイル名</h3>
-        <p><code>Calendar-[CURRENT_SAVE_VERSION]_[YYYY]_[MM]_[DD]_[HH]_[mm]_[ss].json</code></p>
-        <p><code>例: Calendar-3.0_2025_07_10_18_30_15.json</code></p>
+        <p><code class="example-date-ja">例: Calendar-3.0_2025_07_10_18_30_15.json</code></p>
 
         <h3>v4.0 のファイル名</h3>
-        <p><code>Calendar-[CURRENT_SAVE_VERSION]_[YYYY]-[MM]-[DD]_[HH]-[mm]-[ss].json</code></p>
-        <p><code>例: Calendar-4.0_2025-07-10_18-30-15.json</code></p>
+        <p><code class="example-date-ja">例: Calendar-4.0_2025-07-10_18-30-15.json</code></p>
 
         <p>
           v1.0、v2.0、v3.0、v4.0 では、ファイル名や JSON の形式が異なります。<br />
@@ -213,20 +209,16 @@
         <h2>Differences in JSON Filename Format</h2>
 
         <h3>v1.0 format</h3>
-        <p><code>calendar_events_[YYYY][MM][DD]_[HH][mm][ss].json</code></p>
-        <p><code>Example: calendar_events_20250710_183015.json</code></p>
+        <p><code class="example-date-en">Example: calendar_events_20250710_183015.json</code></p>
 
         <h3>v2.0 format</h3>
-        <p><code>Calendar-[CALENDAR_VERSION]_[YYYY]_[MM]_[DD]_[HH]_[mm]_[ss].json</code></p>
-        <p><code>Example: Calendar-2.0_2025_07_10_18_30_15.json</code></p>
+        <p><code class="example-date-en">Example: Calendar-2.0_2025_07_10_18_30_15.json</code></p>
 
         <h3>v3.0 format</h3>
-        <p><code>Calendar-[CURRENT_SAVE_VERSION]_[YYYY]_[MM]_[DD]_[HH]_[mm]_[ss].json</code></p>
-        <p><code>Example: Calendar-3.0_2025_07_10_18_30_15.json</code></p>
+        <p><code class="example-date-en">Example: Calendar-3.0_2025_07_10_18_30_15.json</code></p>
 
         <h3>v4.0 format</h3>
-        <p><code>Calendar-[CURRENT_SAVE_VERSION]_[YYYY]-[MM]-[DD]_[HH]-[mm]-[ss].json</code></p>
-        <p><code>Example: Calendar-4.0_2025-07-10_18-30-15.json</code></p>
+        <p><code class="example-date-en">Example: Calendar-4.0_2025-07-10_18-30-15.json</code></p>
 
         <p>
           The filenames and JSON formats differ between v1.0, v2.0, v3.0, and v4.0.<br />
@@ -239,11 +231,16 @@
 
   <script>
     let currentLang = 'ja';
+    let openedDate;
+
     document.addEventListener('DOMContentLoaded', () => {
+      openedDate = new Date();
+
       const saved = localStorage.getItem('calendarLang');
       if (saved && saved !== currentLang) {
         setLang(saved);
       }
+      updateExampleDates();
     });
 
     function setLang(lang) {
@@ -268,6 +265,50 @@
 
     function toggleLang() {
       setLang(currentLang === 'ja' ? 'en' : 'ja');
+    }
+
+    function padZero(num) {
+      return num.toString().padStart(2, '0');
+    }
+
+    function updateExampleDates() {
+      const now = openedDate || new Date();
+      const YYYY = now.getFullYear();
+      const MM = padZero(now.getMonth() + 1);
+      const DD = padZero(now.getDate());
+      const HH = padZero(now.getHours());
+      const mm = padZero(now.getMinutes());
+      const ss = padZero(now.getSeconds());
+
+      // 日本語の例
+      document.querySelectorAll('.example-date-ja').forEach(el => {
+        let text = el.textContent;
+
+        if (text.includes('calendar_events_')) {
+          el.textContent = `例: calendar_events_${YYYY}${MM}${DD}_${HH}${mm}${ss}.json`;
+        } else if (text.includes('Calendar-4.0')) {
+          el.textContent = `例: Calendar-4.0_${YYYY}-${MM}-${DD}_${HH}-${mm}-${ss}.json`;
+        } else if (text.includes('Calendar-')) {
+          const verMatch = text.match(/Calendar-(\d\.\d)/);
+          const version = verMatch ? verMatch[1] : 'x.x';
+          el.textContent = `例: Calendar-${version}_${YYYY}_${MM}_${DD}_${HH}_${mm}_${ss}.json`;
+        }
+      });
+
+      // 英語の例
+      document.querySelectorAll('.example-date-en').forEach(el => {
+        let text = el.textContent;
+
+        if (text.includes('calendar_events_')) {
+          el.textContent = `Example: calendar_events_${YYYY}${MM}${DD}_${HH}${mm}${ss}.json`;
+        } else if (text.includes('Calendar-4.0')) {
+          el.textContent = `Example: Calendar-4.0_${YYYY}-${MM}-${DD}_${HH}-${mm}-${ss}.json`;
+        } else if (text.includes('Calendar-')) {
+          const verMatch = text.match(/Calendar-(\d\.\d)/);
+          const version = verMatch ? verMatch[1] : 'x.x';
+          el.textContent = `Example: Calendar-${version}_${YYYY}_${MM}_${DD}_${HH}_${mm}_${ss}.json`;
+        }
+      });
     }
   </script>
 </body>
