@@ -1,6 +1,7 @@
 // ============================
-// 定数・設定キー
+// Birthday-Counter App Config
 // ============================
+
 const APP_NAME = "Birthday-counter";
 const CURRENT_SAVE_VERSION = "1.0";
 const SUPPORTED_VERSIONS = ["1.0"];
@@ -8,10 +9,14 @@ const STORAGE_KEY = "birthdayData";
 const SETTINGS_KEY = "birthdaySettings";
 
 // ============================
-// ローカルストレージ保存／読み込み
+// Local Storage Save / Load
 // ============================
+
 function saveLocal(data) {
-  const saveObj = { version: CURRENT_SAVE_VERSION, data };
+  const saveObj = {
+    version: CURRENT_SAVE_VERSION,
+    data: data
+  };
   localStorage.setItem(STORAGE_KEY, JSON.stringify(saveObj));
 }
 
@@ -33,17 +38,28 @@ function saveSettings(settings) {
 
 function loadSettings() {
   const s = localStorage.getItem(SETTINGS_KEY);
-  if (s) return JSON.parse(s);
-  return {
-    withAge: false,
-    confetti: true,
-    sound: false,
-  };
+  if (!s) {
+    return {
+      withAge: false,
+      confetti: true,
+      sound: false
+    };
+  }
+  try {
+    return JSON.parse(s);
+  } catch {
+    return {
+      withAge: false,
+      confetti: true,
+      sound: false
+    };
+  }
 }
 
 // ============================
-// 日付計算ユーティリティ
+// Date Utility
 // ============================
+
 function isLeapYear(year) {
   return (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
 }
@@ -55,9 +71,11 @@ function daysInMonth(year, month) {
 
 function calculateCountdown(month, day) {
   const now = new Date();
-  let next = new Date(now.getFullYear(), month - 1, day);
-  if (next < now) next.setFullYear(next.getFullYear() + 1);
+  let year = now.getFullYear();
+  let next = new Date(year, month - 1, day);
+  if (next < now) next = new Date(year + 1, month - 1, day);
   const diff = next - now;
+
   return {
     days: Math.floor(diff / (1000 * 60 * 60 * 24)),
     hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
@@ -76,39 +94,23 @@ function calculateAge(year, month, day) {
 
 function isToday(month, day) {
   const now = new Date();
-  return now.getMonth() + 1 === month && now.getDate() === day;
+  return (now.getMonth() + 1 === month) && (now.getDate() === day);
 }
 
 function formatDateForFilename(date) {
   const pad = n => String(n).padStart(2, '0');
-  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}_${pad(date.getHours())}-${pad(date.getMinutes())}-${pad(date.getSeconds())}`;
+  return `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())}_${pad(date.getHours())}-${pad(date.getMinutes())}-${pad(date.getSeconds())}`;
 }
 
 function toJST(date) {
-  const jst = new Date(date.getTime() + 9 * 60 * 60 * 1000);
+  const jst = new Date(date.getTime() + 9*60*60*1000);
   return jst.toISOString().replace('Z', '+09:00');
 }
 
 // ============================
-// 季節判定・紙吹雪絵文字マップ
+// Confetti Effect
 // ============================
-function getSeason(month) {
-  if ([12,1,2].includes(month)) return 'winter';
-  if ([3,4,5].includes(month)) return 'spring';
-  if ([6,7,8].includes(month)) return 'summer';
-  return 'autumn';
-}
 
-const confettiEmojiMap = {
-  winter: "❄️⛄️❄️❄️⛄️❄️",
-  spring: "🌸🌷🌸🌷🌸",
-  summer: "🌞🌴🌊🍉🌞",
-  autumn: "🍁🍂🎃🌰🍁"
-};
-
-// ============================
-// 紙吹雪アニメーション
-// ============================
 function createConfettiPiece(container) {
   const confetti = document.createElement('div');
   confetti.classList.add('confetti');
@@ -118,6 +120,7 @@ function createConfettiPiece(container) {
   const size = 5 + Math.random() * 5;
   confetti.style.width = size + 'px';
   confetti.style.height = size + 'px';
+
   container.appendChild(confetti);
   confetti.addEventListener('animationend', () => confetti.remove());
 }
@@ -132,25 +135,27 @@ function triggerConfetti() {
 }
 
 // ============================
-// 簡単祝祭音（短いベル）
+// Sound Effect (short bell)
 // ============================
+
 function playSound() {
   if (!window.AudioContext) return;
   const ctx = new AudioContext();
-  const o = ctx.createOscillator();
-  const g = ctx.createGain();
-  o.type = 'triangle';
-  o.frequency.setValueAtTime(880, ctx.currentTime);
-  g.gain.setValueAtTime(0.1, ctx.currentTime);
-  o.connect(g);
-  g.connect(ctx.destination);
-  o.start();
-  o.stop(ctx.currentTime + 0.2);
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = 'triangle';
+  osc.frequency.setValueAtTime(880, ctx.currentTime);
+  gain.gain.setValueAtTime(0.1, ctx.currentTime);
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  osc.start();
+  osc.stop(ctx.currentTime + 0.2);
 }
 
 // ============================
-// カウントダウン・UI更新
+// UI Update & Countdown Start
 // ============================
+
 let countdownInterval = null;
 
 function startCountdown(data, settings) {
@@ -189,6 +194,7 @@ function startCountdown(data, settings) {
       ageEl.textContent = '素敵な1日を！🌟';
     }
 
+    clearInterval(countdownInterval);
     return;
   }
 
@@ -225,114 +231,83 @@ function startCountdown(data, settings) {
 }
 
 // ============================
-// JSON エクスポート・インポート
+// Season & Confetti Emoji Map
 // ============================
-function exportJSON() {
-  const savedData = loadLocal();
-  if (!savedData) return;
 
-  const now = new Date();
-  const json = {
-    savedAtUTC: now.toISOString(),
-    savedAtJST: toJST(now),
-    settings: {
-      app: APP_NAME,
-      version: CURRENT_SAVE_VERSION,
-      year: savedData.year,
-      month: savedData.month,
-      day: savedData.day,
-      withAge: savedData.withAge,
-    }
-  };
-
-  const filename = `${APP_NAME}-${CURRENT_SAVE_VERSION}_${formatDateForFilename(now)}.json`;
-  const blob = new Blob([JSON.stringify(json, null, 2)], { type: "application/json" });
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = filename;
-  a.click();
-  URL.revokeObjectURL(a.href);
+function getSeason(month) {
+  if ([12,1,2].includes(month)) return 'winter';
+  if ([3,4,5].includes(month)) return 'spring';
+  if ([6,7,8].includes(month)) return 'summer';
+  return 'autumn';
 }
 
-function importJSON(file, onComplete) {
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = (event) => {
-    try {
-      const json = JSON.parse(event.target.result);
-      const settings = json.settings;
-      if (!settings || settings.app !== APP_NAME || !SUPPORTED_VERSIONS.includes(settings.version)) {
-        alert("対応していないデータです");
-        return;
-      }
-      onComplete(settings);
-    } catch {
-      alert("ファイルの読み込みに失敗しました");
-    }
-  };
-  reader.readAsText(file);
-}
+const confettiEmojiMap = {
+  winter: "❄️⛄️❄️❄️⛄️❄️",
+  spring: "🌸🌷🌸🌷🌸",
+  summer: "🌞🌴🌊🍉🌞",
+  autumn: "🍁🍂🎃🌰🍁"
+};
 
 // ============================
-// 設定UI制御と反映
+// Settings UI Control
 // ============================
-function applySettings(settings) {
-  document.getElementById('withAge').checked = settings.withAge;
-  document.getElementById('toggleAgeDisplay').checked = settings.withAge;
-  document.getElementById('toggleConfetti').checked = settings.confetti;
-  document.getElementById('toggleSound').checked = settings.sound;
 
-  const yearInput = document.getElementById('yearInput');
-  yearInput.classList.toggle('hidden', !settings.withAge);
-  document.getElementById('year').required = settings.withAge;
-}
-
-// ============================
-// DOM初期化・イベント設定
-// ============================
 document.addEventListener('DOMContentLoaded', () => {
+  const exportBtn = document.getElementById('exportBtn');
   const form = document.getElementById('birthdayForm');
   const withAgeCheckbox = document.getElementById('withAge');
   const yearInput = document.getElementById('yearInput');
   const importFile = document.getElementById('importFile');
-  const exportBtn = document.getElementById('exportBtn');
 
   exportBtn.classList.add('hidden');
 
+  // Load settings & apply
+  let appSettings = loadSettings();
+  applySettings(appSettings);
+
+  // 年入力表示切替
   withAgeCheckbox.onchange = () => {
     yearInput.classList.toggle('hidden', !withAgeCheckbox.checked);
     document.getElementById('year').required = withAgeCheckbox.checked;
-
-    const settings = loadSettings();
-    settings.withAge = withAgeCheckbox.checked;
-    saveSettings(settings);
+    appSettings.withAge = withAgeCheckbox.checked;
+    saveSettings(appSettings);
   };
 
+  // JSONファイル読み込み
   importFile.onchange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    importJSON(file, (settings) => {
-      document.getElementById('month').value = settings.month;
-      document.getElementById('day').value = settings.day;
-      withAgeCheckbox.checked = settings.withAge;
-      document.getElementById('year').value = settings.year ?? '';
-      yearInput.classList.toggle('hidden', !settings.withAge);
-
-      const appSettings = loadSettings();
-      appSettings.withAge = settings.withAge;
-      saveSettings(appSettings);
-    });
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const json = JSON.parse(event.target.result);
+        const settings = json.settings;
+        if (!settings || settings.app !== APP_NAME || !SUPPORTED_VERSIONS.includes(settings.version)) {
+          alert("対応していないデータです");
+          return;
+        }
+        document.getElementById('month').value = settings.month;
+        document.getElementById('day').value = settings.day;
+        withAgeCheckbox.checked = settings.withAge;
+        document.getElementById('year').value = settings.year ?? '';
+        yearInput.classList.toggle('hidden', !settings.withAge);
+        appSettings = settings;
+        saveSettings(appSettings);
+      } catch {
+        alert("ファイルの読み込みに失敗しました");
+      }
+    };
+    reader.readAsText(file);
     e.target.value = '';
   };
 
-  const appSettings = loadSettings();
-  applySettings(appSettings);
-
+  // 保存済みデータあれば起動
   const saved = loadLocal();
   if (saved) {
     startCountdown(saved, appSettings);
   }
 
+  // フォーム送信
   form.onsubmit = (e) => {
     e.preventDefault();
     const withAge = withAgeCheckbox.checked;
@@ -340,33 +315,67 @@ document.addEventListener('DOMContentLoaded', () => {
     const month = parseInt(document.getElementById('month').value, 10);
     const day = parseInt(document.getElementById('day').value, 10);
 
-    if (withAge && (!year || year < 1900 || year > 2100)) return;
-    if (month < 1 || month > 12) return;
-    const maxDay = daysInMonth(year || new Date().getFullYear(), month);
-    if (day < 1 || day > maxDay) return;
+    if (withAge) {
+      if (!year || year < 1900 || year > 2100) {
+        alert("有効な年を入力してください");
+        return;
+      }
+    }
+    if (month < 1 || month > 12) {
+      alert("有効な月を入力してください");
+      return;
+    }
+    if (day < 1 || day > daysInMonth(year || new Date().getFullYear(), month)) {
+      alert("有効な日を入力してください");
+      return;
+    }
 
     const data = { year, month, day, withAge };
     saveLocal(data);
-    startCountdown(data, loadSettings());
+    startCountdown(data, appSettings);
   };
 
-  exportBtn.onclick = exportJSON;
+  // エクスポートボタン
+  exportBtn.onclick = () => {
+    const savedData = loadLocal();
+    if (!savedData) return;
 
-  // 設定チェックボックス連動保存
-  document.getElementById('toggleAgeDisplay').onchange = (e) => {
-    const s = loadSettings();
-    s.withAge = e.target.checked;
-    saveSettings(s);
-    applySettings(s);
+    const now = new Date();
+    const json = {
+      savedAtUTC: now.toISOString(),
+      savedAtJST: toJST(now),
+      settings: {
+        app: APP_NAME,
+        version: CURRENT_SAVE_VERSION,
+        year: savedData.year,
+        month: savedData.month,
+        day: savedData.day,
+        withAge: savedData.withAge
+      }
+    };
+
+    const filename = `${APP_NAME}-${CURRENT_SAVE_VERSION}_${formatDateForFilename(now)}.json`;
+    const blob = new Blob([JSON.stringify(json, null, 2)], { type: "application/json" });
+
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(a.href);
   };
-  document.getElementById('toggleConfetti').onchange = (e) => {
-    const s = loadSettings();
-    s.confetti = e.target.checked;
-    saveSettings(s);
-  };
-  document.getElementById('toggleSound').onchange = (e) => {
-    const s = loadSettings();
-    s.sound = e.target.checked;
-    saveSettings(s);
-  };
+
+  // 設定画面があればここに処理も追加可能（例: confettiやsoundのトグル保存など）
 });
+
+// ============================
+// Apply settings to UI
+// ============================
+
+function applySettings(settings) {
+  const withAgeCheckbox = document.getElementById('withAge');
+  const yearInput = document.getElementById('yearInput');
+
+  withAgeCheckbox.checked = settings.withAge;
+  yearInput.classList.toggle('hidden', !settings.withAge);
+  document.getElementById('year').required = settings.withAge;
+}
