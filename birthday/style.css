@@ -1,204 +1,195 @@
-/* リセット・ベース */
-* {
-  box-sizing: border-box;
+:root {
+  --bg-color: #fff;
+  --text-color: #222;
+  --accent: #ff4081;
+  --input-bg: #f9f9f9;
+  --border: #ddd;
+  --confetti-content: "🎊🎉🌸🎈✨🎂🎁🎉🌟";
 }
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-color: #121212;
+    --text-color: #eee;
+    --accent: #ff80ab;
+    --input-bg: #222;
+    --border: #444;
+  }
+}
+
 body {
-  font-family: "Noto Sans JP", sans-serif;
-  line-height: 1.5;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: var(--bg-color);
+  color: var(--text-color);
+  margin: 0;
   padding: 1rem;
-  background: #f9f9f9;
-  color: #222;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  transition: background 0.3s, color 0.3s;
 }
 
-/* hiddenクラスで非表示 */
-.hidden {
-  display: none !important;
+main {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background: var(--input-bg);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
 }
 
-/* タイトル */
-h1 {
-  margin-bottom: 1.5rem;
-  font-weight: 700;
-}
-
-/* フォーム全体 */
-form#birthdayForm {
-  background: #fff;
-  padding: 1rem 1.5rem;
-  border-radius: 6px;
-  box-shadow: 0 1px 5px rgba(0,0,0,0.1);
-  width: 100%;
-  max-width: 320px;
+h1, h2 {
+  text-align: center;
+  color: var(--accent);
   margin-bottom: 1rem;
 }
 
-/* フォームの各項目 */
-form#birthdayForm div {
-  margin-bottom: 1rem;
-}
-
-/* ラベルとインプット */
-label {
+form label {
   display: block;
-  margin-bottom: 0.25rem;
+  margin-top: 1rem;
   font-weight: 600;
-  font-size: 0.9rem;
 }
 
-input[type="number"] {
+input[type="number"],
+input[type="file"] {
   width: 100%;
-  padding: 0.4rem 0.5rem;
+  padding: 0.5rem;
   font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  transition: border-color 0.3s ease;
-}
-
-input[type="number"]:focus {
-  outline: none;
-  border-color: #0078d4;
-  box-shadow: 0 0 5px rgba(0,120,212,0.4);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg-color);
+  color: var(--text-color);
+  box-sizing: border-box;
 }
 
 input[type="checkbox"] {
   margin-right: 0.5rem;
-  transform: scale(1.1);
   vertical-align: middle;
 }
 
-/* ボタン共通 */
+.buttons {
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
 button {
-  cursor: pointer;
-  font-weight: 600;
-  font-size: 1rem;
-  border-radius: 4px;
-  border: none;
-  padding: 0.5rem 1rem;
-  background-color: #0078d4;
+  background: var(--accent);
   color: white;
-  transition: background-color 0.3s ease;
-  user-select: none;
+  border: none;
+  border-radius: 8px;
+  padding: 0.7rem 1.4rem;
+  font-size: 1rem;
+  cursor: pointer;
+  margin: 0 0.5rem;
+  transition: opacity 0.2s ease;
 }
 
-button:hover:not(:disabled) {
-  background-color: #005a9e;
+button:hover,
+button:focus {
+  opacity: 0.85;
+  outline: none;
 }
 
-button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-
-/* カウントダウン表示 */
-#countdown {
-  font-size: 1.4rem;
-  margin-bottom: 0.75rem;
-  font-weight: 700;
-  color: #333;
-  text-align: center;
-}
-
-/* 年齢表示 */
-#age {
-  font-size: 1.1rem;
-  text-align: center;
-  margin-bottom: 1rem;
-  color: #555;
-}
-
-/* お祝いメッセージ */
-#specialUI {
-  text-align: center;
-  font-size: 1.3rem;
-  color: #d95f5f;
-  margin-bottom: 1rem;
-  font-weight: 700;
+.hidden {
+  display: none !important;
 }
 
 /* 設定ボタン */
-#settingsBtn {
-  margin-top: 0.5rem;
-  background-color: #555;
-}
-
-#settingsBtn:hover {
-  background-color: #333;
-}
-
-/* インポートファイル入力 */
-#importFile {
-  margin-top: 0.5rem;
-  font-size: 0.9rem;
-}
-
-/* モーダル背景 */
-#settingsModal {
+.settings-btn {
   position: fixed;
-  top: 0; left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0,0,0,0.4);
+  bottom: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: white;
+  font-size: 2rem;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+}
+
+/* 設定モーダル */
+.settings-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 999;
+  z-index: 10001;
 }
 
-/* モーダル内容 */
-#settingsContent {
-  background: #fff;
-  padding: 1.5rem 2rem;
-  border-radius: 8px;
-  width: 90%;
-  max-width: 320px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+.settings-modal.hidden {
+  display: none;
 }
 
-/* 設定見出し */
-#settingsContent h2 {
-  margin-top: 0;
-  margin-bottom: 1rem;
-  font-weight: 700;
-  font-size: 1.2rem;
-  color: #222;
+.settings-content {
+  background: var(--input-bg);
+  color: var(--text-color);
+  padding: 2rem;
+  border-radius: 14px;
+  width: 320px;
+  box-shadow: 0 6px 18px rgb(0 0 0 / 0.25);
 }
 
-/* 設定項目 */
-.setting-item {
-  margin-bottom: 1rem;
-  font-size: 1rem;
+.settings-content label {
+  display: flex;
+  align-items: center;
+  margin: 1rem 0;
+  font-weight: 600;
+  cursor: pointer;
 }
 
-/* 閉じるボタン */
-#closeSettingsBtn {
-  width: 100%;
-  background-color: #d9534f;
-  margin-top: 0.5rem;
+.settings-content input[type="checkbox"] {
+  margin-right: 0.75rem;
 }
 
-#closeSettingsBtn:hover {
-  background-color: #b52b27;
+/* 誕生日のときの紙吹雪 */
+body.birthday::before {
+  content: var(--confetti-content);
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 2rem;
+  animation: confetti-fall 5s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 9999;
+  user-select: none;
 }
 
-/* 誕生日モードボディスタイル */
-body.birthday {
-  background: linear-gradient(135deg, #ffafbd, #ffc3a0);
-  color: #800000;
-  transition: background 0.5s ease;
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(-100%) rotate(0deg);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(40vh) rotate(180deg);
+  }
+  100% {
+    transform: translateY(100vh) rotate(360deg);
+    opacity: 0;
+  }
 }
 
-/* モバイル対応 */
+/* 追加で、レスポンシブ対応例 */
 @media (max-width: 400px) {
-  form#birthdayForm, #settingsContent {
-    width: 95%;
+  main {
+    margin: 1rem;
     padding: 1rem;
   }
-
   button {
-    width: 100%;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+  .settings-content {
+    width: 90vw;
+    padding: 1rem;
   }
 }
