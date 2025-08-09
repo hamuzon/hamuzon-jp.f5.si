@@ -1,148 +1,185 @@
-:root {
-  --bg-color: #fff;
-  --text-color: #222;
-  --accent: #ff4081;
-  --input-bg: #f9f9f9;
-  --border: #ddd;
-  --confetti-content: "🎊🎉🌸🎈✨🎂🎁🎉🌟";
-}
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg-color: #121212;
-    --text-color: #eee;
-    --accent: #ff80ab;
-    --input-bg: #222;
-    --border: #444;
-  }
-}
+/* === 全体レイアウト・フォント === */
 body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  background: var(--bg-color);
-  color: var(--text-color);
+  background: #f0f4f8;
+  color: #333;
   margin: 0;
   padding: 1rem;
-  transition: background 0.3s, color 0.3s;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
-main {
-  max-width: 600px;
-  margin: 2rem auto;
-  padding: 1.5rem;
-  background: var(--input-bg);
-  border-radius: 12px;
-  border: 1px solid var(--border);
-  box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
+
+h1 {
+  margin-bottom: 1rem;
+  color: #1e40af;
 }
-h1, h2 {
-  text-align: center;
-  color: var(--accent);
+
+/* === フォーム === */
+form#birthdayForm {
+  background: #fff;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgb(0 0 0 / 0.1);
+  width: 300px;
+  max-width: 90vw;
   margin-bottom: 1rem;
 }
-form label {
+
+form#birthdayForm > div {
+  margin-bottom: 0.75rem;
+}
+
+label {
   display: block;
-  margin-top: 1rem;
+  margin-bottom: 0.25rem;
   font-weight: 600;
 }
-input[type="number"], input[type="file"] {
+
+input[type="number"],
+input[type="file"] {
   width: 100%;
-  padding: 0.5rem;
-  font-size: 1rem;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  background: var(--bg-color);
-  color: var(--text-color);
+  padding: 0.4rem 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
   box-sizing: border-box;
+  font-size: 1rem;
 }
+
 input[type="checkbox"] {
   margin-right: 0.5rem;
+  vertical-align: middle;
 }
-.buttons {
-  margin-top: 1.5rem;
-  text-align: center;
-}
+
 button {
-  background: var(--accent);
+  background-color: #2563eb;
   color: white;
   border: none;
-  border-radius: 8px;
-  padding: 0.7rem 1.4rem;
+  padding: 0.5rem 1.2rem;
   font-size: 1rem;
+  border-radius: 5px;
   cursor: pointer;
-  margin: 0 0.5rem;
-  transition: opacity 0.2s ease;
+  transition: background-color 0.3s ease;
 }
+
 button:hover {
-  opacity: 0.85;
+  background-color: #1d4ed8;
 }
-.hidden {
-  display: none;
+
+button:disabled,
+button[disabled] {
+  background-color: #9ca3af;
+  cursor: not-allowed;
 }
-.settings-btn {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background: var(--accent);
-  color: white;
-  font-size: 2rem;
-  cursor: pointer;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-  z-index: 10000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  border: none;
+
+/* === カウントダウン表示 === */
+#countdown {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: #2563eb;
 }
-.settings-modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 10001;
+
+#age {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  color: #4b5563;
 }
-.settings-modal.hidden {
-  display: none;
+
+/* === 誕生日特別表示 === */
+body.birthday {
+  background: linear-gradient(135deg, #fef3c7, #fde68a);
+  color: #b45309;
 }
-.settings-content {
-  background: var(--input-bg);
-  color: var(--text-color);
-  padding: 2rem;
-  border-radius: 14px;
-  width: 320px;
-  box-shadow: 0 6px 18px rgb(0 0 0 / 0.25);
-}
-.settings-content label {
-  display: flex;
-  align-items: center;
+
+#specialUI {
+  text-align: center;
+  font-size: 1.4rem;
+  font-weight: 700;
   margin: 1rem 0;
-  font-weight: 600;
+  min-height: 3rem;
 }
-body.birthday::before {
-  content: var(--confetti-content);
-  position: fixed;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 2rem;
-  animation: confetti-fall 5s ease-in-out infinite;
+
+.celebration {
+  font-size: 1.6rem;
+  margin-bottom: 0.5rem;
+  user-select: none;
+}
+
+/* === 紙吹雪 === */
+#confettiContainer {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
   pointer-events: none;
-  z-index: 9999;
 }
-@keyframes confetti-fall {
+
+.confetti {
+  position: absolute;
+  top: 0;
+  animation-name: fall;
+  animation-duration: 3s;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+  opacity: 0.9;
+  border-radius: 2px;
+  will-change: transform;
+}
+
+@keyframes fall {
   0% {
-    transform: translateY(-100%) rotate(0deg);
-    opacity: 0;
-  }
-  50% {
-    opacity: 1;
-    transform: translateY(40vh) rotate(180deg);
+    transform: translateY(0) rotate(0deg);
+    opacity: 0.9;
   }
   100% {
     transform: translateY(100vh) rotate(360deg);
     opacity: 0;
   }
+}
+
+/* === 設定モーダル（仮） === */
+#settingsModal {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.4);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+#settingsModal.active,
+#settingsModal:not(.hidden) {
+  display: flex;
+}
+
+#settingsContent {
+  background: white;
+  border-radius: 8px;
+  padding: 1.5rem 2rem;
+  width: 320px;
+  max-width: 90vw;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+}
+
+#settingsContent h2 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  color: #1e3a8a;
+}
+
+.setting-item {
+  margin-bottom: 1rem;
+}
+
+.setting-item label {
+  cursor: pointer;
+}
+
+/* === 非表示クラス === */
+.hidden {
+  display: none !important;
 }
