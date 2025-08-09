@@ -1,137 +1,204 @@
-:root {
-  --bg-color: #ffffff;
-  --text-color: #222222;
-  --accent: #ff4081;
-  --input-bg: #f0f0f0;
-  --border: #cccccc;
+/* リセット・ベース */
+* {
+  box-sizing: border-box;
 }
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg-color: #1e1e1e;
-    --text-color: #ffffff;
-    --accent: #ff80ab;
-    --input-bg: #2c2c2c;
-    --border: #444444;
-  }
-}
-
 body {
-  font-family: 'Segoe UI', sans-serif;
-  background: var(--bg-color);
-  color: var(--text-color);
-  margin: 0;
+  font-family: "Noto Sans JP", sans-serif;
+  line-height: 1.5;
   padding: 1rem;
-  transition: background 0.3s, color 0.3s;
+  background: #f9f9f9;
+  color: #222;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-main {
-  max-width: 600px;
-  margin: auto;
+/* hiddenクラスで非表示 */
+.hidden {
+  display: none !important;
 }
 
-h1, h2, h3 {
-  text-align: center;
-  color: var(--accent);
+/* タイトル */
+h1 {
+  margin-bottom: 1.5rem;
+  font-weight: 700;
 }
 
-form, #countdown, #specialUI {
-  background: var(--input-bg);
-  padding: 1.5rem;
-  border-radius: 8px;
-  border: 1px solid var(--border);
-  margin-top: 1rem;
+/* フォーム全体 */
+form#birthdayForm {
+  background: #fff;
+  padding: 1rem 1.5rem;
+  border-radius: 6px;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 320px;
+  margin-bottom: 1rem;
 }
 
+/* フォームの各項目 */
+form#birthdayForm div {
+  margin-bottom: 1rem;
+}
+
+/* ラベルとインプット */
 label {
   display: block;
-  margin: 1rem 0 0.2rem;
+  margin-bottom: 0.25rem;
+  font-weight: 600;
+  font-size: 0.9rem;
 }
 
 input[type="number"] {
   width: 100%;
-  padding: 0.5rem;
-  border: 1px solid var(--border);
+  padding: 0.4rem 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
   border-radius: 4px;
-  background: var(--bg-color);
-  color: var(--text-color);
+  transition: border-color 0.3s ease;
+}
+
+input[type="number"]:focus {
+  outline: none;
+  border-color: #0078d4;
+  box-shadow: 0 0 5px rgba(0,120,212,0.4);
 }
 
 input[type="checkbox"] {
   margin-right: 0.5rem;
+  transform: scale(1.1);
+  vertical-align: middle;
 }
 
-.buttons {
-  margin-top: 1.5rem;
-  text-align: center;
-}
-
+/* ボタン共通 */
 button {
-  padding: 0.6rem 1.2rem;
-  margin: 0.3rem;
-  border: none;
-  border-radius: 5px;
-  background: var(--accent);
-  color: #fff;
-  font-size: 1rem;
   cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  border-radius: 4px;
+  border: none;
+  padding: 0.5rem 1rem;
+  background-color: #0078d4;
+  color: white;
+  transition: background-color 0.3s ease;
+  user-select: none;
 }
 
-button:hover {
-  opacity: 0.85;
+button:hover:not(:disabled) {
+  background-color: #005a9e;
 }
 
-.hidden {
-  display: none;
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
 }
 
-.celebration {
+/* カウントダウン表示 */
+#countdown {
   font-size: 1.4rem;
+  margin-bottom: 0.75rem;
+  font-weight: 700;
+  color: #333;
   text-align: center;
-  padding: 1rem;
-  animation: pop 1s ease-in-out infinite alternate;
 }
 
-@keyframes pop {
-  from { transform: scale(1); }
-  to { transform: scale(1.05); }
+/* 年齢表示 */
+#age {
+  font-size: 1.1rem;
+  text-align: center;
+  margin-bottom: 1rem;
+  color: #555;
 }
 
-/* 🎊 花吹雪アニメーション */
-body.birthday::before {
-  content: "🎊🎉🌸🎈✨🎂🎁🎉🌟";
+/* お祝いメッセージ */
+#specialUI {
+  text-align: center;
+  font-size: 1.3rem;
+  color: #d95f5f;
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+/* 設定ボタン */
+#settingsBtn {
+  margin-top: 0.5rem;
+  background-color: #555;
+}
+
+#settingsBtn:hover {
+  background-color: #333;
+}
+
+/* インポートファイル入力 */
+#importFile {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+}
+
+/* モーダル背景 */
+#settingsModal {
   position: fixed;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 2rem;
-  animation: confetti 5s ease-in-out infinite;
-  pointer-events: none;
-  z-index: 9999;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
 }
 
-@keyframes confetti {
-  0% {
-    transform: translateX(-50%) translateY(-100%) rotate(0deg);
-    opacity: 0;
-  }
-  50% {
-    opacity: 1;
-    transform: translateX(-50%) translateY(40vh) rotate(180deg);
-  }
-  100% {
-    transform: translateX(-50%) translateY(100vh) rotate(360deg);
-    opacity: 0;
-  }
+/* モーダル内容 */
+#settingsContent {
+  background: #fff;
+  padding: 1.5rem 2rem;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 320px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
 }
 
-@media (max-width: 600px) {
+/* 設定見出し */
+#settingsContent h2 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: #222;
+}
+
+/* 設定項目 */
+.setting-item {
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+/* 閉じるボタン */
+#closeSettingsBtn {
+  width: 100%;
+  background-color: #d9534f;
+  margin-top: 0.5rem;
+}
+
+#closeSettingsBtn:hover {
+  background-color: #b52b27;
+}
+
+/* 誕生日モードボディスタイル */
+body.birthday {
+  background: linear-gradient(135deg, #ffafbd, #ffc3a0);
+  color: #800000;
+  transition: background 0.5s ease;
+}
+
+/* モバイル対応 */
+@media (max-width: 400px) {
+  form#birthdayForm, #settingsContent {
+    width: 95%;
+    padding: 1rem;
+  }
+
   button {
     width: 100%;
-    margin: 0.3rem 0;
-  }
-
-  input[type="number"] {
-    font-size: 1rem;
   }
 }
