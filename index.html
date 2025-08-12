@@ -2,85 +2,126 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Hamuzon Link Portal</title>
-  <link rel="icon" href="icon.svg" type="image/svg+xml" />
-  <script src="https://cdn.tailwindcss.com"></script>
   <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
     html, body {
       margin: 0; padding: 0;
-      box-sizing: border-box;
-      overflow-x: hidden;
-    }
-    body {
       font-family: 'Inter', 'Segoe UI', 'Hiragino Kaku Gothic ProN', sans-serif;
-    }
-    .bg-gradient-custom {
       background: linear-gradient(to bottom, #ffcf91 0%, #a96bf8 100%);
+      min-height: 100vh;
+      color: #333;
     }
-    .backdrop-blur-custom {
-      backdrop-filter: blur(8px);
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
     }
-    .link-btn {
-      display: block;
-      width: 100%;
-      background-color: white;
-      color: #1f2937; /* text-gray-800 */
-      text-decoration: none;
-      padding: 0.75rem 1.25rem;
-      border-radius: 0.75rem;
-      font-weight: 600;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    h1 {
       text-align: center;
-      transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+      font-size: 2rem;
+      color: #f0f0f0;
+      text-shadow: 0 0 8px rgba(0, 0, 0, 0.7);
+      margin-bottom: 2rem;
+    }
+    h1 a.tpww {
+      color: #fff8dd;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    h1 a.tpww:hover {
+      text-decoration: underline;
+    }
+    ul {
+      padding: 0;
+      margin: 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+      list-style: none;
+    }
+    li {
+      margin: 0;
+    }
+    a {
+      display: block;
+      background: rgba(20, 20, 20, 0.15);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      color: #ddd;
+      text-decoration: none;
+      padding: 1rem;
+      border-radius: 16px;
+      font-size: 1rem;
+      font-weight: 600;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+      transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
       word-break: break-word;
       user-select: none;
     }
-    .link-btn:hover {
-      background-color: #f3f4f6; /* hover:bg-gray-100 */
-      transform: translateY(-0.25rem);
-      box-shadow: 0 10px 15px rgba(0,0,0,0.2);
+    a:hover {
+      background: rgba(30, 30, 30, 0.3);
+      transform: translateY(-4px);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+    }
+    footer {
+      text-align: center;
+      padding: 1rem;
+      color: #f0f0f0;
+      font-size: 0.85rem;
     }
     footer a {
+      color: #fff8dd;
+      text-decoration: underline;
       user-select: text;
+    }
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.5rem;
+      }
+      footer {
+        font-size: 0.75rem;
+      }
+      ul {
+        grid-template-columns: 1fr !important;
+      }
     }
   </style>
 </head>
-<body class="flex flex-col items-center justify-center min-h-screen p-4 text-white text-center bg-gradient-custom bg-fixed bg-cover">
-
-  <div class="container w-full max-w-5xl px-4 py-6 bg-black bg-opacity-25 rounded-2xl shadow-xl backdrop-blur-custom">
-    <h1 class="text-4xl font-extrabold mb-6 sm:text-3xl">
-      <a href="." onclick="location.reload()" class="text-white hover:underline">Hamuzon Link Portal</a>
-    </h1>
-
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-      <a href="https://scratch.mit.edu/users/hamusata/" class="link-btn">🐱 Scratch user @hamusata</a>
-      <a href="https://scratch.mit.edu/users/hamuzon/" class="link-btn">🐱 Scratch user @hamuzon</a>
-      <a href="https://hamuzon.github.io/hamuzon-jp.f5.si/Time-Zone_app/" class="link-btn">🕰️ TimeZone - Hamuzon</a>
-      <a href="https://hamuzon.github.io/hamuzon-jp.f5.si/expo2025-counter/" class="link-btn">⏳ Expo 2025 Countdown</a>
-      <a href="https://hamuzon.github.io/hamuzon-jp.f5.si/clock/" class="link-btn">⏰ 時計 / Clock</a>
-      <a href="https://hamuzon.github.io/hamuzon-jp.f5.si/bin2dec/" class="link-btn">🔢 Binary⇔Decimal Converter</a>
-      <a href="https://hamuzon.github.io/hamuzon-jp.f5.si/text/" class="link-btn">🔍 Text Enlarger📝</a>
-      <a href="https://hamuzon.github.io/hamuzon-jp.f5.si/Device-info/" class="link-btn">📱 Device Info Viewer</a>
-      <a href="https://hamuzon.github.io/hamuzon-jp.f5.si/password/" class="link-btn">🔑Password Generator Tool🗝️</a>
-      <a href="https://hamuzon.github.io/hamuzon-jp.f5.si/calculator/" class="link-btn">🔢 計算機 / calculator 🧮</a>
-      <a href="https://hamuzon.github.io/hamuzon-jp.f5.si/calendar/" class="link-btn">📅 カレンダー / calendar 🗓️</a>
-      <a href="https://hamuzon.github.io/hamuzon-jp.f5.si/todo/" class="link-btn">📝 todo lists ✏️</a>
-      <a href="https://hamuzon.github.io/hamuzon-jp.f5.si/task-board/" class="link-btn">🗂️ タスクボード / Task Board 📋</a>
-      <a href="https://hamuzon.github.io/hamuzon-jp.f5.si/birthday/" class="link-btn">🎂 birthday counter 🔢</a>
-      <a href="https://hamuzon.github.io/hamuzon-jp.f5.si/qr/"class="link-btn">🔳QR 🔗</a>
-      <a href="https://hamuzon.github.io/hamuzon-jp.f5.si/dice/" class="link-btn">🎲サイコロ🎯</a>
-      <a href="https://omikuji.hamuzon-jp.f5.si/" class="link-btn">🍀おみくじ🔮</a>
-      <a href="https://hamuzon.github.io/hamuzon-jp.f5.si/passapi/" class="link-btn">🔑 Password Generator App 🗝️(apiversion)</a>
-      <a href="https://hamuzon.github.io/hamuzon-jp.f5.si/discord/" class="link-btn">📱 discord Timestamp Converter 🖥️</a>
-      <a href="https://hamuzon.github.io/hamuzon-jp.f5.si/fraction/" class="link-btn">🔢 分数メーカー / fraction maker 🧮</a>
-    </div>
+<body>
+  <div class="container">
+    <h1><a href="." class="tpww" onclick="location.reload()">Hamuzon Link Portal</a></h1>
+    <ul>
+      <li><a href="https://scratch.mit.edu/users/hamusata/">🐱 Scratch user @hamusata</a></li>
+      <li><a href="https://scratch.mit.edu/users/hamuzon/">🐱 Scratch user @hamuzon</a></li>
+      <li><a href="https://hamuzon.github.io/hamuzon-jp.f5.si/Time-Zone_app/">🕰️ TimeZone - Hamuzon</a></li>
+      <li><a href="https://hamuzon.github.io/hamuzon-jp.f5.si/expo2025-counter/">⏳ Expo 2025 Countdown</a></li>
+      <li><a href="https://hamuzon.github.io/hamuzon-jp.f5.si/clock/">⏰ 時計 / Clock</a></li>
+      <li><a href="https://hamuzon.github.io/hamuzon-jp.f5.si/bin2dec/">🔢 Binary⇔Decimal Converter</a></li>
+      <li><a href="https://hamuzon.github.io/hamuzon-jp.f5.si/text/">🔍 Text Enlarger📝</a></li>
+      <li><a href="https://hamuzon.github.io/hamuzon-jp.f5.si/Device-info/">📱 Device Info Viewer</a></li>
+      <li><a href="https://hamuzon.github.io/hamuzon-jp.f5.si/password/">🔑Password Generator Tool🗝️</a></li>
+      <li><a href="https://hamuzon.github.io/hamuzon-jp.f5.si/calculator/">🔢 計算機 / calculator 🧮</a></li>
+      <li><a href="https://hamuzon.github.io/hamuzon-jp.f5.si/calendar/">📅 カレンダー / calendar 🗓️</a></li>
+      <li><a href="https://hamuzon.github.io/hamuzon-jp.f5.si/todo/">📝 todo lists ✏️</a></li>
+      <li><a href="https://hamuzon.github.io/hamuzon-jp.f5.si/task-board/">🗂️ タスクボード / Task Board 📋</a></li>
+      <li><a href="https://hamuzon.github.io/hamuzon-jp.f5.si/birthday/">🎂 birthday counter 🔢</a></li>
+      <li><a href="https://hamuzon.github.io/hamuzon-jp.f5.si/qr/">🔳QR 🔗</a></li>
+      <li><a href="https://hamuzon.github.io/hamuzon-jp.f5.si/dice/">🎲サイコロ🎯</a></li>
+      <li><a href="https://hamuzon.github.io/hamuzon-jp.f5.si/omikuji/">🍀おみくじ🔮</a></li>
+      <li><a href="https://hamuzon.github.io/hamuzon-jp.f5.si/passapi/">🔑 Password Generator App 🗝️(apiversion)</a></li>
+      <li><a href="https://hamuzon.github.io/hamuzon-jp.f5.si/discord/">📱 discord Timestamp Converter 🖥️</a></li>
+      <li><a href="https://hamuzon.github.io/hamuzon-jp.f5.si/fraction/">🔢 分数メーカー / fraction maker 🧮</a></li>
+    </ul>
   </div>
 
-  <footer class="mt-6 text-sm text-orange-100 text-center w-full max-w-5xl select-none">
-    <p>&copy; <span id="year-range"></span>
-      <a href="https://hamuzon-jp.f5.si" class="text-orange-50 font-bold hover:underline">[@hamuzon](hamuzon-jp.f5.si)</a>
-    </p>
+  <footer>
+    <p>&copy; <span id="year-range"></span> <a href="https://hamuzon-jp.f5.si">[@hamuzon](hamuzon-jp.f5.si)</a></p>
   </footer>
 
   <script>
@@ -89,6 +130,5 @@
     const yearRange = baseYear === currentYear ? `${baseYear}` : `${baseYear}–${currentYear}`;
     document.getElementById('year-range').textContent = yearRange;
   </script>
-
 </body>
 </html>

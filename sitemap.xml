@@ -1,22 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://hamuzon-jp.f5.si/</loc>
-    <lastmod>2025-07-07</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
+    <loc>https://scratch.mit.edu/users/hamusata/</loc>
   </url>
   <url>
-    <loc>https://hamuzon-jp.f5.si/calculator/</loc>
-    <lastmod>2025-07-07</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <loc>https://scratch.mit.edu/users/hamuzon/</loc>
+  </url>
+  <url>
+    <loc>https://hamuzon-jp.f5.si/Time-Zone_app/</loc>
+  </url>
+  <url>
+    <loc>https://hamuzon-jp.f5.si/expo2025-counter/</loc>
+  </url>
+  <url>
+    <loc>https://hamuzon-jp.f5.si/clock/</loc>
+  </url>
+  <url>
+    <loc>https://hamuzon-jp.f5.si/bin2dec/</loc>
+  </url>
+  <url>
+    <loc>https://hamuzon-jp.f5.si/text/</loc>
+  </url>
+  <url>
+    <loc>https://hamuzon-jp.f5.si/Device-info/</loc>
   </url>
   <url>
     <loc>https://hamuzon-jp.f5.si/password/</loc>
-    <lastmod>2025-07-07</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://hamuzon-jp.f5.si/calculator/</loc>
+  </url>
+  <url>
+    <loc>https://hamuzon-jp.f5.si/calendar/</loc>
+  </url>
+  <url>
+    <loc>https://hamuzon-jp.f5.si/todo/</loc>
+  </url>
+  <url>
+    <loc>https://hamuzon-jp.f5.si/task-board/</loc>
+  </url>
+  <url>
+    <loc>https://hamuzon-jp.f5.si/birthday/</loc>
+  </url>
+  <url>
+    <loc>https://hamuzon-jp.f5.si/qr/</loc>
+  </url>
+  <url>
+    <loc>https://hamuzon-jp.f5.si/dice/</loc>
+  </url>
+  <url>
+    <loc>https://hamuzon-jp.f5.si/omikuji/</loc>
+  </url>
+  <url>
+    <loc>https://hamuzon-jp.f5.si/passapi/</loc>
+  </url>
+  <url>
+    <loc>https://hamuzon-jp.f5.si/discord/</loc>
+  </url>
+  <url>
+    <loc>https://hamuzon-jp.f5.si/fraction/</loc>
   </url>
 </urlset>
-
