@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>📝 ToDo lists v1.0 ✏</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="icon.svg" />
+</head>
+<body>
+  <header>
+    <h1>📝 ToDo lists ✏</h1>
+    <button id="add-todo-btn" aria-label="新しいTODOを追加">➕追加</button>
+    <button id="save-json-btn" aria-label="TODOをJSONファイルに保存">💾保存</button>
+    <button id="load-json-btn" aria-label="JSONファイルからTODOを読み込み">📂読込</button>
+    <input type="file" id="load-json-input" accept="application/json" hidden />
+  </header>
+
+  <main>
+    <div id="todo-list-container" aria-live="polite" aria-label="TODOリスト"></div>
+  </main>
+
+  <!-- モーダル -->
+  <div id="modal-bg" class="modal-bg" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-date" tabindex="-1">
+      <h2 id="modal-date">📅 日付</h2>
+
+      <label for="todo-date">日付:</label>
+      <input type="date" id="todo-date" />
+
+      <label for="todo-time">時刻 (任意):</label>
+      <input type="time" id="todo-time" placeholder="例: 13:30" />
+
+      <label for="todo-text">TODO内容:</label>
+      <textarea id="todo-text" rows="5" placeholder="TODO内容を入力してください（改行可能）"></textarea>
+
+      <div class="modal-buttons">
+        <button id="save-btn">保存</button>
+        <button id="delete-btn">削除</button>
+        <button id="close-btn">閉じる</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
