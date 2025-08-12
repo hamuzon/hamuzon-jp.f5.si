@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Text enlargement app</title>
   <meta name="description" content="Text拡大appですいれたText拡大表示します" />
-  <link rel="icon" href="icon-light.png" type="image/png" />
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP&family=Sawarabi+Mincho&display=swap" rel="stylesheet" />
+  <link rel="icon" href="https://home.hamusata.f5.si/icon.svg" type="image/svg+xml" />
+  <link href="https://fonts.googleapis.com/css2?family=Potta+One&family=Noto+Serif+JP&family=Sawarabi+Mincho&display=swap" rel="stylesheet" />
   <style>
     :root {
       --color-primary: #00793d;
@@ -20,7 +20,7 @@
 
     body {
       margin: 0;
-      font-family: 'Sawarabi Mincho', 'Noto Serif JP', serif;
+      font-family: 'Potta One', 'Sawarabi Mincho', 'Noto Serif JP', serif;
       background-color: var(--color-background);
       color: var(--color-on-background);
       min-height: 100vh;
@@ -82,6 +82,7 @@
       user-select: text;
       border: 2px solid var(--color-primary);
       transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      font-family: 'Potta One', cursive;
     }
 
     #settings {
@@ -166,11 +167,12 @@
         <div class="setting-item">
           <label for="fontSelector">フォント選択</label>
           <select id="fontSelector">
+            <option value="'Potta One', cursive" selected>Potta One</option>
             <option value="'Noto Serif JP', serif">Noto Serif JP</option>
             <option value="'Sawarabi Mincho', serif">Sawarabi Mincho</option>
             <option value="Arial, sans-serif">Arial</option>
             <option value="Verdana, sans-serif">Verdana</option>
-            <option value="Courier New, monospace">Courier New</option>
+            <option value="'Courier New', monospace">Courier New</option>
           </select>
         </div>
         <div class="setting-item">
@@ -182,7 +184,7 @@
   </main>
 
   <footer id="footer">
-    <div id="footer-author">©️2025年 Text enlargement app</div>
+    <div id="footer-author"></div>
     <div>
       使用ライブラリー:
       <a href="https://developer.mozilla.org/ja/docs/Web/HTML" target="_blank" rel="noopener noreferrer">HTML5</a>,
@@ -272,17 +274,11 @@
     updateDisplay();
     updateStyles();
 
-    // --- 追加部分: 動的なフッター表示 ---
+    // コピーライト自動更新＋固定リンク埋め込み
     const footerAuthor = document.getElementById("footer-author");
-    const hostname = window.location.hostname;
+    const currentYear = new Date().getFullYear();
 
-    if (hostname.includes("hamuzon.github.io")) {
-      footerAuthor.innerHTML = '©️2025年 <a href="https://hamuzon.github.io" target="_blank" rel="noopener noreferrer">@hamuzon</a>';
-    } else if (hostname.includes("hamusata.f5.si")) {
-      footerAuthor.innerHTML = '©️2025年 <a href="https://home.hamusata.f5.si" target="_blank" rel="noopener noreferrer">@hamusata</a>';
-    } else {
-      footerAuthor.textContent = '©️2025年 Text enlargement app';
-    }
+    footerAuthor.innerHTML = `©️${currentYear}年 <a href="https://hamuzon.web.fc2.com" target="_blank" rel="noopener noreferrer">@hamuzon</a> - hamuzon.web.fc2.com`;
   </script>
 </body>
 </html>

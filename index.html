@@ -8,8 +8,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     html, body {
-      margin: 0;
-      padding: 0;
+      margin: 0; padding: 0;
       box-sizing: border-box;
       overflow-x: hidden;
     }
@@ -22,51 +21,74 @@
     .backdrop-blur-custom {
       backdrop-filter: blur(8px);
     }
+    .link-btn {
+      display: block;
+      width: 100%;
+      background-color: white;
+      color: #1f2937; /* text-gray-800 */
+      text-decoration: none;
+      padding: 0.75rem 1.25rem;
+      border-radius: 0.75rem;
+      font-weight: 600;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      text-align: center;
+      transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+      word-break: break-word;
+      user-select: none;
+    }
+    .link-btn:hover {
+      background-color: #f3f4f6; /* hover:bg-gray-100 */
+      transform: translateY(-0.25rem);
+      box-shadow: 0 10px 15px rgba(0,0,0,0.2);
+    }
+    footer a {
+      user-select: text;
+    }
   </style>
 </head>
 <body class="flex flex-col items-center justify-center min-h-screen p-4 text-white text-center bg-gradient-custom bg-fixed bg-cover">
 
-  <!-- メインコンテナ -->
   <div class="container w-full max-w-5xl px-4 py-6 bg-black bg-opacity-25 rounded-2xl shadow-xl backdrop-blur-custom">
-    <!-- タイトル -->
     <h1 class="text-4xl font-extrabold mb-6 sm:text-3xl">
       <a href="." onclick="location.reload()" class="text-white hover:underline">Hamuzon Link Portal</a>
     </h1>
 
-    <!-- リンク群 -->
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-      <a class="link-btn" href="https://scratch.mit.edu/users/hamusata/" target="_blank" rel="noopener noreferrer">🐱 Scratch user @hamusata</a>
-      <a class="link-btn" href="https://scratch.mit.edu/users/hamuzon/" target="_blank" rel="noopener noreferrer">🐱 Scratch user @hamuzon</a>
-      <a class="link-btn" href="https://hamuzon.github.io/hamuzon-jp.f5.si/Time-Zone_app/" target="_blank" rel="noopener noreferrer">🕰️ TimeZone - Hamuzon</a>
-      <a class="link-btn" href="https://hamuzon.github.io/hamuzon-jp.f5.si/expo2025-counter/" target="_blank" rel="noopener noreferrer">⏳ Expo 2025 Countdown</a>
-      <a class="link-btn" href="https://hamuzon.github.io/hamuzon-jp.f5.si/clock/" target="_blank" rel="noopener noreferrer">⏰ 時計 / Clock</a>
-      <a class="link-btn" href="https://hamuzon.github.io/hamuzon-jp.f5.si/bin2dec/" target="_blank" rel="noopener noreferrer">🔢 Binary⇔Decimal Converter</a>
-      <a class="link-btn" href="https://hamuzon.github.io/hamuzon-jp.f5.si/text/" target="_blank" rel="noopener noreferrer">🔍 Text Enlarger</a>
-      <a class="link-btn" href="https://hamuzon.github.io/hamuzon-jp.f5.si/Device-info/" target="_blank" rel="noopener noreferrer">📱 Device Info Viewer</a>
-      <a class="link-btn" href="https://hamuzon.github.io/hamuzon-jp.f5.si/password/" target="_blank" rel="noopener noreferrer">🔑Password Generator Tool🗝️</a>
-      <a class="link-btn" href="https://hamuzon.github.io/hamuzon-jp.f5.si/calculator/" target="_blank" rel="noopener noreferrer">🔢 計算機 / calculator 🧮</a>
-      <a class="link-btn" href="https://hamuzon.github.io/hamuzon-jp.f5.si/calendar/" target="_blank" rel="noopener noreferrer">📅 カレンダー / calendar 🗓️</a>
-      <a class="link-btn" href="https://hamuzon.github.io/hamuzon-jp.f5.si/todo/" target="_blank" rel="noopener noreferrer">📝 todo lists ✏️</a>
-      <a class="link-btn" href="https://hamuzon.github.io/hamuzon-jp.f5.si/birthday/" target="_blank" rel="noopener noreferrer">🎂 birthday counter 🔢</a>
-      <a class="link-btn" href="http://qr.hamuzon-jp.f5.si/" target="_blank" rel="noopener noreferrer">🔳QR 🔗</a>
-      <a class="link-btn" href="https://dice.hamuzon-jp.f5.si/" target="_blank" rel="noopener noreferrer">🎲サイコロ🎯</a>
-      <a class="link-btn" href="https://omikuji.hamuzon-jp.f5.si/" target="_blank" rel="noopener noreferrer">🍀おみくじ🔮</a>
-      <a class="link-btn" href="http://passapi.hamuzon-jp.f5.si/" target="_blank" rel="noopener noreferrer">🔑 Password Generator App 🗝️(apiversion)</a>
+      <a href="https://scratch.mit.edu/users/hamusata/" class="link-btn">🐱 Scratch user @hamusata</a>
+      <a href="https://scratch.mit.edu/users/hamuzon/" class="link-btn">🐱 Scratch user @hamuzon</a>
+      <a href="https://hamuzon.github.io/hamuzon-jp.f5.si/Time-Zone_app/" class="link-btn">🕰️ TimeZone - Hamuzon</a>
+      <a href="https://hamuzon.github.io/hamuzon-jp.f5.si/expo2025-counter/" class="link-btn">⏳ Expo 2025 Countdown</a>
+      <a href="https://hamuzon.github.io/hamuzon-jp.f5.si/clock/" class="link-btn">⏰ 時計 / Clock</a>
+      <a href="https://hamuzon.github.io/hamuzon-jp.f5.si/bin2dec/" class="link-btn">🔢 Binary⇔Decimal Converter</a>
+      <a href="https://hamuzon.github.io/hamuzon-jp.f5.si/text/" class="link-btn">🔍 Text Enlarger📝</a>
+      <a href="https://hamuzon.github.io/hamuzon-jp.f5.si/Device-info/" class="link-btn">📱 Device Info Viewer</a>
+      <a href="https://hamuzon.github.io/hamuzon-jp.f5.si/password/" class="link-btn">🔑Password Generator Tool🗝️</a>
+      <a href="https://hamuzon.github.io/hamuzon-jp.f5.si/calculator/" class="link-btn">🔢 計算機 / calculator 🧮</a>
+      <a href="https://hamuzon.github.io/hamuzon-jp.f5.si/calendar/" class="link-btn">📅 カレンダー / calendar 🗓️</a>
+      <a href="https://hamuzon.github.io/hamuzon-jp.f5.si/todo/" class="link-btn">📝 todo lists ✏️</a>
+      <a href="https://hamuzon.github.io/hamuzon-jp.f5.si/task-board/" class="link-btn">🗂️ タスクボード / Task Board 📋</a>
+      <a href="https://hamuzon.github.io/hamuzon-jp.f5.si/birthday/" class="link-btn">🎂 birthday counter 🔢</a>
+      <a href="https://hamuzon.github.io/hamuzon-jp.f5.si/qr/"class="link-btn">🔳QR 🔗</a>
+      <a href="https://hamuzon.github.io/hamuzon-jp.f5.si/dice/" class="link-btn">🎲サイコロ🎯</a>
+      <a href="https://omikuji.hamuzon-jp.f5.si/" class="link-btn">🍀おみくじ🔮</a>
+      <a href="https://hamuzon.github.io/hamuzon-jp.f5.si/passapi/" class="link-btn">🔑 Password Generator App 🗝️(apiversion)</a>
+      <a href="https://hamuzon.github.io/hamuzon-jp.f5.si/discord/" class="link-btn">📱 discord Timestamp Converter 🖥️</a>
+      <a href="https://hamuzon.github.io/hamuzon-jp.f5.si/fraction/" class="link-btn">🔢 分数メーカー / fraction maker 🧮</a>
     </div>
   </div>
 
-  <!-- フッター -->
   <footer class="mt-6 text-sm text-orange-100 text-center w-full max-w-5xl select-none">
-    <p>&copy; 2025 
-      <a href="." onclick="location.reload()" class="text-orange-50 font-bold hover:underline">@hamuzon</a>
+    <p>&copy; <span id="year-range"></span>
+      <a href="https://hamuzon-jp.f5.si" class="text-orange-50 font-bold hover:underline">[@hamuzon](hamuzon-jp.f5.si)</a>
     </p>
   </footer>
 
-  <!-- Tailwind カスタムクラス定義 -->
-  <style>
-    .link-btn {
-      @apply block w-full bg-white text-gray-800 no-underline py-3 px-5 rounded-xl font-semibold shadow-md transition duration-300 ease-in-out text-center hover:bg-gray-100 hover:-translate-y-1 hover:shadow-lg break-words;
-    }
-  </style>
+  <script>
+    const baseYear = 2025;
+    const currentYear = new Date().getFullYear();
+    const yearRange = baseYear === currentYear ? `${baseYear}` : `${baseYear}–${currentYear}`;
+    document.getElementById('year-range').textContent = yearRange;
+  </script>
+
 </body>
 </html>
