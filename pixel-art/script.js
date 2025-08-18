@@ -1,11 +1,12 @@
 (() => {
-  // --- PixelDraw アプリ部分 ---
+  // --- 定数 ---
   const SUPPORTED_VERSIONS = ["1.0"];
   const APP_NAME = "PixelDraw";
   const APP_VERSION = "1.0";
   const WIDTH = 16;
   const HEIGHT = 16;
 
+  // パレット（透明は#00000000）
   const palette = [
     "#000000",
     "#ff0000",
@@ -16,9 +17,11 @@
     "#00000000" // 透明
   ];
 
+  // 状態
   let currentColorIndex = 0;
   let isDrawing = false;
 
+  // 要素取得
   const paletteEl = document.getElementById("palette");
   const canvasEl = document.getElementById("canvas");
   const resetBtn = document.getElementById("btn-reset");
@@ -28,6 +31,7 @@
   const fileLoadInput = document.getElementById("file-load");
   const titleInput = document.getElementById("titleInput");
 
+  // ピクセル生成
   for(let i=0; i<WIDTH*HEIGHT; i++){
     const pixel = document.createElement("div");
     pixel.classList.add("pixel");
@@ -36,6 +40,7 @@
     canvasEl.appendChild(pixel);
   }
 
+  // パレット生成
   function createPalette(){
     paletteEl.innerHTML = "";
     palette.forEach((color, i) => {
@@ -52,21 +57,25 @@
     });
   }
 
+  // 色選択
   function selectColor(index, btnEl){
     currentColorIndex = index;
     paletteEl.querySelectorAll(".color-btn").forEach(b => b.classList.remove("selected"));
     btnEl.classList.add("selected");
   }
 
+  // ピクセル塗り
   function paintPixel(pixel){
     pixel.style.backgroundColor = palette[currentColorIndex];
     pixel.dataset.colorIndex = currentColorIndex;
   }
 
+  // 変更時処理（ローカルストレージ保存）
   function onDrawChange(){
     saveToLocalStorage();
   }
 
+  // マウス関連イベント
   canvasEl.addEventListener("mousedown", e => {
     if(!e.target.classList.contains("pixel")) return;
     isDrawing = true;
@@ -85,10 +94,11 @@
     isDrawing = false;
   });
 
+  // リセット
   resetBtn.addEventListener("click", () => {
     if(confirm("本当にボードをリセットして全てクリアしますか？")){
       canvasEl.querySelectorAll(".pixel").forEach(p => {
-        p.style.backgroundColor = palette[palette.length-1];
+        p.style.backgroundColor = palette[palette.length-1]; // 透明
         delete p.dataset.colorIndex;
       });
       localStorage.removeItem("pixelDrawingData-v1");
@@ -96,15 +106,18 @@
     }
   });
 
+  // JSONで保存
   saveBtn.addEventListener("click", () => {
     downloadJson();
   });
 
+  // JSON読み込みボタン押下
   loadBtn.addEventListener("click", () => {
     fileLoadInput.value = null;
     fileLoadInput.click();
   });
 
+  // JSONファイル読み込み
   fileLoadInput.addEventListener("change", e => {
     const file = e.target.files[0];
     if(!file) return alert("ファイルが選択されていません。");
@@ -151,6 +164,7 @@
     reader.readAsText(file);
   });
 
+  // ページロード時に保存データ復元
   window.addEventListener("load", () => {
     const saved = localStorage.getItem("pixelDrawingData-v1");
     if(saved){
@@ -167,8 +181,10 @@
     }
   });
 
+  // 作品名変更で保存
   titleInput.addEventListener("input", () => saveToLocalStorage());
 
+  // 画像保存
   imgSaveBtn.addEventListener("click", () => {
     const formats = ["png", "jpeg"];
     const oldSelect = document.getElementById("img-format-select");
@@ -210,6 +226,7 @@
     });
   });
 
+  // 画像作成＆保存処理
   function saveImage(format) {
     const cvs = document.createElement("canvas");
     cvs.width = WIDTH;
@@ -229,6 +246,7 @@
     cvs.toBlob(blob => downloadBlob(blob, `${APP_NAME}-${APP_VERSION}_${getTimestamp()}.${format}`), mime, 0.92);
   }
 
+  // Blobをダウンロード
   function downloadBlob(blob, filename){
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -240,6 +258,7 @@
     URL.revokeObjectURL(url);
   }
 
+  // ローカルストレージ保存
   function saveToLocalStorage(){
     const data = {
       app: APP_NAME,
@@ -253,6 +272,7 @@
     localStorage.setItem("pixelDrawingData-v1", JSON.stringify(data));
   }
 
+  // JSON保存用ダウンロード処理
   function downloadJson(){
     const data = {
       app: APP_NAME,
@@ -279,6 +299,7 @@
     alert("作品を保存しました。");
   }
 
+  // キャンバスの色インデックス取得
   function getCanvasColorIndices(){
     const indices = [];
     canvasEl.querySelectorAll(".pixel").forEach(p => {
@@ -288,6 +309,7 @@
     return indices;
   }
 
+  // ピクセル配列を圧縮（3連続以上を[startIndex, count]でまとめる）
   function compressPixels(indices){
     const compressed = [];
     let i = 0;
@@ -311,6 +333,7 @@
     return compressed;
   }
 
+  // 圧縮されたピクセル配列を展開してキャンバスに適用 (v1.0用)
   function fillCanvasWithCompressedPixels(pixels){
     const indices = [];
     for(let i=0; i<pixels.length; i++){
@@ -321,13 +344,13 @@
         for(let c=0; c<count; c++){
           indices[start + c] = colorIndex;
         }
-        i++;
+        i++; // 次は色番号なのでスキップ
       } else if(typeof val === "number"){
         indices.push(val);
       }
     }
     for(let i=0; i<WIDTH*HEIGHT; i++){
-      const idx = indices[i] !== undefined ? indices[i] : palette.length - 1;
+      const idx = indices[i] !== undefined ? indices[i] : palette.length - 1; // 透明デフォルト
       const pixel = canvasEl.querySelector(`.pixel[data-index="${i}"]`);
       if(pixel){
         pixel.style.backgroundColor = palette[idx];
@@ -336,31 +359,13 @@
     }
   }
 
+  // タイムスタンプ生成
   function getTimestamp(){
     const dt = new Date();
     const pad = n => n.toString().padStart(2,"0");
     return `${dt.getFullYear()}-${pad(dt.getMonth()+1)}-${pad(dt.getDate())}_${pad(dt.getHours())}-${pad(dt.getMinutes())}-${pad(dt.getSeconds())}`;
   }
 
+  // 初期化
   createPalette();
-
-  // --- フッター・著作年表示部分---
-  const baseYear = 2025;
-  const currentYear = new Date().getFullYear();
-  const yearDisplay = currentYear > baseYear ? `${baseYear}~${currentYear}` : `${baseYear}`;
-
-  const host = location.hostname.toLowerCase();
-
-  if(host === "hamuzon-jp.f5.si"){
-    const footerHamuzon = document.getElementById("footer-hamuzon");
-    const yearHamuzon = document.getElementById("year-hamuzon");
-    const linkHamuzon = document.getElementById("link-hamuzon");
-
-    if(footerHamuzon) footerHamuzon.style.display = "inline";
-    if(yearHamuzon) yearHamuzon.textContent = yearDisplay;
-    if(linkHamuzon){
-      linkHamuzon.href = "https://hamuzon-jp.f5.si";
-      linkHamuzon.textContent = "@hamuzon";
-    }
-  }
 })();
