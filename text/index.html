@@ -274,11 +274,12 @@
     updateDisplay();
     updateStyles();
 
-    // コピーライト自動更新＋固定リンク埋め込み
     const footerAuthor = document.getElementById("footer-author");
+    const baseYear = 2025;
     const currentYear = new Date().getFullYear();
+    const yearText = currentYear > baseYear ? `${baseYear}~${currentYear}` : `${baseYear}`;
 
-    footerAuthor.innerHTML = `©️${currentYear}年 <a href="https://hamuzon-jp.f5.si/" target="_blank" rel="noopener noreferrer">@hamuzon</a>`;
+    footerAuthor.innerHTML = `©️${yearText} <a href="https://hamuzon-jp.f5.si/" target="_blank" rel="noopener noreferrer">@hamuzon</a>`;
   </script>
 </body>
 </html>
