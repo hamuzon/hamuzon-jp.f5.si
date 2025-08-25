@@ -27,10 +27,7 @@ body {
   flex-direction: column;
 }
 @media (prefers-color-scheme: dark) {
-  body {
-    background-color: var(--bg-dark);
-    color: var(--text-dark);
-  }
+  body { background-color: var(--bg-dark); color: var(--text-dark); }
 }
 header {
   background-color: var(--accent);
@@ -299,7 +296,7 @@ main {
     deleteGroupBtn.className='group-delete-btn';
     deleteGroupBtn.title='グループ削除';
     deleteGroupBtn.textContent='✖';
-    deleteGroupBtn.addEventListener('click', ()=>{
+    deleteGroupBtn.addEventListener('click', ()=>{ 
       if(confirm(`グループ「${taskData[groupIndex].title}」を削除しますか？ タスクも全て削除されます。`)){
         taskData.splice(groupIndex,1);
         saveToStorage();
@@ -328,7 +325,6 @@ main {
     tasksDiv.addEventListener('drop', e=>{
       e.preventDefault();
       if(dragSrcGroupIdx===null || dragSrcTaskIdx===null) return;
-      if(dragSrcGroupIdx===groupIndex && dragSrcTaskIdx===null) return;
       const draggedTask=taskData[dragSrcGroupIdx].tasks.splice(dragSrcTaskIdx,1)[0];
       taskData[groupIndex].tasks.push(draggedTask);
       saveToStorage();
@@ -353,7 +349,6 @@ main {
       taskDiv.addEventListener('drop', e=>{
         e.preventDefault();
         if(dragSrcGroupIdx===null || dragSrcTaskIdx===null) return;
-        if(dragSrcGroupIdx===groupIndex && dragSrcTaskIdx===taskIndex) return;
         if(dragSrcGroupIdx===groupIndex){
           const tasksArr=taskData[groupIndex].tasks;
           const draggedTask=tasksArr.splice(dragSrcTaskIdx,1)[0];
@@ -421,6 +416,18 @@ main {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
   }
 
+  function saveToFile(){
+    const dataStr = JSON.stringify({version:APP_SAVE_VERSION,data:taskData},null,2);
+    const blob = new Blob([dataStr], {type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const filename = `taskboard_${new Date().toISOString().replace(/[:.]/g,'-')}.json`;
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
   function loadFromFile(file){
     const reader=new FileReader();
     reader.onload=e=>{
@@ -441,7 +448,7 @@ main {
   }
 
   addGroupBtn.addEventListener('click', ()=>{ taskData.push({title:'新しいグループ', tasks:[]}); saveToStorage(); render(); });
-  saveBtn.addEventListener('click', ()=>{ saveToStorage(); alert('保存しました'); });
+  saveBtn.addEventListener('click', saveToFile);
   loadBtn.addEventListener('click', ()=>loadInput.click());
   loadInput.addEventListener('change', e=>{ if(e.target.files.length) loadFromFile(e.target.files[0]); });
 
