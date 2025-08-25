@@ -1,330 +1,599 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Task Board</title>
-<link rel="icon" href="icon.svg" />
-<style>
-:root {
-  --bg-light:#eaf4f1;
-  --text-light:#2a3a34;
-  --bg-dark:#1f2a28;
-  --text-dark:#c6d8d3;
-  --accent:#2e7d32;
-  --border-radius:8px;
-}
-html{box-sizing:border-box;}
-*,*:before,*:after{box-sizing:inherit;}
-body{
-  margin:0;padding:0;
-  font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans-serif;
-  background-color:var(--bg-light);
-  color:var(--text-light);
-  transition:background-color 0.3s,color 0.3s;
-  min-height:100vh;
-  display:flex;
-  flex-direction:column;
-}
-@media(prefers-color-scheme:dark){
-  body{background-color:var(--bg-dark);color:var(--text-dark);}
-}
-header{
-  background-color:var(--accent);
-  color:white;
-  padding:1rem;
-  display:flex;
-  flex-wrap:wrap;
-  justify-content:space-between;
-  align-items:center;
-  box-shadow:0 3px 8px rgba(46,125,50,0.5);
-}
-header h1{margin:0;font-size:1.5rem;flex-grow:1;font-weight:700;letter-spacing:0.05em;}
-.controls{margin-top:0.5rem;display:flex;flex-wrap:wrap;gap:0.3rem;}
-button{
-  background-color:white;
-  border:none;
-  border-radius:var(--border-radius);
-  padding:0.4rem 1rem;
-  cursor:pointer;
-  font-weight:600;
-  color:var(--accent);
-  box-shadow:0 1px 3px rgba(46,125,50,0.3);
-  transition:background-color 0.3s,color 0.3s;
-}
-button:hover{
-  background-color:var(--accent);
-  color:white;
-  box-shadow:0 0 12px rgba(46,125,50,0.8);
-}
-main{
-  flex-grow:1;
-  padding:1rem;
-  max-width:900px;
-  margin:auto;
-  width:100%;
-}
-.progress-overall{
-  height:12px;
-  background:#cde6d0;
-  border-radius:var(--border-radius);
-  overflow:hidden;
-  margin-bottom:0.3rem;
-  position:relative;
-  box-shadow:inset 0 1px 3px rgba(0,0,0,0.1);
-}
-.progress-overall>div{
-  height:100%;
-  background-color:var(--accent);
-  width:0%;
-  transition:width 0.3s ease;
-  box-shadow:0 0 6px var(--accent);
-}
-.progress-overall>span{
-  position:absolute;
-  right:8px;
-  top:50%;
-  transform:translateY(-50%);
-  font-weight:700;
-  color:var(--text-light);
-  user-select:none;
-  text-shadow:0 0 3px #fff9;
-}
-@media(prefers-color-scheme:dark){
-  .progress-overall{background:#3a5a40;box-shadow:inset 0 1px 3px rgba(0,0,0,0.6);}
-  .progress-overall>div{box-shadow:0 0 10px var(--accent);}
-  .progress-overall>span{color:var(--text-dark);text-shadow:0 0 5px #1f2a28cc;}
-}
-.groups{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;}
-.group{
-  background-color:#d8ead7;
-  border-radius:var(--border-radius);
-  flex:1 1 280px;
-  max-width:280px;
-  display:flex;
-  flex-direction:column;
-  padding:1rem;
-  box-shadow:0 2px 6px rgba(46,125,50,0.15);
-  transition:background-color 0.3s;
-}
-@media(prefers-color-scheme:dark){.group{background-color:#2c4230;box-shadow:0 2px 8px rgba(46,125,50,0.7);}}
-.group-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:0.3rem;}
-.group h2{margin:0;font-size:1.25rem;outline:none;cursor:text;flex-grow:1;color:var(--text-light);font-weight:700;}
-@media(prefers-color-scheme:dark){.group h2{color:var(--text-dark);}}
-.group-progress{height:8px;background:#b8d1b1;border-radius:var(--border-radius);overflow:hidden;margin-bottom:0.3rem;position:relative;box-shadow:inset 0 1px 2px rgba(0,0,0,0.1);}
-.group-progress>div{height:100%;background-color:var(--accent);width:0%;transition:width 0.3s ease;box-shadow:0 0 5px var(--accent);}
-.group-progress>span{position:absolute;right:6px;top:50%;transform:translateY(-50%);font-size:0.85rem;font-weight:600;color:var(--text-light);user-select:none;text-shadow:0 0 2px #fff9;}
-@media(prefers-color-scheme:dark){.group-progress{background:#3c6b39;box-shadow:inset 0 1px 2px rgba(0,0,0,0.6);}.group-progress>span{color:var(--text-dark);text-shadow:0 0 4px #1f2a28cc;}}
-.tasks{flex-grow:1;overflow-y:auto;max-height:400px;}
-.task{display:flex;align-items:center;margin-bottom:0.6rem;background:#f3f9f5;padding:0.4rem 0.6rem;border-radius:var(--border-radius);box-shadow:0 1px 3px rgba(46,125,50,0.1);transition:background-color 0.3s;}
-@media(prefers-color-scheme:dark){.task{background:#34662c80;box-shadow:0 1px 4px rgba(46,125,50,0.6);}}
-.task input[type="checkbox"]{margin-right:0.6rem;width:18px;height:18px;cursor:pointer;accent-color:var(--accent);}
-.task-text{flex-grow:1;outline:none;cursor:text;user-select:text;color:var(--text-light);}
-.task-text[contenteditable]:empty::before{content:attr(data-placeholder);color:#97b88d;}
-@media(prefers-color-scheme:dark){.task-text{color:var(--text-dark);}.task-text[contenteditable]:empty::before{color:#88b36eaa;}}
-.task-delete{margin-left:0.6rem;background:none;border:none;color:#a43030;font-size:1.2rem;cursor:pointer;transition:color 0.3s;}
-.task-delete:hover{color:#6f1c1c;}
-.add-task-btn{margin-top:0.8rem;background-color:var(--accent);color:white;border-radius:var(--border-radius);border:none;padding:0.6rem;cursor:pointer;font-weight:700;box-shadow:0 2px 8px rgba(46,125,50,0.8);transition:background-color 0.3s,box-shadow 0.3s;}
-.add-task-btn:hover{background-color:#27632a;box-shadow:0 2px 12px rgba(39,99,42,1);}
-.group-delete-btn{margin-left:0.6rem;background:none;border:none;color:#a43030;font-size:1.3rem;cursor:pointer;font-weight:700;user-select:none;transition:color 0.3s;}
-.group-delete-btn:hover{color:#6f1c1c;}
-@media(max-width:600px){.groups{flex-direction:column;align-items:center;}}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Task Board</title>
+  <link rel="icon" href="icon.svg" />
+  <style>
+    :root {
+      --bg-light:#eaf4f1;
+      --text-light:#2a3a34;
+      --bg-dark:#1f2a28;
+      --text-dark:#c6d8d3;
+      --accent:#2e7d32;
+      --border-radius:8px;
+    }
+
+    html { box-sizing: border-box; }
+    *, *:before, *:after { box-sizing: inherit; }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-light);
+      transition: background-color 0.3s, color 0.3s;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      body { background-color: var(--bg-dark); color: var(--text-dark); }
+    }
+
+    header {
+      background-color: var(--accent);
+      color: white;
+      padding: 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 3px 8px rgba(46,125,50,0.5);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+      flex-grow: 1;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+
+    .controls {
+      margin-top: 0.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.3rem;
+    }
+
+    button {
+      background-color: white;
+      border: none;
+      border-radius: var(--border-radius);
+      padding: 0.4rem 1rem;
+      cursor: pointer;
+      font-weight: 600;
+      color: var(--accent);
+      box-shadow: 0 1px 3px rgba(46,125,50,0.3);
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    button:hover {
+      background-color: var(--accent);
+      color: white;
+      box-shadow: 0 0 12px rgba(46,125,50,0.8);
+    }
+
+    main {
+      flex-grow: 1;
+      padding: 1rem;
+      max-width: 900px;
+      margin: auto;
+      width: 100%;
+    }
+
+    .progress-overall {
+      height: 12px;
+      background: #cde6d0;
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      margin-bottom: 0.3rem;
+      position: relative;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .progress-overall > div {
+      height: 100%;
+      background-color: var(--accent);
+      width: 0%;
+      transition: width 0.3s ease;
+      box-shadow: 0 0 6px var(--accent);
+    }
+
+    .progress-overall > span {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-weight: 700;
+      color: var(--text-light);
+      user-select: none;
+      text-shadow: 0 0 3px #fff9;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .progress-overall {
+        background: #3a5a40;
+        box-shadow: inset 0 1px 3px rgba(0,0,0,0.6);
+      }
+      .progress-overall > div { box-shadow: 0 0 10px var(--accent); }
+      .progress-overall > span {
+        color: var(--text-dark);
+        text-shadow: 0 0 5px #1f2a28cc;
+      }
+    }
+
+    .groups {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .group {
+      background-color: #d8ead7;
+      border-radius: var(--border-radius);
+      flex: 1 1 280px;
+      max-width: 280px;
+      display: flex;
+      flex-direction: column;
+      padding: 1rem;
+      box-shadow: 0 2px 6px rgba(46,125,50,0.15);
+      transition: background-color 0.3s;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .group {
+        background-color: #2c4230;
+        box-shadow: 0 2px 8px rgba(46,125,50,0.7);
+      }
+    }
+
+    .group-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.3rem;
+    }
+
+    .group h2 {
+      margin: 0;
+      font-size: 1.25rem;
+      outline: none;
+      cursor: text;
+      flex-grow: 1;
+      color: var(--text-light);
+      font-weight: 700;
+    }
+
+    @media (prefers-color-scheme: dark) { .group h2 { color: var(--text-dark); } }
+
+    .group-progress {
+      height: 8px;
+      background: #b8d1b1;
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      margin-bottom: 0.3rem;
+      position: relative;
+      box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+    }
+
+    .group-progress > div {
+      height: 100%;
+      background-color: var(--accent);
+      width: 0%;
+      transition: width 0.3s ease;
+      box-shadow: 0 0 5px var(--accent);
+    }
+
+    .group-progress > span {
+      position: absolute;
+      right: 6px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-light);
+      user-select: none;
+      text-shadow: 0 0 2px #fff9;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .group-progress {
+        background: #3c6b39;
+        box-shadow: inset 0 1px 2px rgba(0,0,0,0.6);
+      }
+      .group-progress > span {
+        color: var(--text-dark);
+        text-shadow: 0 0 4px #1f2a28cc;
+      }
+    }
+
+    .tasks {
+      flex-grow: 1;
+      overflow-y: auto;
+      max-height: 400px;
+    }
+
+    .task {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.6rem;
+      background: #f3f9f5;
+      padding: 0.4rem 0.6rem;
+      border-radius: var(--border-radius);
+      box-shadow: 0 1px 3px rgba(46,125,50,0.1);
+      transition: background-color 0.3s;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .task {
+        background: #34662c80;
+        box-shadow: 0 1px 4px rgba(46,125,50,0.6);
+      }
+    }
+
+    .task input[type="checkbox"] {
+      margin-right: 0.6rem;
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      accent-color: var(--accent);
+    }
+
+    .task-text {
+      flex-grow: 1;
+      outline: none;
+      cursor: text;
+      user-select: text;
+      color: var(--text-light);
+    }
+
+    .task-text[contenteditable]:empty::before {
+      content: attr(data-placeholder);
+      color: #97b88d;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .task-text { color: var(--text-dark); }
+      .task-text[contenteditable]:empty::before { color: #88b36eaa; }
+    }
+
+    .task-delete {
+      margin-left: 0.6rem;
+      background: none;
+      border: none;
+      color: #a43030;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+
+    .task-delete:hover { color: #6f1c1c; }
+
+    .add-task-btn {
+      margin-top: 0.8rem;
+      background-color: var(--accent);
+      color: white;
+      border-radius: var(--border-radius);
+      border: none;
+      padding: 0.6rem;
+      cursor: pointer;
+      font-weight: 700;
+      box-shadow: 0 2px 8px rgba(46,125,50,0.8);
+      transition: background-color 0.3s, box-shadow 0.3s;
+    }
+
+    .add-task-btn:hover {
+      background-color: #27632a;
+      box-shadow: 0 2px 12px rgba(39,99,42,1);
+    }
+
+    .group-delete-btn {
+      margin-left: 0.6rem;
+      background: none;
+      border: none;
+      color: #a43030;
+      font-size: 1.3rem;
+      cursor: pointer;
+      font-weight: 700;
+      user-select: none;
+      transition: color 0.3s;
+    }
+
+    .group-delete-btn:hover { color: #6f1c1c; }
+
+    @media(max-width: 600px) { .groups { flex-direction: column; align-items: center; } }
+  </style>
 </head>
 <body>
-<header>
-  <h1>Task Board</h1>
-  <div class="controls">
-    <button id="add-group-btn">＋ グループ追加</button>
-    <button id="save-btn">💾 保存</button>
-    <input type="file" id="load-input" hidden/>
-    <button id="load-btn">📂 読み込み</button>
-    <button id="clear-storage-btn" title="ローカルストレージクリア">🗑 ローカル消去</button>
-  </div>
-</header>
-<main>
-  <div class="progress-overall"><div></div><span>0%</span></div>
-  <div class="groups" id="groups-container" aria-live="polite"></div>
-</main>
-<script>
+  <header>
+    <h1>Task Board</h1>
+    <div class="controls">
+      <button id="add-group-btn">＋ グループ追加</button>
+      <button id="save-btn">💾 保存</button>
+      <input type="file" id="load-input" hidden />
+      <button id="load-btn">📂 読み込み</button>
+      <button id="clear-storage-btn" title="ローカルストレージクリア">🗑 ローカル消去</button>
+    </div>
+  </header>
+  <main>
+    <div class="progress-overall"><div></div><span>0%</span></div>
+    <div class="groups" id="groups-container" aria-live="polite"></div>
+  </main>
+  <script>
 (() => {
-const APP_SAVE_VERSION="1.0";
-const STORAGE_KEY="taskboard_data";
-const SUPPORTED_VERSIONS=["1.0"];
-const groupsContainer=document.getElementById('groups-container');
-const saveBtn=document.getElementById('save-btn');
-const loadBtn=document.getElementById('load-btn');
-const loadInput=document.getElementById('load-input');
-const addGroupBtn=document.getElementById('add-group-btn');
-const overallProgressBar=document.querySelector('.progress-overall > div');
-const overallProgressText=document.querySelector('.progress-overall > span');
-const clearStorageBtn=document.getElementById('clear-storage-btn');
-let taskData=[];
+  const APP_SAVE_VERSION = "1.0";
+  const STORAGE_KEY = "taskboard_data";
+  const SUPPORTED_VERSIONS = ["1.0"];
+  const groupsContainer = document.getElementById('groups-container');
+  const saveBtn = document.getElementById('save-btn');
+  const loadBtn = document.getElementById('load-btn');
+  const loadInput = document.getElementById('load-input');
+  const addGroupBtn = document.getElementById('add-group-btn');
+  const overallProgressBar = document.querySelector('.progress-overall > div');
+  const overallProgressText = document.querySelector('.progress-overall > span');
+  const clearStorageBtn = document.getElementById('clear-storage-btn');
+  let taskData = [];
 
-function getDefaultGroups(){
-  return [
-    {title:'📥 未着手',tasks:[]},
-    {title:'🚧 進行中',tasks:[]},
-    {title:'✅ 完了',tasks:[]}
-  ];
-}
-function calcProgress(tasks){return tasks.length?Math.round(tasks.filter(t=>t.done).length/tasks.length*100):0;}
-let dragSrcGroupIdx=null,dragSrcTaskIdx=null;
+  function getDefaultGroups() {
+    return [
+      { title: '📥 未着手', tasks: [] },
+      { title: '🚧 進行中', tasks: [] },
+      { title: '✅ 完了', tasks: [] }
+    ];
+  }
 
-function createGroupElement(group,groupIndex){
-  const groupDiv=document.createElement('section');
-  groupDiv.className='group';
-  groupDiv.setAttribute('draggable','true');
-  groupDiv.dataset.groupIndex=groupIndex;
+  function calcProgress(tasks) {
+    return tasks.length ? Math.round(tasks.filter(t => t.done).length / tasks.length * 100) : 0;
+  }
 
-  groupDiv.addEventListener('dragstart',e=>{dragSrcGroupIdx=groupIndex;e.dataTransfer.effectAllowed='move';groupDiv.style.opacity='0.5';});
-  groupDiv.addEventListener('dragend',e=>{dragSrcGroupIdx=null;groupDiv.style.opacity='';});
-  groupDiv.addEventListener('dragover',e=>{e.preventDefault();e.dataTransfer.dropEffect='move';});
-  groupDiv.addEventListener('drop',e=>{
-    e.preventDefault();
-    if(dragSrcGroupIdx===null||dragSrcGroupIdx===groupIndex) return;
-    const dragged=taskData.splice(dragSrcGroupIdx,1)[0];
-    taskData.splice(groupIndex,0,dragged);
-    saveToStorage();render();
-  });
+  let dragSrcGroupIdx = null, dragSrcTaskIdx = null;
 
-  const groupHeader=document.createElement('div');
-  groupHeader.className='group-header';
-  const h2=document.createElement('h2');
-  h2.contentEditable=true;
-  h2.spellcheck=false;
-  h2.textContent=group.title;
-  h2.setAttribute('aria-label','グループ名編集');
-  h2.addEventListener('input',()=>{taskData[groupIndex].title=h2.textContent.trim()||'無題グループ';saveToStorage();});
-  const deleteGroupBtn=document.createElement('button');
-  deleteGroupBtn.className='group-delete-btn';
-  deleteGroupBtn.title='グループ削除';
-  deleteGroupBtn.textContent='✖';
-  deleteGroupBtn.addEventListener('click',()=>{
-    if(confirm(`グループ「${taskData[groupIndex].title}」を削除しますか？ タスクも全て削除されます。`)){
-      taskData.splice(groupIndex,1);saveToStorage();render();
-    }
-  });
-  groupHeader.appendChild(h2);groupHeader.appendChild(deleteGroupBtn);groupDiv.appendChild(groupHeader);
+  function createGroupElement(group, groupIndex) {
+    const groupDiv = document.createElement('section');
+    groupDiv.className = 'group';
+    groupDiv.setAttribute('draggable', 'true');
+    groupDiv.dataset.groupIndex = groupIndex;
 
-  const progressWrapper=document.createElement('div');progressWrapper.className='group-progress';
-  const progressFill=document.createElement('div');
-  const progressPercent=calcProgress(group.tasks);
-  progressFill.style.width=progressPercent+'%';
-  const progressText=document.createElement('span');progressText.textContent=progressPercent+'%';
-  progressWrapper.appendChild(progressFill);progressWrapper.appendChild(progressText);groupDiv.appendChild(progressWrapper);
-
-  const tasksDiv=document.createElement('div');tasksDiv.className='tasks';
-  tasksDiv.addEventListener('dragover',e=>{e.preventDefault();});
-  tasksDiv.addEventListener('drop',e=>{
-    e.preventDefault();
-    if(dragSrcGroupIdx===null||dragSrcTaskIdx===null) return;
-    const draggedTask=taskData[dragSrcGroupIdx].tasks.splice(dragSrcTaskIdx,1)[0];
-    taskData[groupIndex].tasks.push(draggedTask);
-    saveToStorage();render();
-  });
-
-  group.tasks.forEach((task,taskIndex)=>{
-    const taskDiv=document.createElement('div');
-    taskDiv.className='task';taskDiv.setAttribute('draggable','true');
-    taskDiv.dataset.groupIndex=groupIndex;taskDiv.dataset.taskIndex=taskIndex;
-
-    taskDiv.addEventListener('dragstart',e=>{dragSrcGroupIdx=groupIndex;dragSrcTaskIdx=taskIndex;e.dataTransfer.effectAllowed='move';taskDiv.style.opacity='0.5';});
-    taskDiv.addEventListener('dragend',e=>{dragSrcGroupIdx=null;dragSrcTaskIdx=null;taskDiv.style.opacity='';});
-    taskDiv.addEventListener('dragover',e=>{e.preventDefault();});
-    taskDiv.addEventListener('drop',e=>{
+    // グループのドラッグ
+    groupDiv.addEventListener('dragstart', e => {
+      dragSrcGroupIdx = groupIndex;
+      e.dataTransfer.effectAllowed = 'move';
+      groupDiv.style.opacity = '0.5';
+    });
+    groupDiv.addEventListener('dragend', e => {
+      dragSrcGroupIdx = null;
+      groupDiv.style.opacity = '';
+    });
+    groupDiv.addEventListener('dragover', e => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; });
+    groupDiv.addEventListener('drop', e => {
       e.preventDefault();
-      if(dragSrcGroupIdx===null||dragSrcTaskIdx===null) return;
-      if(dragSrcGroupIdx===groupIndex){
-        const arr=taskData[groupIndex].tasks;
-        const t=arr.splice(dragSrcTaskIdx,1)[0];
-        arr.splice(taskIndex,0,t);
-      }else{
-        const t=taskData[dragSrcGroupIdx].tasks.splice(dragSrcTaskIdx,1)[0];
-        taskData[groupIndex].tasks.splice(taskIndex,0,t);
-      }
-      saveToStorage();render();
+      if (dragSrcGroupIdx === null || dragSrcGroupIdx === groupIndex) return;
+      const dragged = taskData.splice(dragSrcGroupIdx, 1)[0];
+      taskData.splice(groupIndex, 0, dragged);
+      saveToStorage();
+      render();
     });
 
-    const checkbox=document.createElement('input');
-    checkbox.type='checkbox';checkbox.checked=task.done;
-    checkbox.addEventListener('change',()=>{taskData[groupIndex].tasks[taskIndex].done=checkbox.checked;saveToStorage();render();});
-    taskDiv.appendChild(checkbox);
+    // グループヘッダー
+    const groupHeader = document.createElement('div');
+    groupHeader.className = 'group-header';
 
-    const taskText=document.createElement('span');
-    taskText.className='task-text';taskText.contentEditable=true;taskText.spellcheck=false;
-    taskText.dataset.placeholder='タスク名を入力';taskText.textContent=task.text;
-    taskText.addEventListener('input',()=>{taskData[groupIndex].tasks[taskIndex].text=taskText.textContent;saveToStorage();});
-    taskDiv.appendChild(taskText);
+    const h2 = document.createElement('h2');
+    h2.contentEditable = true;
+    h2.spellcheck = false;
+    h2.textContent = group.title;
+    h2.setAttribute('aria-label', 'グループ名編集');
+    h2.addEventListener('input', () => {
+      taskData[groupIndex].title = h2.textContent.trim() || '無題グループ';
+      saveToStorage();
+    });
 
-    const delBtn=document.createElement('button');
-    delBtn.className='task-delete';delBtn.title='タスク削除';delBtn.textContent='🗑️';
-    delBtn.addEventListener('click',()=>{taskData[groupIndex].tasks.splice(taskIndex,1);saveToStorage();render();});
-    taskDiv.appendChild(delBtn);
-
-    tasksDiv.appendChild(taskDiv);
-  });
-  groupDiv.appendChild(tasksDiv);
-
-  const addTaskBtn=document.createElement('button');addTaskBtn.className='add-task-btn';addTaskBtn.textContent='＋ タスク追加';
-  addTaskBtn.addEventListener('click',()=>{taskData[groupIndex].tasks.push({text:'新しいタスク',done:false});saveToStorage();render();});
-  groupDiv.appendChild(addTaskBtn);
-
-  return groupDiv;
-}
-
-function render(){
-  groupsContainer.innerHTML='';
-  taskData.forEach((g,i)=>groupsContainer.appendChild(createGroupElement(g,i)));
-  const allTasks=taskData.flatMap(g=>g.tasks);
-  const overallPercent=calcProgress(allTasks);
-  overallProgressBar.style.width=overallPercent+'%';
-  overallProgressText.textContent=overallPercent+'%';
-}
-
-function saveToStorage(){
-  localStorage.setItem(STORAGE_KEY,JSON.stringify({version:APP_SAVE_VERSION,data:taskData}));
-}
-
-function saveToFile(){
-  saveToStorage();
-  const now=new Date();const jp=new Date(now.getTime()+9*60*60*1000);
-  const pad=n=>String(n).padStart(2,'0');
-  const filename=`TaskBoard-${APP_SAVE_VERSION}_${jp.getFullYear()}-${pad(jp.getMonth()+1)}-${pad(jp.getDate())}_${pad(jp.getHours())}-${pad(jp.getMinutes())}-${pad(jp.getSeconds())}.json`;
-  const blob=new Blob([JSON.stringify({version:APP_SAVE_VERSION,data:taskData},null,2)],{type:"application/json"});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement('a');a.href=url;a.download=filename;document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
-}
-
-function loadFromFile(file){
-  const reader=new FileReader();
-  reader.onload=e=>{
-    try{
-      const obj=JSON.parse(e.target.result);
-      if(!obj.version||!SUPPORTED_VERSIONS.includes(obj.version)){
-        alert('非対応バージョンのデータです');return;
+    const deleteGroupBtn = document.createElement('button');
+    deleteGroupBtn.className = 'group-delete-btn';
+    deleteGroupBtn.title = 'グループ削除';
+    deleteGroupBtn.textContent = '✖';
+    deleteGroupBtn.addEventListener('click', () => {
+      if (confirm(`グループ「${taskData[groupIndex].title}」を削除しますか？ タスクも全て削除されます。`)) {
+        taskData.splice(groupIndex, 1);
+        saveToStorage();
+        render();
       }
-      taskData=obj.data;saveToStorage();render();
-    }catch(err){alert('読み込み失敗: '+err.message);}
-  };
-  reader.readAsText(file);
-}
+    });
 
-// イベント設定
-addGroupBtn.addEventListener('click',()=>{taskData.push({title:'新しいグループ',tasks:[]});saveToStorage();render();});
-saveBtn.addEventListener('click',saveToFile);
-loadBtn.addEventListener('click',()=>loadInput.click());
-loadInput.addEventListener('change',e=>{if(e.target.files.length) loadFromFile(e.target.files[0]);});
-clearStorageBtn.addEventListener('click',()=>{if(confirm('ローカルストレージを全て消去しますか？')){localStorage.removeItem(STORAGE_KEY);taskData=getDefaultGroups();render();}});
+    groupHeader.appendChild(h2);
+    groupHeader.appendChild(deleteGroupBtn);
+    groupDiv.appendChild(groupHeader);
 
-// 初回ロード
-try{
-  const raw=localStorage.getItem(STORAGE_KEY);
-  if(raw){const obj=JSON.parse(raw);taskData=obj.version&&SUPPORTED_VERSIONS.includes(obj.version)?obj.data:getDefaultGroups();}
-  else taskData=getDefaultGroups();
-}catch(e){taskData=getDefaultGroups();}
-render();
+    // グループ進捗
+    const progressWrapper = document.createElement('div');
+    progressWrapper.className = 'group-progress';
+    const progressFill = document.createElement('div');
+    const progressPercent = calcProgress(group.tasks);
+    progressFill.style.width = progressPercent + '%';
+    const progressText = document.createElement('span');
+    progressText.textContent = progressPercent + '%';
+    progressWrapper.appendChild(progressFill);
+    progressWrapper.appendChild(progressText);
+    groupDiv.appendChild(progressWrapper);
+
+    // タスクコンテナ
+    const tasksDiv = document.createElement('div');
+    tasksDiv.className = 'tasks';
+    tasksDiv.addEventListener('dragover', e => e.preventDefault());
+    tasksDiv.addEventListener('drop', e => {
+      e.preventDefault();
+      if (dragSrcGroupIdx === null || dragSrcTaskIdx === null) return;
+      const draggedTask = taskData[dragSrcGroupIdx].tasks.splice(dragSrcTaskIdx, 1)[0];
+      taskData[groupIndex].tasks.push(draggedTask);
+      saveToStorage();
+      render();
+    });
+
+    group.tasks.forEach((task, taskIndex) => {
+      const taskDiv = document.createElement('div');
+      taskDiv.className = 'task';
+      taskDiv.setAttribute('draggable', 'true');
+      taskDiv.dataset.groupIndex = groupIndex;
+      taskDiv.dataset.taskIndex = taskIndex;
+
+      taskDiv.addEventListener('dragstart', e => {
+        dragSrcGroupIdx = groupIndex;
+        dragSrcTaskIdx = taskIndex;
+        e.dataTransfer.effectAllowed = 'move';
+        taskDiv.style.opacity = '0.5';
+      });
+      taskDiv.addEventListener('dragend', e => {
+        dragSrcGroupIdx = null;
+        dragSrcTaskIdx = null;
+        taskDiv.style.opacity = '';
+      });
+      taskDiv.addEventListener('dragover', e => e.preventDefault());
+      taskDiv.addEventListener('drop', e => {
+        e.preventDefault();
+        if (dragSrcGroupIdx === null || dragSrcTaskIdx === null) return;
+        if (dragSrcGroupIdx === groupIndex) {
+          const arr = taskData[groupIndex].tasks;
+          const t = arr.splice(dragSrcTaskIdx, 1)[0];
+          arr.splice(taskIndex, 0, t);
+        } else {
+          const t = taskData[dragSrcGroupIdx].tasks.splice(dragSrcTaskIdx, 1)[0];
+          taskData[groupIndex].tasks.splice(taskIndex, 0, t);
+        }
+        saveToStorage();
+        render();
+      });
+
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.checked = task.done;
+      checkbox.addEventListener('change', () => {
+        taskData[groupIndex].tasks[taskIndex].done = checkbox.checked;
+        saveToStorage();
+        render();
+      });
+      taskDiv.appendChild(checkbox);
+
+      const taskText = document.createElement('span');
+      taskText.className = 'task-text';
+      taskText.contentEditable = true;
+      taskText.spellcheck = false;
+      taskText.dataset.placeholder = 'タスク名を入力';
+      taskText.textContent = task.text;
+      taskText.addEventListener('input', () => {
+        taskData[groupIndex].tasks[taskIndex].text = taskText.textContent;
+        saveToStorage();
+      });
+      taskDiv.appendChild(taskText);
+
+      const delBtn = document.createElement('button');
+      delBtn.className = 'task-delete';
+      delBtn.title = 'タスク削除';
+      delBtn.textContent = '🗑️';
+      delBtn.addEventListener('click', () => {
+        taskData[groupIndex].tasks.splice(taskIndex, 1);
+        saveToStorage();
+        render();
+      });
+      taskDiv.appendChild(delBtn);
+
+      tasksDiv.appendChild(taskDiv);
+    });
+
+    groupDiv.appendChild(tasksDiv);
+
+    const addTaskBtn = document.createElement('button');
+    addTaskBtn.className = 'add-task-btn';
+    addTaskBtn.textContent = '＋ タスク追加';
+    addTaskBtn.addEventListener('click', () => {
+      taskData[groupIndex].tasks.push({ text: '新しいタスク', done: false });
+      saveToStorage();
+      render();
+    });
+    groupDiv.appendChild(addTaskBtn);
+
+    return groupDiv;
+  }
+
+  function render() {
+    groupsContainer.innerHTML = '';
+    taskData.forEach((g, i) => groupsContainer.appendChild(createGroupElement(g, i)));
+    const allTasks = taskData.flatMap(g => g.tasks);
+    const overallPercent = calcProgress(allTasks);
+    overallProgressBar.style.width = overallPercent + '%';
+    overallProgressText.textContent = overallPercent + '%';
+  }
+
+  function saveToStorage() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ version: APP_SAVE_VERSION, data: taskData }));
+  }
+
+  function saveToFile() {
+    saveToStorage();
+    const now = new Date();
+    const pad = n => String(n).padStart(2, '0');
+    const filename = `TaskBoard-${APP_SAVE_VERSION}_${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}_${pad(now.getHours())}-${pad(now.getMinutes())}-${pad(now.getSeconds())}.json`;
+    const blob = new Blob([JSON.stringify({ version: APP_SAVE_VERSION, data: taskData }, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  function loadFromFile(file) {
+    const reader = new FileReader();
+    reader.onload = e => {
+      try {
+        const obj = JSON.parse(e.target.result);
+        if (!obj.version || !SUPPORTED_VERSIONS.includes(obj.version)) {
+          alert('非対応バージョンのデータです');
+          return;
+        }
+        taskData = obj.data;
+        saveToStorage();
+        render();
+      } catch (err) {
+        alert('読み込み失敗: ' + err.message);
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  // イベント設定
+  addGroupBtn.addEventListener('click', () => { taskData.push({ title:'新しいグループ', tasks:[] }); saveToStorage(); render(); });
+  saveBtn.addEventListener('click', saveToFile);
+  loadBtn.addEventListener('click', () => loadInput.click());
+  loadInput.addEventListener('change', e => { if (e.target.files.length) loadFromFile(e.target.files[0]); });
+  clearStorageBtn.addEventListener('click', () => {
+    if (confirm('ローカルストレージを全て消去しますか？')) {
+      localStorage.removeItem(STORAGE_KEY);
+      taskData = getDefaultGroups();
+      render();
+    }
+  });
+
+  // 初回ロード
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      const obj = JSON.parse(raw);
+      taskData = obj.version && SUPPORTED_VERSIONS.includes(obj.version) ? obj.data : getDefaultGroups();
+    } else taskData = getDefaultGroups();
+  } catch (e) {
+    taskData = getDefaultGroups();
+  }
+
+  render();
 })();
-</script>
+  </script>
 </body>
 </html>
