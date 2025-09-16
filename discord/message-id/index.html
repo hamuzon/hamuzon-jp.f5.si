@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Discord Snowflake Analyzer</title>
+<title>Discord Snowflake Analyzer & Info</title>
 
 <link rel="icon" href="https://hamusata.f5.si/icon.webp" type="image/webp" />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet" />
@@ -30,8 +30,12 @@ h1{margin:0 0 16px 0; font-weight:800; font-size:1.6rem; text-align:center; colo
 input{flex:1; padding:10px 12px; border-radius:10px; border:1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.02); color:var(--text-main); font-family: monospace;}
 button{padding:10px 16px; border:none; border-radius:10px; background: linear-gradient(90deg,var(--accent-1),var(--accent-2)); color:#02131A; cursor:pointer; font-weight:700;}
 button:hover{filter:brightness(1.05);}
-.result{padding:12px; border-radius:12px; background: rgba(0,0,0,0.02); font-family: monospace; font-size:0.95rem; white-space:pre-wrap;}
+.result{
+  padding:12px; border-radius:12px; background: rgba(0,0,0,0.02); font-family: monospace; font-size:0.95rem; 
+  white-space:pre-wrap; word-break: break-all; overflow-wrap: break-word;
+}
 .explain{padding:12px; border-radius:12px; background: rgba(0,0,0,0.04); font-size:0.9rem; margin-top:12px; line-height:1.4; color:var(--muted);}
+.explain a{color:var(--accent-1); text-decoration:underline;}
 @media(max-width:600px){.controls{flex-direction:column;} button{width:100%;}}
 </style>
 </head>
@@ -55,6 +59,7 @@ button:hover{filter:brightness(1.05);}
 <li><strong>52〜63ビット:</strong> Sequence（同じミリ秒内での連番）</li>
 </ul>
 <p>Snowflake IDは単純な数字ではなく、<strong>日時順に増加</strong>する仕組みです。Binary/Hexで内部構造も確認できます。</p>
+<p>公式ドキュメント（英語）: <a href="https://discord.com/developers/docs/reference#snowflakes" target="_blank">Discord Snowflake Official Documentation</a></p>
 <p>※この解析ツールはAI生成コードによる実装です。</p>
 </div>
 
