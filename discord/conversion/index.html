@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Discord Message-ID & Timestamp Converter</title>
+<title>Discord Message-ID Converter</title>
 <link rel="icon" href="https://hamusata.f5.si/icon.webp">
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
@@ -15,7 +15,8 @@ body {
                 #0b0b0d;
     color: #e6eef8;
     min-height: 100vh;
-    padding: 2rem;
+    -webkit-font-smoothing: antialiased;
+    padding: 0;
 }
 .glass {
     background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
@@ -23,103 +24,93 @@ body {
     padding: 32px 28px;
     box-shadow: 0 10px 30px rgba(12,10,25,0.6), inset 0 1px 0 rgba(255,255,255,0.03);
     border: 1px solid rgba(167,139,250,0.12);
+    margin-bottom: 24px;
     backdrop-filter: blur(12px) saturate(120%);
+    transition: transform .18s ease, box-shadow .18s ease;
 }
-.input-field { width:100%; padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,0.04); background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.16)); color:#e6eef8; }
-.button { padding:10px 20px; border-radius:12px; font-weight:700; color:#0b0b0d; background:linear-gradient(90deg,#8b5cf6,#00d3ff); border:none; cursor:pointer; }
-.discord-box { background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(10,10,12,0.16)); padding: 12px; border-radius:12px; font-family: 'Fira Mono','Menlo','Consolas',monospace; cursor:pointer; }
-h1,h2,h3 { margin-bottom:0.75rem; }
+.glass:hover, .glass:focus-within { transform: translateY(-6px); }
+.input-field {
+    width: 100%; padding: 12px 14px; border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.04);
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.16));
+    color: #e6eef8; font-size: 1rem; outline: none;
+    transition: border .18s, box-shadow .18s;
+}
+.input-field:focus { border-color: rgba(124,77,255,0.95); box-shadow: 0 6px 20px rgba(124,77,255,0.08); }
+.button {
+    padding: 10px 20px; border-radius: 12px; font-weight: 700;
+    color: #0b0b0d; background: linear-gradient(90deg, #8b5cf6 0%, #00d3ff 100%);
+    border: none; cursor: pointer; transition: transform .12s ease, box-shadow .12s ease;
+}
+.button.bg-accent { background: linear-gradient(90deg, #00d3ff 0%, #ff84c7 100%); color:#081018; }
+.button:hover { transform: translateY(-4px); }
+.discord-box {
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(10,10,12,0.16));
+    padding: 12px 14px; border-radius: 12px; cursor:pointer;
+    font-family: 'Fira Mono','Menlo','Consolas',monospace;
+}
 .flex-container { display:flex; flex-wrap:wrap; gap:24px; justify-content:center; }
+h1 { color:transparent; background: linear-gradient(90deg,#8b5cf6,#00d3ff); -webkit-background-clip:text; background-clip:text; }
+@media(max-width:640px){ .flex-container{flex-direction:column; gap:12px;} .glass{padding:18px 12px;} }
 </style>
 </head>
 <body>
 
-<h1 class="text-4xl font-bold text-center mb-8 tracking-tight">Discord Timestamp Generator</h1>
+<h1 class="text-4xl font-bold text-center mb-8 tracking-tight" style="text-shadow:0 2px 12px #7c3aed44;">Discord Message-ID Converter</h1>
 
 <div class="flex-container w-full max-w-3xl mx-auto">
     <div class="glass flex-1 min-w-[300px]">
-        <h2 class="text-2xl font-semibold mb-3" style="color:#f472b6;">DiscordメッセージID変換</h2>
-        <input type="text" id="snowflakeInput" class="input-field mb-4" placeholder="DiscordメッセージIDを入力">
+        <h2 class="text-2xl font-semibold mb-3" style="color:#f472b6;">メッセージIDを入力</h2>
+        <div class="flex flex-col sm:flex-row items-stretch gap-4 mb-4">
+            <input type="text" id="msgIdInput" class="input-field" placeholder="DiscordメッセージIDを入力">
+            <button class="button bg-accent" onclick="convert()">変換</button>
+        </div>
 
-        <div id="timestampOutput" class="mb-4"></div>
-        <h3 class="text-xl font-semibold mb-3" style="color:#a78bfa;">Discordタイムスタンプ</h3>
-        <div id="discordFormats" class="grid grid-cols-1 gap-3"></div>
+        <h2 class="text-2xl font-semibold mb-3" style="color:#a78bfa;">結果</h2>
+        <div id="result" class="discord-box text-base" style="white-space: pre-wrap;"></div>
+
+        <div class="mt-6 text-center text-sm text-muted">
+          © <span id="year-range"></span> <a href="https://hamusata.f5.si" target="_blank" class="underline">hamusata</a>
+        </div>
     </div>
 </div>
 
 <script>
-// DiscordメッセージID → UNIX秒
-function snowflakeToUnix(id){
+const baseYear = 2025;
+const currentYear = new Date().getFullYear();
+document.getElementById('year-range').textContent = baseYear === currentYear ? baseYear : `${baseYear}–${currentYear}`;
+
+function pad2(n){ return String(n).padStart(2,'0'); }
+function pad3(n){ return String(n).padStart(3,'0'); }
+
+function convert(){
+    const input = document.getElementById('msgIdInput').value.trim();
+    const resultEl = document.getElementById('result');
+    if(!input){
+        resultEl.innerText = '';
+        return;
+    }
     try{
+        const id = BigInt(input);
         const discordEpoch = 1420070400000n;
-        const tsMs = (BigInt(id) >> 22n) + discordEpoch;
-        return Number(tsMs/1000n);
-    } catch { return null; }
+        const tsMs = (id >> 22n) + discordEpoch;
+        const date = new Date(Number(tsMs));
+        
+        // JST
+        const jst = new Date(Number(tsMs) + 9*3600*1000);
+        const jstStr = `${jst.getFullYear()}/${pad2(jst.getMonth()+1)}/${pad2(jst.getDate())} ${pad2(jst.getHours())}:${pad2(jst.getMinutes())}:${pad2(jst.getSeconds())}.${pad3(jst.getMilliseconds())}`;
+
+        // UTC
+        const utc = date.toISOString().replace('T',' ').replace('Z','');
+
+        // Local
+        const local = date.toLocaleString();
+
+        resultEl.innerText = `UNIX: ${Math.floor(Number(tsMs)/1000)}\nLocal: ${local}\nUTC: ${utc}\nJST: ${jstStr}`;
+    }catch(e){
+        resultEl.innerText = '⚠️ 無効なIDです。';
+    }
 }
-
-// ローカル/UTC/日本時間文字列
-function formatDates(unix){
-    const d = new Date(unix*1000);
-    return {
-        local: d.toLocaleString(),
-        utc: d.toISOString().replace('T',' ').replace('Z',''),
-        jst: new Date(d.getTime() + 9*3600*1000).toISOString().replace('T',' ').replace('Z','')
-    };
-}
-
-// Discordフォーマット生成
-function generateDiscordFormats(unix){
-    const date = new Date(unix*1000);
-    const JP_WEEK=['日曜日','月曜日','火曜日','水曜日','木曜日','金曜日','土曜日'];
-    const pad=n=>String(n).padStart(2,'0');
-    const entries=[
-        {tag:`<t:${Math.floor(unix)}:d>`, preview:`${date.getFullYear()}/${pad(date.getMonth()+1)}/${pad(date.getDate())}`},
-        {tag:`<t:${Math.floor(unix)}:D>`, preview:`${date.getFullYear()}年${date.getMonth()+1}月${date.getDate()}日`},
-        {tag:`<t:${Math.floor(unix)}:t>`, preview:`${pad(date.getHours())}:${pad(date.getMinutes())}`},
-        {tag:`<t:${Math.floor(unix)}:T>`, preview:`${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`},
-        {tag:`<t:${Math.floor(unix)}:f>`, preview:`${date.getFullYear()}年${date.getMonth()+1}月${date.getDate()}日 ${pad(date.getHours())}:${pad(date.getMinutes())}`},
-        {tag:`<t:${Math.floor(unix)}:F>`, preview:`${date.getFullYear()}年${date.getMonth()+1}月${date.getDate()}日 ${JP_WEEK[date.getDay()]} ${pad(date.getHours())}:${pad(date.getMinutes())}`},
-        {tag:`<t:${Math.floor(unix)}:R>`, preview:formatRelative(unix)}
-    ];
-    return entries;
-}
-
-// 簡易相対時間
-function formatRelative(unix){
-    const now=Math.floor(Date.now()/1000);
-    let diff=unix-now, abs=Math.abs(diff);
-    if(abs<60) return diff<0?`${abs}秒前`:`${abs}秒後`;
-    if(abs<3600) return diff<0?`${Math.round(abs/60)}分前`:`${Math.round(abs/60)}分後`;
-    if(abs<86400) return diff<0?`${Math.round(abs/3600)}時間前`:`${Math.round(abs/3600)}時間後`;
-    return diff<0?`${Math.round(abs/86400)}日前`:`${Math.round(abs/86400)}日後`;
-}
-
-// コピー
-function copyText(text){ navigator.clipboard.writeText(text).then(()=>alert('コピーしました！')); }
-
-// レスポンスフリー
-const input = document.getElementById('snowflakeInput');
-const output = document.getElementById('timestampOutput');
-const discordDiv = document.getElementById('discordFormats');
-
-input.addEventListener('input',()=>{
-    const val = input.value.trim();
-    if(!val){ output.innerHTML=''; discordDiv.innerHTML=''; return; }
-    const unix = snowflakeToUnix(val);
-    if(unix===null){ output.innerHTML='⚠️ 無効なIDです'; discordDiv.innerHTML=''; return; }
-    const dates = formatDates(unix);
-    output.innerHTML = `<b>UNIX秒:</b> ${unix}<br><b>ローカル:</b> ${dates.local}<br><b>UTC:</b> ${dates.utc}<br><b>日本時間:</b> ${dates.jst}`;
-
-    discordDiv.innerHTML='';
-    generateDiscordFormats(unix).forEach(e=>{
-        const el=document.createElement('div');
-        el.className='discord-box';
-        el.innerHTML=`<div class="font-mono">${e.tag}</div><div class="text-xs mt-1" style="color:#a78bfa;">${e.preview}</div>`;
-        el.onclick=()=>copyText(e.tag);
-        discordDiv.appendChild(el);
-    });
-});
 </script>
-
 </body>
 </html>
