@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Discord Snowflake Timestamp Converter</title>
+
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet" />
+
+<link rel="icon" href="https://home.hamusata.f5.si/icon.svg" type="image/svg+xml" />
+<style>
+  /* ---------- Material 3 Expressive inspired palette (cool, "kakkoi") ---------- */
+  :root{
+    --bg-a: #071024;       /* deep navy */
+    --bg-b: #071842;       /* darker blue */
+    --accent-1: #00B8D4;   /* cyan / primary */
+    --accent-2: #7C3AED;   /* violet / expressive accent */
+    --accent-3: #00FFC6;   /* neon mint for highlights */
+    --glass-bg: rgba(255,255,255,0.06);
+    --glass-border: rgba(255,255,255,0.12);
+    --glass-inner: rgba(255,255,255,0.03);
+    --text-main: #EAF6FF;
+    --muted: rgba(234,246,255,0.75);
+    --danger: #FF6B6B;
+    --max-width: 520px;
+  }
+
+  /* reset + box sizing */
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+
+  /* Background */
+  body {
+    font-family: "Inter", "Noto Sans JP", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    background: radial-gradient(1200px 600px at 10% 10%, rgba(12,36,72,0.6), transparent 10%),
+                linear-gradient(135deg, var(--bg-a), var(--bg-b) 60%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(12px, 3vw, 32px);
+    color: var(--text-main);
+  }
+
+  /* Container - Liquid glass card */
+  .container {
+    width: 100%;
+    max-width: var(--max-width);
+    padding: clamp(18px, 3.5vw, 28px);
+    border-radius: 18px;
+    position: relative;
+    overflow: visible;
+    background: linear-gradient(180deg,
+                rgba(255,255,255,0.035) 0%,
+                rgba(255,255,255,0.02) 50%,
+                rgba(0,0,0,0.04) 100%);
+    backdrop-filter: blur(12px) saturate(140%);
+    -webkit-backdrop-filter: blur(12px) saturate(140%);
+    border: 1px solid var(--glass-border);
+    box-shadow:
+      0 8px 30px rgba(3,10,30,0.6),
+      inset 0 1px 0 rgba(255,255,255,0.03),
+      0 1px 0 rgba(255,255,255,0.02);
+    display: flex;
+    flex-direction: column;
+    gap: clamp(12px, 2.2vw, 18px);
+    align-items: stretch;
+  }
+
+  /* Decorative glow / accent lines */
+  .container::before,
+  .container::after{
+    content: "";
+    position: absolute;
+    pointer-events: none;
+    border-radius: 50%;
+    filter: blur(36px);
+    opacity: 0.9;
+  }
+  .container::before{
+    width: 360px; height: 160px;
+    right: -80px; top: -60px;
+    background: radial-gradient(closest-side, var(--accent-2), transparent 60%);
+    mix-blend-mode: screen;
+  }
+  .container::after{
+    width: 260px; height: 120px;
+    left: -80px; bottom: -40px;
+    background: radial-gradient(closest-side, var(--accent-1), transparent 60%);
+    mix-blend-mode: screen;
+  }
+
+  h1 {
+    margin: 0;
+    font-weight: 800;
+    font-size: clamp(1.25rem, 3.5vw, 1.6rem);
+    letter-spacing: -0.02em;
+    color: var(--text-main);
+    text-shadow: 0 1px 0 rgba(0,0,0,0.4);
+    user-select: none;
+  }
+
+  /* Input / button layout */
+  .controls {
+    display: grid;
+    gap: 10px;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+  }
+
+  input#snowflakeInput {
+    padding: clamp(12px, 2.2vw, 14px);
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.03));
+    color: var(--text-main);
+    font-size: clamp(0.95rem, 2.2vw, 1rem);
+    outline: none;
+    text-align: center;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
+    transition: box-shadow 200ms ease, border-color 200ms ease, transform 150ms ease;
+  }
+  input#snowflakeInput::placeholder { color: rgba(234,246,255,0.55); }
+
+  input#snowflakeInput:focus{
+    border-color: rgba(0,0,0,0.18);
+    box-shadow:
+      0 6px 18px rgba(2,10,30,0.6),
+      0 0 10px rgba(0,184,212,0.12);
+    transform: translateY(-1px);
+  }
+
+  button {
+    padding: clamp(10px, 2vw, 12px) clamp(14px, 3vw, 18px);
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+    color: #02131A;
+    font-weight: 700;
+    font-size: clamp(0.95rem, 2vw, 1rem);
+    box-shadow: 0 6px 18px rgba(12,30,60,0.45), 0 1px 0 rgba(255,255,255,0.06) inset;
+    transition: transform 140ms ease, box-shadow 140ms ease, filter 140ms ease;
+  }
+  button:hover{ transform: translateY(-3px); filter: brightness(1.03); }
+  button:active{ transform: translateY(-1px); }
+
+  /* Result / output box - liquid glass style with monospace */
+  .result {
+    min-height: 3.6rem;
+    border-radius: 12px;
+    padding: clamp(12px, 2.2vw, 14px);
+    background: linear-gradient(180deg, rgba(0,0,0,0.02), rgba(255,255,255,0.01));
+    border: 1px solid rgba(255,255,255,0.05);
+    color: var(--muted);
+    font-family: "Courier New", ui-monospace, SFMono-Regular, Menlo, Monaco, "Noto Sans JP", monospace;
+    font-size: clamp(0.92rem, 1.9vw, 0.98rem);
+    text-align: center;
+    white-space: pre-wrap;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
+  }
+
+  /* small helper row for locale toggles (future extensibility) */
+  .meta {
+    display:flex;
+    gap:8px;
+    justify-content: center;
+    align-items: center;
+    color: rgba(234,246,255,0.7);
+    font-size: 0.85rem;
+  }
+
+  /* responsive: stack button under input on small screens */
+  @media (max-width: 600px){
+    .controls { grid-template-columns: 1fr; }
+    button { width: 100%; }
+  }
+
+  /* reduce motion accessibility */
+  @media (prefers-reduced-motion: reduce){
+    * { transition: none !important; animation: none !important; transform: none !important; }
+  }
+
+  /* small focus visible for keyboard users */
+  :focus-visible {
+    outline: 3px solid rgba(0,184,212,0.18);
+    outline-offset: 3px;
+    border-radius: 10px;
+  }
+</style>
+</head>
+<body>
+  <div class="container" role="main" aria-label="Discord Snowflake to Timestamp Converter">
+    <h1>Discord Snowflake Timestamp Converter</h1>
+
+    <div class="controls" aria-hidden="false">
+      <input
+        type="text"
+        id="snowflakeInput"
+        placeholder="DiscordメッセージIDを入力"
+        autocomplete="off"
+        autocorrect="off"
+        autocapitalize="off"
+        spellcheck="false"
+        aria-label="Discord message ID input"
+        onkeydown="if(event.key==='Enter'){convert();}"
+      />
+      <button type="button" onclick="convert()" aria-label="Convert Discord Snowflake ID to timestamp">変換</button>
+    </div>
+
+    <div id="result" class="result" aria-live="polite" aria-atomic="true"></div>
+    
+  </div>
+
+  <script>
+    function formatDateWithMs(date, locale = 'ja-JP', timeZone = 'Asia/Tokyo') {
+      const options = {
+        year: 'numeric', month: '2-digit', day: '2-digit',
+        hour: '2-digit', minute: '2-digit',
+        second: '2-digit',
+        fractionalSecondDigits: 3,
+        hour12: false,
+        timeZone: timeZone,
+      };
+      try {
+        return new Intl.DateTimeFormat(locale, options).format(date);
+      } catch {
+        const y = date.getFullYear();
+        const M = String(date.getMonth() + 1).padStart(2, '0');
+        const d = String(date.getDate()).padStart(2, '0');
+        const H = String(date.getHours()).padStart(2, '0');
+        const m = String(date.getMinutes()).padStart(2, '0');
+        const s = date.getSeconds();
+        const ms = date.getMilliseconds();
+        const secWithMs = (s + ms / 1000).toFixed(3).padStart(6, '0');
+        return `${y}/${M}/${d} ${H}:${m}:${secWithMs}`;
+      }
+    }
+
+    function convert() {
+      const input = document.getElementById('snowflakeInput').value.trim();
+      const result = document.getElementById('result');
+
+      if (!input) {
+        result.innerText = '';
+        return;
+      }
+
+      try {
+        const id = BigInt(input);
+        const discordEpoch = 1420070400000n;
+        const timestampMs = (id >> 22n) + discordEpoch;
+
+        const date = new Date(Number(timestampMs));
+        const jstStr = formatDateWithMs(date, 'ja-JP', 'Asia/Tokyo');
+
+        result.innerText = `🇯🇵 JST: ${jstStr}`;
+      } catch {
+        result.innerText = '⚠️ 無効なIDです。';
+      }
+    }
+  </script>
+</body>
+</html>
