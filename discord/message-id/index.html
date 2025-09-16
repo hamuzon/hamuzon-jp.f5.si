@@ -3,12 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Discord Snowflake Analyzer & Info</title>
+<title>Discord Snowflake Analyzer</title>
 
-<!-- Favicon -->
 <link rel="icon" href="https://hamusata.f5.si/icon.webp" type="image/webp" />
-
-<!-- Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet" />
 
 <style>
@@ -35,14 +32,13 @@ button{padding:10px 16px; border:none; border-radius:10px; background: linear-gr
 button:hover{filter:brightness(1.05);}
 .result{padding:12px; border-radius:12px; background: rgba(0,0,0,0.02); font-family: monospace; font-size:0.95rem; white-space:pre-wrap;}
 .explain{padding:12px; border-radius:12px; background: rgba(0,0,0,0.04); font-size:0.9rem; margin-top:12px; line-height:1.4; color:var(--muted);}
-.explain a{color:var(--accent-1); text-decoration:underline;}
 @media(max-width:600px){.controls{flex-direction:column;} button{width:100%;}}
 </style>
 </head>
 <body>
 
 <div class="container">
-<h1>Discord Snowflake Analyzer</h1>
+<h1>Discord Snowflake解析ツール</h1>
 <div class="controls">
 <input type="text" id="snowflakeInput" placeholder="DiscordメッセージIDを入力" oninput="analyze()" />
 <button onclick="analyze()">解析</button>
@@ -51,17 +47,15 @@ button:hover{filter:brightness(1.05);}
 </div>
 
 <div class="container explain">
-<h2>Snowflake IDの仕組みと公式情報</h2>
-<p>DiscordのSnowflake IDは64bit整数で構成されます。<br>
-公式ドキュメントも参照可能です：
-<a href="https://discord.com/developers/docs/reference#snowflakes" target="_blank">Discord Snowflake公式ドキュメント</a></p>
+<h2>Snowflake IDの仕組み</h2>
+<p>DiscordのSnowflake IDは64bit整数で構成されます。内容はAI生成コードによる解析ツールです。</p>
 <ul>
 <li><strong>0〜41ビット:</strong> Discord Epochからのミリ秒（生成日時）</li>
 <li><strong>42〜51ビット:</strong> Worker ID（どのサーバープロセスで生成されたか）</li>
 <li><strong>52〜63ビット:</strong> Sequence（同じミリ秒内での連番）</li>
 </ul>
-<p>Snowflake IDは単純な数字ではなく、<strong>日時順に増加</strong>する仕組みです。<br>
-Binary/Hexで見るとIDの内部構造がわかります。</p>
+<p>Snowflake IDは単純な数字ではなく、<strong>日時順に増加</strong>する仕組みです。Binary/Hexで内部構造も確認できます。</p>
+<p>※この解析ツールはAI生成コードによる実装です。</p>
 </div>
 
 <script>
@@ -80,7 +74,7 @@ function analyze(){
   const result = document.getElementById('result');
   if(!input){ result.innerText=''; return; }
 
-  input = input.replace(/[\s\u3000]/g,''); // 空白・全角スペース除去
+  input = input.replace(/[\s\u3000]/g,''); 
   if(!/^\d+$/.test(input)){ result.innerText='⚠️ 数字のみのIDを入力してください。'; return; }
 
   try{
