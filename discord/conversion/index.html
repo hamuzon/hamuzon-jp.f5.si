@@ -3,81 +3,91 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Discord Snowflake Converter</title>
+<title>Discord Message-ID Converter</title>
 <style>
-body {
-    font-family: 'Segoe UI', sans-serif;
-    background: #0b0b0d;
-    color: #e6eef8;
-    padding: 2rem;
-    min-height: 100vh;
-}
-h1 { text-align:center; margin-bottom:2rem; font-size:2rem; background: linear-gradient(90deg,#8b5cf6,#00d3ff); -webkit-background-clip:text; color:transparent; }
-input {
+  body {
+    font-family: "Noto Sans JP", sans-serif;
+    background:#0b0b0d;
+    color:#e6eef8;
+    padding:2rem;
+  }
+  h1 {
+    text-align:center;
+    font-size:1.8rem;
+    margin-bottom:1.5rem;
+    color:#00B8D4;
+  }
+  input {
     width:100%; max-width:400px;
-    padding:0.5rem; border-radius:8px;
+    padding:0.5rem;
+    border-radius:6px;
     border:1px solid #444;
     background:#1a1a1f;
     color:#e6eef8;
     font-size:1rem;
     outline:none;
-}
-.output { margin-top:1rem; line-height:1.6; }
-.output b { color:#8b5cf6; }
-footer {
-    text-align:center; margin-top:3rem; font-size:0.9rem; color:#888;
-}
-footer a { color:#8b5cf6; text-decoration:none; }
+    text-align:center;
+    margin-bottom:1rem;
+  }
+  .result {
+    margin-top:1rem;
+    line-height:1.6;
+  }
+  .result b { color:#8b5cf6; }
+  footer {
+    text-align:center;
+    margin-top:2rem;
+    font-size:0.9rem;
+    color:#888;
+  }
+  footer a { color:#00B8D4; text-decoration:none; }
 </style>
 </head>
 <body>
 
-<h1>Discord Snowflake Converter</h1>
+<h1>DiscordメッセージID変換</h1>
+<input type="text" id="snowflakeInput" placeholder="DiscordメッセージIDを入力">
 
-<input type="text" id="snowflakeInput" placeholder="ここにメッセージIDを入力">
-<div class="output" id="output"></div>
+<div id="output" class="result"></div>
 
 <footer>
-  <span id="year-range"></span> &copy; <a href="https://hamusata.f5.si" target="_blank">hamusata</a> - Discord Message ID Converter
+  <span id="year-range"></span> &copy; <a href="https://hamusata.f5.si" target="_blank">hamusata</a> - Discord Message-ID Converter
 </footer>
 
 <script>
-// Snowflake → UNIX秒変換
-function snowflakeToUnix(snowflake){
-    const discordEpoch = 1420070400000n; // 2015-01-01 UTC
-    const tsMs = (BigInt(snowflake) >> 22n) + discordEpoch;
-    return Number(tsMs / 1000n); // UNIX秒
-}
-
-// UNIX秒 → 日付フォーマット
-function formatDate(ts, offsetHours=0){
-    const d = new Date((ts + offsetHours*3600)*1000);
-    const pad = n => String(n).padStart(2,'0');
-    return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
-}
-
 const input = document.getElementById('snowflakeInput');
 const output = document.getElementById('output');
 
-// レスポンスフリーで即時更新
-input.addEventListener('input', ()=>{
-    const val = input.value.trim();
-    if(!val){ output.innerHTML=''; return; }
-    try{
-        const unix = snowflakeToUnix(val);
-        const local = new Date(unix*1000).toLocaleString();
-        const utc = formatDate(unix, 0);
-        const jst = formatDate(unix, 9);
+function snowflakeToUnix(snowflake){
+  const discordEpoch = 1420070400000n; // 2015-01-01 UTC
+  const tsMs = (BigInt(snowflake) >> 22n) + discordEpoch;
+  return Number(tsMs / 1000n);
+}
 
-        output.innerHTML = `
+function formatDate(ts, offsetHours=0){
+  const d = new Date((ts + offsetHours*3600)*1000);
+  const pad=n=>String(n).padStart(2,'0');
+  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+}
+
+// レスポンスフリー
+input.addEventListener('input', ()=>{
+  const val = input.value.trim();
+  if(!val){ output.innerHTML=''; return; }
+  try{
+    const unix = snowflakeToUnix(val);
+    const local = new Date(unix*1000).toLocaleString();
+    const utc = formatDate(unix,0);
+    const jst = formatDate(unix,9);
+    output.innerHTML = `
 <b>UNIX秒:</b> ${unix}<br>
 <b>ローカル時間:</b> ${local}<br>
 <b>UTC:</b> ${utc}<br>
 <b>日本時間:</b> ${jst}
-        `;
-    } catch(e){
-        output.innerHTML = '無効なIDです';
-    }
+    `;
+  } catch(e){
+    output.innerHTML = '⚠️ 無効なIDです';
+  }
 });
 
 // コピーライト年数自動更新
