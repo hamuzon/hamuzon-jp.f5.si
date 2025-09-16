@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Discord Timestamp Generator</title>
+<title>Discord Message-ID & Timestamp Converter</title>
 <link rel="icon" href="https://hamusata.f5.si/icon.webp">
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
@@ -15,8 +15,7 @@ body {
                 #0b0b0d;
     color: #e6eef8;
     min-height: 100vh;
-    -webkit-font-smoothing: antialiased;
-    padding: 0;
+    padding: 2rem;
 }
 .glass {
     background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
@@ -24,200 +23,103 @@ body {
     padding: 32px 28px;
     box-shadow: 0 10px 30px rgba(12,10,25,0.6), inset 0 1px 0 rgba(255,255,255,0.03);
     border: 1px solid rgba(167,139,250,0.12);
-    margin-bottom: 24px;
     backdrop-filter: blur(12px) saturate(120%);
-    transition: transform .18s ease, box-shadow .18s ease;
 }
-.glass:hover, .glass:focus-within { transform: translateY(-6px); }
-.input-field {
-    width: 100%; padding: 12px 14px; border-radius: 12px;
-    border: 1px solid rgba(255,255,255,0.04);
-    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.16));
-    color: #e6eef8; font-size: 1rem; outline: none;
-    transition: border .18s, box-shadow .18s;
-}
-.input-field:focus { border-color: rgba(124,77,255,0.95); box-shadow: 0 6px 20px rgba(124,77,255,0.08); }
-.button {
-    padding: 10px 20px; border-radius: 12px; font-weight: 700;
-    color: #0b0b0d; background: linear-gradient(90deg, #8b5cf6 0%, #00d3ff 100%);
-    border: none; cursor: pointer; transition: transform .12s ease, box-shadow .12s ease;
-}
-.button.bg-accent { background: linear-gradient(90deg, #00d3ff 0%, #ff84c7 100%); color:#081018; }
-.button:hover { transform: translateY(-4px); }
-.discord-box {
-    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(10,10,12,0.16));
-    padding: 12px 14px; border-radius: 12px; cursor:pointer;
-    font-family: 'Fira Mono','Menlo','Consolas',monospace;
-}
+.input-field { width:100%; padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,0.04); background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.16)); color:#e6eef8; }
+.button { padding:10px 20px; border-radius:12px; font-weight:700; color:#0b0b0d; background:linear-gradient(90deg,#8b5cf6,#00d3ff); border:none; cursor:pointer; }
+.discord-box { background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(10,10,12,0.16)); padding: 12px; border-radius:12px; font-family: 'Fira Mono','Menlo','Consolas',monospace; cursor:pointer; }
+h1,h2,h3 { margin-bottom:0.75rem; }
 .flex-container { display:flex; flex-wrap:wrap; gap:24px; justify-content:center; }
-h1 { color:transparent; background: linear-gradient(90deg,#8b5cf6,#00d3ff); -webkit-background-clip:text; background-clip:text; }
-@media(max-width:640px){ .flex-container{flex-direction:column; gap:12px;} .glass{padding:18px 12px;} }
 </style>
 </head>
 <body>
 
-<h1 class="text-4xl font-bold text-center mb-8 tracking-tight" style="text-shadow:0 2px 12px #7c3aed44;">Discord Timestamp Generator</h1>
+<h1 class="text-4xl font-bold text-center mb-8 tracking-tight">Discord Timestamp Generator</h1>
 
 <div class="flex-container w-full max-w-3xl mx-auto">
     <div class="glass flex-1 min-w-[300px]">
-        <h2 class="text-2xl font-semibold mb-3" style="color:#f472b6;">現在の時刻</h2>
-        <div id="currentTimeCard" class="text-lg font-semibold mb-6"></div>
+        <h2 class="text-2xl font-semibold mb-3" style="color:#f472b6;">DiscordメッセージID変換</h2>
+        <input type="text" id="snowflakeInput" class="input-field mb-4" placeholder="DiscordメッセージIDを入力">
 
-        <h2 class="text-2xl font-semibold mb-3" style="color:#a78bfa;">タイムスタンプ & 日付</h2>
-        <div class="flex flex-col sm:flex-row items-stretch gap-4 mb-4">
-            <div class="flex-1 w-full sm:w-auto">
-                <label for="tsInput" class="mb-1 block" style="color:#f3f4f6;">UNIXタイムスタンプ</label>
-                <input type="text" id="tsInput" class="input-field" placeholder="秒単位で入力 (小数点可)">
-            </div>
-            <div class="text-2xl font-bold flex items-center justify-center sm:mt-8" style="color:#a78bfa;">&#8644;</div>
-            <div class="flex-1 w-full sm:w-auto">
-                <label for="dateInput" class="mb-1 block" style="color:#f3f4f6;">日付と時刻</label>
-                <input type="datetime-local" id="dateInput" class="input-field" step="1">
-            </div>
-        </div>
-
-        <div class="flex flex-wrap gap-2 mb-4">
-            <button class="button" onclick="setNow()">今をセット</button>
-            <button class="button bg-accent" onclick="copyText('tsInput')">UNIXコピー</button>
-        </div>
-
-        <div id="relativeOutput" class="text-lg font-semibold mb-4" style="color:#f472b6;"></div>
-        <hr class="border-t border-gray-400 opacity-30 my-4">
-
+        <div id="timestampOutput" class="mb-4"></div>
         <h3 class="text-xl font-semibold mb-3" style="color:#a78bfa;">Discordタイムスタンプ</h3>
-        <div id="discordFormats" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+        <div id="discordFormats" class="grid grid-cols-1 gap-3"></div>
     </div>
 </div>
 
 <script>
-const tsInput = document.getElementById('tsInput');
-const dateInput = document.getElementById('dateInput');
-const discordFormats = document.getElementById('discordFormats');
-const relativeOutput = document.getElementById('relativeOutput');
-const currentTimeCard = document.getElementById('currentTimeCard');
-
-function updateCurrentTime(){
-    const now = new Date();
-    const unixSec = Math.floor(now.getTime()/1000);
-    currentTimeCard.innerHTML = `<div style="color:#a78bfa;">UNIX: ${unixSec}</div><div style="color:#f3f4f6;">${now.toLocaleString()}</div>`;
+// DiscordメッセージID → UNIX秒
+function snowflakeToUnix(id){
+    try{
+        const discordEpoch = 1420070400000n;
+        const tsMs = (BigInt(id) >> 22n) + discordEpoch;
+        return Number(tsMs/1000n);
+    } catch { return null; }
 }
 
-function parseTimestampInput(val){
-    if(!val) return null;
-    const num = Number(val.trim());
-    if(isNaN(num)) return null;
-    return Math.abs(num) > 1e11 ? num/1000 : num;
+// ローカル/UTC/日本時間文字列
+function formatDates(unix){
+    const d = new Date(unix*1000);
+    return {
+        local: d.toLocaleString(),
+        utc: d.toISOString().replace('T',' ').replace('Z',''),
+        jst: new Date(d.getTime() + 9*3600*1000).toISOString().replace('T',' ').replace('Z','')
+    };
 }
 
-function toLocalDatetimeInput(date){
+// Discordフォーマット生成
+function generateDiscordFormats(unix){
+    const date = new Date(unix*1000);
+    const JP_WEEK=['日曜日','月曜日','火曜日','水曜日','木曜日','金曜日','土曜日'];
     const pad=n=>String(n).padStart(2,'0');
-    return `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+    const entries=[
+        {tag:`<t:${Math.floor(unix)}:d>`, preview:`${date.getFullYear()}/${pad(date.getMonth()+1)}/${pad(date.getDate())}`},
+        {tag:`<t:${Math.floor(unix)}:D>`, preview:`${date.getFullYear()}年${date.getMonth()+1}月${date.getDate()}日`},
+        {tag:`<t:${Math.floor(unix)}:t>`, preview:`${pad(date.getHours())}:${pad(date.getMinutes())}`},
+        {tag:`<t:${Math.floor(unix)}:T>`, preview:`${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`},
+        {tag:`<t:${Math.floor(unix)}:f>`, preview:`${date.getFullYear()}年${date.getMonth()+1}月${date.getDate()}日 ${pad(date.getHours())}:${pad(date.getMinutes())}`},
+        {tag:`<t:${Math.floor(unix)}:F>`, preview:`${date.getFullYear()}年${date.getMonth()+1}月${date.getDate()}日 ${JP_WEEK[date.getDay()]} ${pad(date.getHours())}:${pad(date.getMinutes())}`},
+        {tag:`<t:${Math.floor(unix)}:R>`, preview:formatRelative(unix)}
+    ];
+    return entries;
 }
 
-function updateOutputs(ts){
-    if(ts===null||isNaN(ts)){ discordFormats.innerHTML=''; relativeOutput.innerText=''; return; }
-    generateDiscordTimestamps(ts);
-    updateRelativeTime(ts);
-}
-
-function formatRelativeSimple(tsSeconds){
+// 簡易相対時間
+function formatRelative(unix){
     const now=Math.floor(Date.now()/1000);
-    let diff=tsSeconds-now;
-    const abs=Math.abs(diff);
-    if(abs<60) return diff<0?`${Math.round(abs)}秒前`:`${Math.round(abs)}秒後`;
+    let diff=unix-now, abs=Math.abs(diff);
+    if(abs<60) return diff<0?`${abs}秒前`:`${abs}秒後`;
     if(abs<3600) return diff<0?`${Math.round(abs/60)}分前`:`${Math.round(abs/60)}分後`;
     if(abs<86400) return diff<0?`${Math.round(abs/3600)}時間前`:`${Math.round(abs/3600)}時間後`;
     return diff<0?`${Math.round(abs/86400)}日前`:`${Math.round(abs/86400)}日後`;
 }
 
-function generateDiscordTimestamps(ts){
-    discordFormats.innerHTML='';
-    if(ts===null||isNaN(ts)) return;
-    const date=new Date(Math.floor(ts)*1000);
-    const secondsInt=Math.floor(ts);
-    const JP_WEEK=['日曜日','月曜日','火曜日','水曜日','木曜日','金曜日','土曜日'];
-    const pad=n=>String(n).padStart(2,'0');
-    const entries=[
-        {tag:`<t:${secondsInt}:d>`, preview:`${date.getFullYear()}/${pad(date.getMonth()+1)}/${pad(date.getDate())}`},
-        {tag:`<t:${secondsInt}:D>`, preview:`${date.getFullYear()}年${date.getMonth()+1}月${date.getDate()}日`},
-        {tag:`<t:${secondsInt}:t>`, preview:`${pad(date.getHours())}:${pad(date.getMinutes())}`},
-        {tag:`<t:${secondsInt}:T>`, preview:`${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`},
-        {tag:`<t:${secondsInt}:f>`, preview:`${date.getFullYear()}年${date.getMonth()+1}月${date.getDate()}日 ${pad(date.getHours())}:${pad(date.getMinutes())}`},
-        {tag:`<t:${secondsInt}:F>`, preview:`${date.getFullYear()}年${date.getMonth()+1}月${date.getDate()}日 ${JP_WEEK[date.getDay()]} ${pad(date.getHours())}:${pad(date.getMinutes())}`},
-        {tag:`<t:${secondsInt}:R>`, preview:formatRelativeSimple(secondsInt)},
-    ];
-    entries.forEach(e=>{
+// コピー
+function copyText(text){ navigator.clipboard.writeText(text).then(()=>alert('コピーしました！')); }
+
+// レスポンスフリー
+const input = document.getElementById('snowflakeInput');
+const output = document.getElementById('timestampOutput');
+const discordDiv = document.getElementById('discordFormats');
+
+input.addEventListener('input',()=>{
+    const val = input.value.trim();
+    if(!val){ output.innerHTML=''; discordDiv.innerHTML=''; return; }
+    const unix = snowflakeToUnix(val);
+    if(unix===null){ output.innerHTML='⚠️ 無効なIDです'; discordDiv.innerHTML=''; return; }
+    const dates = formatDates(unix);
+    output.innerHTML = `<b>UNIX秒:</b> ${unix}<br><b>ローカル:</b> ${dates.local}<br><b>UTC:</b> ${dates.utc}<br><b>日本時間:</b> ${dates.jst}`;
+
+    discordDiv.innerHTML='';
+    generateDiscordFormats(unix).forEach(e=>{
         const el=document.createElement('div');
         el.className='discord-box';
-        const tagLine=document.createElement('div'); tagLine.className='font-mono text-base'; tagLine.textContent=e.tag;
-        const previewLine=document.createElement('div'); previewLine.className='text-xs'; previewLine.style.color='#a78bfa'; previewLine.style.marginTop='6px'; previewLine.textContent=e.preview;
-        el.appendChild(tagLine); el.appendChild(previewLine);
-        el.addEventListener('click',()=>copyTextFromElement(e.tag));
-        discordFormats.appendChild(el);
+        el.innerHTML=`<div class="font-mono">${e.tag}</div><div class="text-xs mt-1" style="color:#a78bfa;">${e.preview}</div>`;
+        el.onclick=()=>copyText(e.tag);
+        discordDiv.appendChild(el);
     });
-}
-
-function updateRelativeTime(ts){
-    const now=Math.floor(Date.now()/1000);
-    const diff=Math.floor(ts)-now;
-    relativeOutput.innerText=(diff===0)?'現在':formatRelativeSimple(Math.floor(ts));
-}
-
-tsInput.addEventListener('input',()=>{
-    const parsed=parseTimestampInput(tsInput.value);
-    if(parsed===null||isNaN(parsed)){ dateInput.value=''; updateOutputs(null); return; }
-    dateInput.value=toLocalDatetimeInput(new Date(parsed*1000));
-    updateOutputs(parsed);
 });
-
-dateInput.addEventListener('input',()=>{
-    const val=dateInput.value; if(!val){ tsInput.value=''; updateOutputs(null); return; }
-    const [d,t]=val.split('T'); if(!d||!t){ tsInput.value=''; updateOutputs(null); return; }
-    const [y,m,day]=d.split('-').map(Number);
-    const [h,min,s]=t.split(':').map(Number);
-    const date=new Date(y,m-1,day,h||0,min||0,s||0);
-    if(isNaN(date.getTime())){ tsInput.value=''; updateOutputs(null); return; }
-    const ts=date.getTime()/1000;
-    tsInput.value=(ts%1===0)?ts.toFixed(0):ts.toFixed(3);
-    updateOutputs(ts);
-});
-
-function setNow(){
-    const now=new Date(); const ts=now.getTime()/1000;
-    tsInput.value=ts.toFixed(0); dateInput.value=toLocalDatetimeInput(now);
-    updateOutputs(ts);
-}
-
-function copyText(elementId){
-    const text=document.getElementById(elementId).value;
-    if(text) navigator.clipboard.writeText(text).then(()=>showToast('コピーしました！'));
-}
-function copyTextFromElement(text){
-    navigator.clipboard.writeText(text).then(()=>showToast('コピーしました！'));
-}
-
-function showToast(msg){
-    const toast=document.createElement('div'); toast.innerText=msg;
-    Object.assign(toast.style,{
-        position:'fixed', bottom:'32px', left:'50%', transform:'translateX(-50%)',
-        background:'rgba(36,37,46,0.95)', color:'#a78bfa', padding:'12px 28px',
-        borderRadius:'12px', fontWeight:'bold', fontSize:'1.1rem', boxShadow:'0 2px 12px #a78bfa44', zIndex:9999
-    });
-    document.body.appendChild(toast);
-    setTimeout(()=>toast.remove(),1200);
-}
-
-// 自動更新
-setInterval(()=>{
-    const parsed=parseTimestampInput(tsInput.value);
-    if(parsed!==null&&!isNaN(parsed)){
-        generateDiscordTimestamps(parsed);
-        updateRelativeTime(parsed);
-    }
-    updateCurrentTime();
-},1000);
-
-setNow();
 </script>
+
 </body>
 </html>
