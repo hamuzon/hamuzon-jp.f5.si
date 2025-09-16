@@ -1,63 +1,67 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Discord Snowflake Analyzer - info</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Discord Snowflake Analyzer & Info</title>
 
+<!-- Favicon -->
+<link rel="icon" href="https://hamusata.f5.si/icon.webp" type="image/webp" />
+
+<!-- Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet" />
-<link rel="icon" href="https://home.hamusata.f5.si/icon.svg" type="image/svg+xml" />
 
 <style>
 :root{
-  --bg-a: #071024; --bg-b: #071842;
-  --accent-1: #00B8D4; --accent-2: #7C3AED; --accent-3: #00FFC6;
-  --glass-bg: rgba(255,255,255,0.06); --glass-border: rgba(255,255,255,0.12);
-  --text-main: #EAF6FF; --muted: rgba(234,246,255,0.75); --max-width: 520px;
+  --bg-a:#071024; --bg-b:#071842;
+  --accent-1:#00B8D4; --accent-2:#7C3AED;
+  --text-main:#EAF6FF; --muted:rgba(234,246,255,0.75);
+  --max-width:600px;
 }
-*, *::before, *::after { box-sizing: border-box; }
-html, body { height:100%; margin:0; }
-body {
-  font-family: "Inter","Noto Sans JP", system-ui;
-  background: radial-gradient(1200px 600px at 10% 10%, rgba(12,36,72,0.6), transparent 10%),
-              linear-gradient(135deg, var(--bg-a), var(--bg-b) 60%);
-  display:flex; align-items:center; justify-content:center;
-  padding:clamp(12px,3vw,32px); color: var(--text-main);
+*,*::before,*::after{box-sizing:border-box;}
+html,body{height:100%;margin:0;}
+body{
+  font-family:"Inter","Noto Sans JP",system-ui;
+  background: radial-gradient(1200px 600px at 10% 10%, rgba(12,36,72,0.6), transparent 10%), linear-gradient(135deg,var(--bg-a),var(--bg-b) 60%);
+  display:flex; flex-direction:column; align-items:center; padding:16px; color:var(--text-main);
 }
-.container {
-  width:100%; max-width:var(--max-width); padding:clamp(18px,3.5vw,28px);
-  border-radius:18px; position:relative; overflow:visible;
-  background: linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.02) 50%, rgba(0,0,0,0.04) 100%);
-  backdrop-filter: blur(12px) saturate(140%); -webkit-backdrop-filter: blur(12px) saturate(140%);
-  border:1px solid var(--glass-border);
-  box-shadow:0 8px 30px rgba(3,10,30,0.6), inset 0 1px 0 rgba(255,255,255,0.03), 0 1px 0 rgba(255,255,255,0.02);
-  display:flex; flex-direction:column; gap:clamp(12px,2.2vw,18px); align-items:stretch;
+.container{
+  width:100%; max-width:var(--max-width); padding:20px; border-radius:18px; background: rgba(255,255,255,0.03); backdrop-filter:blur(12px); margin-bottom:16px;
 }
-.container::before,.container::after{content:""; position:absolute; pointer-events:none; border-radius:50%; filter:blur(36px); opacity:0.9;}
-.container::before{width:360px;height:160px; right:-80px; top:-60px; background:radial-gradient(closest-side,var(--accent-2),transparent 60%); mix-blend-mode:screen;}
-.container::after{width:260px;height:120px; left:-80px; bottom:-40px; background:radial-gradient(closest-side,var(--accent-1),transparent 60%); mix-blend-mode:screen;}
-h1 { margin:0; font-weight:800; font-size:clamp(1.25rem,3.5vw,1.6rem); letter-spacing:-0.02em; color:var(--text-main); text-shadow:0 1px 0 rgba(0,0,0,0.4); user-select:none;}
-.controls { display:grid; gap:10px; grid-template-columns:1fr auto; align-items:center;}
-input#snowflakeInput { padding:clamp(12px,2.2vw,14px); border-radius:12px; border:1px solid rgba(255,255,255,0.08); background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.03)); color: var(--text-main); font-size:clamp(0.95rem,2.2vw,1rem); outline:none; text-align:center; box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);}
-input#snowflakeInput::placeholder { color: rgba(234,246,255,0.55);}
-input#snowflakeInput:focus{border-color: rgba(0,0,0,0.18); box-shadow:0 6px 18px rgba(2,10,30,0.6),0 0 10px rgba(0,184,212,0.12); transform:translateY(-1px);}
-button { padding:clamp(10px,2vw,12px) clamp(14px,3vw,18px); border-radius:12px; border:none; cursor:pointer; background: linear-gradient(90deg,var(--accent-1),var(--accent-2)); color:#02131A; font-weight:700; font-size:clamp(0.95rem,2vw,1rem); box-shadow:0 6px 18px rgba(12,30,60,0.45),0 1px 0 rgba(255,255,255,0.06) inset;}
-button:hover{transform:translateY(-3px); filter:brightness(1.03);} button:active{transform:translateY(-1px);}
-.result { min-height:8rem; border-radius:12px; padding:clamp(12px,2.2vw,14px); background: linear-gradient(180deg, rgba(0,0,0,0.02), rgba(255,255,255,0.01)); border:1px solid rgba(255,255,255,0.05); color: var(--muted); font-family:"Courier New", monospace; font-size:clamp(0.92rem,1.9vw,0.98rem); text-align:left; white-space:pre-wrap; box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);}
-@media(max-width:600px){.controls{grid-template-columns:1fr;} button{width:100%;}}
-:focus-visible{outline:3px solid rgba(0,184,212,0.18); outline-offset:3px;border-radius:10px;}
+h1{margin:0 0 16px 0; font-weight:800; font-size:1.6rem; text-align:center; color:var(--text-main);}
+.controls{display:flex; gap:10px; margin-bottom:12px;}
+input{flex:1; padding:10px 12px; border-radius:10px; border:1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.02); color:var(--text-main); font-family: monospace;}
+button{padding:10px 16px; border:none; border-radius:10px; background: linear-gradient(90deg,var(--accent-1),var(--accent-2)); color:#02131A; cursor:pointer; font-weight:700;}
+button:hover{filter:brightness(1.05);}
+.result{padding:12px; border-radius:12px; background: rgba(0,0,0,0.02); font-family: monospace; font-size:0.95rem; white-space:pre-wrap;}
+.explain{padding:12px; border-radius:12px; background: rgba(0,0,0,0.04); font-size:0.9rem; margin-top:12px; line-height:1.4; color:var(--muted);}
+.explain a{color:var(--accent-1); text-decoration:underline;}
+@media(max-width:600px){.controls{flex-direction:column;} button{width:100%;}}
 </style>
 </head>
 <body>
-<div class="container" role="main" aria-label="Discord Snowflake Full Analyzer">
-<h1>Discord Snowflake Analyzer - info</h1>
 
+<div class="container">
+<h1>Discord Snowflake Analyzer</h1>
 <div class="controls">
-<input type="text" id="snowflakeInput" placeholder="DiscordメッセージIDを入力" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" onkeydown="if(event.key==='Enter'){analyze();}" />
-<button type="button" onclick="analyze()">解析</button>
+<input type="text" id="snowflakeInput" placeholder="DiscordメッセージIDを入力" oninput="analyze()" />
+<button onclick="analyze()">解析</button>
+</div>
+<div id="result" class="result"></div>
 </div>
 
-<div id="result" class="result"></div>
+<div class="container explain">
+<h2>Snowflake IDの仕組みと公式情報</h2>
+<p>DiscordのSnowflake IDは64bit整数で構成されます。<br>
+公式ドキュメントも参照可能です：
+<a href="https://discord.com/developers/docs/reference#snowflakes" target="_blank">Discord Snowflake公式ドキュメント</a></p>
+<ul>
+<li><strong>0〜41ビット:</strong> Discord Epochからのミリ秒（生成日時）</li>
+<li><strong>42〜51ビット:</strong> Worker ID（どのサーバープロセスで生成されたか）</li>
+<li><strong>52〜63ビット:</strong> Sequence（同じミリ秒内での連番）</li>
+</ul>
+<p>Snowflake IDは単純な数字ではなく、<strong>日時順に増加</strong>する仕組みです。<br>
+Binary/Hexで見るとIDの内部構造がわかります。</p>
 </div>
 
 <script>
@@ -76,28 +80,19 @@ function analyze(){
   const result = document.getElementById('result');
   if(!input){ result.innerText=''; return; }
 
-  // 空白・改行・全角スペース除去
-  input = input.replace(/[\s\u3000]/g,'');
-
-  // 数字のみチェック
+  input = input.replace(/[\s\u3000]/g,''); // 空白・全角スペース除去
   if(!/^\d+$/.test(input)){ result.innerText='⚠️ 数字のみのIDを入力してください。'; return; }
 
   try{
     const id = BigInt(input);
     const discordEpoch = 1420070400000n;
-
-    // Timestamp(ms)計算
     const timestampMsBigInt = (id >> 22n) + discordEpoch;
 
-    // Number安全範囲チェック
-    let timestampMs;
     let date;
     if(timestampMsBigInt <= BigInt(Number.MAX_SAFE_INTEGER)){
-      timestampMs = Number(timestampMsBigInt);
-      date = new Date(timestampMs);
+      date = new Date(Number(timestampMsBigInt));
     } else {
-      timestampMs = null;
-      date = new Date(Number(discordEpoch + (id >> 22n & 0x1FFFFFn))); // おおよその表示
+      date = new Date(Number(discordEpoch + (id >> 22n & 0x1FFFFFn)));
     }
 
     const utc = formatDate(date,'en-US','UTC');
@@ -106,7 +101,6 @@ function analyze(){
 
     const workerId = (id >> 12n) & 0x3FFn;
     const sequence = id & 0xFFFn;
-
     const binary = id.toString(2).padStart(64,'0');
     const hex = '0x'+id.toString(16).toUpperCase();
 
@@ -126,11 +120,13 @@ Hexadecimal: ${hex}
 BigInt値: ${id}
 
 順序性目安: 数値が大きいほど新しいID
-    `.trim();
+`.trim();
+
   } catch(e){
     result.innerText='⚠️ 無効なIDです。';
   }
 }
 </script>
+
 </body>
 </html>
