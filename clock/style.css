@@ -8,8 +8,8 @@ html, body {
   min-height: 100vh;
   width: 100vw;
   overflow-x: hidden;
-  background: linear-gradient(135deg, #87ceeb, #e0f7fa);
-  color: #1a1a1a;
+  background: linear-gradient(135deg, #a2dff7, #0077b6);
+  color: #111;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   display: flex;
   flex-direction: column;
@@ -27,7 +27,7 @@ h1 {
   font-size: 2.4rem;
   margin-bottom: 2rem;
   text-align: center;
-  color: #013a63;
+  color: #023e8a;
 }
 
 .zones {
@@ -37,7 +37,7 @@ h1 {
 }
 
 .zone-card {
-  background-color: #ffffffee;
+  background-color: #ffffff;
   border-radius: 14px;
   padding: 1.5rem 2rem;
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
@@ -51,18 +51,18 @@ h1 {
   font-size: 1.5rem;
   margin-bottom: 0.3rem;
   font-weight: 700;
-  color: #01497c;
+  color: #03045e;
 }
 
 .zone-offset {
   font-size: 1rem;
-  color: #333333;
+  color: #333;
   margin-bottom: 0.6rem;
 }
 
 .date {
   font-size: 1rem;
-  color: #444444;
+  color: #444;
   margin-bottom: 0.4rem;
 }
 
@@ -70,7 +70,7 @@ h1 {
   font-size: 2.4rem;
   font-family: monospace;
   font-weight: bold;
-  color: #012a4a;
+  color: #0077b6;
 }
 
 @media screen and (max-width: 768px) {
