@@ -8,8 +8,8 @@ html, body {
   min-height: 100vh;
   width: 100vw;
   overflow-x: hidden;
-  background: linear-gradient(135deg, #87cefa, #e0f7fa);
-  color: #0a2540;
+  background: linear-gradient(135deg, #87ceeb, #e0f7fa);
+  color: #1a1a1a;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   display: flex;
   flex-direction: column;
@@ -24,10 +24,10 @@ html, body {
 }
 
 h1 {
-  font-size: 2.2rem;
+  font-size: 2.4rem;
   margin-bottom: 2rem;
   text-align: center;
-  color: #01579b;
+  color: #013a63;
 }
 
 .zones {
@@ -37,10 +37,10 @@ h1 {
 }
 
 .zone-card {
-  background-color: #ffffffcc;
-  border-radius: 12px;
+  background-color: #ffffffee;
+  border-radius: 14px;
   padding: 1.5rem 2rem;
-  box-shadow: 0 4px 10px rgba(0, 80, 160, 0.2);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
   text-align: center;
   width: 100%;
   max-width: 440px;
@@ -48,29 +48,29 @@ h1 {
 }
 
 .zone-name {
-  font-size: 1.4rem;
-  margin-bottom: 0.2rem;
+  font-size: 1.5rem;
+  margin-bottom: 0.3rem;
   font-weight: 700;
-  color: #0277bd;
+  color: #01497c;
 }
 
 .zone-offset {
   font-size: 1rem;
-  color: #01579b;
+  color: #333333;
   margin-bottom: 0.6rem;
 }
 
 .date {
   font-size: 1rem;
-  color: #01579b;
+  color: #444444;
   margin-bottom: 0.4rem;
 }
 
 .time {
-  font-size: 2.2rem;
+  font-size: 2.4rem;
   font-family: monospace;
   font-weight: bold;
-  color: #003c8f;
+  color: #012a4a;
 }
 
 @media screen and (max-width: 768px) {
@@ -84,6 +84,6 @@ h1 {
   }
 
   .time {
-    font-size: 1.6rem;
+    font-size: 1.8rem;
   }
 }
