@@ -1,16 +1,16 @@
 :root {
-  --md-sys-color-primary: #023e8a;
+  --md-sys-color-primary: #0077b6;
   --md-sys-color-on-primary: #ffffff;
-  --md-sys-color-surface: #ffffff;
-  --md-sys-color-on-surface: #111111;
-  --md-sys-color-error: #b00020;
-  --md-sys-color-outline: #0077b6;
+  --md-sys-color-surface: #caf0f8;
+  --md-sys-color-on-surface: #03045e;
+  --md-sys-color-error: #e63946;
+  --md-sys-color-outline: #90e0ef;
 }
 
 body {
   font-family: 'Roboto', sans-serif;
   margin: 0;
-  background: linear-gradient(to bottom right, #a2dff7, #0077b6);
+  background: linear-gradient(to bottom, #90e0ef, #00b4d8);
   color: var(--md-sys-color-on-surface);
   padding: 1rem;
 }
@@ -40,7 +40,7 @@ select, button {
 }
 
 select {
-  background: white;
+  background: #ffffff;
   color: var(--md-sys-color-on-surface);
   border: 1px solid var(--md-sys-color-outline);
   min-width: 200px;
@@ -52,7 +52,7 @@ button {
 }
 
 button:hover {
-  background: #0353a4;
+  background: #0096c7;
 }
 
 .timezone-container {
@@ -63,10 +63,10 @@ button:hover {
 }
 
 .timezone {
-  background-color: #ffffffcc;
+  background: #ffffff;
   padding: 1rem;
   border-radius: 16px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -79,19 +79,18 @@ button:hover {
   margin-bottom: 0.5rem;
   text-align: center;
   word-break: break-word;
-  color: #023e8a;
 }
 
 .time {
   font-family: monospace;
   font-size: 1.4rem;
   margin-bottom: 0.5rem;
-  color: #0077b6;
+  color: var(--md-sys-color-on-surface);
 }
 
 .remove-button {
   background: var(--md-sys-color-error);
-  color: white;
+  color: #ffffff;
   border: none;
   border-radius: 8px;
   padding: 0.4rem 0.8rem;
@@ -104,7 +103,7 @@ button:hover {
 }
 
 .remove-button:hover {
-  background: #9b1b17;
+  background: #c1121f;
 }
 
 .error-message {
