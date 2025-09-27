@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ファイルエディター / File Editor - hamusata</title>
+
+<!-- Favicon -->
+<link rel="icon" href="https://hamusata.f5.si/icon.webp" type="image/webp">
+<link rel="icon" href="https://hamusata.f5.si/icon.png" type="image/png">
+<link rel="icon" href="https://hamusata.f5.si/favicon.ico" type="image/x-icon">
+
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Potta+One&family=Roboto+Mono&display=swap" rel="stylesheet">
+
+<!-- 外部CSS -->
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-theme="light">
+
+<header>
+  <div class="brand">ファイルエディター / File Editor</div>
+  <div class="controls">
+    <button id="newBtn">新規</button>
+    <button id="openBtn">開く</button>
+    <input type="file" id="fileInput" style="display:none" multiple>
+    <button id="saveBtn">保存</button>
+    <button id="downloadBtn">ダウンロード</button>
+    <input type="text" id="filenameInput" placeholder="ファイル名">
+    <select id="fontsize">
+      <option value="12">12px</option>
+      <option value="14" selected>14px</option>
+      <option value="16">16px</option>
+      <option value="18">18px</option>
+      <option value="20">20px</option>
+    </select>
+    <select id="fontfamily">
+      <option value="'Potta One', cursive" selected>Potta One</option>
+      <option value="'Roboto Mono', monospace">Roboto Mono</option>
+      <option value="Arial, sans-serif">Arial</option>
+      <option value="'Courier New', monospace">Courier New</option>
+    </select>
+    <button id="themeToggle">ライト/ダーク</button>
+    <button id="settingBtn">設定</button>
+    <button id="helpBtn">機能説明</button>
+  </div>
+</header>
+
+<main>
+  <aside class="sidebar" id="infoPanel">
+    <strong>情報</strong>
+    <div class="tablist" id="tablist"></div>
+    <hr>
+    <div class="info" id="fileInfo">ファイルなし</div>
+    <div class="status" id="status">未保存</div>
+    <div id="dropArea" class="file-drop">ここにファイルをドラッグ＆ドロップ</div>
+  </aside>
+
+  <section class="editor-area">
+    <div class="editor-wrap">
+      <div class="linenums" id="linenums"></div>
+      <div class="editor">
+        <textarea id="code" class="code" spellcheck="false" placeholder="ここにテキストを貼り付けるか、ファイルを開いてください..."></textarea>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- 設定パネル 初期非表示 -->
+<aside class="sidebar" id="settingPanel" style="display:none;">
+  <strong>設定</strong>
+  <div style="display:flex; flex-direction:column; gap:6px; margin-top:6px;">
+    <input type="color" id="bgColor" value="#F0F8FF" title="背景色">
+    <input type="color" id="panelColor" value="#FFFFFF" title="パネル色">
+    <input type="color" id="accentColor" value="#4EA0FF" title="アクセント色">
+    <input type="color" id="highlightColor" value="#A7C7FF" title="ハイライト色">
+    <input type="color" id="textColor" value="#1A1A1A" title="文字色">
+    <button id="saveThemeBtn" title="テーマをJSONとして保存">テーマ保存</button>
+    <button id="loadThemeBtn" title="保存したテーマJSONを読み込む">テーマ読み込み</button>
+  </div>
+</aside>
+
+<!-- 機能説明モーダル 初期非表示 -->
+<div class="modal" id="helpModal" style="display:none;">
+  <h2>ファイルエディター機能説明</h2>
+  <ul>
+    <li><b>新規:</b> 新しいタブを作成します。</li>
+    <li><b>開く:</b> ファイルを選択してタブに読み込みます。</li>
+    <li><b>保存:</b> 現在タブの内容を保存します。</li>
+    <li><b>ダウンロード:</b> 現在タブの内容をファイルとして保存します。</li>
+    <li><b>ファイル名:</b> タブのファイル名を変更できます。</li>
+    <li><b>フォントサイズ:</b> エディターの文字サイズを変更できます。</li>
+    <li><b>フォント:</b> エディターのフォントを変更できます。</li>
+    <li><b>ライト/ダーク:</b> テーマを切り替えます。</li>
+    <li><b>設定:</b> 色やテーマを変更できます。</li>
+    <li><b>機能説明:</b> このモーダルを開きます。</li>
+  </ul>
+  <button onclick="helpModal.style.display='none'">閉じる</button>
+</div>
+
+<footer>
+  &copy; <span id="year"></span> <a href="https://hamusata.f5.si">@hamuzon / @hamusata</a> – All rights reserved.
+</footer>
+
+<!-- 外部JS -->
+<script src="script.js"></script>
+</body>
+</html>
