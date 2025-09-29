@@ -124,28 +124,29 @@
   </main>
 
   <script>
-const baseYear = 2025;
-const thisYear = new Date().getFullYear();
-const hostname = location.hostname;
-let footerHTML = "";
+    const baseYear = 2025;
+    const thisYear = new Date().getFullYear();
+    const hostname = location.hostname;
+    let footerHTML = "";
 
-if (hostname === "hamuzon-jp.f5.si") {
-  footerHTML = `&copy; ${baseYear}${thisYear > baseYear ? "–" + thisYear : ""} <a class="link" href="https://hamuzon-jp.f5.si" target="_blank" rel="noopener">@hamuzon</a>`;
-} else {
-  footerHTML = `&copy; ${baseYear}${thisYear > baseYear ? "–" + thisYear : ""} QR Code Generator`;
-}
+    if (hostname === "hamuzon.github.io") {
+      footerHTML = `&copy; ${baseYear}${thisYear > baseYear ? "–" + thisYear : ""} <a class="link" href="https://hamuzon.github.io" target="_blank" rel="noopener">@hamuzon</a>`;
+    } else if (hostname === "qr.hamusata.f5.si") {
+      footerHTML = `&copy; ${baseYear}${thisYear > baseYear ? "–" + thisYear : ""} <a class="link" href="https://home.hamusata.f5.si" target="_blank" rel="noopener">@hamusata</a>`;
+    } else {
+      footerHTML = `&copy; ${baseYear}${thisYear > baseYear ? "–" + thisYear : ""} QR Code Generator`;
+    }
 
-document.getElementById("copyright").innerHTML = footerHTML;
+    document.getElementById("copyright").innerHTML = footerHTML;
 
-function isValidURL(str) {
-  try {
-    const url = new URL(str);
-    return url.protocol === "http:" || url.protocol === "https:";
-  } catch {
-    return false;
-  }
-}
-
+    function isValidURL(str) {
+      try {
+        const url = new URL(str);
+        return url.protocol === "http:" || url.protocol === "https:";
+      } catch {
+        return false;
+      }
+    }
 
     async function shortenURL(url) {
       try {
