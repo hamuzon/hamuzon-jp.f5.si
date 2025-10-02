@@ -23,25 +23,31 @@
   }
   h1 { margin:0 0 1rem; font-size:clamp(1.75rem,4vw,2.25rem); color:#0a1f44; }
   p { font-size:clamp(1rem,2.5vw,1.1rem); color:#002166; }
-  button {
-    padding:1rem 2rem; font-size:1.1rem;
-    border:none; border-radius:0.75rem;
+  a.button {
+    display:inline-block;
+    text-decoration:none;
+    padding:1rem 2rem;
+    font-size:1.1rem;
+    border-radius:0.75rem;
     background:linear-gradient(90deg,#00c6ff,#0072ff);
-    color:white; cursor:pointer; font-weight:600; transition:0.3s;
+    color:white;
+    font-weight:600;
+    transition:0.3s;
     width:100%;
     max-width:300px;
+    text-align:center;
   }
-  button:hover { background:linear-gradient(90deg,#0072ff,#004aad); }
+  a.button:hover { background:linear-gradient(90deg,#0072ff,#004aad); }
 </style>
 </head>
 <body>
   <div class="container">
     <h1>Discord Tools</h1>
     <p>このページからDiscord関連のツールページに移動できます。</p>
-    <button onclick="location.href='timestamp/index.html'">DiscordメッセージID 計算ページ</button>
-    <button onclick="location.href='dashboard/index.html'">UNIX時間 → Discordタイムスタンプページ</button>
-    <button onclick="location.href='conversion/index.html'">UNIX時間表示対応版 DiscordメッセージID 計算ページ</button>
-    <button onclick="location.href='message-id/index.html'">メッセージIDの解析 (AICode)</button>
+    <a class="button" href="timestamp/index.html">DiscordメッセージID 計算ページ</a>
+    <a class="button" href="dashboard/index.html">UNIX時間 → Discordタイムスタンプページ</a>
+    <a class="button" href="conversion/index.html">UNIX時間表示対応版 DiscordメッセージID 計算ページ</a>
+    <a class="button" href="message-id/index.html">メッセージIDの解析 (AICode)</a>
   </div>
 </body>
 </html>
