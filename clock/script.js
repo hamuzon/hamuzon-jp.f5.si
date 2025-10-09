@@ -8,12 +8,22 @@ const clocksToUpdate = [];
 let baseUtcDate = null;
 let basePerformanceTime = null;
 
+// ======= ブラウザ言語判定 =======
+const userLang = navigator.language || "en-US";
+
 // ======= 利用可能タイムゾーンをセレクトに追加 =======
 const allTimezones = Intl.supportedValuesOf("timeZone");
+
+// Intl.DisplayNamesで日本語/英語表示
+const tzDisplayNames = new Intl.DisplayNames(
+  [userLang.startsWith("ja") ? "ja" : "en"],
+  { type: "timeZone" }
+);
+
 allTimezones.forEach(tz => {
   const option = document.createElement("option");
   option.value = tz;
-  option.textContent = tz;
+  option.textContent = tzDisplayNames.of(tz) || tz;
   timezoneSelect.appendChild(option);
 });
 
@@ -31,9 +41,9 @@ async function fetchUtcTime() {
       if (!res.ok) continue;
       const data = await res.json();
 
-      if (data.utc_datetime) return new Date(data.utc_datetime);       // worldtimeapi
-      if (data.dateTime) return new Date(data.dateTime);               // timeapi.io
-      if (data.currentDateTime) return new Date(data.currentDateTime); // worldclockapi
+      if (data.utc_datetime) return new Date(data.utc_datetime);
+      if (data.dateTime) return new Date(data.dateTime);
+      if (data.currentDateTime) return new Date(data.currentDateTime);
     } catch (e) {
       continue;
     }
@@ -56,27 +66,56 @@ async function syncTimeFromInternet() {
   }
 }
 
+// ======= URLからタイムゾーン復元 =======
+function loadTimezonesFromURL() {
+  const params = new URLSearchParams(window.location.search);
+  const tzParams = params.getAll("tz"); 
+  tzParams.forEach(tz => {
+    if (allTimezones.includes(tz)) {
+      timezoneSelect.value = tz;
+      addTimezone();
+    }
+  });
+}
+
+// ======= 現在のタイムゾーンをURLに反映 =======
+function updateURLWithTimezones() {
+  const params = new URLSearchParams();
+  clocksToUpdate.forEach(clock => {
+    params.append("tz", clock.tz);
+  });
+  const newURL = `${window.location.pathname}?${params.toString()}`;
+  window.history.replaceState({}, "", newURL);
+}
+
 // ======= タイムゾーン追加 =======
 function addTimezone() {
   const tz = timezoneSelect.value;
+  const displayName = tzDisplayNames.of(tz) || tz;
   const uniqueId = "tz_" + tz.replace(/[^a-zA-Z0-9]/g, "_") + "_" + Date.now();
+
+  // 重複追加防止
+  if (clocksToUpdate.some(c => c.tz === tz)) return;
 
   const container = document.createElement("div");
   container.className = "timezone";
   container.id = uniqueId;
 
   container.innerHTML = `
-    <div class="label">${tz}</div>
+    <div class="label">${displayName}</div>
     <div class="time" id="${uniqueId}-time">--:--:--</div>
-    <button class="remove-button" aria-label="削除 ${tz}" title="削除 ${tz}">×</button>
+    <button class="remove-button" aria-label="削除 ${displayName}" title="削除 ${displayName}">×</button>
   `;
 
   container.querySelector(".remove-button").addEventListener("click", () => {
     removeTimezone(uniqueId);
+    updateURLWithTimezones(); // 削除後URL更新
   });
 
   timezonesContainer.appendChild(container);
   clocksToUpdate.push({ id: uniqueId + "-time", tz: tz });
+
+  updateURLWithTimezones(); // 追加後URL更新
 }
 
 // ======= タイムゾーン削除 =======
@@ -96,7 +135,7 @@ function updateClocks() {
   const nowUtc = new Date(baseUtcDate.getTime() + elapsed);
 
   clocksToUpdate.forEach(clock => {
-    const formatter = new Intl.DateTimeFormat("ja-JP", {
+    const formatter = new Intl.DateTimeFormat(userLang, {
       timeZone: clock.tz,
       hour12: false,
       hour: "2-digit",
@@ -113,7 +152,8 @@ function updateClocks() {
 window.addEventListener("DOMContentLoaded", async () => {
   timezoneSelect.value = "Asia/Tokyo"; // 初期値
   await syncTimeFromInternet();
-  addTimezone(); // 最初の1個表示
+  loadTimezonesFromURL(); // URLから復元
+  if (clocksToUpdate.length === 0) addTimezone(); // デフォルト1個
   setInterval(updateClocks, 1000); // 1秒ごとに更新
 });
 
