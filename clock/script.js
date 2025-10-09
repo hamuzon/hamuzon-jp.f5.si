@@ -7,6 +7,7 @@ const clocksToUpdate = [];
 let baseUtcDate = null;
 let basePerformanceTime = null;
 
+// 利用可能タイムゾーンをセレクトに追加
 const allTimezones = Intl.supportedValuesOf("timeZone");
 allTimezones.forEach(tz => {
   const option = document.createElement("option");
@@ -15,12 +16,36 @@ allTimezones.forEach(tz => {
   timezoneSelect.appendChild(option);
 });
 
+// 複数APIからUTC時間を取得するフェイルオーバー関数
+async function fetchUtcTime() {
+  const urls = [
+    "https://worldtimeapi.org/api/timezone/Etc/UTC",
+    "https://timeapi.io/api/Time/current/zone?timeZone=UTC",
+    "https://worldclockapi.com/api/json/utc/now"
+  ];
+
+  for (const url of urls) {
+    try {
+      const res = await fetch(url);
+      if (!res.ok) continue;
+      const data = await res.json();
+
+      if (data.utc_datetime) return new Date(data.utc_datetime);       // worldtimeapi
+      if (data.dateTime) return new Date(data.dateTime);               // timeapi.io
+      if (data.currentDateTime) return new Date(data.currentDateTime); // worldclockapi
+    } catch (e) {
+      continue;
+    }
+  }
+
+  // 全部失敗時は端末時間
+  return new Date();
+}
+
+// ネット時間を同期
 async function syncTimeFromInternet() {
   try {
-    const res = await fetch("https://worldtimeapi.org/api/timezone/Etc/UTC");
-    if (!res.ok) throw new Error("Fetch failed");
-    const data = await res.json();
-    baseUtcDate = new Date(data.utc_datetime);
+    baseUtcDate = await fetchUtcTime();
     basePerformanceTime = performance.now();
     errorMessage.textContent = "";
   } catch (e) {
@@ -30,6 +55,7 @@ async function syncTimeFromInternet() {
   }
 }
 
+// タイムゾーン追加
 function addTimezone() {
   const tz = timezoneSelect.value;
   const uniqueId = "tz_" + tz.replace(/[^a-zA-Z0-9]/g, "_") + "_" + Date.now();
@@ -53,6 +79,7 @@ function addTimezone() {
   clocksToUpdate.push({ id: uniqueId + "-time", tz: tz });
 }
 
+// タイムゾーン削除
 function removeTimezone(id) {
   const idx = clocksToUpdate.findIndex(obj => obj.id === id + "-time");
   if (idx !== -1) clocksToUpdate.splice(idx, 1);
@@ -61,6 +88,7 @@ function removeTimezone(id) {
   if (el) el.remove();
 }
 
+// 時計更新
 function updateClocks() {
   if (!baseUtcDate || basePerformanceTime === null) return;
 
@@ -81,6 +109,7 @@ function updateClocks() {
   });
 }
 
+// 初期化
 window.addEventListener("DOMContentLoaded", async () => {
   timezoneSelect.value = "Asia/Tokyo";
   await syncTimeFromInternet();
