@@ -1,13 +1,14 @@
+// ======= DOM取得 =======
 const timezoneSelect = document.getElementById("timezone-select");
 const timezonesContainer = document.getElementById("timezones");
 const errorMessage = document.getElementById("error-message");
 
+// ======= 時計管理 =======
 const clocksToUpdate = [];
-
 let baseUtcDate = null;
 let basePerformanceTime = null;
 
-// 利用可能タイムゾーンをセレクトに追加
+// ======= 利用可能タイムゾーンをセレクトに追加 =======
 const allTimezones = Intl.supportedValuesOf("timeZone");
 allTimezones.forEach(tz => {
   const option = document.createElement("option");
@@ -16,7 +17,7 @@ allTimezones.forEach(tz => {
   timezoneSelect.appendChild(option);
 });
 
-// 複数APIからUTC時間を取得するフェイルオーバー関数
+// ======= 複数APIからUTC取得（フェイルオーバー） =======
 async function fetchUtcTime() {
   const urls = [
     "https://worldtimeapi.org/api/timezone/Etc/UTC",
@@ -38,11 +39,11 @@ async function fetchUtcTime() {
     }
   }
 
-  // 全部失敗時は端末時間
+  // 全API失敗時は端末時間
   return new Date();
 }
 
-// ネット時間を同期
+// ======= ネット時間同期 =======
 async function syncTimeFromInternet() {
   try {
     baseUtcDate = await fetchUtcTime();
@@ -55,7 +56,7 @@ async function syncTimeFromInternet() {
   }
 }
 
-// タイムゾーン追加
+// ======= タイムゾーン追加 =======
 function addTimezone() {
   const tz = timezoneSelect.value;
   const uniqueId = "tz_" + tz.replace(/[^a-zA-Z0-9]/g, "_") + "_" + Date.now();
@@ -75,11 +76,10 @@ function addTimezone() {
   });
 
   timezonesContainer.appendChild(container);
-
   clocksToUpdate.push({ id: uniqueId + "-time", tz: tz });
 }
 
-// タイムゾーン削除
+// ======= タイムゾーン削除 =======
 function removeTimezone(id) {
   const idx = clocksToUpdate.findIndex(obj => obj.id === id + "-time");
   if (idx !== -1) clocksToUpdate.splice(idx, 1);
@@ -88,7 +88,7 @@ function removeTimezone(id) {
   if (el) el.remove();
 }
 
-// 時計更新
+// ======= 時計更新 =======
 function updateClocks() {
   if (!baseUtcDate || basePerformanceTime === null) return;
 
@@ -109,12 +109,12 @@ function updateClocks() {
   });
 }
 
-// 初期化
+// ======= 初期化 =======
 window.addEventListener("DOMContentLoaded", async () => {
-  timezoneSelect.value = "Asia/Tokyo";
+  timezoneSelect.value = "Asia/Tokyo"; // 初期値
   await syncTimeFromInternet();
-  addTimezone();
-  setInterval(updateClocks, 1000);
+  addTimezone(); // 最初の1個表示
+  setInterval(updateClocks, 1000); // 1秒ごとに更新
 });
 
 document.getElementById("add-button").addEventListener("click", addTimezone);
