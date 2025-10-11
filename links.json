@@ -22,4 +22,8 @@
   { "title": "🔢 分数メーカー / fraction maker 🧮", "url": "https://hamuzon.github.io/hamuzon-jp.f5.si/fraction/" },
   { "title": "🎨 ピクセル アート / pixel-art 🖌️", "url": "https://hamuzon.github.io/hamuzon-jp.f5.si/pixel-art/" },
   { "title": "📝 ファイルエディター / File Editor 📁", "url": "https://hamuzon.github.io/hamuzon-jp.f5.si/editor/" }
+{
+  "title": "🌍️ アクセス位置共有 🌐 / (世界のどこからをリアルタイムで表示) / Hosted by Cloudflare Workers",
+  "url": "https://world.hamuzon-jp.f5.si/"
+}
 ]
