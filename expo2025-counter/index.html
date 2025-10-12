@@ -158,7 +158,7 @@
         ended: "万博は終了しました。",
         dayCount: day => `今日は万博の${day}日目です。`,
         timeSinceStart: (d, h, m, s) => `開催開始から経過した時間：${d}日 ${h}時間${m}分${s}秒`,
-        remainToStart: (d, h, m, s) => `再開まで：${d}日 ${h}時間${m}分${s}秒`,
+        remainToStart: (d, h, m, s) => `開幕まで：${d}日 ${h}時間${m}分${s}秒`,
         remainToEnd: (d, h, m, s) => `終了まで：${d}日 ${h}時間${m}分${s}秒`,
         toggleLabel: "EN",
         footerText: "開催期間: 2025/04/13 00:00 JST ～ 2025/10/13 00:00 JST"
@@ -197,24 +197,19 @@
       if (jstTime < startDateJST) {
         const diffMs = startDateJST - jstTime;
         const { d, h, m, s } = formatRemaining(diffMs);
-
         dayDisplay.textContent = t.notStarted;
         hourDisplay.textContent = "";
         remainDisplay.textContent = t.remainToStart(d, h, m, s);
-
       } else if (jstTime > endDateJST) {
         dayDisplay.textContent = t.ended;
         hourDisplay.textContent = "";
         remainDisplay.textContent = "";
-
       } else {
         const diffDays = Math.floor((today - startDateJST) / (1000 * 60 * 60 * 24)) + 1;
         dayDisplay.textContent = t.dayCount(diffDays);
-
         const elapsedMs = jstTime - startDateJST;
         const { d, h, m, s } = formatRemaining(elapsedMs);
         hourDisplay.textContent = t.timeSinceStart(d, h, m, s);
-
         const remainMs = endDateJST - jstTime;
         const remain = formatRemaining(remainMs);
         remainDisplay.textContent = t.remainToEnd(remain.d, remain.h, remain.m, remain.s);
@@ -236,7 +231,6 @@
     }
 
     langToggleBtn.addEventListener('click', toggleLanguage);
-
     updateTexts();
     dayDisplay.textContent = texts[lang].loading;
     updateDay();
