@@ -289,6 +289,8 @@
       "hamuzon.github.io": { baseYear: 2025, user: "@hamuzon", link: "https://hamuzon.github.io" },
       "hamusata.f5.si": { baseYear: 2025, user: "@hamusata", link: "https://hamusata.f5.si" },
       "device-info.hamusata.f5.si": { baseYear: 2025, user: "@hamusata", link: "https://hamusata.f5.si" },
+      "device-info.hamuzon-jp.f5.si": { baseYear: 2025, user: "@hamuzon", link: "https://hamuzon.f5.si" },
+      "hamuzon-jp.f5.si": { baseYear: 2025, user: "@hamuzon", link: "https://hamuzon.f5.si" },
       "default": { baseYear: 2025, user: "device-info", link: "" }
     };
     const host = window.location.hostname;
