@@ -3,238 +3,112 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Expo 2025 Countdown</title>
-<meta name="description" content="Expo 2025(2025年大阪万博)の開催日数計算" />
+<title>Redirecting to Expo Countdown...</title>
+<meta name="description" content="Redirecting to Expo 2025 Countdown" />
 <link rel="icon" href="icon.png" type="image/png" />
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Orbitron&family=Roboto&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron&display=swap');
 
   * {
-    margin: 0; padding: 0; box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
   }
 
   body {
     background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-    font-family: 'Roboto', sans-serif;
-    color: #e0f7fa;
-    min-height: 100vh;
+    font-family: 'Orbitron', sans-serif;
+    color: #00e5ff;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 1rem;
-  }
-
-  .container {
-    background: rgba(255, 255, 255, 0.07);
-    border-radius: 24px;
-    padding: 3rem 4rem;
-    max-width: 420px;
-    width: 100%;
-    box-shadow: 0 0 20px rgba(0, 229, 255, 0.5);
+    min-height: 100vh;
+    flex-direction: column;
     text-align: center;
-    position: relative;
-  }
-
-  h1 {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 2.8rem;
-    color: #00e5ff;
-    text-shadow:
-      0 0 8px #00e5ff,
-      0 0 20px #00e5ff;
-    margin-bottom: 0.3rem;
-  }
-
-  h2 {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 1.1rem;
-    color: #80deea;
-    letter-spacing: 0.15em;
-    margin-bottom: 2rem;
-  }
-
-  #dayDisplay {
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: #00fff7;
-    text-shadow:
-      0 0 5px #00fff7,
-      0 0 15px #00fff7;
-    margin-bottom: 1.2rem;
-  }
-
-  #hourDisplay, #remainDisplay {
-    font-size: 1.2rem;
-    font-weight: 500;
-    color: #80deea;
-    margin-bottom: 1rem;
-    letter-spacing: 0.05em;
-  }
-
-  #remainDisplay {
-    margin-bottom: 3rem;
-  }
-
-  .footer {
-    font-size: 0.9rem;
-    color: #4dd0e1;
-    letter-spacing: 0.1em;
     user-select: none;
   }
 
-  .lang-toggle {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    background: rgba(0, 229, 255, 0.15);
-    border: none;
-    border-radius: 20px;
-    color: #00e5ff;
-    font-weight: 600;
-    padding: 6px 14px;
-    cursor: pointer;
-    font-family: 'Roboto', sans-serif;
-    transition: background-color 0.3s ease;
-  }
-  .lang-toggle:hover {
-    background: rgba(0, 229, 255, 0.3);
+  h1 {
+    font-size: 2.2rem;
+    margin-bottom: 1rem;
+    text-shadow: 0 0 10px #00e5ff, 0 0 20px #00e5ff;
   }
 
-  @media (max-width: 480px) {
-    .container {
-      padding: 2rem 2rem;
-      max-width: 320px;
-    }
-    h1 {
-      font-size: 2rem;
-    }
-    #dayDisplay {
-      font-size: 2rem;
-      margin-bottom: 1rem;
-    }
-    #hourDisplay, #remainDisplay {
-      font-size: 1rem;
-      margin-bottom: 1rem;
-    }
-    h2 {
-      font-size: 1rem;
-      margin-bottom: 1.5rem;
-    }
+  p {
+    font-size: 1.1rem;
+    color: #80deea;
+    letter-spacing: 0.05em;
+  }
+
+  #count {
+    color: #00fff7;
+    font-weight: bold;
+  }
+
+  .loading {
+    margin-top: 1.5rem;
+    display: inline-block;
+  }
+
+  .dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin: 0 3px;
+    border-radius: 50%;
+    background: #00e5ff;
+    animation: blink 1.2s infinite ease-in-out;
+  }
+
+  .dot:nth-child(2) { animation-delay: 0.2s; }
+  .dot:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes blink {
+    0%, 80%, 100% { opacity: 0.2; }
+    40% { opacity: 1; }
+  }
+
+  a {
+    color: #00e5ff;
+    text-decoration: underline;
   }
 </style>
+<script>
+  const redirectURL = "https://expo.hamuzon-jp.f5.si/";
+  const redirectDelay = 5; // ← 秒数変更OK
+
+  let count = redirectDelay;
+  function updateCountdown() {
+    const countElem = document.getElementById("count");
+    if (countElem) {
+      countElem.textContent = count;
+      if (count <= 0) {
+        window.location.href = redirectURL;
+      } else {
+        count--;
+        setTimeout(updateCountdown, 1000);
+      }
+    }
+  }
+
+  window.onload = updateCountdown;
+</script>
 </head>
 <body>
-  <div class="container" role="main" aria-live="polite">
-    <button class="lang-toggle" aria-label="Toggle Language">EN</button>
-    <h1 id="title">2025 日本万博</h1>
-    <h2 id="subtitle">開催からの経過日数カウント</h2>
-    <p id="dayDisplay">読み込み中…</p>
-    <p id="hourDisplay"></p>
-    <p id="remainDisplay"></p>
-    <div class="footer" id="footer">
-      開催期間: 2025/04/13 00:00 JST ～ 2025/10/13 00:00 JST
-    </div>
+  <h1>Redirecting...</h1>
+  <p>この機能はサポートを終了しました。<br>新しいサポート先へ移動します。</p>
+  <p><span id="count"></span> 秒後に <strong>expo.hamuzon-jp.f5.si</strong> に移動します</p>
+  <div class="loading">
+    <span class="dot"></span><span class="dot"></span><span class="dot"></span>
   </div>
 
-  <script>
-    const startDateJST = new Date(Date.UTC(2025, 3, 12, 15, 0, 0)); // 2025/4/13 00:00 JST
-    const endDateJST = new Date(Date.UTC(2025, 9, 12, 15, 0, 0));   // 2025/10/13 00:00 JST
-
-    const dayDisplay = document.getElementById("dayDisplay");
-    const hourDisplay = document.getElementById("hourDisplay");
-    const remainDisplay = document.getElementById("remainDisplay");
-    const title = document.getElementById("title");
-    const subtitle = document.getElementById("subtitle");
-    const langToggleBtn = document.querySelector(".lang-toggle");
-
-    let lang = 'jp';
-
-    const texts = {
-      jp: {
-        title: "2025 日本万博",
-        subtitle: "開催からの経過日数カウント",
-        loading: "読み込み中…",
-        notStarted: "万博はまだ始まっていません。",
-        ended: "万博は終了しました。",
-        dayCount: day => `今日は万博の${day}日目です。`,
-        timeSinceStart: (d, h, m, s) => `開催開始から経過した時間：${d}日 ${h}時間${m}分${s}秒`,
-        remainToStart: (d, h, m, s) => `開幕まで：${d}日 ${h}時間${m}分${s}秒`,
-        remainToEnd: (d, h, m, s) => `終了まで：${d}日 ${h}時間${m}分${s}秒`,
-        toggleLabel: "EN",
-        footerText: "開催期間: 2025/04/13 00:00 JST ～ 2025/10/13 00:00 JST"
-      },
-      en: {
-        title: "Expo 2025 Japan",
-        subtitle: "Days Since Opening",
-        loading: "Loading...",
-        notStarted: "The Expo hasn't started yet.",
-        ended: "The Expo has ended.",
-        dayCount: day => `Today is day ${day} of the Expo.`,
-        timeSinceStart: (d, h, m, s) => `Time since opening: ${d}d ${h}h ${m}m ${s}s`,
-        remainToStart: (d, h, m, s) => `Time until opening: ${d}d ${h}h ${m}m ${s}s`,
-        remainToEnd: (d, h, m, s) => `Time until closing: ${d}d ${h}h ${m}m ${s}s`,
-        toggleLabel: "JP",
-        footerText: "Period: Apr 13, 2025 00:00 JST ～ Oct 13, 2025 00:00 JST"
-      }
-    };
-
-    function formatRemaining(ms) {
-      const d = Math.floor(ms / (1000 * 60 * 60 * 24));
-      const h = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const m = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
-      const s = Math.floor((ms % (1000 * 60)) / 1000);
-      return { d, h, m, s };
-    }
-
-    function updateDay() {
-      const now = new Date();
-      const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
-      const jstTime = new Date(utc + (9 * 60 * 60 * 1000));
-      const today = new Date(jstTime.getFullYear(), jstTime.getMonth(), jstTime.getDate());
-
-      const t = texts[lang];
-
-      if (jstTime < startDateJST) {
-        const diffMs = startDateJST - jstTime;
-        const { d, h, m, s } = formatRemaining(diffMs);
-        dayDisplay.textContent = t.notStarted;
-        hourDisplay.textContent = "";
-        remainDisplay.textContent = t.remainToStart(d, h, m, s);
-      } else if (jstTime > endDateJST) {
-        dayDisplay.textContent = t.ended;
-        hourDisplay.textContent = "";
-        remainDisplay.textContent = "";
-      } else {
-        const diffDays = Math.floor((today - startDateJST) / (1000 * 60 * 60 * 24)) + 1;
-        dayDisplay.textContent = t.dayCount(diffDays);
-        const elapsedMs = jstTime - startDateJST;
-        const { d, h, m, s } = formatRemaining(elapsedMs);
-        hourDisplay.textContent = t.timeSinceStart(d, h, m, s);
-        const remainMs = endDateJST - jstTime;
-        const remain = formatRemaining(remainMs);
-        remainDisplay.textContent = t.remainToEnd(remain.d, remain.h, remain.m, remain.s);
-      }
-    }
-
-    function updateTexts() {
-      const t = texts[lang];
-      title.textContent = t.title;
-      subtitle.textContent = t.subtitle;
-      langToggleBtn.textContent = t.toggleLabel;
-      document.getElementById("footer").textContent = t.footerText;
-    }
-
-    function toggleLanguage() {
-      lang = (lang === 'jp') ? 'en' : 'jp';
-      updateTexts();
-      updateDay();
-    }
-
-    langToggleBtn.addEventListener('click', toggleLanguage);
-    updateTexts();
-    dayDisplay.textContent = texts[lang].loading;
-    updateDay();
-    setInterval(updateDay, 1000);
-  </script>
+  <noscript>
+    <p style="margin-top:1.5rem; color:#ffcccb;">
+      JavaScriptが無効のため、自動で移動しません。<br>
+      この機能はサポートを終了しました。<br>
+      以下のリンクをクリックしてサポート先へ移動してください：<br><br>
+      <a href="https://expo.hamuzon-jp.f5.si/">https://expo.hamuzon-jp.f5.si/</a>
+    </p>
+  </noscript>
 </body>
 </html>
