@@ -1,5 +1,4 @@
-(function () {
-  // ======== 言語データ ========
+(function() {
   const dict = {
     ja: {
       title: "デバイス情報",
@@ -7,14 +6,7 @@
       os_ua: "OS情報（User-Agent）",
       browser_ch: "ブラウザ情報（UA-CH）",
       browser_ua: "ブラウザ情報（User-Agent）",
-      category: {
-        os: "OS情報",
-        browser: "ブラウザ情報",
-        screen: "画面情報",
-        cpu: "CPU・メモリ",
-        network: "ネットワーク情報",
-        other: "その他情報"
-      },
+      category: { os: "OS情報", browser: "ブラウザ情報", screen: "画面情報", cpu: "CPU・メモリ", network: "ネットワーク情報", other: "その他情報" },
       os: `<span class="selectable">OS名</span>`,
       version: `<span class="selectable">バージョン</span>`,
       device: `<span class="selectable">端末名</span>`,
@@ -58,14 +50,7 @@
       os_ua: "OS Information (User-Agent)",
       browser_ch: "Browser Information (UA-CH)",
       browser_ua: "Browser Information (User-Agent)",
-      category: {
-        os: "OS Information",
-        browser: "Browser Information",
-        screen: "Screen Information",
-        cpu: "CPU & Memory",
-        network: "Network Information",
-        other: "Other Information"
-      },
+      category: { os: "OS Information", browser: "Browser Information", screen: "Screen Information", cpu: "CPU & Memory", network: "Network Information", other: "Other Information" },
       os: `<span class="selectable">Operating System</span>`,
       version: `<span class="selectable">Version</span>`,
       device: `<span class="selectable">Device Name</span>`,
@@ -78,7 +63,7 @@
       pixelDepth: `<span class="selectable">Pixel Depth</span>`,
       cpu: `<span class="selectable">CPU Cores</span>`,
       cpuName: `<span class="selectable">CPU Name</span>`,
-      memory: `<span class="selectable">memory:Max 8GB</span>`,
+      memory: `<span class="selectable">Memory: Max 8GB</span>`,
       ipv4: `<span class="selectable">IPv4 Address</span>`,
       ipv6: `<span class="selectable">IPv6 Address</span>`,
       ip: `<span class="selectable">Current IP</span>`,
@@ -105,7 +90,6 @@
     }
   };
 
-  // ======== DOM要素 ========
   const titleEl = document.getElementById('title');
   const btnJa = document.getElementById('btn-ja');
   const btnEn = document.getElementById('btn-en');
@@ -141,7 +125,6 @@
   let currentLang = localStorage.getItem("lang") || (navigator.language.startsWith("ja") ? "ja" : "en");
   let darkMode = localStorage.getItem("mode") === "dark" || (localStorage.getItem("mode") === null && window.matchMedia('(prefers-color-scheme: dark)').matches);
 
-  // ======== UA-CH取得 ========
   async function getOsBrowserByUACh() {
     const result = { os: "", version: "", device: "", browser: "", browserVersion: "" };
     if (navigator.userAgentData?.getHighEntropyValues) {
@@ -159,7 +142,6 @@
     return result;
   }
 
-  // ======== UA取得 ========
   function getOsBrowserByUA() {
     const ua = navigator.userAgent;
     let os = dict[currentLang].unknown, version = dict[currentLang].unknown, device = dict[currentLang].unknown;
@@ -177,7 +159,6 @@
     return { os, version, device, browser, browserVersion:bver };
   }
 
-  // ======== CPU名推定 ========
   function getCpuNameByUA() {
     const ua = navigator.userAgent;
     if (/arm|aarch64/i.test(ua)) return currentLang==="ja"?`ARM (推定)`:`ARM (Estimated)`;
@@ -185,17 +166,15 @@
     if (/i686|i386|x86/i.test(ua)) return currentLang==="ja"?`x86 (推定)`:`x86 (Estimated)`;
     if (/PPC|PowerPC/i.test(ua)) return currentLang==="ja"?`PowerPC (推定)`:`PowerPC (Estimated)`;
     if (/mips/i.test(ua)) return currentLang==="ja"?`MIPS (推定)`:`MIPS (Estimated)`;
-    return dict[currentLang].not_available;
+    return dict[currentLang].unknown;
   }
 
-  // ======== テーブル行作成 ========
-  function createRow(label,value){ 
-    const row=document.createElement('tr'); 
-    row.innerHTML=`<th scope="row">${label}</th><td>${value||dict[currentLang].unknown}</td>`; 
-    return row; 
+  function createRow(label,value){
+    const row=document.createElement('tr');
+    row.innerHTML=`<th scope="row">${label}</th><td>${value||dict[currentLang].unknown}</td>`;
+    return row;
   }
 
-  // ======== IP取得 ========
   async function fetchIPData() {
     const ipv4 = await fetch('https://api.ipify.org?format=json').then(res=>res.json()).then(d=>d.ip||dict[currentLang].unknown).catch(()=>dict[currentLang].unknown);
     const ipv6 = await fetch('https://api64.ipify.org?format=json').then(res=>res.json()).then(d=>d.ip||dict[currentLang].unknown).catch(()=>dict[currentLang].unknown);
@@ -203,7 +182,6 @@
     return { ipv4, ipv6, currentIP };
   }
 
-  // ======== 情報更新 ========
   async function updateInfo() {
     const lang = dict[currentLang];
     Object.values(tables).forEach(tbl=>tbl.innerHTML='');
@@ -237,14 +215,12 @@
     footerLibrary.innerHTML = lang.footer.library;
   }
 
-  // ======== 現在時刻更新 ========
   function updateCurrentTime() {
     const nowStr = new Date().toLocaleString();
     const rows = tables.other.querySelectorAll('tr');
     for(const row of rows){ if(row.firstElementChild?.textContent===dict[currentLang].now.replace(/<[^>]+>/g,'')){ row.lastElementChild.textContent=nowStr; break; } }
   }
 
-  // ======== 言語切替 ========
   function setLang(lang){
     currentLang=lang;
     localStorage.setItem("lang",lang);
@@ -260,7 +236,6 @@
     updateInfo();
   }
 
-  // ======== ダーク/ライト切替 ========
   function setMode(isDark){
     darkMode=isDark;
     localStorage.setItem("mode",isDark?"dark":"light");
@@ -272,18 +247,15 @@
     favicon.href=isDark?'icon-dark.png':'icon-light.png';
   }
 
-  // ======== ボタンイベント ========
   btnJa.addEventListener('click',()=>{ setLang('ja'); });
   btnEn.addEventListener('click',()=>{ setLang('en'); });
   btnLight.addEventListener('click',()=>setMode(false));
   btnDark.addEventListener('click',()=>setMode(true));
 
-  // ======== 初期化 ========
   setMode(darkMode);
   setLang(currentLang);
   setInterval(updateCurrentTime,1000);
 
-  // ======== フッター自動設定 ========
   (function() {
     const siteConfig = {
       "hamuzon.github.io": { baseYear: 2025, user: "@hamuzon", link: "https://hamuzon.github.io" },
