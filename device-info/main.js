@@ -260,10 +260,10 @@
 
   btnJa.addEventListener('click',()=>setLang('ja'));
   btnEn.addEventListener('click',()=>setLang('en'));
-  btnLight.addEventListener('click',()=>setMode('light'));
-  btnDark.addEventListener('click',()=>setMode('dark'));
+  btnLight.addEventListener('click',()=>setMode(false));
+  btnDark.addEventListener('click',()=>setMode(true));
 
-  setMode(darkMode?'dark':'light');
+  setMode(darkMode);
   setLang(currentLang);
   setInterval(updateCurrentTime,1000);
 
