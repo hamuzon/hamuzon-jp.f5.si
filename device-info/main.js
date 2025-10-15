@@ -20,6 +20,7 @@
       cpu: `<span class="selectable">CPUコア数</span>`,
       cpuName: `<span class="selectable">CPU名</span>`,
       memory: `<span class="selectable">メモリ：最大 8GBまで</span>`,
+      gpu: `<span class="selectable">GPU名</span>`,
       ipv4: `<span class="selectable">IPv4アドレス</span>`,
       ipv6: `<span class="selectable">IPv6アドレス</span>`,
       ip: `<span class="selectable">現在使用IP</span>`,
@@ -63,6 +64,7 @@
       cpu: `<span class="selectable">CPU Cores</span>`,
       cpuName: `<span class="selectable">CPU Name</span>`,
       memory: `<span class="selectable">Memory: Max 8GB</span>`,
+      gpu: `<span class="selectable">GPU Name</span>`,
       ipv4: `<span class="selectable">IPv4 Address</span>`,
       ipv6: `<span class="selectable">IPv6 Address</span>`,
       ip: `<span class="selectable">Current IP</span>`,
@@ -97,7 +99,6 @@
   const footerCopyright = document.getElementById('footer-copyright');
   const footerWarning = document.getElementById('footer-warning');
   const footerLibrary = document.getElementById('footer-library');
-
   const tables = {
     os_ua_ch: document.getElementById('table-os-ua-ch'),
     os_ua: document.getElementById('table-os-ua'),
@@ -108,12 +109,10 @@
     network: document.getElementById('table-network'),
     other: document.getElementById('table-other')
   };
-
   const osUaChLabel = document.getElementById('os-ua-ch-label');
   const osUaLabel = document.getElementById('os-ua-label');
   const browserUaChLabel = document.getElementById('browser-ua-ch-label');
   const browserUaLabel = document.getElementById('browser-ua-label');
-
   const sectionTitles = {
     os: document.getElementById('cat-os'),
     browser: document.getElementById('cat-browser'),
@@ -170,6 +169,15 @@
     return dict[currentLang].unknown;
   }
 
+  function getGPUName() {
+    const canvas = document.createElement('canvas');
+    const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+    if (!gl) return dict[currentLang].unknown;
+    const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+    if (debugInfo) return gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) || dict[currentLang].unknown;
+    return dict[currentLang].unknown;
+  }
+
   function createRow(label,value){
     const row=document.createElement('tr');
     row.innerHTML=`<th scope="row">${label}</th><td>${value||dict[currentLang].unknown}</td>`;
@@ -204,7 +212,8 @@
 
     const cpuCores = typeof navigator.hardwareConcurrency==="number"?navigator.hardwareConcurrency:lang.unknown;
     const memory = typeof navigator.deviceMemory==="number"?`${Math.min(navigator.deviceMemory,8)} GB`:lang.unknown;
-    [[lang.cpu,cpuCores],[lang.cpuName,getCpuNameByUA()],[lang.memory,memory]].forEach(([l,v])=>tables.cpu.appendChild(createRow(l,v)));
+    const gpuName = getGPUName();
+    [[lang.cpu,cpuCores],[lang.cpuName,getCpuNameByUA()],[lang.memory,memory],[lang.gpu,gpuName]].forEach(([l,v])=>tables.cpu.appendChild(createRow(l,v)));
 
     const {ipv4,ipv6,currentIP} = await fetchIPData();
     const onlineStatus = navigator.onLine?lang.online_yes:lang.online_no;
