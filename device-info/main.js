@@ -1,4 +1,5 @@
 (function() {
+
   const dict = {
     ja: {
       title: "デバイス情報",
@@ -20,12 +21,12 @@
       cpu: `<span class="selectable">CPUコア数</span>`,
       cpuName: `<span class="selectable">CPU名</span>`,
       memory: `<span class="selectable">メモリ：最大 8GBまで</span>`,
+      gpu: `<span class="selectable">GPU名</span>`,
       ipv4: `<span class="selectable">IPv4アドレス</span>`,
       ipv6: `<span class="selectable">IPv6アドレス</span>`,
       ip: `<span class="selectable">現在使用IP</span>`,
       online: `<span class="selectable">オンライン状態</span>`,
       language: `<span class="selectable">ブラウザ言語</span>`,
-      cookiesEnabled: `<span class="selectable">クッキー有効</span>`,
       fetchedAt: `<span class="selectable">取得時刻</span>`,
       now: `<span class="selectable">現在時刻</span>`,
       timezone: `<span class="selectable">タイムゾーン</span>`,
@@ -37,11 +38,13 @@
       footer: {
         copyright: "© 2025 device-info",
         warning: "表示される情報は一部、正確でない可能性があります。",
-        library: `使用ライブラリ: 
+        library: `
+          使用ライブラリ: 
           <a href="https://www.ipify.org/" target="_blank" rel="noopener noreferrer">ipify API</a>,
           <a href="https://developer.mozilla.org/ja/docs/Web/API/Device_Memory_API" target="_blank" rel="noopener noreferrer">Device Memory API</a>,
           <a href="https://developer.mozilla.org/ja/docs/Web/API" target="_blank" rel="noopener noreferrer">Web API</a>,
-          <a href="https://wicg.github.io/ua-client-hints/" target="_blank" rel="noopener noreferrer">UA Client Hints</a>`
+          <a href="https://wicg.github.io/ua-client-hints/" target="_blank" rel="noopener noreferrer">UA Client Hints</a>
+        `
       }
     },
     en: {
@@ -64,12 +67,12 @@
       cpu: `<span class="selectable">CPU Cores</span>`,
       cpuName: `<span class="selectable">CPU Name</span>`,
       memory: `<span class="selectable">Memory: Max 8GB</span>`,
+      gpu: `<span class="selectable">GPU Name</span>`,
       ipv4: `<span class="selectable">IPv4 Address</span>`,
       ipv6: `<span class="selectable">IPv6 Address</span>`,
       ip: `<span class="selectable">Current IP</span>`,
       online: `<span class="selectable">Online Status</span>`,
       language: `<span class="selectable">Browser Language</span>`,
-      cookiesEnabled: `<span class="selectable">Cookies Enabled</span>`,
       fetchedAt: `<span class="selectable">Fetched At</span>`,
       now: `<span class="selectable">Current Time</span>`,
       timezone: `<span class="selectable">Timezone</span>`,
@@ -81,11 +84,13 @@
       footer: {
         copyright: "© 2025 device-info",
         warning: "Displayed information may not be accurate.",
-        library: `Libraries used: 
+        library: `
+          Libraries used: 
           <a href="https://www.ipify.org/" target="_blank" rel="noopener noreferrer">ipify API</a>,
           <a href="https://developer.mozilla.org/en-US/docs/Web/API/Device_Memory_API" target="_blank" rel="noopener noreferrer">Device Memory API</a>,
           <a href="https://developer.mozilla.org/en-US/docs/Web/API" target="_blank" rel="noopener noreferrer">Web API</a>,
-          <a href="https://wicg.github.io/ua-client-hints/" target="_blank" rel="noopener noreferrer">UA Client Hints</a>`
+          <a href="https://wicg.github.io/ua-client-hints/" target="_blank" rel="noopener noreferrer">UA Client Hints</a>
+        `
       }
     }
   };
@@ -95,10 +100,10 @@
   const btnEn = document.getElementById('btn-en');
   const btnLight = document.getElementById('btn-light');
   const btnDark = document.getElementById('btn-dark');
-  const favicon = document.getElementById('favicon');
   const footerCopyright = document.getElementById('footer-copyright');
   const footerWarning = document.getElementById('footer-warning');
   const footerLibrary = document.getElementById('footer-library');
+
   const tables = {
     os_ua_ch: document.getElementById('table-os-ua-ch'),
     os_ua: document.getElementById('table-os-ua'),
@@ -109,10 +114,12 @@
     network: document.getElementById('table-network'),
     other: document.getElementById('table-other')
   };
+
   const osUaChLabel = document.getElementById('os-ua-ch-label');
   const osUaLabel = document.getElementById('os-ua-label');
   const browserUaChLabel = document.getElementById('browser-ua-ch-label');
   const browserUaLabel = document.getElementById('browser-ua-label');
+
   const sectionTitles = {
     os: document.getElementById('cat-os'),
     browser: document.getElementById('cat-browser'),
@@ -142,14 +149,24 @@
     return result;
   }
 
+  function detectLinuxDistro(ua) {
+    ua = ua.toLowerCase();
+    if (/ubuntu/.test(ua)) return "Ubuntu";
+    if (/fedora/.test(ua)) return "Fedora";
+    if (/debian/.test(ua)) return "Debian";
+    if (/arch/.test(ua)) return "Arch Linux";
+    if (/manjaro/.test(ua)) return "Manjaro";
+    return "Linux";
+  }
+
   function getOsBrowserByUA() {
     const ua = navigator.userAgent;
     let os = dict[currentLang].unknown, version = dict[currentLang].unknown, device = dict[currentLang].unknown;
     if (/Android/.test(ua)) { os="Android"; version=(ua.match(/Android\s+([\d.]+)/)||[])[1]||version; device=(ua.match(/;\s?([^;\/]+)\s+Build/i)||[])[1]||device; }
     else if (/iPhone|iPad|iPod/.test(ua)) { version=(ua.match(/OS (\d+)[_.](\d+)/)||[])[1]||version; device=/iPhone/.test(ua)?"iPhone":"iPad"; os=device==="iPhone"?"iOS":"iPadOS"; }
-    else if (/Windows NT/.test(ua)) { const ver=(ua.match(/Windows NT ([\d.]+)/)||[])[1]; const map={"10.0":"10 / 11","6.3":"8.1","6.2":"8","6.1":"7","6.0":"Vista","5.1":"XP"}; os="Windows"; version=map[ver]||ver||version; device="PC"; }
     else if (/Mac OS X/.test(ua)) { os="macOS"; version=(ua.match(/Mac OS X (\d+[_\.]\d+)/)||[])[1]?.replace(/_/g,".")||version; device="Mac"; }
-    else if (/Linux/.test(navigator.platform)) { os="Linux"; device=currentLang==="ja"?"Linux端末":"Linux device"; }
+    else if (/Windows NT/.test(ua)) { const ver=(ua.match(/Windows NT ([\d.]+)/)||[])[1]; const map={"10.0":"10 / 11","6.3":"8.1","6.2":"8","6.1":"7","6.0":"Vista","5.1":"XP"}; os="Windows"; version=map[ver]||ver||version; device="PC"; }
+    else if (/Linux/.test(navigator.platform)) { os = detectLinuxDistro(ua); device=currentLang==="ja"?"Linux端末":"Linux device"; }
     let browser=dict[currentLang].unknown,bver=dict[currentLang].unknown;
     if (/Edg\//.test(ua)) browser="Microsoft Edge", bver=(ua.match(/Edg\/([\d\.]+)/)||[])[1]||bver;
     else if (/OPR\//.test(ua)) browser="Opera", bver=(ua.match(/OPR\/([\d\.]+)/)||[])[1]||bver;
@@ -169,6 +186,16 @@
     return dict[currentLang].unknown;
   }
 
+  function getGPUInfo() {
+    try {
+      const canvas = document.createElement('canvas');
+      const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+      if (!gl) return dict[currentLang].unknown;
+      const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+      return debugInfo ? gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) : dict[currentLang].unknown;
+    } catch { return dict[currentLang].unknown; }
+  }
+
   function createRow(label,value){
     const row=document.createElement('tr');
     row.innerHTML=`<th scope="row">${label}</th><td>${value||dict[currentLang].unknown}</td>`;
@@ -179,38 +206,30 @@
     const ipv4 = await fetch('https://api.ipify.org?format=json').then(res=>res.json()).then(d=>d.ip||dict[currentLang].unknown).catch(()=>dict[currentLang].unknown);
     const ipv6 = await fetch('https://api64.ipify.org?format=json').then(res=>res.json()).then(d=>d.ip||dict[currentLang].unknown).catch(()=>dict[currentLang].unknown);
     const currentIP = (ipv6 && ipv6!==dict[currentLang].unknown)?ipv6:ipv4;
-    return { ipv4, ipv6, currentIP };
+    return { ipv4,ipv6,currentIP };
   }
 
   async function updateInfo() {
     const lang = dict[currentLang];
     Object.values(tables).forEach(tbl=>tbl.innerHTML='');
     const [osch, osua] = await Promise.all([getOsBrowserByUACh(), getOsBrowserByUA()]);
-
     osUaChLabel.innerHTML = lang.os_ch;
     [[lang.os,osch.os||lang.unknown],[lang.version,osch.version||lang.unknown],[lang.device,osch.device||lang.unknown]].forEach(([l,v])=>tables.os_ua_ch.appendChild(createRow(l,v)));
-
     osUaLabel.innerHTML = lang.os_ua;
     [[lang.os,osua.os],[lang.version,osua.version],[lang.device,osua.device]].forEach(([l,v])=>tables.os_ua.appendChild(createRow(l,v)));
-
     browserUaChLabel.innerHTML = lang.browser_ch;
     [[lang.browser,osch.browser||lang.unknown],[lang.browserVersion,osch.browserVersion||lang.unknown]].forEach(([l,v])=>tables.browser_ua_ch.appendChild(createRow(l,v)));
-
     browserUaLabel.innerHTML = lang.browser_ua;
     [[lang.browser,osua.browser],[lang.browserVersion,osua.browserVersion]].forEach(([l,v])=>tables.browser_ua.appendChild(createRow(l,v)));
-
     [[lang.screen,`${screen.width} x ${screen.height}`],[lang.viewport,`${window.innerWidth} x ${window.innerHeight}`],[lang.colorDepth,screen.colorDepth],[lang.pixelDepth,screen.pixelDepth]].forEach(([l,v])=>tables.screen.appendChild(createRow(l,v)));
-
     const cpuCores = typeof navigator.hardwareConcurrency==="number"?navigator.hardwareConcurrency:lang.unknown;
     const memory = typeof navigator.deviceMemory==="number"?`${Math.min(navigator.deviceMemory,8)} GB`:lang.unknown;
-    [[lang.cpu,cpuCores],[lang.cpuName,getCpuNameByUA()],[lang.memory,memory]].forEach(([l,v])=>tables.cpu.appendChild(createRow(l,v)));
-
+    const gpu = getGPUInfo();
+    [[lang.cpu,cpuCores],[lang.cpuName,getCpuNameByUA()],[lang.memory,memory],[lang.gpu,gpu]].forEach(([l,v])=>tables.cpu.appendChild(createRow(l,v)));
     const {ipv4,ipv6,currentIP} = await fetchIPData();
     const onlineStatus = navigator.onLine?lang.online_yes:lang.online_no;
     [[lang.ipv4,ipv4],[lang.ipv6,ipv6],[lang.ip,currentIP],[lang.online,onlineStatus]].forEach(([l,v])=>tables.network.appendChild(createRow(l,v)));
-
-    [[lang.language,navigator.language||lang.unknown],[lang.cookiesEnabled,navigator.cookieEnabled?lang.online_yes:lang.online_no],[lang.fetchedAt,new Date().toLocaleString()],[lang.now,''],[lang.timezone,Intl.DateTimeFormat().resolvedOptions().timeZone||lang.unknown]].forEach(([l,v])=>tables.other.appendChild(createRow(l,v)));
-
+    [[lang.language,navigator.language||lang.unknown],[lang.fetchedAt,new Date().toLocaleString()],[lang.now,''],[lang.timezone,Intl.DateTimeFormat().resolvedOptions().timeZone||lang.unknown]].forEach(([l,v])=>tables.other.appendChild(createRow(l,v)));
     footerWarning.innerHTML = lang.footer.warning;
     footerLibrary.innerHTML = lang.footer.library;
   }
@@ -228,31 +247,23 @@
     Object.entries(dict[lang].category).forEach(([key,label])=>{ if(sectionTitles[key]) sectionTitles[key].textContent=label; });
     btnJa.classList.toggle('active',lang==='ja');
     btnEn.classList.toggle('active',lang==='en');
-    btnJa.setAttribute('aria-pressed',lang==='ja');
-    btnEn.setAttribute('aria-pressed',lang==='en');
-    btnLight.textContent=dict[lang].light+" / Light";
-    btnDark.textContent=dict[lang].dark+" / Dark";
-    document.body.setAttribute("lang",lang);
     updateInfo();
   }
 
-  function setMode(isDark){
-    darkMode=isDark;
-    localStorage.setItem("mode",isDark?"dark":"light");
-    document.body.classList.toggle('light',!darkMode);
-    btnLight.classList.toggle('active',!darkMode);
-    btnDark.classList.toggle('active',darkMode);
-    btnLight.setAttribute('aria-pressed',!darkMode);
-    btnDark.setAttribute('aria-pressed',darkMode);
-    favicon.href=isDark?'icon-dark.png':'icon-light.png';
+  function setMode(mode){
+    darkMode=(mode==='dark');
+    localStorage.setItem("mode",mode);
+    document.documentElement.setAttribute('data-theme',mode);
+    btnDark.classList.toggle('active',mode==='dark');
+    btnLight.classList.toggle('active',mode==='light');
   }
 
-  btnJa.addEventListener('click',()=>{ setLang('ja'); });
-  btnEn.addEventListener('click',()=>{ setLang('en'); });
-  btnLight.addEventListener('click',()=>setMode(false));
-  btnDark.addEventListener('click',()=>setMode(true));
+  btnJa.addEventListener('click',()=>setLang('ja'));
+  btnEn.addEventListener('click',()=>setLang('en'));
+  btnLight.addEventListener('click',()=>setMode('light'));
+  btnDark.addEventListener('click',()=>setMode('dark'));
 
-  setMode(darkMode);
+  setMode(darkMode?'dark':'light');
   setLang(currentLang);
   setInterval(updateCurrentTime,1000);
 
@@ -277,4 +288,5 @@
       }
     }
   })();
+
 })();
