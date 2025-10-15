@@ -1,5 +1,4 @@
 :root {
-  /* カラーセット：モダンフラット、落ち着いたブルー系 */
   --bg-dark: #0f172a;
   --bg-light: #f5f7fa;
   --text-dark: #e0e7ff;
@@ -64,9 +63,12 @@ h1 {
   margin-bottom: 1.5rem;
   flex-wrap: wrap;
   justify-content: center;
+  width: 100%;
+  max-width: 400px;
 }
 
 .controls button {
+  flex: 1 1 auto;
   font-family: var(--font-mono);
   padding: 0.5rem 1rem;
   border: 2px solid var(--accent-dark);
@@ -90,6 +92,13 @@ body.light .controls button {
 
 body.light .controls button.active {
   background: var(--accent-light);
+}
+
+@media (max-width: 480px) {
+  .controls button {
+    flex: 1 1 45%;
+    text-align: center;
+  }
 }
 
 section {
