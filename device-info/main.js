@@ -186,8 +186,8 @@
 
   async function fetchIPData() {
     const ipv4 = await fetch('https://api.ipify.org?format=json').then(res=>res.json()).then(d=>d.ip||dict[currentLang].unknown).catch(()=>dict[currentLang].unknown);
-    const ipv6 = await fetch('https://api64.ipify.org?format=json').then(res=>res.json()).then(d=>d.ip||dict[currentLang].unknown).catch(()=>dict[currentLang].unknown);
-    const currentIP = (ipv6 && ipv6!==dict[currentLang].unknown)?ipv6:ipv4;
+    const ipv6 = await fetch('https://api6.ipify.org/?format=json').then(res=>res.json()).then(d=>d.ip||dict[currentLang].unknown).catch(()=>dict[currentLang].unknown);
+    const currentIP = await fetch('https://api64.ipify.org?format=json').then(res=>res.json()).then(d=>d.ip||dict[currentLang].unknown).catch(()=>dict[currentLang].unknown);
     return { ipv4, ipv6, currentIP };
   }
 
@@ -217,7 +217,12 @@
 
     const {ipv4,ipv6,currentIP} = await fetchIPData();
     const onlineStatus = navigator.onLine?lang.online_yes:lang.online_no;
-    [[lang.ipv4,ipv4],[lang.ipv6,ipv6],[lang.ip,currentIP],[lang.online,onlineStatus]].forEach(([l,v])=>tables.network.appendChild(createRow(l,v)));
+    [[lang.ipv4, ipv4],[lang.ipv6, ipv6],[lang.ip, currentIP]].forEach(([label, ip]) => {
+      const row = document.createElement('tr');
+      row.innerHTML = `<th scope="row">${label}</th><td>${ip||lang.unknown}</td><td></td>`;
+      tables.network.appendChild(row);
+    });
+    tables.network.appendChild(createRow(lang.online, onlineStatus));
 
     [[lang.language,navigator.language||lang.unknown],[lang.fetchedAt,new Date().toLocaleString()],[lang.now,''],[lang.timezone,Intl.DateTimeFormat().resolvedOptions().timeZone||lang.unknown]].forEach(([l,v])=>tables.other.appendChild(createRow(l,v)));
 
