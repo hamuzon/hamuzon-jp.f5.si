@@ -3,9 +3,7 @@ const timezonesContainer = document.getElementById("timezones");
 const errorMessage = document.getElementById("error-message");
 
 const clocksToUpdate = [];
-
-let baseUtcDate = null;
-let basePerformanceTime = null;
+let baseUtcTime = null;
 
 const allTimezones = Intl.supportedValuesOf("timeZone");
 allTimezones.forEach(tz => {
@@ -28,13 +26,12 @@ async function syncTimeFromInternet() {
       if (!res.ok) throw new Error("Fetch failed");
       const data = await res.json();
       if (data.utc_datetime) {
-        baseUtcDate = new Date(data.utc_datetime);
+        baseUtcTime = new Date(data.utc_datetime).getTime();
       } else if (data.dateTime) {
-        baseUtcDate = new Date(data.dateTime);
+        baseUtcTime = new Date(data.dateTime).getTime();
       } else {
         throw new Error("Unknown API response format");
       }
-      basePerformanceTime = performance.now();
       errorMessage.textContent = "";
       success = true;
       break;
@@ -43,8 +40,7 @@ async function syncTimeFromInternet() {
     }
   }
   if (!success) {
-    baseUtcDate = new Date();
-    basePerformanceTime = performance.now();
+    baseUtcTime = Date.now();
     errorMessage.textContent = "※ インターネット時間取得に失敗。端末時間を使用します。";
   }
 }
@@ -55,11 +51,7 @@ function addTimezone() {
   const container = document.createElement("div");
   container.className = "timezone";
   container.id = uniqueId;
-  container.innerHTML = `
-    <div class="label">${tz}</div>
-    <div class="time" id="${uniqueId}-time">--:--:--</div>
-    <button class="remove-button">×</button>
-  `;
+  container.innerHTML = `<div class="label">${tz}</div><div class="time" id="${uniqueId}-time">--:--:--</div><button class="remove-button">×</button>`;
   container.querySelector(".remove-button").addEventListener("click", () => {
     removeTimezone(uniqueId);
   });
@@ -75,9 +67,8 @@ function removeTimezone(id) {
 }
 
 function updateClocks() {
-  if (!baseUtcDate || basePerformanceTime === null) return;
-  const elapsed = performance.now() - basePerformanceTime;
-  const nowUtc = new Date(baseUtcDate.getTime() + elapsed);
+  if (baseUtcTime === null) return;
+  const nowUtc = new Date(Date.now());
   clocksToUpdate.forEach(clock => {
     const formatter = new Intl.DateTimeFormat("ja-JP", {
       timeZone: clock.tz,
