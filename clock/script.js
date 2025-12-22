@@ -15,58 +15,69 @@ allTimezones.forEach(tz => {
   timezoneSelect.appendChild(option);
 });
 
+const timeSources = [
+  "https://worldtimeapi.org/api/timezone/Etc/UTC",
+  "https://timeapi.io/api/Time/current/zone?timeZone=UTC"
+];
+
 async function syncTimeFromInternet() {
-  try {
-    const res = await fetch("https://worldtimeapi.org/api/timezone/Etc/UTC");
-    if (!res.ok) throw new Error("Fetch failed");
-    const data = await res.json();
-    baseUtcDate = new Date(data.utc_datetime);
-    basePerformanceTime = performance.now();
-    errorMessage.textContent = "";
-  } catch (e) {
+  let success = false;
+  for (const url of timeSources) {
+    try {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error("Fetch failed");
+      const data = await res.json();
+      if (data.utc_datetime) {
+        baseUtcDate = new Date(data.utc_datetime);
+      } else if (data.dateTime) {
+        baseUtcDate = new Date(data.dateTime);
+      } else {
+        throw new Error("Unknown API response format");
+      }
+      basePerformanceTime = performance.now();
+      errorMessage.textContent = "";
+      success = true;
+      break;
+    } catch (e) {
+      console.warn(`Time sync failed from ${url}`, e);
+    }
+  }
+  if (!success) {
     baseUtcDate = new Date();
     basePerformanceTime = performance.now();
-    errorMessage.textContent = "※ インターネットからの時間取得に失敗しました。端末の時間を使用します。";
+    errorMessage.textContent = "※ インターネット時間取得に失敗。端末時間を使用します。";
   }
 }
 
 function addTimezone() {
   const tz = timezoneSelect.value;
   const uniqueId = "tz_" + tz.replace(/[^a-zA-Z0-9]/g, "_") + "_" + Date.now();
-
   const container = document.createElement("div");
   container.className = "timezone";
   container.id = uniqueId;
-
   container.innerHTML = `
     <div class="label">${tz}</div>
     <div class="time" id="${uniqueId}-time">--:--:--</div>
-    <button class="remove-button" aria-label="削除 ${tz}" title="削除 ${tz}">×</button>
+    <button class="remove-button">×</button>
   `;
-
   container.querySelector(".remove-button").addEventListener("click", () => {
     removeTimezone(uniqueId);
   });
-
   timezonesContainer.appendChild(container);
-
   clocksToUpdate.push({ id: uniqueId + "-time", tz: tz });
 }
 
 function removeTimezone(id) {
   const idx = clocksToUpdate.findIndex(obj => obj.id === id + "-time");
   if (idx !== -1) clocksToUpdate.splice(idx, 1);
-
   const el = document.getElementById(id);
   if (el) el.remove();
 }
 
 function updateClocks() {
   if (!baseUtcDate || basePerformanceTime === null) return;
-
   const elapsed = performance.now() - basePerformanceTime;
   const nowUtc = new Date(baseUtcDate.getTime() + elapsed);
-
   clocksToUpdate.forEach(clock => {
     const formatter = new Intl.DateTimeFormat("ja-JP", {
       timeZone: clock.tz,
