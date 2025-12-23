@@ -26,7 +26,7 @@ async function syncTimeFromInternet() {
       const res = await fetch(url);
       if (!res.ok) throw new Error();
       const data = await res.json();
-      
+
       let serverTime;
       if (data.utc_datetime) {
         serverTime = new Date(data.utc_datetime).getTime();
@@ -55,7 +55,7 @@ async function syncTimeFromInternet() {
 function addTimezone() {
   const tz = timezoneSelect.value;
   const uniqueId = "tz_" + tz.replace(/[^a-zA-Z0-9]/g, "_") + "_" + Date.now();
-  
+
   const container = document.createElement("div");
   container.className = "timezone-item";
   container.id = uniqueId;
@@ -64,11 +64,11 @@ function addTimezone() {
     <div class="time" id="${uniqueId}-time">--:--:--</div>
     <button class="remove-button">×</button>
   `;
-  
+
   container.querySelector(".remove-button").addEventListener("click", () => {
     removeTimezone(uniqueId);
   });
-  
+
   timezonesContainer.appendChild(container);
   clocksToUpdate.push({ id: uniqueId + "-time", tz: tz });
 }
