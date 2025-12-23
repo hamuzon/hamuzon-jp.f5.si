@@ -16,15 +16,14 @@ allTimezones.forEach(tz => {
 const timeSources = [
   "https://worldtimeapi.org/api/timezone/Etc/UTC",
   "https://timeapi.io/api/Time/current/zone?timeZone=UTC",
-  "https://nowapi.vercel.app/api/now",
-  "https://timezoneapi.io/api/timezone/?Asia/Tokyo&token=ahXpUfXGZpWf"
+  "https://nowapi.vercel.app/api/now"
 ];
 
 async function syncTimeFromInternet() {
   let success = false;
   for (const url of timeSources) {
     try {
-      const res = await fetch(url, { signal: AbortSignal.timeout(3000) });
+      const res = await fetch(url);
       if (!res.ok) throw new Error();
       const data = await res.json();
       
@@ -35,9 +34,6 @@ async function syncTimeFromInternet() {
         serverTime = new Date(data.dateTime).getTime();
       } else if (data.dateString) {
         serverTime = new Date(data.dateString).getTime();
-      } else if (data.data && data.data.datetime) {
-        const d = data.data.datetime;
-        serverTime = new Date(`${d.date_time_ymd}Z`).getTime();
       } else {
         throw new Error();
       }
@@ -59,17 +55,20 @@ async function syncTimeFromInternet() {
 function addTimezone() {
   const tz = timezoneSelect.value;
   const uniqueId = "tz_" + tz.replace(/[^a-zA-Z0-9]/g, "_") + "_" + Date.now();
+  
   const container = document.createElement("div");
-  container.className = "timezone";
+  container.className = "timezone-item";
   container.id = uniqueId;
   container.innerHTML = `
     <div class="label">${tz}</div>
     <div class="time" id="${uniqueId}-time">--:--:--</div>
     <button class="remove-button">×</button>
   `;
+  
   container.querySelector(".remove-button").addEventListener("click", () => {
     removeTimezone(uniqueId);
   });
+  
   timezonesContainer.appendChild(container);
   clocksToUpdate.push({ id: uniqueId + "-time", tz: tz });
 }
