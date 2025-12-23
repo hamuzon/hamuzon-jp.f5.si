@@ -3,7 +3,7 @@ const timezonesContainer = document.getElementById("timezones");
 const errorMessage = document.getElementById("error-message");
 
 const clocksToUpdate = [];
-let baseUtcTime = null;
+let timeOffset = 0;
 
 const allTimezones = Intl.supportedValuesOf("timeZone");
 allTimezones.forEach(tz => {
@@ -15,32 +15,43 @@ allTimezones.forEach(tz => {
 
 const timeSources = [
   "https://worldtimeapi.org/api/timezone/Etc/UTC",
-  "https://timeapi.io/api/Time/current/zone?timeZone=UTC"
+  "https://timeapi.io/api/Time/current/zone?timeZone=UTC",
+  "https://nowapi.vercel.app/api/now",
+  "https://timezoneapi.io/api/timezone/?Asia/Tokyo&token=ahXpUfXGZpWf"
 ];
 
 async function syncTimeFromInternet() {
   let success = false;
   for (const url of timeSources) {
     try {
-      const res = await fetch(url);
-      if (!res.ok) throw new Error("Fetch failed");
+      const res = await fetch(url, { signal: AbortSignal.timeout(3000) });
+      if (!res.ok) throw new Error();
       const data = await res.json();
+      
+      let serverTime;
       if (data.utc_datetime) {
-        baseUtcTime = new Date(data.utc_datetime).getTime();
+        serverTime = new Date(data.utc_datetime).getTime();
       } else if (data.dateTime) {
-        baseUtcTime = new Date(data.dateTime).getTime();
+        serverTime = new Date(data.dateTime).getTime();
+      } else if (data.dateString) {
+        serverTime = new Date(data.dateString).getTime();
+      } else if (data.data && data.data.datetime) {
+        const d = data.data.datetime;
+        serverTime = new Date(`${d.date_time_ymd}Z`).getTime();
       } else {
-        throw new Error("Unknown API response format");
+        throw new Error();
       }
+
+      timeOffset = serverTime - Date.now();
       errorMessage.textContent = "";
       success = true;
       break;
     } catch (e) {
-      console.warn(`Time sync failed from ${url}`, e);
+      console.warn(`Failed: ${url}`);
     }
   }
   if (!success) {
-    baseUtcTime = Date.now();
+    timeOffset = 0;
     errorMessage.textContent = "※ インターネット時間取得に失敗。端末時間を使用します。";
   }
 }
@@ -51,7 +62,11 @@ function addTimezone() {
   const container = document.createElement("div");
   container.className = "timezone";
   container.id = uniqueId;
-  container.innerHTML = `<div class="label">${tz}</div><div class="time" id="${uniqueId}-time">--:--:--</div><button class="remove-button">×</button>`;
+  container.innerHTML = `
+    <div class="label">${tz}</div>
+    <div class="time" id="${uniqueId}-time">--:--:--</div>
+    <button class="remove-button">×</button>
+  `;
   container.querySelector(".remove-button").addEventListener("click", () => {
     removeTimezone(uniqueId);
   });
@@ -67,8 +82,7 @@ function removeTimezone(id) {
 }
 
 function updateClocks() {
-  if (baseUtcTime === null) return;
-  const nowUtc = new Date(Date.now());
+  const correctedNow = new Date(Date.now() + timeOffset);
   clocksToUpdate.forEach(clock => {
     const formatter = new Intl.DateTimeFormat("ja-JP", {
       timeZone: clock.tz,
@@ -77,9 +91,8 @@ function updateClocks() {
       minute: "2-digit",
       second: "2-digit"
     });
-    const formattedTime = formatter.format(nowUtc);
     const el = document.getElementById(clock.id);
-    if (el) el.textContent = formattedTime;
+    if (el) el.textContent = formatter.format(correctedNow);
   });
 }
 
