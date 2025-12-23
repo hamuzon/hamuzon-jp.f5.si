@@ -64,7 +64,8 @@ button:hover {
   justify-content: center;
 }
 
-.timezone {
+/* JSのクラス名に合わせて .timezone-item に修正 */
+.timezone-item {
   background: #ffffff;
   padding: 1rem;
   border-radius: 16px;
