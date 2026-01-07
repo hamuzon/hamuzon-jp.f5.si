@@ -1,218 +1,247 @@
 :root {
-  --bg-dark: #0f172a;
-  --bg-light: #f5f7fa;
-  --text-dark: #e0e7ff;
-  --text-light: #1f2937;
-  --accent-dark: #3b82f6;
-  --accent-light: #2563eb;
-  --border-dark: #334155;
-  --border-light: #cbd5e1;
-  --font-mono: 'Fira Code', monospace;
-  --radius: 12px;
-  --transition: 0.3s;
+    --bg-dark: #0f172a;
+    --bg-light: #f5f7fa;
+    --text-dark: #e0e7ff;
+    --text-light: #1f2937;
+    --accent-dark: #3b82f6;
+    --accent-light: #2563eb;
+    --border-dark: #334155;
+    --border-light: #cbd5e1;
+    --font-mono: 'Fira Code', monospace;
+    --radius: 12px;
+    --transition: 0.3s;
 }
 
 body {
-  margin: 0;
-  font-family: var(--font-mono);
-  background-color: var(--bg-dark);
-  color: var(--text-dark);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 1rem;
-  transition: background var(--transition), color var(--transition);
-  text-align: center;
+    margin: 0;
+    font-family: var(--font-mono);
+    background-color: var(--bg-dark);
+    color: var(--text-dark);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    text-align: center;
+    transition: background var(--transition), color var(--transition);
 }
 
 body.light {
-  background-color: var(--bg-light);
-  color: var(--text-light);
-}
-
-header {
-  width: 100%;
-  max-width: 900px;
-  margin: 1rem auto 1.5rem;
-  padding: 0.6rem 1rem;
-  font-size: 0.9rem;
-  line-height: 1.4;
-  font-weight: 600;
-  border-radius: var(--radius);
-  background: rgba(59, 130, 246, 0.15);
-  color: var(--accent-dark);
-  user-select: none;
-  transition: background var(--transition), color var(--transition);
-}
-
-body.light header {
-  background: rgba(37, 99, 235, 0.15);
-  color: var(--accent-light);
+    background-color: var(--bg-light);
+    color: var(--text-light);
 }
 
 h1 {
-  margin: 0 0 1rem;
-  font-size: 2rem;
-  user-select: none;
+    margin: 0 0 1rem;
+    font-size: 2rem;
+    user-select: none;
+}
+
+header {
+    width: 100%;
+    max-width: 900px;
+    margin: 1rem auto 1.5rem;
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    font-weight: 600;
+    border-radius: var(--radius);
+    background: rgba(59, 130, 246, 0.15);
+    color: var(--accent-dark);
+    user-select: none;
+    transition: background var(--transition), color var(--transition);
+}
+
+body.light header {
+    background: rgba(37, 99, 235, 0.15);
+    color: var(--accent-light);
 }
 
 .controls {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 1.5rem;
-  flex-wrap: nowrap;
-  width: 100%;
-  max-width: 800px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    width: 100%;
+    max-width: 800px;
 }
 
 .controls button {
-  font-family: var(--font-mono);
-  padding: 0.5rem 1rem;
-  border: 2px solid var(--accent-dark);
-  background: transparent;
-  color: var(--text-dark);
-  cursor: pointer;
-  border-radius: var(--radius);
-  transition: var(--transition);
-  user-select: none;
-  flex: 0 1 auto;
+    font-family: var(--font-mono);
+    padding: 0.5rem 1rem;
+    border: 2px solid var(--accent-dark);
+    background: transparent;
+    color: var(--text-dark);
+    cursor: pointer;
+    border-radius: var(--radius);
+    transition: var(--transition);
+    user-select: none;
+    flex: 0 1 auto;
 }
 
 body.light .controls button {
-  border-color: var(--accent-light);
-  color: var(--text-light);
+    border-color: var(--accent-light);
+    color: var(--text-light);
 }
 
 .controls button.active {
-  background: var(--accent-dark);
-  color: #fff;
+    background: var(--accent-dark);
+    color: #fff;
 }
 
 body.light .controls button.active {
-  background: var(--accent-light);
-}
-
-@media (max-width: 600px) {
-  .controls {
-    flex-wrap: wrap;
-  }
-  .controls button {
-    flex: 1 1 45%;
-    text-align: center;
-  }
+    background: var(--accent-light);
 }
 
 section {
-  width: 100%;
-  max-width: 900px;
-  margin-bottom: 2rem;
-  border-radius: var(--radius);
-  background: rgba(255, 255, 255, 0.05);
-  padding: 1rem;
-  overflow-x: auto;
-  transition: background var(--transition);
-  text-align: left;
+    width: 100%;
+    max-width: 900px;
+    margin-bottom: 2rem;
+    border-radius: var(--radius);
+    background: rgba(255, 255, 255, 0.05);
+    padding: 1rem;
+    overflow-x: auto;
+    transition: background var(--transition);
+    text-align: left;
 }
 
 body.light section {
-  background: #fff;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    background: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 }
 
 section h2 {
-  margin-top: 0;
-  margin-bottom: 0.5rem;
-  font-weight: 700;
-  user-select: none;
-  text-align: center;
+    margin: 0 0 0.5rem 0;
+    font-weight: 700;
+    user-select: none;
+    text-align: center;
 }
 
 table {
-  width: 100%;
-  border-collapse: collapse;
-  table-layout: fixed;
-  min-width: 300px;
-  margin: 0 auto;
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    min-width: 300px;
+    margin: 0 auto;
 }
 
-th, td {
-  padding: 0.6rem 0.8rem;
-  border-bottom: 1px solid var(--border-dark);
-  text-align: left;
-  word-break: break-word;
-  vertical-align: top;
-  transition: border-color var(--transition);
+th,
+td {
+    padding: 0.6rem 0.8rem;
+    border-bottom: 1px solid var(--border-dark);
+    text-align: left;
+    word-break: break-word;
+    vertical-align: top;
+    transition: border-color var(--transition);
 }
 
-body.light th, body.light td {
-  border-color: var(--border-light);
+body.light th,
+body.light td {
+    border-color: var(--border-light);
 }
 
 th {
-  font-weight: 600;
-  width: 40%;
-  color: var(--accent-dark);
-  user-select: none;
+    font-weight: 600;
+    width: 40%;
+    color: var(--accent-dark);
+    user-select: none;
 }
 
 body.light th {
-  color: var(--accent-light);
+    color: var(--accent-light);
 }
 
 tr {
-  animation: fadeIn 0.4s ease-in-out;
+    animation: fadeIn 0.4s ease-in-out;
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-footer {
-  font-size: 0.85rem;
-  text-align: center;
-  margin-top: auto;
-  padding-top: 1rem;
-  user-select: none;
-  color: var(--text-dark);
-  transition: color var(--transition);
-}
-
-body.light footer {
-  color: var(--text-light);
-}
-
-footer a {
-  color: inherit;
-  text-decoration: underline;
-}
-
-footer a:hover {
-  text-decoration: none;
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .subhead {
-  font-size: 0.95em;
-  color: #9ca3af;
-  margin-bottom: 0.3em;
-  user-select: none;
-  text-align: center;
+    font-size: 0.95em;
+    color: #9ca3af;
+    margin-bottom: 0.3em;
+    user-select: none;
+    text-align: center;
+}
+
+footer {
+    font-size: 0.85rem;
+    text-align: center;
+    margin-top: auto;
+    padding-top: 1rem;
+    color: var(--text-dark);
+    transition: color var(--transition);
+    user-select: none;
+}
+
+body.light footer {
+    color: var(--text-light);
+}
+
+footer a {
+    color: inherit;
+    text-decoration: underline;
+}
+
+footer a:hover {
+    text-decoration: none;
 }
 
 @media (max-width: 768px) {
-  section { padding: 0.8rem; }
-  th, td { padding: 0.5rem 0.6rem; }
-  h1 { font-size: 1.8rem; }
-  .controls button { font-size: 0.9rem; padding: 0.4rem 0.8rem; }
+    section {
+        padding: 0.8rem;
+    }
+    th,
+    td {
+        padding: 0.5rem 0.6rem;
+    }
+    h1 {
+        font-size: 1.8rem;
+    }
+    .controls button {
+        font-size: 0.9rem;
+        padding: 0.4rem 0.8rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .controls {
+        flex-wrap: wrap;
+    }
+    .controls button {
+        flex: 1 1 45%;
+        text-align: center;
+    }
 }
 
 @media (max-width: 480px) {
-  h1 { font-size: 1.6rem; }
-  .controls button { font-size: 0.85rem; padding: 0.35rem 0.7rem; }
-  th, td { padding: 0.4rem 0.6rem; }
-  section { padding: 0.6rem; }
-  header { font-size: 0.8rem; }
+    h1 {
+        font-size: 1.6rem;
+    }
+    .controls button {
+        font-size: 0.85rem;
+        padding: 0.35rem 0.7rem;
+    }
+    th,
+    td {
+        padding: 0.4rem 0.6rem;
+    }
+    section {
+        padding: 0.6rem;
+    }
+    header {
+        font-size: 0.8rem;
+    }
 }

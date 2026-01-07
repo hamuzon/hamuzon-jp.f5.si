@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Device Info - Legacy version</title>
+<style>
+body {
+  margin: 0;
+  font-family: monospace;
+  background: #0f172a;
+  color: #e0e7ff;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 1rem;
+}
+body.light {
+  background: #f5f7fa;
+  color: #1f2937;
+}
+h1 {
+  margin: 0 0 1rem;
+  font-size: 2rem;
+}
+.controls {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+.controls button {
+  padding: 0.5rem 1rem;
+  border: 2px solid #3b82f6;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  border-radius: 8px;
+}
+.controls button.active {
+  background: #3b82f6;
+  color: #fff;
+}
+section {
+  width: 100%;
+  max-width: 900px;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: rgba(255,255,255,0.05);
+  border-radius: 8px;
+  text-align: left;
+  margin-left: auto;
+  margin-right: auto;
+}
+body.light section {
+  background: #fff;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 auto;
+}
+th, td {
+  padding: 0.5rem;
+  border-bottom: 1px solid #334155;
+  text-align: left;
+}
+.subhead {
+  text-align: center;
+  color: #9ca3af;
+  margin-bottom: 0.3em;
+}
+footer {
+  font-size: 0.85rem;
+  text-align: center;
+  margin-top: 2rem;
+}
+</style>
+</head>
+<body>
+<h1 id="title">Device Info - Legacy version  (some display content may differ)</h1>
+
+<div class="controls">
+  <button id="btn-ja" class="active">日本語</button>
+  <button id="btn-en">English</button>
+  <button id="btn-light">ライト / Light</button>
+  <button id="btn-dark" class="active">ダーク / Dark</button>
+</div>
+
+<section><h2 id="cat-os"></h2>
+<div class="subhead" id="os-ua-ch-label"></div>
+<table id="table-os-ua-ch"></table>
+<div class="subhead" id="os-ua-label"></div>
+<table id="table-os-ua"></table>
+</section>
+
+<section><h2 id="cat-browser"></h2>
+<div class="subhead" id="browser-ua-ch-label"></div>
+<table id="table-browser-ua-ch"></table>
+<div class="subhead" id="browser-ua-label"></div>
+<table id="table-browser-ua"></table>
+</section>
+
+<section><h2 id="cat-screen"></h2>
+<table id="table-screen"></table>
+</section>
+
+<section><h2 id="cat-cpu"></h2>
+<table id="table-cpu"></table>
+</section>
+
+<section><h2 id="cat-network"></h2>
+<table id="table-network"></table>
+</section>
+
+<section><h2 id="cat-other"></h2>
+<table id="table-other"></table>
+</section>
+
+<footer>
+<div id="footer-copyright">© 2025 device-info</div>
+<div id="footer-warning">表示情報は一部正確でない可能性があります。</div>
+</footer>
+
+<script>
+(function(){
+  var dict={
+    ja:{title:"デバイス情報",os_ch:"OS情報（UA-CH）",os_ua:"OS情報（User-Agent）",browser_ch:"ブラウザ情報（UA-CH）",browser_ua:"ブラウザ情報（User-Agent）",category:{os:"OS情報",browser:"ブラウザ情報",screen:"画面情報",cpu:"CPU・メモリ",network:"ネットワーク情報",other:"その他情報"},unknown:"不明",online_yes:"オンライン",online_no:"オフライン",light:"ライト",dark:"ダーク"},
+    en:{title:"Device Info",os_ch:"OS Info (UA-CH)",os_ua:"OS Info (User-Agent)",browser_ch:"Browser Info (UA-CH)",browser_ua:"Browser Info (User-Agent)",category:{os:"OS Info",browser:"Browser Info",screen:"Screen Info",cpu:"CPU & Memory",network:"Network Info",other:"Other Info"},unknown:"Unknown",online_yes:"Online",online_no:"Offline",light:"Light",dark:"Dark"}
+  };
+
+  var titleEl=document.getElementById('title');
+  var btnJa=document.getElementById('btn-ja');
+  var btnEn=document.getElementById('btn-en');
+  var btnLight=document.getElementById('btn-light');
+  var btnDark=document.getElementById('btn-dark');
+
+  var tables={
+    os_ua_ch:document.getElementById('table-os-ua-ch'),
+    os_ua:document.getElementById('table-os-ua'),
+    browser_ua_ch:document.getElementById('table-browser-ua-ch'),
+    browser_ua:document.getElementById('table-browser-ua'),
+    screen:document.getElementById('table-screen'),
+    cpu:document.getElementById('table-cpu'),
+    network:document.getElementById('table-network'),
+    other:document.getElementById('table-other')
+  };
+  var osUaChLabel=document.getElementById('os-ua-ch-label');
+  var osUaLabel=document.getElementById('os-ua-label');
+  var browserUaChLabel=document.getElementById('browser-ua-ch-label');
+  var browserUaLabel=document.getElementById('browser-ua-label');
+  var sectionTitles={
+    os:document.getElementById('cat-os'),
+    browser:document.getElementById('cat-browser'),
+    screen:document.getElementById('cat-screen'),
+    cpu:document.getElementById('cat-cpu'),
+    network:document.getElementById('cat-network'),
+    other:document.getElementById('cat-other')
+  };
+
+  var currentLang=localStorage.getItem("lang")||"ja";
+  var darkMode=localStorage.getItem("mode")==="dark";
+
+  function createRow(label,value){var row=document.createElement('tr');row.innerHTML="<th>"+label+"</th><td>"+(value||dict[currentLang].unknown)+"</td>";return row;}
+
+  function getCpuName(){var ua=navigator.userAgent.toLowerCase();if(/arm|aarch64/.test(ua))return currentLang==="ja"?"ARM (推定)":"ARM (Estimated)";if(/x86_64|win64|amd64/.test(ua))return currentLang==="ja"?"x64 (推定)":"x64 (Estimated)";if(/i686|i386|x86/.test(ua))return currentLang==="ja"?"x86 (推定)":"x86 (Estimated)";return dict[currentLang].unknown;}
+
+  function getGPU(){var canvas=document.createElement('canvas');var gl=canvas.getContext('webgl')||canvas.getContext('experimental-webgl');if(!gl)return dict[currentLang].unknown;var ext=gl.getExtension('WEBGL_debug_renderer_info');if(ext)return gl.getParameter(ext.UNMASKED_RENDERER_WEBGL)||dict[currentLang].unknown;return dict[currentLang].unknown;}
+
+  function getOsBrowser(){var ua=navigator.userAgent.toLowerCase();var os=dict[currentLang].unknown,device=dict[currentLang].unknown,browser=dict[currentLang].unknown;if(ua.indexOf("windows")!==-1){os="Windows";device="PC";}else if(ua.indexOf("mac")!==-1){os="macOS";device="Mac";}else if(ua.indexOf("android")!==-1){os="Android";device="Android";}else if(ua.indexOf("iphone")!==-1||ua.indexOf("ipad")!==-1){os="iOS";device="iPhone/iPad";}if(ua.indexOf("chrome")!==-1){browser="Chrome";}else if(ua.indexOf("safari")!==-1){browser="Safari";}else if(ua.indexOf("firefox")!==-1){browser="Firefox";}else if(ua.indexOf("msie")!==-1||ua.indexOf("trident")!==-1){browser="IE";}return {os:os,device:device,browser:browser};}
+
+  function fetchIP(callback){
+    var ips={ipv4:dict[currentLang].unknown,ipv6:dict[currentLang].unknown,currentIP:dict[currentLang].unknown};
+    var done=0;
+    function check(){done++;if(done>=3)callback(ips);}
+    var xhr=new XMLHttpRequest();xhr.open("GET","https://api.ipify.org?format=json");xhr.onreadystatechange=function(){if(xhr.readyState===4){try{ips.ipv4=JSON.parse(xhr.responseText).ip||ips.ipv4;}catch(e){};check();}};xhr.send();
+    var xhr2=new XMLHttpRequest();xhr2.open("GET","https://api6.ipify.org/?format=json");xhr2.onreadystatechange=function(){if(xhr2.readyState===4){try{ips.ipv6=JSON.parse(xhr2.responseText).ip||ips.ipv6;}catch(e){};check();}};xhr2.send();
+    var xhr3=new XMLHttpRequest();xhr3.open("GET","https://api64.ipify.org?format=json");xhr3.onreadystatechange=function(){if(xhr3.readyState===4){try{ips.currentIP=JSON.parse(xhr3.responseText).ip||ips.currentIP;}catch(e){};check();}};xhr3.send();
+  }
+
+  function updateInfo(){
+    var lang=dict[currentLang];
+    for(var t in tables){tables[t].innerHTML="";}
+    var info=getOsBrowser();
+    osUaChLabel.innerHTML=lang.os_ch;
+    osUaLabel.innerHTML=lang.os_ua;
+    browserUaChLabel.innerHTML=lang.browser_ch;
+    browserUaLabel.innerHTML=lang.browser_ua;
+
+    tables.os_ua_ch.appendChild(createRow("OS",info.os));
+    tables.os_ua_ch.appendChild(createRow("端末",info.device));
+    tables.os_ua.appendChild(createRow("OS",info.os));
+    tables.os_ua.appendChild(createRow("端末",info.device));
+
+    tables.browser_ua_ch.appendChild(createRow("ブラウザ",info.browser));
+    tables.browser_ua.appendChild(createRow("ブラウザ",info.browser));
+
+    tables.screen.appendChild(createRow("解像度",screen.width+" x "+screen.height));
+    tables.screen.appendChild(createRow("ビューポート",window.innerWidth+" x "+window.innerHeight));
+    tables.screen.appendChild(createRow("色深度",screen.colorDepth));
+    tables.screen.appendChild(createRow("ピクセル深度",screen.pixelDepth));
+
+    tables.cpu.appendChild(createRow("CPUコア数",navigator.hardwareConcurrency||lang.unknown));
+    tables.cpu.appendChild(createRow("CPU名",getCpuName()));
+    tables.cpu.appendChild(createRow("GPU名",getGPU()));
+    tables.cpu.appendChild(createRow("メモリ(最大8GB)",navigator.deviceMemory?navigator.deviceMemory+" GB":lang.unknown));
+
+    fetchIP(function(ips){
+      tables.network.appendChild(createRow("IPv4",ips.ipv4));
+      tables.network.appendChild(createRow("IPv6",ips.ipv6));
+      tables.network.appendChild(createRow("現在IP",ips.currentIP));
+      tables.network.appendChild(createRow("オンライン",navigator.onLine?lang.online_yes:lang.online_no));
+    });
+
+    tables.other.appendChild(createRow("ブラウザ言語",navigator.language||lang.unknown));
+    tables.other.appendChild(createRow("取得時刻",new Date().toLocaleString()));
+    tables.other.appendChild(createRow("現在時刻",""));
+    tables.other.appendChild(createRow("タイムゾーン",Intl.DateTimeFormat().resolvedOptions().timeZone||lang.unknown));
+  }
+
+  function updateCurrentTime(){
+    var rows=tables.other.getElementsByTagName("tr");
+    var now=new Date().toLocaleString();
+    for(var i=0;i<rows.length;i++){
+      if(rows[i].getElementsByTagName("th")[0].textContent==="現在時刻"){rows[i].getElementsByTagName("td")[0].textContent=now;break;}
+    }
+  }
+
+  function setLang(lang){
+    currentLang=lang;
+    localStorage.setItem("lang",lang);
+    titleEl.textContent=dict[lang].title;
+    for(var k in dict[lang].category){
+      if(sectionTitles[k])sectionTitles[k].textContent=dict[lang].category[k];
+    }
+    btnJa.className=(lang==="ja")?"active":"";
+    btnEn.className=(lang==="en")?"active":"";
+    updateInfo();
+  }
+
+  function setMode(isDark){
+    darkMode=isDark;
+    localStorage.setItem("mode",isDark?"dark":"light");
+    document.body.className=isDark?"":"light";
+    btnLight.className=isDark?"":"active";
+    btnDark.className=isDark?"active":"";
+  }
+
+  btnJa.onclick=function(){setLang("ja");};
+  btnEn.onclick=function(){setLang("en");};
+  btnLight.onclick=function(){setMode(false);};
+  btnDark.onclick=function(){setMode(true);};
+
+  setMode(darkMode);
+  setLang(currentLang);
+  setInterval(updateCurrentTime,1000);
+
+})();
+</script>
+</body>
+</html>

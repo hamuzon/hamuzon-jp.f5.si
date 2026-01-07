@@ -6,7 +6,15 @@
       os_ua: "OS情報（User-Agent）",
       browser_ch: "ブラウザ情報（UA-CH）",
       browser_ua: "ブラウザ情報（User-Agent）",
-      category: { os: "OS情報", browser: "ブラウザ情報", screen: "画面情報", cpu: "CPU・メモリ", network: "ネットワーク情報", other: "その他情報" },
+      category: {
+        os: "OS情報",
+        browser: "ブラウザ情報",
+        screen: "画面情報",
+        cpu: "CPU・メモリ",
+        network: "ネットワーク情報",
+        other: "その他情報",
+        battery: "バッテリー情報"
+      },
       os: `<span class="selectable">OS名</span>`,
       version: `<span class="selectable">バージョン</span>`,
       device: `<span class="selectable">端末名</span>`,
@@ -29,13 +37,15 @@
       fetchedAt: `<span class="selectable">取得時刻</span>`,
       now: `<span class="selectable">現在時刻</span>`,
       timezone: `<span class="selectable">タイムゾーン</span>`,
+      batteryLevel: `<span class="selectable">バッテリー残量</span>`,
+      batteryCharging: `<span class="selectable">充電状態</span>`,
       unknown: `<span class="selectable">不明</span>`,
       online_yes: `<span class="selectable">オンライン</span>`,
       online_no: `<span class="selectable">オフライン</span>`,
       light: "ライト",
       dark: "ダーク",
       footer: {
-        copyright: "© 2025 device-info",
+        copyright: "&copy; 2025 device-info",
         warning: "表示される情報は一部、正確でない可能性があります。",
         library: `使用ライブラリ: 
           <a href="https://www.ipify.org/" target="_blank" rel="noopener noreferrer">ipify API</a>,
@@ -50,7 +60,15 @@
       os_ua: "OS Information (User-Agent)",
       browser_ch: "Browser Information (UA-CH)",
       browser_ua: "Browser Information (User-Agent)",
-      category: { os: "OS Information", browser: "Browser Information", screen: "Screen Information", cpu: "CPU & Memory", network: "Network Information", other: "Other Information" },
+      category: {
+        os: "OS Information",
+        browser: "Browser Information",
+        screen: "Screen Information",
+        cpu: "CPU & Memory",
+        network: "Network Information",
+        other: "Other Information",
+        battery: "Battery Information"
+      },
       os: `<span class="selectable">Operating System</span>`,
       version: `<span class="selectable">Version</span>`,
       device: `<span class="selectable">Device Name</span>`,
@@ -73,13 +91,15 @@
       fetchedAt: `<span class="selectable">Fetched At</span>`,
       now: `<span class="selectable">Current Time</span>`,
       timezone: `<span class="selectable">Timezone</span>`,
+      batteryLevel: `<span class="selectable">Battery Level</span>`,
+      batteryCharging: `<span class="selectable">Charging Status</span>`,
       unknown: `<span class="selectable">Unknown</span>`,
       online_yes: `<span class="selectable">Online</span>`,
       online_no: `<span class="selectable">Offline</span>`,
       light: "Light",
       dark: "Dark",
       footer: {
-        copyright: "© 2025 device-info",
+        copyright: "&copy; 2025 device-info",
         warning: "Displayed information may not be accurate.",
         library: `Libraries used: 
           <a href="https://www.ipify.org/" target="_blank" rel="noopener noreferrer">ipify API</a>,
@@ -107,7 +127,8 @@
     screen: document.getElementById('table-screen'),
     cpu: document.getElementById('table-cpu'),
     network: document.getElementById('table-network'),
-    other: document.getElementById('table-other')
+    other: document.getElementById('table-other'),
+    battery: document.getElementById('table-battery')
   };
   const osUaChLabel = document.getElementById('os-ua-ch-label');
   const osUaLabel = document.getElementById('os-ua-label');
@@ -119,7 +140,8 @@
     screen: document.getElementById('cat-screen'),
     cpu: document.getElementById('cat-cpu'),
     network: document.getElementById('cat-network'),
-    other: document.getElementById('cat-other')
+    other: document.getElementById('cat-other'),
+    battery: document.getElementById('cat-battery')
   };
 
   let currentLang = localStorage.getItem("lang") || (navigator.language.startsWith("ja") ? "ja" : "en");
@@ -191,10 +213,22 @@
     return { ipv4, ipv6, currentIP };
   }
 
+  async function updateBattery() {
+    if(!navigator.getBattery) return { level: dict[currentLang].unknown, charging: dict[currentLang].unknown };
+    try {
+      const battery = await navigator.getBattery();
+      const level = Math.round(battery.level*100)+'%';
+      const charging = battery.charging ? dict[currentLang].online_yes : dict[currentLang].online_no;
+      return { level, charging };
+    } catch(e){ return { level: dict[currentLang].unknown, charging: dict[currentLang].unknown }; }
+  }
+
   async function updateInfo() {
     const lang = dict[currentLang];
     Object.values(tables).forEach(tbl=>tbl.innerHTML='');
     const [osch, osua] = await Promise.all([getOsBrowserByUACh(), getOsBrowserByUA()]);
+    const ipData = await fetchIPData();
+    const batteryData = await updateBattery();
 
     osUaChLabel.innerHTML = lang.os_ch;
     [[lang.os,osch.os||lang.unknown],[lang.version,osch.version||lang.unknown],[lang.device,osch.device||lang.unknown]].forEach(([l,v])=>tables.os_ua_ch.appendChild(createRow(l,v)));
@@ -215,16 +249,12 @@
     const gpuName = getGPUName();
     [[lang.cpu,cpuCores],[lang.cpuName,getCpuNameByUA()],[lang.memory,memory],[lang.gpu,gpuName]].forEach(([l,v])=>tables.cpu.appendChild(createRow(l,v)));
 
-    const {ipv4,ipv6,currentIP} = await fetchIPData();
-    const onlineStatus = navigator.onLine?lang.online_yes:lang.online_no;
-    [[lang.ipv4, ipv4],[lang.ipv6, ipv6],[lang.ip, currentIP]].forEach(([label, ip]) => {
-      const row = document.createElement('tr');
-      row.innerHTML = `<th scope="row">${label}</th><td>${ip||lang.unknown}</td><td></td>`;
-      tables.network.appendChild(row);
-    });
-    tables.network.appendChild(createRow(lang.online, onlineStatus));
+    [[lang.ipv4, ipData.ipv4],[lang.ipv6, ipData.ipv6],[lang.ip, ipData.currentIP]].forEach(([label, ip]) => { tables.network.appendChild(createRow(label, ip)); });
+    tables.network.appendChild(createRow(lang.online, navigator.onLine?lang.online_yes:lang.online_no));
 
     [[lang.language,navigator.language||lang.unknown],[lang.fetchedAt,new Date().toLocaleString()],[lang.now,''],[lang.timezone,Intl.DateTimeFormat().resolvedOptions().timeZone||lang.unknown]].forEach(([l,v])=>tables.other.appendChild(createRow(l,v)));
+
+    [[lang.batteryLevel,batteryData.level],[lang.batteryCharging,batteryData.charging]].forEach(([l,v])=>tables.battery.appendChild(createRow(l,v)));
 
     footerWarning.innerHTML = lang.footer.warning;
     footerLibrary.innerHTML = lang.footer.library;
@@ -286,9 +316,9 @@
     const yearText = currentYear > config.baseYear ? `${config.baseYear}~${currentYear}` : `${config.baseYear}`;
     if (footerCopyright) {
       if (config.link) {
-        footerCopyright.innerHTML = `© ${yearText} <a href="${config.link}" target="_blank" rel="noopener noreferrer">${config.user}</a> device-info`;
+        footerCopyright.innerHTML = `&copy; ${yearText} <a href="${config.link}" target="_blank" rel="noopener noreferrer">${config.user}</a> device-info`;
       } else {
-        footerCopyright.textContent = `© ${yearText} device-info`;
+        footerCopyright.innerHTML = `&copy; ${yearText} device-info`;
       }
     }
   })();
