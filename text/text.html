@@ -405,7 +405,7 @@ const hostname=window.location.hostname;
 const baseYear=2025;
 const currentYear=new Date().getFullYear();
 const yearText=currentYear>baseYear?`${baseYear}~${currentYear}`:`${baseYear}`;
-if(hostname.includes("https://hamuzon-jp.f5.si")){
+if(hostname.includes("hamuzon-jp.f5.si")){
   footerAuthor.innerHTML=`&copy;${yearText} <a href="https://hamuzon-jp.f5.si" target="_blank">@hamuzon</a>`;
 }else if(hostname.includes("hamusata.f5.si")){
   footerAuthor.innerHTML=`&copy;${yearText} <a href="https://home.hamusata.f5.si" target="_blank">@hamusata</a>`;
