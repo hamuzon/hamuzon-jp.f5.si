@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>七夕短冊メーカー</title>
+<link rel="icon" href="icon-light.svg" type="image/svg+xml" />
+<style>
+  body {
+    margin:0; padding:0;
+    background: linear-gradient(to bottom, #002a4e, #000a1e);
+    font-family: "Yu Mincho", serif;
+    overflow-x: hidden;
+    color: #fff;
+    position: relative;
+  }
+  body::before {
+    content: "";
+    position: absolute; top:0; left:0;
+    width: 100%; height: 100%;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600"><defs><circle id="star" r="2" fill="white"/></defs><g><use href="#star" x="50" y="100"/><use href="#star" x="150" y="50"/><use href="#star" x="300" y="150"/><use href="#star" x="400" y="80"/><use href="#star" x="600" y="200"/><use href="#star" x="700" y="100"/></g></svg>') repeat;
+    opacity: 0.3; z-index: 0;
+  }
+  header {
+    position: relative; z-index: 2;
+    display: flex; align-items: center; padding: 10px 20px;
+    background: rgba(0,0,0,0.3);
+  }
+  header img { width: 32px; height: 32px; margin-right: 10px; }
+  header h1 {
+    margin: 0; font-size: 1.5rem; color: #f9c846;
+  }
+  .container {
+    position: relative; z-index: 2;
+    padding: 20px;
+    text-align: center;
+    max-width: 480px;
+    margin: auto;
+  }
+  .input-area {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+  .input-area input[type="text"] {
+    font-size: 1.1rem;
+    padding: 8px;
+    border-radius: 6px;
+    border: none;
+    outline: none;
+  }
+  #wishInput {
+    flex: 1;
+    min-width: 160px;
+  }
+  #nameInput {
+    width: 120px;
+  }
+  .input-area select {
+    font-size: 1.1rem;
+    padding: 8px;
+    border-radius: 6px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+  }
+  .input-area button {
+    padding: 8px 15px;
+    font-size: 1rem;
+    background-color: #f9c846;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+  }
+  .input-area button:hover {
+    background: #d4a72c;
+  }
+  .bamboo {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 300px;
+    height: 400px;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 600" preserveAspectRatio="none"><g fill="none" stroke="lightgreen" stroke-width="2"><path d="M100,0 C100,150 110,200 100,300 C90,400 110,500 100,600"/><path d="M100,150 Q80,170 60,200"/><path d="M100,300 Q120,320 140,350"/><path d="M100,450 Q80,470 60,500"/></g></svg>') no-repeat center/contain;
+    opacity: 0.2;
+    z-index: 1;
+  }
+  .tanzaku-wrapper {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    position: relative;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  .string {
+    width: 2px;
+    height: 50px;
+    background: #aaa;
+    margin: 0 auto;
+    animation: sway 3s ease-in-out infinite alternate;
+  }
+  .tanzaku {
+    background: linear-gradient(90deg, #fff7e8, #ffeecf);
+    border: 3px solid #d4aa00;
+    border-radius: 12px;
+    width: 120px;
+    height: 250px;
+    padding: 15px 8px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    font-size: 1.3rem;
+    color: #222;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transform-origin: top center;
+    animation: sway 3s ease-in-out infinite alternate;
+    position: relative;
+    user-select: none;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .name {
+    margin-top: 12px;
+    font-size: 0.8rem;
+    color: #555;
+  }
+  /* 色バリエーション */
+  .red { background: linear-gradient(90deg, #f9c0c0, #f4a1a1); border-color: #d45454; color: #4a0b0b; }
+  .blue { background: linear-gradient(90deg, #a7c9f9, #7fa8f4); border-color: #3b5da3; color: #102353; }
+  .yellow { background: linear-gradient(90deg, #fff7b3, #fff1a5); border-color: #d4c245; color: #4a420b; }
+  .green { background: linear-gradient(90deg, #b7f4b6, #8ae68a); border-color: #4da34d; color: #0b3a0b; }
+  .purple { background: linear-gradient(90deg, #dab6f4, #c692f4); border-color: #774da3; color: #3a0b53; }
+  @keyframes sway {
+    0% { transform: rotate(4deg); }
+    100% { transform: rotate(-4deg); }
+  }
+  #exampleTanzaku .tanzaku {
+    animation-duration: 4s;
+    opacity: 0.8;
+  }
+  #exampleTanzaku .tanzaku.red { border-color: #d45454; color: #4a0b0b; }
+  #exampleTanzaku .tanzaku.blue { border-color: #3b5da3; color: #102353; }
+  #exampleTanzaku .tanzaku.yellow { border-color: #d4c245; color: #4a420b; }
+  #exampleTanzaku .tanzaku.green { border-color: #4da34d; color: #0b3a0b; }
+  #exampleTanzaku .tanzaku.purple { border-color: #774da3; color: #3a0b53; }
+  .btn-area {
+    margin-top: 20px;
+    display: none;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .btn-area button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+  }
+  #saveBtn {
+    background: #1e90ff;
+    color: #fff;
+  }
+  #saveBtn:hover {
+    background: #187bcd;
+  }
+  #postBtn {
+    background: #32cd32;
+    color: #fff;
+  }
+  #postBtn:hover {
+    background: #28a428;
+  }
+  footer {
+    margin-top: 40px;
+    padding: 10px;
+    text-align: center;
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.6);
+    position: relative;
+    z-index: 2;
+  }
+  footer a {
+    color: rgba(255,255,255,0.6);
+    text-decoration: none;
+  }
+  @media (max-width: 480px) {
+    .tanzaku {
+      height: 220px;
+      font-size: 1.1rem;
+      width: 90px;
+      padding: 12px 6px;
+    }
+    .bamboo {
+      width: 200px;
+      height: 300px;
+    }
+    .input-area input[type="text"], .input-area select {
+      min-width: 140px;
+    }
+  }
+</style>
+</head>
+<body>
+<header>
+  <img src="icon-light.svg" alt="Icon" />
+  <h1>七夕短冊メーカー</h1>
+</header>
+
+<div class="bamboo"></div>
+
+<div class="container">
+  <div class="input-area" role="form" aria-label="願い事入力フォーム">
+    <input id="wishInput" type="text" placeholder="願い事を書いてください🌟" maxlength="50" aria-label="願い事" />
+    <input id="nameInput" type="text" placeholder="名前（任意）" maxlength="20" aria-label="名前（任意）" />
+    <select id="colorSelect" aria-label="短冊の色を選択">
+      <option value="red" selected>赤</option>
+      <option value="blue">青</option>
+      <option value="yellow">黄</option>
+      <option value="green">緑</option>
+      <option value="purple">紫</option>
+    </select>
+    <button type="button" onclick="addOwn()">🎋 表示・投稿準備</button>
+  </div>
+
+  <!-- ユーザー短冊 -->
+  <div class="tanzaku-wrapper" id="ownWrapper" style="display:none;"></div>
+
+  <!-- 例の短冊 -->
+  <div class="tanzaku-wrapper" id="exampleTanzaku">
+    <div class="string"></div><div class="tanzaku red example">🌏世界が平和でありますように</div>
+    <div class="string"></div><div class="tanzaku blue example">😊毎日楽しくすごせますように</div>
+    <div class="string"></div><div class="tanzaku green example">🎓勉強がうまくいきますように</div>
+  </div>
+
+  <div class="btn-area" id="btnArea">
+    <button id="saveBtn" type="button">🎁 短冊を持ち帰る</button>
+    <button id="postBtn" type="button">🚀 投稿する</button>
+  </div>
+</div>
+
+<footer>
+  2025 <a href="." target="_blank" rel="noopener noreferrer">@hamuzon</a>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script>
+const ownWrapper = document.getElementById('ownWrapper');
+const btnArea = document.getElementById('btnArea');
+
+function escapeHtml(text) {
+  const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+  return text.replace(/[&<>"']/g, m => map[m]);
+}
+
+function addOwn() {
+  const text = document.getElementById('wishInput').value.trim();
+  if (!text) {
+    alert('願い事を書いてください');
+    return;
+  }
+  const name = document.getElementById('nameInput').value.trim();
+  const color = document.getElementById('colorSelect').value;
+
+  const safeText = escapeHtml(text);
+  const safeName = escapeHtml(name);
+
+  // 画面表示（縦書き）
+  ownWrapper.innerHTML =
+    '<div class="string"></div>' +
+    `<div class="tanzaku ${color}">` +
+    `${safeText}<div class="name">${safeName ? safeName : ''}</div>` +
+    `</div>`;
+  ownWrapper.style.display = 'flex';
+  btnArea.style.display = 'flex';
+
+  ownWrapper.dataset.wish = text;
+  ownWrapper.dataset.name = name;
+  ownWrapper.dataset.color = color;
+}
+
+function generateFilename() {
+  const now = new Date();
+  const yyyy = now.getFullYear();
+  const mm = String(now.getMonth() + 1).padStart(2, '0');
+  const dd = String(now.getDate()).padStart(2, '0');
+  const hh = String(now.getHours()).padStart(2, '0');
+  const mi = String(now.getMinutes()).padStart(2, '0');
+  const ss = String(now.getSeconds()).padStart(2, '0');
+  return `tanzaku_${yyyy}${mm}${dd}_${hh}${mi}${ss}.png`;
+}
+
+function createImageTanzaku(wish, name, color) {
+  // 色ごとのスタイルマップ
+  const colorStyles = {
+    red: {
+      background: 'linear-gradient(90deg, #f9c0c0, #f4a1a1)',
+      borderColor: '#d45454',
+      color: '#4a0b0b'
+    },
+    blue: {
+      background: 'linear-gradient(90deg, #a7c9f9, #7fa8f4)',
+      borderColor: '#3b5da3',
+      color: '#102353'
+    },
+    yellow: {
+      background: 'linear-gradient(90deg, #fff7b3, #fff1a5)',
+      borderColor: '#d4c245',
+      color: '#4a420b'
+    },
+    green: {
+      background: 'linear-gradient(90deg, #b7f4b6, #8ae68a)',
+      borderColor: '#4da34d',
+      color: '#0b3a0b'
+    },
+    purple: {
+      background: 'linear-gradient(90deg, #dab6f4, #c692f4)',
+      borderColor: '#774da3',
+      color: '#3a0b53'
+    },
+  };
+
+  const style = colorStyles[color] || colorStyles.red;
+
+  const wrapper = document.createElement('div');
+  wrapper.style.background = style.background;
+  wrapper.style.border = `3px solid ${style.borderColor}`;
+  wrapper.style.borderRadius = "12px";
+  wrapper.style.width = "260px";
+  wrapper.style.padding = "20px";
+  wrapper.style.boxShadow = "0 8px 16px rgba(0,0,0,0.4)";
+  wrapper.style.color = style.color;
+  wrapper.style.fontSize = "22px";
+  wrapper.style.fontFamily = "'Yu Mincho', serif";
+  wrapper.style.display = "flex";
+  wrapper.style.flexDirection = "column";
+  wrapper.style.justifyContent = "center";
+  wrapper.style.alignItems = "center";
+  wrapper.style.textAlign = "center";
+  wrapper.style.userSelect = "none";
+  wrapper.style.whiteSpace = "pre-wrap";
+  wrapper.style.wordBreak = "break-word";
+  wrapper.style.position = "relative";
+  wrapper.style.lineHeight = "1.3";
+
+  if(name) {
+    const nameP = document.createElement('p');
+    nameP.style.margin = "0 0 12px 0";
+    nameP.style.fontSize = "20px";
+    nameP.style.color = "#555";
+    nameP.textContent = `🎋${name}🎋`;
+    wrapper.appendChild(nameP);
+  }
+
+  const wishP = document.createElement('p');
+  wishP.style.margin = "0";
+  wishP.textContent = `🌟${wish}🌟`;
+  wrapper.appendChild(wishP);
+
+  const footerP = document.createElement('p');
+  footerP.style.margin = "12px 0 0 0";
+  footerP.style.fontSize = "14px";
+  footerP.style.color = "#999";
+  footerP.textContent = "🎋願いごと🎋";
+  wrapper.appendChild(footerP);
+
+  return wrapper;
+}
+
+document.getElementById('saveBtn').onclick = () => {
+  const wish = ownWrapper.dataset.wish;
+  if (!wish) {
+    alert('短冊がありません。願い事を書いてください。');
+    return;
+  }
+  const name = ownWrapper.dataset.name || '';
+  const color = ownWrapper.dataset.color || 'red';
+  const imgTanzaku = createImageTanzaku(wish, name, color);
+  document.body.appendChild(imgTanzaku);
+  html2canvas(imgTanzaku, { backgroundColor: null, scale: 2 }).then(canvas => {
+    canvas.toBlob(blob => {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = generateFilename();
+      a.click();
+      URL.revokeObjectURL(url);
+      document.body.removeChild(imgTanzaku);
+    });
+  });
+};
+
+document.getElementById('postBtn').onclick = () => {
+  const wish = ownWrapper.dataset.wish || '';
+  const name = ownWrapper.dataset.name || '';
+  if (!wish) {
+    alert('願い事を書いてください');
+    return;
+  }
+  let tweetText = '';
+  if (name) {
+    tweetText += `🎋${name}🎋\n`;
+  }
+  tweetText += `🌟${wish}🌟\n🎋願いごと🎋\n#七夕 #TanzakuMaker`;
+  const url = encodeURIComponent('https://hamuzon.web.fc2.com/wish');
+  const tweet = encodeURIComponent(tweetText);
+  window.open(`https://twitter.com/intent/tweet?text=${tweet}&url=${url}`, '_blank');
+};
+</script>
+</body>
+</html>

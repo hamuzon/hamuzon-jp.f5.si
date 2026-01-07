@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Text Enlargement App</title>
+<meta name="description" content="入力したテキストを大きく表示するアプリです。">
+<link rel="icon" href="icon-light.png" type="image/png">
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic&family=BIZ+UDPMincho&family=Zen+Kaku+Gothic+New&family=Zen+Maru+Gothic&family=Noto+Sans+JP&family=Noto+Serif+JP&family=Sawarabi+Gothic&family=Sawarabi+Mincho&family=Potta+One&family=Kosugi&family=Kosugi+Maru&family=Kiwi+Maru&family=M+PLUS+1p&family=M+PLUS+Rounded+1c&family=Shippori+Mincho&family=Shippori+Antique&family=Hina+Mincho&family=Yusei+Magic&family=Rampart+One&family=DotGothic16&family=Yuji+Syuku&family=Yuji+Mai&family=Yuji+Boku&family=Stick&family=Train+One&family=RocknRoll+One&family=Reggae+One&family=Dela+Gothic+One&family=New+Tegomin&family=Kaisei+Opti&family=Kaisei+Decol&family=Kaisei+HarunoUmi&family=Kaisei+Tokumin&family=IBM+Plex+Sans+JP&family=IBM+Plex+Serif+JP&family=Source+Han+Sans+JP&family=Source+Han+Serif+JP&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --color-primary: #00793d;
+  --color-secondary: #4a6354;
+  --color-background: #ffffff;
+  --color-on-background: #1a1c19;
+  --shape-corner-medium: 12px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: 'Noto Serif JP', serif;
+  background-color: var(--color-background);
+  color: var(--color-on-background);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.6;
+  word-break: break-word;
+}
+
+header {
+  background-color: var(--color-primary);
+  color: #ffffff;
+  padding: 1.5rem 1rem;
+  font-weight: 700;
+  font-size: clamp(1.8rem, 6vw, 2.2rem);
+  text-align: center;
+  letter-spacing: 0.08em;
+}
+
+main {
+  flex-grow: 1;
+  width: 100%;
+  max-width: 900px;
+  margin: 1.5rem auto;
+  padding: 0 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+section { display: flex; flex-direction: column; gap: 1rem; }
+
+textarea#textInput {
+  width: 100%;
+  font-size: clamp(1.5rem,5vw,2.5rem);
+  min-height: 140px;
+  padding: 1rem;
+  border-radius: var(--shape-corner-medium);
+  border: 2px solid var(--color-primary);
+  resize: vertical;
+  background-color: var(--color-background);
+  color: var(--color-on-background);
+  transition: all 0.2s ease;
+}
+
+#displayArea {
+  width: 100%;
+  font-size: clamp(2rem,10vw,8rem);
+  font-weight: 600;
+  line-height: 1.4;
+  padding: 1rem;
+  border-radius: var(--shape-corner-medium);
+  background-color: var(--color-background);
+  border: 2px solid var(--color-primary);
+  box-shadow: 0 0 16px var(--color-primary);
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: #000000;
+  overflow-wrap: break-word;
+  overflow-x: hidden;
+  transition: all 0.2s ease;
+}
+
+#buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
+button {
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  border-radius: var(--shape-corner-medium);
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+#copyButton { background-color: var(--color-primary); color: #fff; }
+#resetButton { background-color: var(--color-secondary); color: #fff; }
+
+#settings {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.setting-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 140px;
+}
+
+.setting-item label {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.setting-item input[type=range],
+.setting-item select,
+.setting-item input[type=color] { width: 100%; }
+
+footer#footer {
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--color-secondary);
+  padding: 1.5rem 0 2.5rem 0;
+}
+
+footer#footer a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+footer#footer a:hover { text-decoration: underline; }
+</style>
+</head>
+
+<body>
+<header id="appTitle">文字拡大アプリ</header>
+
+<main>
+<section>
+<h2>入力</h2>
+<textarea id="textInput" placeholder="ここにテキストを入力してください"></textarea>
+</section>
+
+<section>
+<h2>出力</h2>
+<div id="displayArea">test</div>
+<div id="buttons">
+  <button id="copyButton">Copy URL</button>
+  <button id="resetButton">Reset</button>
+</div>
+</section>
+
+<section>
+<h2>設定</h2>
+<div id="settings">
+  <div class="setting-item">
+    <label for="fontSizeSlider">フォントサイズ (px)</label>
+    <input type="range" id="fontSizeSlider" min="40" max="1200" step="1" value="120">
+    <output id="fontSizeValue">120</output>
+  </div>
+  <div class="setting-item">
+    <label for="fontWeightSlider">フォント太さ</label>
+    <input type="range" id="fontWeightSlider" min="400" max="900" step="100" value="600">
+    <output id="fontWeightValue">600</output>
+  </div>
+  <div class="setting-item">
+    <label for="lineHeightSlider">行間</label>
+    <input type="range" id="lineHeightSlider" min="1" max="2" step="0.05" value="1.4">
+    <output id="lineHeightValue">1.4</output>
+  </div>
+  <div class="setting-item">
+    <label for="fontSelector">フォント選択</label>
+    <select id="fontSelector">
+      <option value="'BIZ UDPGothic', sans-serif">BIZ UDPGothic</option>
+      <option value="'BIZ UDPMincho', serif">BIZ UDPMincho</option>
+      <option value="'Zen Kaku Gothic New', sans-serif">Zen Kaku Gothic New</option>
+      <option value="'Zen Maru Gothic', sans-serif">Zen Maru Gothic</option>
+      <option value="'Noto Sans JP', sans-serif">Noto Sans JP</option>
+      <option value="'Noto Serif JP', serif" selected>Noto Serif JP</option>
+      <option value="'Sawarabi Gothic', sans-serif">Sawarabi Gothic</option>
+      <option value="'Sawarabi Mincho', serif">Sawarabi Mincho</option>
+      <option value="'Potta One', cursive">Potta One</option>
+      <option value="'Kosugi', sans-serif">Kosugi</option>
+      <option value="'Kosugi Maru', sans-serif">Kosugi Maru</option>
+      <option value="'Kiwi Maru', serif">Kiwi Maru</option>
+      <option value="'M PLUS 1p', sans-serif">M PLUS 1p</option>
+      <option value="'M PLUS Rounded 1c', sans-serif">M PLUS Rounded 1c</option>
+      <option value="'Shippori Mincho', serif">Shippori Mincho</option>
+      <option value="'Shippori Antique', serif">Shippori Antique</option>
+      <option value="'Hina Mincho', serif">Hina Mincho</option>
+      <option value="'Yusei Magic', sans-serif">Yusei Magic</option>
+      <option value="'Rampart One', cursive">Rampart One</option>
+      <option value="'DotGothic16', sans-serif">DotGothic16</option>
+      <option value="'Yuji Syuku', serif">Yuji Syuku</option>
+      <option value="'Yuji Mai', serif">Yuji Mai</option>
+      <option value="'Yuji Boku', serif">Yuji Boku</option>
+      <option value="'Stick', sans-serif">Stick</option>
+      <option value="'Train One', cursive">Train One</option>
+      <option value="'RocknRoll One', cursive">RocknRoll One</option>
+      <option value="'Reggae One', cursive">Reggae One</option>
+      <option value="'Dela Gothic One', sans-serif">Dela Gothic One</option>
+      <option value="'New Tegomin', serif">New Tegomin</option>
+      <option value="'Kaisei Opti', serif">Kaisei Opti</option>
+      <option value="'Kaisei Decol', serif">Kaisei Decol</option>
+      <option value="'Kaisei HarunoUmi', serif">Kaisei HarunoUmi</option>
+      <option value="'Kaisei Tokumin', serif">Kaisei Tokumin</option>
+      <option value="'IBM Plex Sans JP', sans-serif">IBM Plex Sans JP</option>
+      <option value="'IBM Plex Serif JP', serif">IBM Plex Serif JP</option>
+      <option value="'Source Han Sans JP', sans-serif">Source Han Sans JP</option>
+      <option value="'Source Han Serif JP', serif">Source Han Serif JP</option>
+      <option value="Arial, sans-serif">Arial</option>
+      <option value="Verdana, sans-serif">Verdana</option>
+      <option value="Times New Roman, serif">Times New Roman</option>
+      <option value="Courier New, monospace">Courier New</option>
+      <option value="Georgia, serif">Georgia</option>
+      <option value="Tahoma, sans-serif">Tahoma</option>
+    </select>
+  </div>
+  <div class="setting-item">
+    <label for="accentSelector">アクセントカラー</label>
+    <input type="color" id="accentSelector" value="#00793d">
+  </div>
+</div>
+</section>
+</main>
+
+<footer id="footer">
+<div id="footer-author">&copy;2025 Text Enlargement App</div>
+<div>
+使用ライブラリー:
+<a href="https://developer.mozilla.org/ja/docs/Web/HTML" target="_blank">HTML5</a>,
+<a href="https://developer.mozilla.org/ja/docs/Web/CSS" target="_blank">CSS3</a>,
+<a href="https://developer.mozilla.org/ja/docs/Web/JavaScript" target="_blank">Vanilla JavaScript</a>,
+<a href="https://fonts.google.com/" target="_blank">Google Fonts</a>
+</div>
+</footer>
+
+<script>
+const textInput = document.getElementById("textInput");
+const displayArea = document.getElementById("displayArea");
+const header = document.getElementById("appTitle");
+const fontSizeSlider = document.getElementById("fontSizeSlider");
+const fontSizeValue = document.getElementById("fontSizeValue");
+const fontWeightSlider = document.getElementById("fontWeightSlider");
+const fontWeightValue = document.getElementById("fontWeightValue");
+const lineHeightSlider = document.getElementById("lineHeightSlider");
+const lineHeightValue = document.getElementById("lineHeightValue");
+const fontSelector = document.getElementById("fontSelector");
+const accentSelector = document.getElementById("accentSelector");
+const copyButton = document.getElementById("copyButton");
+const resetButton = document.getElementById("resetButton");
+
+const initialState = {
+  text: "",
+  font: "'Noto Serif JP', serif",
+  weight: "600",
+  size: "120",
+  line: "1.4",
+  color: "#00793d",
+  background: "#fff",
+  colorText: "#000"
+};
+
+// コントラスト計算
+function luminance(r,g,b){
+  const a=[r,g,b].map(v=>{v/=255;return v<=0.03928?v/12.92:Math.pow((v+0.055)/1.055,2.4);});
+  return 0.2126*a[0]+0.7152*a[1]+0.0722*a[2];
+}
+function getContrastColor(hex){
+  const r=parseInt(hex.substr(1,2),16);
+  const g=parseInt(hex.substr(3,2),16);
+  const b=parseInt(hex.substr(5,2),16);
+  return luminance(r,g,b)>0.5?"#000":"#fff";
+}
+
+// スタイル更新
+function updateStyles(){
+  displayArea.style.fontSize = fontSizeSlider.value + "px";
+  displayArea.style.fontWeight = fontWeightSlider.value;
+  displayArea.style.lineHeight = lineHeightSlider.value;
+  displayArea.style.fontFamily = fontSelector.value;
+
+  let accent = accentSelector.value;
+  textInput.style.borderColor = accent;
+  displayArea.style.borderColor = accent;
+  displayArea.style.boxShadow = `0 0 16px ${accent}`;
+  header.style.backgroundColor = accent;
+  header.style.color = getContrastColor(accent);
+  copyButton.style.backgroundColor = accent;
+  copyButton.style.color = getContrastColor(accent);
+  resetButton.style.backgroundColor = accent;
+  resetButton.style.color = getContrastColor(accent);
+
+  if(accent.toLowerCase()==="#ffffff"){
+    document.body.style.backgroundColor = "#000";
+    displayArea.style.backgroundColor = "#000";
+    displayArea.style.color = "#fff";
+    textInput.style.backgroundColor = "#000";
+    textInput.style.color = "#fff";
+  } else {
+    document.body.style.backgroundColor = initialState.background;
+    displayArea.style.backgroundColor = initialState.background;
+    displayArea.style.color = initialState.colorText;
+    textInput.style.backgroundColor = initialState.background;
+    textInput.style.color = initialState.colorText;
+  }
+}
+
+// 表示更新
+function updateDisplay(){
+  displayArea.textContent = textInput.value.trim() || "test";
+}
+
+// URL更新
+function updateURLParams(){
+  const url = new URL(window.location);
+  const params = new URLSearchParams(url.search);
+  if(textInput.value!==initialState.text) params.set("text", textInput.value);
+  if(fontSelector.value!==initialState.font) params.set("font", fontSelector.value);
+  if(fontWeightSlider.value!==initialState.weight) params.set("weight", fontWeightSlider.value);
+  if(fontSizeSlider.value!==initialState.size) params.set("size", fontSizeSlider.value);
+  if(lineHeightSlider.value!==initialState.line) params.set("line", lineHeightSlider.value);
+  if(accentSelector.value.toLowerCase()!==initialState.color.toLowerCase()) params.set("color", accentSelector.value);
+  const newURL = window.location.origin + window.location.pathname + "?" + params.toString();
+  window.history.replaceState({}, "", newURL);
+}
+
+// ローカル保存・ロード
+function saveToLocal(){
+  const state={text:textInput.value,font:fontSelector.value,weight:fontWeightSlider.value,size:fontSizeSlider.value,line:lineHeightSlider.value,color:accentSelector.value};
+  localStorage.setItem('textAppState',JSON.stringify(state));
+}
+function loadFromLocal(){
+  const state=JSON.parse(localStorage.getItem('textAppState')||'{}');
+  if(state.text) textInput.value=state.text;
+  if(state.font) fontSelector.value=state.font;
+  if(state.weight) fontWeightSlider.value=state.weight;
+  if(state.size) fontSizeSlider.value=state.size;
+  if(state.line) lineHeightSlider.value=state.line;
+  if(state.color) accentSelector.value=state.color;
+}
+
+// イベント
+textInput.addEventListener("input",()=>{updateDisplay(); saveToLocal(); updateURLParams();});
+fontSizeSlider.addEventListener("input",()=>{fontSizeValue.textContent=fontSizeSlider.value; updateStyles(); saveToLocal(); updateURLParams();});
+fontWeightSlider.addEventListener("input",()=>{fontWeightValue.textContent=fontWeightSlider.value; updateStyles(); saveToLocal(); updateURLParams();});
+lineHeightSlider.addEventListener("input",()=>{lineHeightValue.textContent=lineHeightSlider.value; updateStyles(); saveToLocal(); updateURLParams();});
+fontSelector.addEventListener("input",()=>{updateStyles(); saveToLocal(); updateURLParams();});
+accentSelector.addEventListener("input",()=>{updateStyles(); saveToLocal(); updateURLParams();});
+
+// Copy
+copyButton.addEventListener("click",()=>{
+  const url=new URL(window.location.origin+window.location.pathname);
+  const params=new URLSearchParams();
+  const order=["text","font","weight","size","line","color"];
+  const current={text:textInput.value,font:fontSelector.value,weight:fontWeightSlider.value,size:fontSizeSlider.value,line:lineHeightSlider.value,color:accentSelector.value};
+  order.forEach(k=>{if(current[k]!==initialState[k]) params.set(k,current[k]);});
+  url.search=params.toString();
+  navigator.clipboard.writeText(url.toString()).then(()=>{alert("URLコピーしました");});
+});
+
+// Reset
+resetButton.addEventListener("click",()=>{
+  textInput.value=initialState.text;
+  fontSelector.value=initialState.font;
+  fontWeightSlider.value=initialState.weight;
+  fontSizeSlider.value=initialState.size;
+  lineHeightSlider.value=initialState.line;
+  accentSelector.value=initialState.color;
+  fontSizeValue.textContent=fontSizeSlider.value;
+  fontWeightValue.textContent=fontWeightSlider.value;
+  lineHeightValue.textContent=lineHeightSlider.value;
+  updateDisplay();
+  updateStyles();
+  saveToLocal();
+  const url=window.location.origin+window.location.pathname;
+  window.history.replaceState({}, "", url);
+  localStorage.removeItem('textAppState');
+});
+
+// 初期ロード
+loadFromLocal();
+updateDisplay();
+updateStyles();
+
+// フッター更新
+const footerAuthor=document.getElementById("footer-author");
+const hostname=window.location.hostname;
+const baseYear=2025;
+const currentYear=new Date().getFullYear();
+const yearText=currentYear>baseYear?`${baseYear}~${currentYear}`:`${baseYear}`;
+if(hostname.includes("https://hamuzon-jp.f5.si")){
+  footerAuthor.innerHTML=`&copy;${yearText} <a href="https://hamuzon-jp.f5.si" target="_blank">@hamuzon</a>`;
+}else if(hostname.includes("hamusata.f5.si")){
+  footerAuthor.innerHTML=`&copy;${yearText} <a href="https://home.hamusata.f5.si" target="_blank">@hamusata</a>`;
+}else{
+  footerAuthor.innerHTML=`&copy;${yearText} Text Enlargement App`;
+}
+</script>
+</body>
+</html>

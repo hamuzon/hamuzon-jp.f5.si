@@ -1,271 +1,232 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <title>分数入力 / Fraction Input</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="icon" href="https://home.hamusata.f5.si/icon.svg" type="image/svg+xml" />
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      padding: 2rem 1rem;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f0f4f8;
-      color: #243746;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
-      user-select: none;
-    }
-    header { text-align: center; margin-bottom: 2rem; }
-    h1 { font-size: 2.4rem; font-weight: 700; color: #1a365d; margin-bottom: 0.3rem; }
-    h2 { font-size: 1.1rem; font-weight: 500; color: #4169aa; margin-top: 0; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fraction Output Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;700&family=Plus+Jakarta+Sans:wght@200;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #fdfdfd;
+            --text: #3d4043;
+            --accent: #94a3b8;
+            --glass: rgba(255, 255, 255, 0.8);
+            --font-jp: 'Noto Serif JP', serif;
+            --font-en: 'Plus Jakarta Sans', sans-serif;
+        }
 
-    .fraction-display {
-      font-weight: 700;
-      font-size: 4rem;
-      color: #1a2e4a;
-      margin-bottom: 2rem;
-      display: inline-flex;
-      align-items: center;
-      white-space: nowrap;
-    }
-    .numerator, .denominator {
-      font-size: 1.4em;
-    }
-    .numerator { vertical-align: super; transform: translateY(-0.3em); margin-right: 0.15em; }
-    .denominator { vertical-align: sub; transform: translateY(0.25em); margin-left: 0.15em; }
-    .slash { font-size: 1.2em; color: #4a6fa5; margin: 0 0.15em; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
-    .input-row {
-      display: flex;
-      justify-content: center;
-      gap: 1.5rem;
-      margin-bottom: 1.5rem;
-      width: 100%;
-      max-width: 320px;
-    }
-    input[type="text"] {
-      flex: 1;
-      padding: 0.5rem 0.75rem;
-      font-size: 1.5rem;
-      border: 3px solid #aaccee;
-      border-radius: 12px;
-      text-align: center;
-      color: #1a2e4a;
-      background-color: #e6f0fa;
-      cursor: text;
-    }
-    input[type="text"]:focus,
-    input.active {
-      border-color: #3f72af;
-      box-shadow: 0 0 10px #90a9d4;
-      outline: none;
-      background-color: #d7e3fc;
-    }
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: var(--font-jp);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-image: 
+                radial-gradient(circle at 15% 15%, #f1f5f9 0%, transparent 35%),
+                radial-gradient(circle at 85% 85%, #f8fafc 0%, transparent 35%);
+            padding: clamp(20px, 5vw, 60px);
+            overflow-x: hidden;
+            line-height: 1.8;
+        }
 
-    .numpad {
-      display: grid;
-      grid-template-columns: repeat(3, 90px);
-      gap: 14px;
-      justify-content: center;
-      margin-bottom: 2rem;
-    }
-    .numpad button {
-      font-size: 1.7rem;
-      font-weight: 700;
-      padding: 16px 0;
-      border: none;
-      border-radius: 16px;
-      background: linear-gradient(145deg, #5a82d8, #2d4ca5);
-      color: white;
-      cursor: pointer;
-      box-shadow: 3px 4px 8px rgba(45, 76, 165, 0.7);
-    }
-    .numpad button:hover { background: linear-gradient(145deg, #2d4ca5, #1e357a); }
-    .numpad button:active {
-      background: linear-gradient(145deg, #1b2d61, #15254c);
-      box-shadow: inset 2px 2px 6px rgba(0, 0, 0, 0.3);
-      transform: translateY(3px);
-    }
+        .hub-wrapper {
+            width: 100%;
+            max-width: 900px;
+            display: flex;
+            flex-direction: column;
+            gap: clamp(60px, 12vh, 100px);
+            flex: 1;
+            justify-content: center;
+            margin-bottom: 60px;
+        }
 
-    .actions {
-      display: flex;
-      justify-content: center;
-      gap: 1.2rem;
-      margin-bottom: 1rem;
-    }
-    .actions button {
-      background: #aaccee;
-      border: none;
-      border-radius: 14px;
-      padding: 12px 32px;
-      font-weight: 700;
-      font-size: 1.2rem;
-      color: #2a4374;
-      cursor: pointer;
-      box-shadow: 3px 4px 6px rgba(42, 67, 116, 0.6);
-    }
-    .actions button:hover {
-      background: #2d4ca5;
-      color: white;
-    }
-    .actions button:active {
-      background: #1a2d61;
-      box-shadow: inset 3px 3px 7px rgba(0, 0, 0, 0.4);
-      transform: translateY(2px);
-      color: white;
-    }
+        header {
+            width: 100%;
+            position: relative;
+            z-index: 2;
+        }
 
-    #message {
-      font-weight: 600;
-      text-align: center;
-      min-height: 1.4em;
-      color: #1a4d8f;
-    }
+        .label-top {
+            font-family: var(--font-en);
+            font-size: 0.7rem;
+            letter-spacing: 0.6em;
+            color: var(--accent);
+            margin-bottom: clamp(15px, 3vw, 25px);
+            display: block;
+            text-transform: uppercase;
+            font-weight: 800;
+        }
 
-    @media (max-width: 420px) {
-      .numpad {
-        grid-template-columns: repeat(3, 70px);
-        gap: 10px;
-      }
-      .numpad button {
-        font-size: 1.3rem;
-        padding: 12px 0;
-      }
-      .input-row {
-        gap: 1rem;
-      }
-      input[type="text"] {
-        font-size: 1.2rem;
-        padding: 0.4rem 0.5rem;
-      }
-      .actions button {
-        padding: 10px 24px;
-        font-size: 1rem;
-      }
-    }
-  </style>
+        .title {
+            font-family: var(--font-en);
+            font-size: clamp(2rem, 9vw, 5rem);
+            font-weight: 200;
+            line-height: 1.05;
+            letter-spacing: -0.03em;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .title span:nth-child(2) { 
+            margin-left: clamp(15px, 6vw, 60px); 
+            color: var(--accent);
+            font-style: italic;
+        }
+        .title span:nth-child(3) { 
+            margin-left: clamp(30px, 12vw, 120px);
+        }
+
+        .nav-container {
+            display: flex;
+            flex-direction: column;
+            gap: clamp(40px, 8vw, 50px);
+            width: 100%;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: flex-start;
+            text-decoration: none;
+            color: var(--text);
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            width: 100%;
+            max-width: 650px;
+        }
+
+        @media (min-width: 769px) {
+            .nav-item.offset { align-self: flex-end; }
+        }
+
+        .card-num {
+            font-family: var(--font-en);
+            font-size: clamp(0.8rem, 2vw, 1rem);
+            font-weight: 800;
+            color: var(--accent);
+            margin-right: clamp(15px, 3vw, 35px);
+            margin-top: clamp(12px, 2.5vw, 18px);
+        }
+
+        .card-content {
+            background: var(--glass);
+            padding: clamp(30px, 6vw, 55px);
+            border-radius: 0 45px 45px 45px;
+            border: 1px solid rgba(255, 255, 255, 1);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+            width: 100%;
+            transition: all 0.4s ease;
+        }
+
+        .nav-item:hover { transform: translateY(-8px); }
+        .nav-item:hover .card-content {
+            background: #ffffff;
+            box-shadow: 0 25px 50px rgba(148, 163, 184, 0.15);
+            border-color: var(--accent);
+        }
+
+        .card-content h3 {
+            font-size: clamp(1.4rem, 4vw, 2rem);
+            font-weight: 700;
+            margin-bottom: 12px;
+            line-height: 1.2;
+        }
+
+        .card-content p {
+            font-size: clamp(0.85rem, 1.5vw, 0.95rem);
+            opacity: 0.8;
+            word-break: keep-all;
+        }
+
+        .card-content p strong {
+            color: var(--text);
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 2px;
+        }
+
+        footer {
+            width: 100%;
+            text-align: center;
+            padding: 40px 20px;
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            color: var(--accent);
+            font-family: var(--font-en);
+            border-top: 1px solid rgba(148, 163, 184, 0.1);
+            margin-top: auto;
+        }
+
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+
+        footer a:hover { opacity: 0.6; }
+        .footer-separator { margin: 0 8px; opacity: 0.5; }
+
+        @media (max-width: 768px) {
+            .hub-wrapper { gap: 50px; }
+            .title span:nth-child(2) { margin-left: 10px; }
+            .title span:nth-child(3) { margin-left: 20px; }
+            .card-content { border-radius: 0 30px 30px 30px; }
+        }
+    </style>
 </head>
 <body>
 
-<header>
-  <h1>分数入力 / Fraction Input</h1>
-  <h2>分子と分母を別々に入力できます<br>Input numerator and denominator separately</h2>
-</header>
+    <div class="hub-wrapper">
+        <header>
+            <span class="label-top">Select Your Version</span>
+            <h1 class="title">
+                <span>Fraction</span>
+                <span>Output</span>
+                <span>Hub</span>
+            </h1>
+        </header>
 
-<main style="width:100%; max-width:360px;">
+        <nav class="nav-container">
+            <a href="fraction.html" class="nav-item">
+                <span class="card-num">V2</span>
+                <div class="card-content">
+                    <h3>UI Update<br>Edition</h3>
+                    <p>
+                        <strong>最新版Version</strong><br>
+                        最新版。UI アップデート レスポンシブ強化 Version
+                    </p>
+                </div>
+            </a>
 
-  <section aria-label="分数表示エリア" style="text-align:center;">
-    <div class="fraction-display" id="fraction-display">
-      <span class="numerator" id="numerator-display">0</span>
-      <span class="slash">⁄</span>
-      <span class="denominator" id="denominator-display">1</span>
+            <a href="legacy.html" class="nav-item offset">
+                <span class="card-num">V1</span>
+                <div class="card-content">
+                    <h3>Basic<br>Edition</h3>
+                    <p>
+                        <strong>基本バージョン</strong><br>
+                        基本バージョン今までのVersion
+                    </p>
+                </div>
+            </a>
+        </nav>
     </div>
-  </section>
 
-  <section class="input-row">
-    <input type="text" id="numerator-input" placeholder="分子 / Numerator" readonly />
-    <input type="text" id="denominator-input" placeholder="分母 / Denominator" readonly />
-  </section>
+    <footer>
+        <div class="footer-content">
+            &copy; <span id="year"></span> Fraction Output <span class="footer-separator">|</span> @hamuzon
+            <br>
+            <a href="https://hamuzon-jp.f5.si" target="_blank" rel="noopener noreferrer">hamuzon-jp.f5.si</a>
+        </div>
+    </footer>
 
-  <section class="numpad">
-    <button type="button">1</button>
-    <button type="button">2</button>
-    <button type="button">3</button>
-    <button type="button">4</button>
-    <button type="button">5</button>
-    <button type="button">6</button>
-    <button type="button">7</button>
-    <button type="button">8</button>
-    <button type="button">9</button>
-    <button type="button">0</button>
-    <button type="button" id="clear-button">クリア</button>
-    <button type="button" id="toggle-button">⇅</button>
-  </section>
-
-  <section class="actions">
-    <button type="button" id="copy-button">コピー / Copy</button>
-    <div id="message" role="alert" aria-live="assertive"></div>
-  </section>
-
-</main>
-
-<script>
-  const superscriptMap = { '0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹' };
-  const subscriptMap = { '0':'₀','1':'₁','2':'₂','3':'₃','4':'₄','5':'₅','6':'₆','7':'₇','8':'₈','9':'₉' };
-
-  const numeratorInput = document.getElementById('numerator-input');
-  const denominatorInput = document.getElementById('denominator-input');
-  const numeratorDisplay = document.getElementById('numerator-display');
-  const denominatorDisplay = document.getElementById('denominator-display');
-  const messageEl = document.getElementById('message');
-  const buttons = document.querySelectorAll('.numpad button');
-
-  let activeInput = numeratorInput;
-  numeratorInput.classList.add('active');
-
-  function toSuperscript(str) {
-    return str.split('').map(ch => superscriptMap[ch] || ch).join('');
-  }
-
-  function toSubscript(str) {
-    return str.split('').map(ch => subscriptMap[ch] || ch).join('');
-  }
-
-  function updateDisplay() {
-    const num = numeratorInput.value || '0';
-    const den = denominatorInput.value || '0';
-
-    numeratorDisplay.textContent = toSuperscript(num);
-    denominatorDisplay.textContent = toSubscript(den);
-  }
-
-  function clearInputs() {
-    numeratorInput.value = '';
-    denominatorInput.value = '';
-    updateDisplay();
-    messageEl.textContent = '';
-  }
-
-  function showMessage(msg, isSuccess = false) {
-    messageEl.textContent = msg;
-    messageEl.style.color = isSuccess ? '#1a5a96' : '#d32f2f';
-  }
-
-  buttons.forEach(button => {
-    button.addEventListener('click', () => {
-      const val = button.textContent;
-      if (button.id === 'clear-button') return clearInputs();
-      if (button.id === 'toggle-button') {
-        activeInput = activeInput === numeratorInput ? denominatorInput : numeratorInput;
-        numeratorInput.classList.toggle('active');
-        denominatorInput.classList.toggle('active');
-        messageEl.textContent = '';
-        return;
-      }
-      activeInput.value += val;
-      updateDisplay();
-      messageEl.textContent = '';
-    });
-  });
-
-  document.getElementById('copy-button').addEventListener('click', () => {
-    const num = numeratorInput.value.trim();
-    const den = denominatorInput.value.trim();
-    if (!num) return showMessage('分子を入力してください');
-    if (!den || den === '0') return showMessage('分母を0以外で入力してください');
-
-    const result = toSuperscript(num) + '⁄' + toSubscript(den);
-    navigator.clipboard.writeText(result)
-      .then(() => showMessage(`コピーしました: ${result}`, true))
-      .catch(() => showMessage('コピーに失敗しました'));
-  });
-
-  updateDisplay();
-</script>
-
+    <script>
+        const baseYear = 2025;
+        const now = new Date().getFullYear();
+        document.getElementById("year").textContent =
+          now > baseYear ? `${baseYear}~${now}` : `${baseYear}`;
+    </script>
 </body>
 </html>

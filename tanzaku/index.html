@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>短冊メーカー / Tanazaku Maker - Redirecting...</title>
+  <style>
+    body {
+      font-family: "Yu Gothic", "游ゴシック体", "メイリオ", meiryo, sans-serif;
+      padding: 1rem;
+      line-height: 1.6;
+      max-width: 600px;
+      margin: auto;
+      color: #333;
+      background-color: #fff;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    a {
+      color: #1a73e8;
+      text-decoration: none;
+      border-bottom: 1px solid #1a73e8;
+    }
+    a:hover,
+    a:focus {
+      text-decoration: underline;
+      outline: none;
+    }
+    p {
+      font-size: 1rem;
+    }
+    @media (max-width: 480px) {
+      body {
+        padding: 0.5rem;
+        font-size: 0.9rem;
+      }
+      p {
+        font-size: 0.9rem;
+      }
+    }
+    /* ダークモード対応 */
+    @media (prefers-color-scheme: dark) {
+      body {
+        background-color: #121212;
+        color: #eee;
+      }
+      a {
+        color: #8ab4f8;
+        border-bottom-color: #8ab4f8;
+      }
+      a:hover,
+      a:focus {
+        text-decoration: underline;
+      }
+    }
+  </style>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const now = new Date();
+      const year = now.getFullYear();
+
+      let targetYear = 2025;
+      if (year === 2026) targetYear = 2026;
+
+      const redirectUrl = `${targetYear}/index.html`;
+
+      setTimeout(() => {
+        location.href = redirectUrl;
+      }, 0);
+
+      const p = document.getElementById("message");
+      p.innerHTML =
+        `短冊メーカー${targetYear}へ自動で移動しています。<br>` +
+        `もし自動的に進まない場合は、<a href="${redirectUrl}">こちら</a> をクリックしてください。<br><br>` +
+        `Redirecting to Tanazaku Maker ${targetYear}.<br>` +
+        `If you are not redirected automatically, please click <a href="${redirectUrl}">here</a>.`;
+    });
+  </script>
+</head>
+<body>
+  <p id="message">読み込み中…</p>
+
+  <noscript>
+    <p>
+      自動で移動できないようです。お手数ですが、下のリンクからお進みください。<br />
+
+      <a href="2026/index.html">短冊メーカー2026へ</a><br><br>
+      Automatic redirection is not working. Please use the links below to proceed.<br />
+      <a href="2026/index.html">Tanazaku Maker 2026</a>
+    </p>
+  </noscript>
+</body>
+</html>

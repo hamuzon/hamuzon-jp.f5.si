@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Text enlargement app</title>
+  <meta name="description" content="Text拡大appです。入力したテキストを拡大表示します" />
+  <link rel="icon" href="icon-light.png" type="image/png">
+
+  <link href="https://fonts.googleapis.com/css2?family=Potta+One&family=Noto+Serif+JP&family=Sawarabi+Mincho&family=Zen+Kaku+Gothic+New&family=Kosugi+Maru&family=Kiwi+Maru&family=Shippori+Mincho&family=M+PLUS+Rounded+1c&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --color-primary: #00793d;
+      --color-secondary: #4a6354;
+      --color-background: #ffffff;
+      --color-on-background: #1a1c19;
+      --shape-corner-medium: 12px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+
+    body {
+      font-family: 'Zen Kaku Gothic New', 'Potta One', sans-serif;
+      background-color: var(--color-background);
+      color: var(--color-on-background);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background-color: var(--color-primary);
+      color: #ffffff;
+      padding: 1rem 1rem;
+      font-weight: 700;
+      font-size: 6vw;
+      letter-spacing: 0.12em;
+      text-align: center;
+      user-select: text;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex-shrink: 0;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    main {
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      max-width: 900px;
+      margin: 0 auto;
+      width: 100%;
+      gap: 1.5rem;
+      padding: 1.5rem 1rem;
+      min-width: 320px;
+    }
+
+    section {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 1rem;
+      color: var(--color-secondary);
+      font-weight: bold;
+    }
+
+    textarea#textInput {
+      width: 100%;
+      min-height: 140px;
+      font-size: 40px;
+      font-family: inherit;
+      padding: 1rem;
+      border-radius: var(--shape-corner-medium);
+      border: 2px solid var(--color-primary);
+      resize: vertical;
+      background-color: var(--color-background);
+      color: var(--color-on-background);
+      transition: border-color 0.3s ease;
+      flex-shrink: 0;
+      outline: none;
+    }
+
+    #displayArea {
+      width: 100%;
+      min-height: 200px;
+      font-weight: 600;
+      font-size: 120px;
+      line-height: 1.4;
+      padding: 1.5rem;
+      border-radius: var(--shape-corner-medium);
+      background-color: var(--color-background);
+      box-shadow: 0 0 12px var(--color-primary);
+      white-space: pre-wrap;
+      word-break: break-word;
+      user-select: text;
+      border: 2px solid var(--color-primary);
+      font-family: 'Potta One', cursive;
+      flex-grow: 1;
+      overflow-y: auto;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    #settings {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+      align-items: flex-start;
+      background-color: #f8f9f8;
+      padding: 1.2rem;
+      border-radius: var(--shape-corner-medium);
+    }
+
+    .setting-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 140px;
+      flex: 1;
+    }
+
+    .setting-item label {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      text-align: center;
+      font-size: 0.85rem;
+    }
+
+    .setting-item input,
+    .setting-item select {
+      width: 100%;
+      cursor: pointer;
+    }
+
+    output {
+      font-size: 0.8rem;
+      font-weight: bold;
+      margin-top: 4px;
+      color: var(--color-primary);
+    }
+
+    footer#footer {
+      text-align: center;
+      font-size: clamp(0.7rem, 1.2vw, 1rem);
+      color: var(--color-secondary);
+      padding: 1.5rem 0 2.5rem 0;
+      user-select: text;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+
+<body>
+
+<header id="appTitle">文字拡大アプリ</header>
+
+<main>
+  <section>
+    <h2>入力</h2>
+    <textarea id="textInput" placeholder="ここにテキストを入力してください"></textarea>
+  </section>
+
+  <section style="flex:1 1 auto; display:flex; flex-direction:column;">
+    <h2>出力</h2>
+    <div id="displayArea">test</div>
+  </section>
+
+  <section>
+    <h2>設定</h2>
+    <div id="settings">
+      <div class="setting-item">
+        <label for="fontSizeSlider">サイズ (px)</label>
+        <input type="range" id="fontSizeSlider" min="40" max="400" step="1" value="120" />
+        <output id="fontSizeValue">120</output>
+      </div>
+
+      <div class="setting-item">
+        <label for="fontWeightSlider">太さ</label>
+        <input type="range" id="fontWeightSlider" min="100" max="900" step="100" value="600" />
+        <output id="fontWeightValue">600</output>
+      </div>
+
+      <div class="setting-item">
+        <label for="lineHeightSlider">行間</label>
+        <input type="range" id="lineHeightSlider" min="1" max="2.5" step="0.05" value="1.4" />
+        <output id="lineHeightValue">1.4</output>
+      </div>
+
+      <div class="setting-item">
+        <label for="fontSelector">フォント</label>
+        <select id="fontSelector">
+          <option value="'Potta One', cursive" selected>Potta One</option>
+          <option value="'Zen Kaku Gothic New', sans-serif">Zen Kaku Gothic</option>
+          <option value="'Noto Serif JP', serif">Noto Serif JP</option>
+          <option value="'Sawarabi Mincho', serif">Sawarabi Mincho</option>
+          <option value="'Shippori Mincho', serif">Shippori Mincho</option>
+          <option value="'Kosugi Maru', sans-serif">Kosugi Maru</option>
+          <option value="'Kiwi Maru', serif">Kiwi Maru</option>
+          <option value="'M PLUS Rounded 1c', sans-serif">M PLUS Rounded 1c</option>
+          <option value="sans-serif">System Sans-serif</option>
+        </select>
+      </div>
+
+      <div class="setting-item">
+        <label for="accentSelector">アクセント</label>
+        <input type="color" id="accentSelector" value="#00793d" />
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer id="footer">
+  <div id="footer-author">&copy; <span id="yearRange"></span> Text enlargement app</div>
+  <div>
+    <a href="https://hamuzon-jp.f5.si" target="_blank" rel="noopener noreferrer">@hamuzon</a>
+  </div>
+</footer>
+
+<script>
+  const textInput        = document.getElementById("textInput");
+  const displayArea      = document.getElementById("displayArea");
+  const fontSizeSlider   = document.getElementById("fontSizeSlider");
+  const fontSizeValue    = document.getElementById("fontSizeValue");
+  const fontWeightSlider = document.getElementById("fontWeightSlider");
+  const fontWeightValue  = document.getElementById("fontWeightValue");
+  const lineHeightSlider = document.getElementById("lineHeightSlider");
+  const lineHeightValue  = document.getElementById("lineHeightValue");
+  const fontSelector     = document.getElementById("fontSelector");
+  const accentSelector   = document.getElementById("accentSelector");
+  const header           = document.getElementById("appTitle");
+  const yearRangeDisplay = document.getElementById("yearRange");
+
+  const BASE_YEAR = 2025;
+  const nowYear = new Date().getFullYear();
+  yearRangeDisplay.textContent = nowYear <= BASE_YEAR ? BASE_YEAR : `${BASE_YEAR}–${nowYear}`;
+
+  function updateDisplay() {
+    displayArea.textContent = textInput.value.trim() || "test";
+    updateStyles();
+  }
+
+  function updateStyles() {
+    const accent = accentSelector.value;
+    
+    displayArea.style.fontSize   = fontSizeSlider.value + "px";
+    displayArea.style.fontWeight = fontWeightSlider.value;
+    displayArea.style.lineHeight = lineHeightSlider.value;
+    displayArea.style.fontFamily = fontSelector.value;
+
+    textInput.style.borderColor   = accent;
+    displayArea.style.borderColor = accent;
+    displayArea.style.boxShadow   = `0 0 12px ${accent}`;
+    header.style.backgroundColor  = accent;
+    header.style.color            = getContrastColor(accent);
+
+    fontSizeValue.textContent   = fontSizeSlider.value;
+    fontWeightValue.textContent = fontWeightSlider.value;
+    lineHeightValue.textContent = lineHeightSlider.value;
+  }
+
+  function luminance(r, g, b) {
+    const a = [r, g, b].map(v => {
+      v /= 255;
+      return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+    });
+    return 0.2126 * a[0] + 0.7152 * a[1] + 0.0722 * a[2];
+  }
+
+  function getContrastColor(hexColor) {
+    const r = parseInt(hexColor.substr(1, 2), 16);
+    const g = parseInt(hexColor.substr(3, 2), 16);
+    const b = parseInt(hexColor.substr(5, 2), 16);
+    return luminance(r, g, b) > 0.5 ? "#000000" : "#ffffff";
+  }
+
+  textInput.addEventListener("input", updateDisplay);
+  [fontSizeSlider, fontWeightSlider, lineHeightSlider, fontSelector, accentSelector].forEach(el => {
+    el.addEventListener("input", updateStyles);
+  });
+
+  updateDisplay();
+</script>
+
+</body>
+</html>

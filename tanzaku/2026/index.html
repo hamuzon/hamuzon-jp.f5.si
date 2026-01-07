@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>七夕短冊メーカー 2026</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+</head>
+<body>
+  <header>
+    🎋 七夕短冊メーカー 2026 / Tanzaku Maker 2026🎋
+  </header>
+
+  <div class="container">
+    <!-- 入力フォーム -->
+    <div class="input-area" role="form" aria-label="願い事入力フォーム">
+      <input id="wishInput" type="text" placeholder="願い事を書いてください🌟 / Enter your wish" maxlength="50" aria-label="願い事" />
+      <input id="nameInput" type="text" placeholder="名前（任意） / Name (Optional)" maxlength="20" aria-label="名前" />
+      <select id="colorSelect" aria-label="短冊の色を選択">
+        <option value="red" selected>赤 / Red</option>
+        <option value="blue">青 / Blue</option>
+        <option value="yellow">黄 / Yellow</option>
+        <option value="green">緑 / Green</option>
+        <option value="purple">紫 / Purple</option>
+      </select>
+      <button type="button" onclick="addOwn()">🎋 表示 / Show</button>
+    </div>
+
+    <!-- ユーザー短冊表示エリア -->
+    <div class="tanzaku-wrapper" id="ownWrapper" style="display:none;"></div>
+
+    <!-- 例の短冊 -->
+    <div class="tanzaku-wrapper" id="exampleTanzaku">
+      <div class="string"></div>
+      <div class="tanzaku red">🌏世界が平和でありますように<div class="name">願い星</div></div>
+
+      <div class="string"></div>
+      <div class="tanzaku blue">😊毎日楽しくすごせますように<div class="name">星のしずく</div></div>
+
+      <div class="string"></div>
+      <div class="tanzaku green">🎓勉強がうまくいきますように<div class="name">たなばたの風</div></div>
+    </div>
+
+    <!-- 保存・投稿ボタン -->
+    <div class="btn-area" id="btnArea" style="display:none;">
+      <button id="saveBtn" type="button">🎁 持ち帰る / Save</button>
+      <button id="postBtn" type="button">🚀 投稿 / Post</button>
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2026 <a href="https://hamuzon.web.fc2.com/" target="_blank" rel="noopener noreferrer">@hamuzon</a>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

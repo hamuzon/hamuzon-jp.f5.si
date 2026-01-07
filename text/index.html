@@ -1,285 +1,231 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Text enlargement app</title>
-  <meta name="description" content="Text拡大appですいれたText拡大表示します" />
-  <link rel="icon" href="https://home.hamusata.f5.si/icon.svg" type="image/svg+xml" />
-  <link href="https://fonts.googleapis.com/css2?family=Potta+One&family=Noto+Serif+JP&family=Sawarabi+Mincho&display=swap" rel="stylesheet" />
-  <style>
-    :root {
-      --color-primary: #00793d;
-      --color-primary-contrast-light: #ffffff;
-      --color-primary-contrast-dark: #000000;
-      --color-secondary: #4a6354;
-      --color-background: #ffffff;
-      --color-on-background: #1a1c19;
-      --shape-corner-medium: 12px;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text App Selector Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;700&family=Plus+Jakarta+Sans:wght@200;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #fffbf8;
+            --text: #4a4441;
+            --accent: #bdae9e;
+            --glass: rgba(255, 255, 255, 0.85);
+            --font-jp: 'Noto Serif JP', serif;
+            --font-en: 'Plus Jakarta Sans', sans-serif;
+        }
 
-    body {
-      margin: 0;
-      font-family: 'Potta One', 'Sawarabi Mincho', 'Noto Serif JP', serif;
-      background-color: var(--color-background);
-      color: var(--color-on-background);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
-    header {
-      background-color: var(--color-primary);
-      color: var(--header-text-color);
-      padding: 1.2rem 2rem;
-      font-weight: 700;
-      font-size: 2.2rem;
-      letter-spacing: 0.12em;
-      text-align: center;
-      user-select: none;
-      transition: color 0.3s ease;
-    }
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: var(--font-jp);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-image: 
+                radial-gradient(circle at 10% 20%, #ffede0 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, #e0f0ff 0%, transparent 40%);
+            padding: clamp(20px, 5vw, 60px);
+            overflow-x: hidden;
+            line-height: 1.8;
+        }
 
-    main {
-      max-width: 900px;
-      margin: 0 auto 2rem auto;
-      padding: 0 1rem;
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 2rem;
-      min-width: 320px;
-    }
+        .hub-wrapper {
+            width: 100%;
+            max-width: 900px;
+            display: flex;
+            flex-direction: column;
+            gap: clamp(60px, 12vh, 120px);
+            flex: 1;
+            justify-content: center;
+            margin-bottom: 60px;
+        }
 
-    textarea#textInput {
-      width: 100%;
-      min-height: 120px;
-      font-size: 40px;
-      font-family: inherit;
-      padding: 0.8rem 1rem;
-      border-radius: var(--shape-corner-medium);
-      border: 2px solid var(--color-primary);
-      resize: vertical;
-      box-sizing: border-box;
-      color: var(--color-on-background);
-      background-color: var(--color-background);
-      transition: border-color 0.3s ease;
-    }
+        header {
+            width: 100%;
+            position: relative;
+            z-index: 2;
+        }
 
-    #displayArea {
-      width: 100%;
-      min-height: 180px;
-      font-weight: 600;
-      font-size: var(--font-size, 120px);
-      line-height: var(--line-height, 1.4);
-      color: #000000;
-      padding: 0.6rem 0;
-      border-radius: var(--shape-corner-medium);
-      background-color: var(--color-background);
-      box-shadow: 0 0 12px var(--color-primary);
-      white-space: pre-wrap;
-      word-break: break-word;
-      user-select: text;
-      border: 2px solid var(--color-primary);
-      transition: border-color 0.3s ease, box-shadow 0.3s ease;
-      font-family: 'Potta One', cursive;
-    }
+        .label-top {
+            font-family: var(--font-en);
+            font-size: 0.75rem;
+            letter-spacing: 0.8em;
+            color: var(--accent);
+            margin-bottom: clamp(15px, 3vw, 30px);
+            display: block;
+            text-transform: uppercase;
+            font-weight: 800;
+        }
 
-    #settings {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1.2rem;
-      justify-content: center;
-      align-items: flex-start;
-    }
+        .title {
+            font-family: var(--font-en);
+            font-size: clamp(2.2rem, 10vw, 5.5rem);
+            font-weight: 200;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            display: flex;
+            flex-direction: column;
+        }
 
-    .setting-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-width: 120px;
-    }
+        .title span:nth-child(2) { 
+            margin-left: clamp(20px, 8vw, 80px); 
+            color: var(--accent);
+            font-style: italic;
+        }
+        .title span:nth-child(3) { 
+            margin-left: clamp(40px, 16vw, 160px);
+        }
 
-    .setting-item label {
-      font-weight: 600;
-      margin-bottom: 0.3rem;
-      text-align: center;
-    }
+        .nav-container {
+            display: flex;
+            flex-direction: column;
+            gap: clamp(40px, 8vw, 60px);
+            width: 100%;
+        }
 
-    .setting-item input[type=range],
-    .setting-item select,
-    .setting-item input[type=color],
-    .setting-item input[type=text] {
-      width: 100%;
-      box-sizing: border-box;
-    }
+        .nav-item {
+            display: flex;
+            align-items: flex-start;
+            text-decoration: none;
+            color: var(--text);
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            width: 100%;
+            max-width: 650px;
+        }
 
-    footer#footer {
-      text-align: center;
-      font-size: 0.85rem;
-      color: var(--color-secondary);
-      padding: 1rem 0 2rem 0;
-      user-select: none;
-    }
+        @media (min-width: 769px) {
+            .nav-item.offset { align-self: flex-end; }
+        }
 
-    footer#footer a {
-      color: var(--color-primary);
-      text-decoration: none;
-    }
+        .card-num {
+            font-family: var(--font-en);
+            font-size: clamp(0.7rem, 2vw, 0.9rem);
+            font-weight: 800;
+            color: var(--accent);
+            margin-right: clamp(10px, 3vw, 30px);
+            margin-top: clamp(10px, 2vw, 15px);
+        }
 
-    footer#footer a:hover {
-      text-decoration: underline;
-    }
-  </style>
+        .card-content {
+            background: var(--glass);
+            padding: clamp(25px, 5vw, 60px);
+            border-radius: 0 40px 40px 40px;
+            border: 1px solid rgba(255, 255, 255, 1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 15px 35px rgba(74, 68, 65, 0.05);
+            width: 100%;
+            transition: all 0.4s ease;
+        }
+
+        .nav-item:hover { transform: scale(1.02) translateY(-10px); }
+        .nav-item:hover .card-content {
+            background: #ffffff;
+            box-shadow: 0 30px 60px rgba(189, 174, 158, 0.2);
+            border-color: var(--accent);
+        }
+
+        .card-content h3 {
+            font-size: clamp(1.4rem, 4vw, 2.2rem);
+            font-weight: 700;
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
+
+        .card-content p {
+            font-size: clamp(0.85rem, 1.5vw, 0.95rem);
+            opacity: 0.8;
+            word-break: keep-all;
+        }
+
+        .card-content p strong {
+            color: var(--text);
+            border-bottom: 2px solid var(--accent);
+        }
+
+        footer {
+            width: 100%;
+            text-align: center;
+            padding: 40px 20px;
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            color: var(--accent);
+            font-family: var(--font-en);
+            border-top: 1px solid rgba(189, 174, 158, 0.2);
+            margin-top: auto;
+        }
+
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+
+        footer a:hover { opacity: 0.6; }
+        .footer-separator { margin: 0 8px; opacity: 0.5; }
+
+        @media (max-width: 768px) {
+            .hub-wrapper { gap: 60px; }
+            .title span:nth-child(2) { margin-left: 15px; }
+            .title span:nth-child(3) { margin-left: 30px; }
+            .card-content { border-radius: 0 25px 25px 25px; }
+        }
+    </style>
 </head>
 <body>
-  <header id="appTitle">文字拡大アプリ</header>
 
-  <main>
-    <section>
-      <h2>入力</h2>
-      <textarea id="textInput" placeholder="ここにテキストを入力してください"></textarea>
-    </section>
+    <div class="hub-wrapper">
+        <header>
+            <span class="label-top">Please select a version</span>
+            <h1 class="title">
+                <span>Text</span>
+                <span>App</span>
+                <span>Selector</span>
+            </h1>
+        </header>
 
-    <section>
-      <h2>出力</h2>
-      <div id="displayArea">test</div>
-    </section>
+        <nav class="nav-container">
+            <a href="text.html" class="nav-item">
+                <span class="card-num">01</span>
+                <div class="card-content">
+                    <h3>Latest<br>Revision</h3>
+                    <p>
+                        <strong>URL共通対応</strong><br>
+                       サイズ・太さ・行間など今までの機能他URL共通対応
+                    </p>
+                </div>
+            </a>
 
-    <section>
-      <h2>設定</h2>
-      <div id="settings">
-        <div class="setting-item">
-          <label for="fontSizeSlider">フォントサイズ (px)</label>
-          <input type="range" id="fontSizeSlider" min="40" max="400" step="1" value="120" />
-          <output id="fontSizeValue">120</output>
-        </div>
-        <div class="setting-item">
-          <label for="fontWeightSlider">フォント太さ</label>
-          <input type="range" id="fontWeightSlider" min="400" max="900" step="100" value="600" />
-          <output id="fontWeightValue">600</output>
-        </div>
-        <div class="setting-item">
-          <label for="lineHeightSlider">行間</label>
-          <input type="range" id="lineHeightSlider" min="1" max="2" step="0.05" value="1.4" />
-          <output id="lineHeightValue">1.4</output>
-        </div>
-        <div class="setting-item">
-          <label for="fontSelector">フォント選択</label>
-          <select id="fontSelector">
-            <option value="'Potta One', cursive" selected>Potta One</option>
-            <option value="'Noto Serif JP', serif">Noto Serif JP</option>
-            <option value="'Sawarabi Mincho', serif">Sawarabi Mincho</option>
-            <option value="Arial, sans-serif">Arial</option>
-            <option value="Verdana, sans-serif">Verdana</option>
-            <option value="'Courier New', monospace">Courier New</option>
-          </select>
-        </div>
-        <div class="setting-item">
-          <label for="accentSelector">アクセントカラー</label>
-          <input type="color" id="accentSelector" value="#00793d" />
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer id="footer">
-    <div id="footer-author"></div>
-    <div>
-      使用ライブラリー:
-      <a href="https://developer.mozilla.org/ja/docs/Web/HTML" target="_blank" rel="noopener noreferrer">HTML5</a>,
-      <a href="https://developer.mozilla.org/ja/docs/Web/CSS" target="_blank" rel="noopener noreferrer">CSS3</a>,
-      <a href="https://developer.mozilla.org/ja/docs/Web/JavaScript" target="_blank" rel="noopener noreferrer">Vanilla JavaScript</a>,
-      <a href="https://fonts.google.com/" target="_blank" rel="noopener noreferrer">Google Fonts</a>
+            <a href="legacy.html" class="nav-item offset">
+                <span class="card-num">02</span>
+                <div class="card-content">
+                    <h3>Legacy<br>Console</h3>
+                    <p>
+                        <strong>道具としてのシンプルさを追求。</strong><br>
+                        サイズ・太さ・行間などあるのlegacy Version。
+                    </p>
+                </div>
+            </a>
+        </nav>
     </div>
-  </footer>
 
-  <script>
-    const textInput = document.getElementById("textInput");
-    const displayArea = document.getElementById("displayArea");
-    const header = document.getElementById("appTitle");
+    <footer>
+        <div class="footer-content">
+            &copy; <span id="year"></span> Text App <span class="footer-separator">|</span> @hamuzon
+            <br>
+            <a href="https://hamuzon-jp.f5.si" target="_blank" rel="noopener noreferrer">hamuzon.web.fc2.com</a>
+        </div>
+    </footer>
 
-    const fontSizeSlider = document.getElementById("fontSizeSlider");
-    const fontSizeValue = document.getElementById("fontSizeValue");
-
-    const fontWeightSlider = document.getElementById("fontWeightSlider");
-    const fontWeightValue = document.getElementById("fontWeightValue");
-
-    const lineHeightSlider = document.getElementById("lineHeightSlider");
-    const lineHeightValue = document.getElementById("lineHeightValue");
-
-    const fontSelector = document.getElementById("fontSelector");
-    const accentSelector = document.getElementById("accentSelector");
-
-    function updateDisplay() {
-      displayArea.textContent = textInput.value.trim() || "test";
-    }
-
-    function updateStyles() {
-      displayArea.style.fontSize = fontSizeSlider.value + "px";
-      displayArea.style.fontWeight = fontWeightSlider.value;
-      displayArea.style.lineHeight = lineHeightSlider.value;
-      displayArea.style.fontFamily = fontSelector.value;
-      displayArea.style.color = "#000000";
-
-      textInput.style.borderColor = accentSelector.value;
-      displayArea.style.borderColor = accentSelector.value;
-      displayArea.style.boxShadow = `0 0 12px ${accentSelector.value}`;
-
-      header.style.backgroundColor = accentSelector.value;
-      updateHeaderTextColor(accentSelector.value);
-    }
-
-    function luminance(r, g, b) {
-      const a = [r, g, b].map((v) => {
-        v /= 255;
-        return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
-      });
-      return 0.2126 * a[0] + 0.7152 * a[1] + 0.0722 * a[2];
-    }
-
-    function getContrastColor(hexColor) {
-      const r = parseInt(hexColor.substr(1, 2), 16);
-      const g = parseInt(hexColor.substr(3, 2), 16);
-      const b = parseInt(hexColor.substr(5, 2), 16);
-      const lum = luminance(r, g, b);
-      return lum > 0.5 ? "#000000" : "#ffffff";
-    }
-
-    function updateHeaderTextColor(bgColor) {
-      header.style.color = getContrastColor(bgColor);
-    }
-
-    textInput.addEventListener("input", updateDisplay);
-
-    fontSizeSlider.addEventListener("input", () => {
-      fontSizeValue.textContent = fontSizeSlider.value;
-      updateStyles();
-    });
-
-    fontWeightSlider.addEventListener("input", () => {
-      fontWeightValue.textContent = fontWeightSlider.value;
-      updateStyles();
-    });
-
-    lineHeightSlider.addEventListener("input", () => {
-      lineHeightValue.textContent = lineHeightSlider.value;
-      updateStyles();
-    });
-
-    fontSelector.addEventListener("input", updateStyles);
-
-    accentSelector.addEventListener("input", updateStyles);
-
-    updateDisplay();
-    updateStyles();
-
-    const footerAuthor = document.getElementById("footer-author");
-    const baseYear = 2025;
-    const currentYear = new Date().getFullYear();
-    const yearText = currentYear > baseYear ? `${baseYear}~${currentYear}` : `${baseYear}`;
-
-    footerAuthor.innerHTML = `©️${yearText} <a href="https://hamuzon-jp.f5.si/" target="_blank" rel="noopener noreferrer">@hamuzon</a>`;
-  </script>
+    <script>
+        const baseYear = 2025;
+        const now = new Date().getFullYear();
+        document.getElementById("year").textContent =
+          now > baseYear ? `${baseYear}~${now}` : `${baseYear}`;
+    </script>
 </body>
 </html>
