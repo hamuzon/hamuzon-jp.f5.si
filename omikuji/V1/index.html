@@ -259,26 +259,35 @@
     loadStoredResult();
   });
 
-  (function() {
-    const baseYear = 2025;
-    const currentYear = new Date().getFullYear();
-    const hostname = location.hostname;
-    const footer = document.getElementById("footer-copy");
+(function () {
+  const baseYear = 2025;
+  const currentYear = new Date().getFullYear();
+  const hostname = location.hostname;
+  const footer = document.getElementById("footer-copy");
 
-    let footerHTML = "";
-    if (hostname === "hamuzon-jp.f5.si") {
-      footerHTML = `&copy; ${baseYear}${currentYear > baseYear ? "–" + currentYear : ""} <a class="link" href="https://hamuzon-jp.f5.si" target="_blank" rel="noopener noreferrer">@hamuzon</a>`;
-    } else if (hostname.includes("omikuji.hamusata.f5.si")) {
-      footerHTML = `&copy; ${baseYear}${currentYear > baseYear ? "–" + currentYear : ""} <a class="link" href="https://home.hamusata.f5.si" target="_blank" rel="noopener noreferrer">@hamusata</a>`;
-    } else {
-      footerHTML = `&copy; ${baseYear}${currentYear > baseYear ? "–" + currentYear : ""} おみくじ / Omikuji`;
-    }
+  if (!footer) return;
 
-    if (footer) {
-      footer.innerHTML = footerHTML;
-    }
-  })();
+  const yearText =
+    baseYear + (currentYear > baseYear ? "–" + currentYear : "");
+
+  let footerHTML;
+
+  if (hostname === "hamuzon-jp.f5.si" || hostname === "www.hamuzon-jp.f5.si") {
+    footerHTML = `
+      &copy; ${yearText}
+      <a class="link"
+         href="https://hamuzon-jp.f5.si"
+         target="_blank"
+         rel="noopener noreferrer">
+        @hamuzon
+      </a>
+    `;
+  } else {
+    footerHTML = `&copy; ${yearText} おみくじ / Omikuji`;
+  }
+
+  footer.innerHTML = footerHTML.trim();
+})();
 </script>
-
 </body>
 </html>
