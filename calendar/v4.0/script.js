@@ -62,7 +62,10 @@ const notifiedEvents = new Set();
 
 // --- 日付文字列フォーマット ---
 function formatDate(date) {
-  return date.toISOString().slice(0, 10);
+  const y = date.getFullYear();
+  const m = pad(date.getMonth() + 1);
+  const d = pad(date.getDate());
+  return `${y}-${m}-${d}`;
 }
 function pad(n) {
   return n.toString().padStart(2, "0");
@@ -110,14 +113,25 @@ function convertV1toV4(data) {
       if (!convertedEvents[dateKey]) convertedEvents[dateKey] = [];
       convertedEvents[dateKey].push({ start, end, text, location: "", notify: false, tags });
     } else if (Array.isArray(val)) {
-      convertedEvents[dateKey] = val.map(ev => ({
-        start: ev.start || "",
-        end: ev.end || "",
-        text: ev.text || "",
-        location: ev.location || "",
-        notify: ev.notify || false,
-        tags: ev.tags || []
-      }));
+      convertedEvents[dateKey] = val.map(ev => {
+        let text = ev.text || "";
+        let tags = ev.tags || [];
+        if (tags.length === 0) {
+          const matches = text.match(/#\S+/g);
+          if (matches) {
+            tags = matches;
+            text = text.replace(/#\S+/g, "").trim();
+          }
+        }
+        return {
+          start: ev.start || "",
+          end: ev.end || "",
+          text: text,
+          location: ev.location || "",
+          notify: ev.notify || false,
+          tags: tags
+        };
+      });
     }
   }
   return {
@@ -130,14 +144,25 @@ function convertV1toV4(data) {
 function convertV2toV4(data) {
   const convertedEvents = {};
   for (const dateKey in data.events) {
-    convertedEvents[dateKey] = data.events[dateKey].map(ev => ({
-      start: ev.start || "",
-      end: ev.end || "",
-      text: ev.text || "",
-      location: ev.location || "",
-      notify: ev.notify || false,
-      tags: ev.tags || []
-    }));
+    convertedEvents[dateKey] = data.events[dateKey].map(ev => {
+      let text = ev.text || "";
+      let tags = ev.tags || [];
+      if (tags.length === 0) {
+        const matches = text.match(/#\S+/g);
+        if (matches) {
+          tags = matches;
+          text = text.replace(/#\S+/g, "").trim();
+        }
+      }
+      return {
+        start: ev.start || "",
+        end: ev.end || "",
+        text: text,
+        location: ev.location || "",
+        notify: ev.notify || false,
+        tags: tags
+      };
+    });
   }
   return {
     version: "4.0",
@@ -149,14 +174,25 @@ function convertV2toV4(data) {
 function convertV3toV4(data) {
   const convertedEvents = {};
   for (const dateKey in data.events) {
-    convertedEvents[dateKey] = data.events[dateKey].map(ev => ({
-      start: ev.start || "",
-      end: ev.end || "",
-      text: ev.text || "",
-      location: ev.location || "",
-      notify: ev.notify || false,
-      tags: ev.tags || []
-    }));
+    convertedEvents[dateKey] = data.events[dateKey].map(ev => {
+      let text = ev.text || "";
+      let tags = ev.tags || [];
+      if (tags.length === 0) {
+        const matches = text.match(/#\S+/g);
+        if (matches) {
+          tags = matches;
+          text = text.replace(/#\S+/g, "").trim();
+        }
+      }
+      return {
+        start: ev.start || "",
+        end: ev.end || "",
+        text: text,
+        location: ev.location || "",
+        notify: ev.notify || false,
+        tags: tags
+      };
+    });
   }
   return {
     version: "4.0",
@@ -443,12 +479,11 @@ function renderTagColorList() {
     colorInput.type = "color";
     colorInput.value = calendarData.tagColors[tag];
     colorInput.addEventListener("change", () => {
-  calendarData.tagColors[tag] = colorInput.value;
-  saveToLocalStorage();
-  drawCalendar(currentDate);
-  renderTagColorList();
-});
-
+      calendarData.tagColors[tag] = colorInput.value;
+      saveToLocalStorage();
+      drawCalendar(currentDate);
+      renderTagColorList();
+    });
 
     const label = document.createElement("span");
     label.textContent = tag;
@@ -501,6 +536,7 @@ addTagBtn.addEventListener("click", () => {
   newTagName.focus();
 });
 
+// 設定モーダル表示・非表示
 settingsBtn.addEventListener("click", () => {
   settingsModalBg.style.display = "flex";
   renderTagColorList();
@@ -522,7 +558,7 @@ function getRandomColor() {
   return color;
 }
 
-// --- ナビゲーション ---
+// --- 月移動・今日ボタン ---
 prevMonthBtn.addEventListener("click", () => {
   currentDate.setMonth(currentDate.getMonth() - 1);
   drawCalendar(currentDate);
@@ -533,17 +569,24 @@ nextMonthBtn.addEventListener("click", () => {
 });
 todayBtn.addEventListener("click", () => {
   currentDate = new Date();
-  currentDate.setHours(0, 0, 0, 0);
+  currentDate.setHours(0,0,0,0);
   drawCalendar(currentDate);
 });
 
-// --- JSON保存・読込 ---
+// --- JSON保存・読み込み ---
 saveJsonBtn.addEventListener("click", () => {
   const jsonStr = JSON.stringify(calendarData, null, 2);
   const blob = new Blob([jsonStr], {type: "application/json"});
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
-  a.download = `Calendar-${CURRENT_SAVE_VERSION}_${formatDate(new Date())}.json`;
+  const now = new Date();
+  const y = now.getFullYear();
+  const m = pad(now.getMonth() + 1);
+  const d = pad(now.getDate());
+  const h = pad(now.getHours());
+  const min = pad(now.getMinutes());
+  const s = pad(now.getSeconds());
+  a.download = `Calendar-${CURRENT_SAVE_VERSION}_${y}-${m}-${d}_${h}-${min}-${s}.json`;
   a.click();
   URL.revokeObjectURL(a.href);
 });
@@ -557,25 +600,29 @@ loadJsonInput.addEventListener("change", () => {
   const reader = new FileReader();
   reader.onload = e => {
     try {
-      const data = JSON.parse(e.target.result);
-      calendarData = convertDataToV4(data);
-      saveToLocalStorage();
-      drawCalendar(currentDate);
-      alert("JSONファイルを読み込みました。");
+      const json = JSON.parse(e.target.result);
+      if (json.version && SUPPORTED_VERSIONS.includes(json.version)) {
+        calendarData = convertDataToV4(json);
+        saveToLocalStorage();
+        drawCalendar(currentDate);
+        alert(`バージョン${json.version}のファイルを読み込みました`);
+      } else {
+        alert("非対応バージョンのファイルです");
+      }
     } catch {
-      alert("無効なJSONファイルです。");
+      alert("JSON読み込みに失敗しました");
     }
   };
   reader.readAsText(file);
   loadJsonInput.value = "";
 });
 
-// --- 通知許可要求 ---
+// --- 通知機能 ---
+// 通知権限を確認して取得
 if ("Notification" in window && Notification.permission !== "granted" && Notification.permission !== "denied") {
   Notification.requestPermission();
 }
 
-// --- 画面内通知操作 ---
 notificationCloseBtn.addEventListener("click", () => {
   notificationPopup.style.display = "none";
 });
@@ -585,36 +632,48 @@ function showNotificationPopup(title, body) {
   notificationPopup.style.display = "block";
 }
 
-// --- 通知チェック ---
+// 1秒ごとに予定開始時刻と現在時刻を比較し通知
 function checkNotifications() {
   if (Notification.permission !== "granted") return;
 
   const now = new Date();
   const todayStr = formatDate(now);
-  const nowStr = now.toTimeString().slice(0, 8);
+  const nowStr = now.toTimeString().slice(0, 8); // "HH:MM:SS"
 
   const events = calendarData.events[todayStr] || [];
 
   events.forEach(ev => {
     if (!ev.notify || !ev.start) return;
 
+    // start 時刻を HH:MM:SS 形式に補完
     let evStart = ev.start.length === 5 ? ev.start + ":00" : ev.start;
 
     if (nowStr === evStart) {
       const key = eventUniqueKey(todayStr, ev.start, ev.text);
       if (!notifiedEvents.has(key)) {
-        new Notification("予定の時間です！", {
-          body: `${ev.start} - ${ev.text}`,
+        // 通知タイトルと本文組み立て
+        const title = ev.text || "予定があります";
+        const bodyParts = [];
+        if (ev.start) bodyParts.push(`開始: ${ev.start}`);
+        if (ev.end) bodyParts.push(`終了: ${ev.end}`);
+        if (ev.location) bodyParts.push(`場所: ${ev.location}`);
+        if (ev.tags && ev.tags.length > 0) bodyParts.push(`タグ: ${ev.tags.join(", ")}`);
+
+        const body = bodyParts.join("\n");
+
+        new Notification(title, {
+          body: body,
           icon: "/icon.svg"
         });
 
-        showNotificationPopup("予定の時間です！", `${ev.start} - ${ev.text}`);
+        showNotificationPopup(title, body);
 
         notifiedEvents.add(key);
       }
     }
   });
 
+  // 1分以上経過した通知はリセット
   for (const key of notifiedEvents) {
     const [dateStr, startTime] = key.split("|");
     if (dateStr !== todayStr) {
@@ -628,10 +687,9 @@ function checkNotifications() {
     }
   }
 }
-
-// --- 毎秒通知チェック開始 ---
 setInterval(checkNotifications, 1000);
 
-// --- 初期ロード ---
+
+// --- 初期処理 ---
 loadFromLocalStorage();
 drawCalendar(currentDate);
