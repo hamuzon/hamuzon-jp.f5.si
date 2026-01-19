@@ -147,6 +147,8 @@
         copyHTML = `&copy; ${baseYear}${currentYear > baseYear ? "–" + currentYear : ""} <a class="link" href="https://hamuzon.github.io" target="_blank" rel="noopener noreferrer">@hamuzon</a>`;
       } else if (hostname.includes("qr.hamusata.f5.si")) {
         copyHTML = `&copy; ${baseYear}${currentYear > baseYear ? "–" + currentYear : ""} <a class="link" href="https://home.hamusata.f5.si" target="_blank" rel="noopener noreferrer">@hamusata</a>`;
+      }else if(hostname.includes("qr.hamusata.f5.si")){
+          footerHTML = `&copy; ${baseYear}${currentYear>baseYear? "–"+currentYear:""} <a href="https://home.hamusata.f5.si" target="_blank" rel="noopener noreferrer">@hamusata</a>`;
       } else {
         copyHTML = `&copy; ${baseYear}${currentYear > baseYear ? "–" + currentYear : ""} QR Code Generator`;
       }
