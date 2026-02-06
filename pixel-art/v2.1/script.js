@@ -1,10 +1,10 @@
 (() => {
     // --- 定数 ---
     const APP_NAME = "PixelDraw";
-    const APP_VERSION = "2.0";
+    const APP_VERSION = "2.1";
     const WIDTH = 16;
     const HEIGHT = 16;
-    const STORAGE_KEY = "pixelDrawingData-v2.0";
+    const STORAGE_KEY = "pixelDrawingData-v2.1";
     const BASE_YEAR = 2025;
 
     // 固定パレット（最初からある6色 + 最後の透明1色）
@@ -85,7 +85,7 @@
                 const count = val[1];
                 const colorIndex = pxData[++i];
                 for (let c = 0; c < count; c++) indices.push(colorIndex);
-            } else if (Array.isArray(val) && val.length === 2) { // v2.0
+            } else if (Array.isArray(val) && val.length === 2) { // v2.1
                 for (let c = 0; c < val[1]; c++) indices.push(val[0]);
             } else if (typeof val === "number") {
                 indices.push(val);
@@ -125,7 +125,7 @@
             linkHref = "https://hamusata.f5.si";
             linkText = "@hamusata";
         } else if (host === "hamuzon.github.io") {
-            linkHref = "https://github.com/Hamuzon";
+            linkHref = "https://github.com/hamuzon";
             linkText = "@hamuzon";
         } else if (host === "hamuzon-jp.f5.si") {
             linkHref = "https://hamuzon-jp.f5.si";
@@ -201,9 +201,17 @@
     };
 
     if ($("btn-add-color")) $("btn-add-color").onclick = () => {
-        const pk = document.createElement("input"); pk.type = "color";
-        pk.onchange = () => { palette.splice(palette.length - 1, 0, pk.value); currentColorIndex = palette.length - 2; createPalette(); saveToLocal(); };
-        pk.click();
+        const old = $("color-ui"); if (old) old.remove();
+        const ui = document.createElement("div");
+        ui.id = "color-ui";
+        ui.style = "position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#c0c0c0;border:2px outset;padding:12px;z-index:9999;display:flex;gap:5px";
+        const pk = document.createElement("input"); pk.type = "color"; pk.value = "#000000";
+        const btn = document.createElement("button"); btn.textContent = "追加";
+        btn.onclick = () => { palette.splice(palette.length - 1, 0, pk.value); currentColorIndex = palette.length - 2; createPalette(); saveToLocal(); ui.remove(); };
+        const cancel = document.createElement("button"); cancel.textContent = "×";
+        cancel.onclick = () => ui.remove();
+        ui.appendChild(pk); ui.appendChild(btn); ui.appendChild(cancel);
+        document.body.appendChild(ui);
     };
 
     if ($("btn-remove-color")) $("btn-remove-color").onclick = () => {
