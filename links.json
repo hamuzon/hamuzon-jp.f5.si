@@ -22,5 +22,5 @@
   { "title": "🔢 分数メーカー / Fraction Maker 🧮", "url": "/fraction/" },
   { "title": "🎨 ピクセル アート / Pixel Art 🖌️", "url": "/pixel-art/" },
   { "title": "📝 ファイルエディター / File Editor 📁", "url": "/editor/" },
-  { "title": "🌍️ アクセス位置共有 🌐 / (世界のどこからをリアルタイムで表示) / Hosted by Cloudflare Workers", "url": "https://world.hamuzon-jp.f5.si/" }
+  { "title": "🌍️ アクセス位置共有 🌐 / (世界のどこからをリアルタイムで表示) / Hosted by Cloudflare Workers", "url": "https://globe.world.hamuzon-jp.f5.si/" }
 ]
