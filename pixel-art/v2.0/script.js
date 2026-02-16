@@ -104,6 +104,46 @@
         localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     };
 
+    const SUPPORTED_VERSIONS = ["1.0", "1.1", "2.0", "2.1"];
+
+    const applyLoadedData = (d) => {
+        palette = d.pl || d.palette || [...FIXED_COLORS_START, FIXED_COLOR_END];
+        titleInput.value = d.t || d.title || "";
+        createPalette();
+        decompress(d.px || d.pixels);
+    };
+
+    const getDataVersion = (d) => String(d?.v || d?.version || "").trim();
+
+    const validateLoadedData = (d, { showAlert = false } = {}) => {
+        const appName = String(d?.a || d?.app || "").trim();
+        const version = getDataVersion(d);
+        const pxData = d?.px || d?.pixels;
+        const plData = d?.pl || d?.palette;
+
+        const fail = (message) => {
+            if (showAlert) alert(message);
+            return null;
+        };
+
+        if (appName !== APP_NAME) return fail("このデータはこのアプリのものではありません。");
+
+        if (!SUPPORTED_VERSIONS.includes(version)) {
+            return fail(`サポートされていないバージョンです。
+対応: ${SUPPORTED_VERSIONS.join(", ")}
+読み込んだ: ${version || "(不明)"}`);
+        }
+
+        if ((d?.width && d.width !== WIDTH) || (d?.height && d.height !== HEIGHT)) {
+            return fail("キャンバスサイズが異なります。");
+        }
+
+        if (!Array.isArray(pxData)) return fail("ピクセルデータが不正です。");
+        if (plData !== undefined && !Array.isArray(plData)) return fail("パレットデータが不正です。");
+
+        return version;
+    };
+
     // --- フッター・コピーライト更新処理 ---
     const updateFooter = () => {
         // 年の表示
@@ -143,7 +183,10 @@
         const blob = new Blob([JSON.stringify(data)], { type: "application/json" });
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
-        const ts = () => { const d = new Date(); return `${d.getFullYear()}-${(d.getMonth()+1).toString().padStart(2,"0")}-${d.getDate().toString().padStart(2,"0")}`; };
+        const ts = () => {
+            const d = new Date();
+            return `${d.getFullYear()}-${(d.getMonth()+1).toString().padStart(2,"0")}-${d.getDate().toString().padStart(2,"0")}_${d.getHours().toString().padStart(2,"0")}-${d.getMinutes().toString().padStart(2,"0")}-${d.getSeconds().toString().padStart(2,"0")}`;
+        };
         a.href = url;
         a.download = `${APP_NAME}-V${APP_VERSION}_${ts()}.json`;
         a.click();
@@ -154,11 +197,14 @@
         const old = $("img-ui"); if (old) old.remove();
         const ui = document.createElement("div");
         ui.id = "img-ui";
-        ui.style = "position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#c0c0c0;border:2px outset;padding:12px;z-index:9999";
+        ui.style = "position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#c0c0c0;border:2px outset;padding:12px;z-index:9999;display:flex;align-items:center;gap:8px";
         const sel = document.createElement("select");
         ["png", "jpeg"].forEach(f => { const opt = document.createElement("option"); opt.value = f; opt.textContent = f.toUpperCase(); sel.appendChild(opt); });
         const btn = document.createElement("button");
         btn.textContent = "保存";
+        const close = document.createElement("button");
+        close.textContent = "×";
+        close.onclick = () => ui.remove();
         btn.onclick = () => {
             const cvs = document.createElement("canvas");
             cvs.width = WIDTH; cvs.height = HEIGHT;
@@ -178,27 +224,56 @@
                 ui.remove();
             }, `image/${sel.value}`);
         };
-        ui.appendChild(sel); ui.appendChild(btn);
+        ui.appendChild(sel); ui.appendChild(btn); ui.appendChild(close);
         document.body.appendChild(ui);
     };
 
-    if ($("btn-load")) $("btn-load").onclick = () => { fileLoadInput.value = null; fileLoadInput.click(); };
-    if (fileLoadInput) fileLoadInput.onchange = (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = (ev) => {
-            try {
-                const d = JSON.parse(ev.target.result);
-                palette = d.pl || d.palette || [...FIXED_COLORS_START, FIXED_COLOR_END];
-                titleInput.value = d.t || d.title || "";
-                createPalette();
-                decompress(d.px || d.pixels);
-                saveToLocal();
-            } catch (err) { alert("読み込み失敗"); }
-        };
-        reader.readAsText(file);
-    };
+    const loadBtn = $("btn-load");
+    if (loadBtn && fileLoadInput) {
+        loadBtn.addEventListener("click", () => {
+            fileLoadInput.value = null;
+            fileLoadInput.click();
+        });
+
+        fileLoadInput.addEventListener("change", e => {
+            const file = e.target.files[0];
+            if (!file) return alert("ファイルが選択されていません。");
+            if (!file.name.toLowerCase().endsWith(".json")) return alert("JSONファイルを選択してください。");
+
+            const reader = new FileReader();
+            reader.onload = ev => {
+                try {
+                    const data = JSON.parse(ev.target.result);
+                    const appName = String(data.a || data.app || "").trim();
+                    const version = getDataVersion(data);
+                    const pxData = data.px || data.pixels;
+                    const plData = data.pl || data.palette;
+
+                    if (appName !== APP_NAME) { alert("このデータはこのアプリのものではありません。"); return; }
+                    if (!SUPPORTED_VERSIONS.includes(version)) {
+                        alert(`サポートされていないバージョンです。
+対応: ${SUPPORTED_VERSIONS.join(", ")}
+読み込んだ: ${version || "(不明)"}`);
+                        return;
+                    }
+                    if ((data.width && data.width !== WIDTH) || (data.height && data.height !== HEIGHT)) { alert("キャンバスサイズが異なります。"); return; }
+                    if (!Array.isArray(pxData)) { alert("ピクセルデータが不正です。"); return; }
+                    if (plData !== undefined && !Array.isArray(plData)) { alert("パレットデータが不正です。"); return; }
+
+                    if (Array.isArray(plData)) { palette = plData; createPalette(); }
+                    else { createPalette(); }
+
+                    decompress(pxData);
+                    titleInput.value = data.t || data.title || "";
+                    saveToLocal();
+                    alert(`バージョン ${version} の作品を読み込みました。`);
+                } catch {
+                    alert("JSONファイルの読み込みに失敗しました。");
+                }
+            };
+            reader.readAsText(file);
+        });
+    }
 
     if ($("btn-add-color")) $("btn-add-color").onclick = () => {
         const pk = document.createElement("input"); pk.type = "color";
@@ -244,10 +319,9 @@
         if (saved) {
             try {
                 const d = JSON.parse(saved);
-                palette = d.pl || d.palette || [...FIXED_COLORS_START, FIXED_COLOR_END];
-                titleInput.value = d.t || d.title || "";
-                createPalette();
-                decompress(d.px || d.pixels);
+                const version = validateLoadedData(d);
+                if (!version) throw new Error("INVALID_CACHED_DATA");
+                applyLoadedData(d);
             } catch (e) { createPalette(); }
         } else {
             createPalette();
