@@ -30,8 +30,8 @@
     }
     button {
       background: rgba(20, 20, 20, 0.15);
-      backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px);
       color: #ddd;
       border: none;
       padding: 1rem 2rem;
@@ -57,6 +57,7 @@
       color: #fff8dd;
       font-size: 1rem;
       font-weight: 600;
+      -webkit-user-select: none;
       user-select: none;
     }
     #result {
@@ -65,6 +66,7 @@
       width: 90vw;
       font-size: 1.5rem;
       line-height: 1.5;
+      -webkit-user-select: none;
       user-select: none;
       text-align: center;
       background: transparent;
@@ -76,8 +78,8 @@
     }
     #result.visible {
       background: rgba(20,20,20,0.15);
-      backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px);
       color: #fff8dd;
       padding: 1.5rem 2rem;
       box-shadow: 0 6px 18px rgba(0,0,0,0.6);
@@ -95,12 +97,14 @@
     .timestamp {
       font-size: 0.85rem;
       color: #ccc;
+      -webkit-user-select: none;
       user-select: none;
     }
     footer#footer-copy {
       margin-top: 4rem;
       font-size: 0.9rem;
       color: #ccc;
+      -webkit-user-select: none;
       user-select: none;
     }
     a.link {
@@ -264,15 +268,18 @@
     const currentYear = new Date().getFullYear();
     const hostname = location.hostname;
     const footer = document.getElementById("footer-copy");
+    const yearRange = `${baseYear}${currentYear > baseYear ? "–" + currentYear : ""}`;
 
     let footerHTML = "";
-    if (hostname === "hamuzon.github.io") {
-      footerHTML = `&copy; ${baseYear}${currentYear > baseYear ? "–" + currentYear : ""} <a class="link" href="https://hamuzon.github.io" target="_blank" rel="noopener noreferrer">@hamuzon</a>`;
-    } else if (hostname.includes("omikuji.hamusata.f5.si")) {
-      footerHTML = `&copy; ${baseYear}${currentYear > baseYear ? "–" + currentYear : ""} <a class="link" href="https://home.hamusata.f5.si" target="_blank" rel="noopener noreferrer">@hamusata</a>`;
-    } else {
-      footerHTML = `&copy; ${baseYear}${currentYear > baseYear ? "–" + currentYear : ""} おみくじ / Omikuji`;
-    }
+      if (hostname === "hamuzon.github.io") {
+        footerHTML = `&copy; ${yearRange} <a href="https://hamuzon.github.io" target="_blank" rel="noopener noreferrer">@hamuzon</a> 御神籤(おみくじ) / Omikuji`;
+      } else if (hostname.includes("hamusata.f5.si")) {
+        footerHTML = `&copy; ${yearRange} <a href="https://home.hamusata.f5.si" target="_blank" rel="noopener noreferrer">@hamusata</a> 御神籤(おみくじ) / Omikuji`;
+      } else if (hostname.includes("hamuzon-jp.f5.si")) {
+        footerHTML = `&copy; ${yearRange} <a href="https://hamuzon-jp.f5.si" target="_blank" rel="noopener noreferrer">@hamuzon</a> 御神籤(おみくじ) / Omikuji`;
+      } else {
+        footerHTML = `&copy; ${yearRange} 御神籤(おみくじ) / Omikuji`;
+      }
 
     if (footer) {
       footer.innerHTML = footerHTML;

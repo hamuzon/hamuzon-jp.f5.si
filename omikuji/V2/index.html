@@ -48,6 +48,7 @@
       overflow-x: hidden;
       overflow-y: auto;
       -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
     }
 
     @keyframes bgMotion {
@@ -75,8 +76,8 @@
       max-width: 520px;
       padding: 3.5rem 2rem;
       background: var(--glass-base);
-      backdrop-filter: blur(25px) saturate(180%);
       -webkit-backdrop-filter: blur(25px) saturate(180%);
+      backdrop-filter: blur(25px) saturate(180%);
       border: 1px solid var(--glass-border);
       border-radius: 48px;
       box-shadow: var(--shadow-soft);
@@ -107,9 +108,11 @@
       font-size: clamp(1.1rem, 4vw, 1.3rem);
       font-weight: 900;
       cursor: pointer;
+      -webkit-backdrop-filter: blur(10px);
       backdrop-filter: blur(10px);
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
       transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      -webkit-user-select: none;
       user-select: none;
       -webkit-tap-highlight-color: transparent;
     }
@@ -405,7 +408,7 @@
         footerHTML = `&copy; ${yearRange} <a href="https://hamuzon.github.io" target="_blank" rel="noopener noreferrer">@hamuzon</a> 御神籤(おみくじ) / Omikuji`;
       } else if (hostname.includes("hamusata.f5.si")) {
         footerHTML = `&copy; ${yearRange} <a href="https://home.hamusata.f5.si" target="_blank" rel="noopener noreferrer">@hamusata</a> 御神籤(おみくじ) / Omikuji`;
-      } else if (hostname.includes("web.fc2.com")) {
+      } else if (hostname.includes("hamuzon-jp.f5.si")) {
         footerHTML = `&copy; ${yearRange} <a href="https://hamuzon-jp.f5.si" target="_blank" rel="noopener noreferrer">@hamuzon</a> 御神籤(おみくじ) / Omikuji`;
       } else {
         footerHTML = `&copy; ${yearRange} 御神籤(おみくじ) / Omikuji`;
