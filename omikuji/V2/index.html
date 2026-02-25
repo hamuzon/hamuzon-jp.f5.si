@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+
+  <meta charset="UTF-8" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>御神籤(おみくじ) / Omikuji</title>
+
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;900&family=Noto+Sans+JP:wght@400;900&family=Noto+Color+Emoji&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-morning: linear-gradient(180deg, #87cefa 0%, #b39ddb 50%, #ffd1dc 100%);
+      --bg-special: linear-gradient(-45deg, #ff4e50, #f9d423, #00e5ff, #7c4dff);
+      --glass-base: rgba(255, 255, 255, 0.15);
+      --glass-border: rgba(255, 255, 255, 0.35);
+      --shadow-soft: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      min-height: 100%;
+      font-family: 'Inter', 'Noto Sans JP', 'Noto Color Emoji', sans-serif;
+      background: var(--bg-morning);
+      background-size: 400% 400%;
+      background-attachment: fixed;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: background 1.5s ease;
+      color: #ffffff;
+      overflow-x: hidden;
+      overflow-y: auto;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    @keyframes bgMotion {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .animate-bg {
+      animation: bgMotion 10s ease infinite !important;
+    }
+
+    .viewport {
+      width: 100%;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px;
+    }
+
+    .liquid-glass-card {
+      width: 100%;
+      max-width: 520px;
+      padding: 3.5rem 2rem;
+      background: var(--glass-base);
+      backdrop-filter: blur(25px) saturate(180%);
+      -webkit-backdrop-filter: blur(25px) saturate(180%);
+      border: 1px solid var(--glass-border);
+      border-radius: 48px;
+      box-shadow: var(--shadow-soft);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2.5rem;
+      text-align: center;
+      position: relative;
+      transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(1.4rem, 6vw, 2rem);
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      text-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .glass-btn {
+      background: rgba(255, 255, 255, 0.25);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      padding: 1.1rem 2.8rem;
+      border-radius: 100px;
+      font-size: clamp(1.1rem, 4vw, 1.3rem);
+      font-weight: 900;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .glass-btn:hover:not(:disabled) {
+      background: rgba(255, 255, 255, 0.4);
+      transform: scale(1.05) translateY(-4px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    .glass-btn:disabled {
+      opacity: 0.4;
+      background: rgba(0, 0, 0, 0.2);
+      border-color: rgba(255, 255, 255, 0.1);
+      cursor: not-allowed;
+      transform: scale(0.98);
+    }
+
+    #result-view {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      width: 100%;
+      animation: floatUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes floatUp {
+      from { opacity: 0; transform: translateY(20px) scale(0.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .kanji {
+      font-size: clamp(3rem, 16vw, 5rem);
+      font-weight: 900;
+      line-height: 1.1;
+      margin: 0;
+      filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.25));
+    }
+
+    .comment {
+      font-size: clamp(0.95rem, 3.5vw, 1.2rem);
+      font-weight: 700;
+      line-height: 1.6;
+      max-width: 90%;
+      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+      word-break: break-word;
+    }
+
+    .timestamp {
+      font-size: 0.7rem;
+      font-weight: 400;
+      opacity: 0.6;
+      margin-top: 1rem;
+    }
+
+    .wait-label {
+      font-size: 0.9rem;
+      font-weight: 800;
+      color: #fffde7;
+      min-height: 1.4rem;
+    }
+
+    footer {
+      padding: 40px 20px;
+      font-size: 0.7rem;
+      text-align: center;
+      width: 100%;
+      opacity: 0.8;
+      line-height: 1.8;
+    }
+
+    .disclaimer {
+      max-width: 600px;
+      margin: 0 auto 20px auto;
+      font-weight: 400;
+    }
+
+    .copyright {
+      font-weight: 900;
+    }
+
+    footer a {
+      color: #ffffff;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+    }
+
+    @media (max-width: 480px) {
+      .liquid-glass-card {
+        padding: 2.5rem 1.5rem;
+        border-radius: 40px;
+      }
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <div class="viewport">
+
+    <div class="liquid-glass-card">
+
+      <h1 id="title">御神籤(おみくじ) / Omikuji</h1>
+
+      <button id="draw-btn" class="glass-btn" onclick="executeDraw()">
+        おみくじを引く / Draw
+      </button>
+
+      <div id="wait-text" class="wait-label"></div>
+
+      <div id="result-view">
+
+        <div id="res-kanji" class="kanji"></div>
+
+        <div id="res-comment" class="comment"></div>
+
+        <div id="res-time" class="timestamp"></div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <footer>
+
+    <div class="disclaimer">
+      当サイトの利用により発生したいかなるトラブルや損失・損害についても、当方は一切の責任を負いません。<br>
+      The administrator assumes no responsibility for any trouble, loss, or damage caused by the use of this site.
+    </div>
+
+    <div id="footer-content" class="copyright"></div>
+
+  </footer>
+
+  <script>
+    const API_MAIN = "https://api.hamusata.f5.si/api/v2/omikuji";
+    const API_BACKUP = "https://omikuji-api-1.hamusata.f5.si/api/omikuji";
+    const CACHE_KEY = "omk_final_v2";
+    const WAIT_LIMIT = 60000;
+    let countdownInterval;
+
+    function getQuery(key) {
+      return new URLSearchParams(window.location.search).get(key);
+    }
+
+    function fireVfx(result, mode) {
+      if (getQuery('vfx') === 'off') return;
+
+      const isSpecial = result.includes('超') || result.includes('祝') || mode === 'birthday';
+      const isDaikichi = result.includes('大吉');
+
+      if (isSpecial || isDaikichi) {
+        const end = Date.now() + (isSpecial ? 3000 : 1500);
+        const frame = () => {
+          confetti({
+            particleCount: 4,
+            angle: 60,
+            spread: 60,
+            origin: { x: 0, y: 0.6 },
+            colors: ['#ffffff', '#ff4e50', '#f9d423']
+          });
+          confetti({
+            particleCount: 4,
+            angle: 120,
+            spread: 60,
+            origin: { x: 1, y: 0.6 },
+            colors: ['#ffffff', '#00e5ff', '#7c4dff']
+          });
+          if (Date.now() < end) requestAnimationFrame(frame);
+        };
+        frame();
+      } else if (result.includes('小吉')) {
+        confetti({
+          particleCount: 30,
+          spread: 40,
+          origin: { y: 0.7 },
+          gravity: 1.5,
+          scalar: 0.8
+        });
+      } else {
+        confetti({
+          particleCount: 70,
+          spread: 70,
+          origin: { y: 0.7 }
+        });
+      }
+    }
+
+    function updateTheme(mode, result = "") {
+      const body = document.body;
+      const isUltra = result.includes('超') || result.includes('祝') || mode === 'birthday';
+
+      if (isUltra && getQuery('theme') !== 'off') {
+        body.classList.add('animate-bg');
+        body.style.background = "var(--bg-special)";
+      } else {
+        body.classList.remove('animate-bg');
+        body.style.background = "var(--bg-morning)";
+      }
+    }
+
+    function startTimer(ms) {
+      const label = document.getElementById('wait-text');
+      const btn = document.getElementById('draw-btn');
+      btn.disabled = true;
+
+      clearInterval(countdownInterval);
+      countdownInterval = setInterval(() => {
+        ms -= 1000;
+        const min = Math.floor(ms / 60000);
+        const sec = Math.floor((ms % 60000) / 1000);
+
+        label.textContent = `あと${min}分${sec}秒待ってね / Please wait ${min} min ${sec} sec`;
+
+        if (ms <= 0) {
+          clearInterval(countdownInterval);
+          label.textContent = "";
+          btn.disabled = false;
+          localStorage.removeItem(CACHE_KEY);
+        }
+      }, 1000);
+    }
+
+    function render(data) {
+      document.getElementById('res-kanji').textContent = data.result;
+      document.getElementById('res-comment').textContent = data.message || data.comment;
+      document.getElementById('res-time').textContent = `更新時間 (JST): ${new Date(data.timestamp).toLocaleString('ja-JP')}`;
+      document.getElementById('result-view').style.display = 'flex';
+    }
+
+    async function executeDraw() {
+      const btn = document.getElementById('draw-btn');
+      const view = document.getElementById('result-view');
+      btn.disabled = true;
+      view.style.display = 'none';
+
+      const now = new Date();
+      const m = now.getMonth() + 1;
+      const d = now.getDate();
+      let mode = getQuery('mode') || 'normal';
+
+      if (m === 1 && d <= 3) mode = 'sanganichi';
+      const bday = getQuery('birthday');
+      if (bday === `${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`) mode = 'birthday';
+
+      const params = new URLSearchParams(window.location.search);
+      if (!params.has('mode')) params.set('mode', mode);
+
+      let data;
+      try {
+        // メインAPIへの試行
+        const response = await fetch(`${API_MAIN}?${params.toString()}`);
+        if (!response.ok) throw new Error('Main API failed');
+        data = await response.json();
+      } catch (err) {
+        console.warn("Switching to backup API...");
+        try {
+          // バックアップAPIへの試行
+          const response = await fetch(`${API_BACKUP}?${params.toString()}`);
+          data = await response.json();
+        } catch (backupErr) {
+          btn.disabled = false;
+          alert("おみくじを取得できませんでした。時間をおいて再度お試しください。");
+          return;
+        }
+      }
+
+      render(data);
+      localStorage.setItem(CACHE_KEY, JSON.stringify({
+        ts: Date.now(),
+        payload: data
+      }));
+
+      updateTheme(data.mode, data.result);
+      fireVfx(data.result, data.mode);
+      startTimer(WAIT_LIMIT);
+    }
+
+    function setupFooter() {
+      const baseYear = 2025;
+      const currentYear = new Date().getFullYear();
+      const hostname = window.location.hostname;
+      const footer = document.getElementById("footer-content");
+
+      let footerHTML = "";
+      const yearRange = `${baseYear}${currentYear > baseYear ? "–" + currentYear : ""}`;
+
+      if (hostname === "hamuzon.github.io") {
+        footerHTML = `&copy; ${yearRange} <a href="https://hamuzon.github.io" target="_blank" rel="noopener noreferrer">@hamuzon</a> 御神籤(おみくじ) / Omikuji`;
+      } else if (hostname.includes("hamusata.f5.si")) {
+        footerHTML = `&copy; ${yearRange} <a href="https://home.hamusata.f5.si" target="_blank" rel="noopener noreferrer">@hamusata</a> 御神籤(おみくじ) / Omikuji`;
+      } else if (hostname.includes("web.fc2.com")) {
+        footerHTML = `&copy; ${yearRange} <a href="https://hamuzon-jp.f5.si" target="_blank" rel="noopener noreferrer">@hamuzon</a> 御神籤(おみくじ) / Omikuji`;
+      } else {
+        footerHTML = `&copy; ${yearRange} 御神籤(おみくじ) / Omikuji`;
+      }
+
+      if (footer) footer.innerHTML = footerHTML;
+    }
+
+    function init() {
+      setupFooter();
+      const cached = localStorage.getItem(CACHE_KEY);
+      if (cached) {
+        const state = JSON.parse(cached);
+        const diff = Date.now() - state.ts;
+        if (diff < WAIT_LIMIT) {
+          render(state.payload);
+          updateTheme(state.payload.mode, state.payload.result);
+          setTimeout(() => {
+            fireVfx(state.payload.result, state.payload.mode);
+          }, 300);
+          startTimer(WAIT_LIMIT - diff);
+          return;
+        }
+      }
+      updateTheme('normal');
+    }
+
+    window.onload = init;
+  </script>
+
+</body>
+
+</html>
