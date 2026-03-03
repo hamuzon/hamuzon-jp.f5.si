@@ -63,7 +63,10 @@
   <url>
     <loc>https://world.hamuzon-jp.f5.si/</loc>
   </url>
-<url>
+  <url>
     <loc>https://video-hub.hamuzon-jp.f5.si/</loc>
+  </url>
+  <url>
+    <loc>https://olympic.hamuzon-jp.f5.si/</loc>
   </url>
 </urlset>
