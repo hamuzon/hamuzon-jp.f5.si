@@ -2,9 +2,9 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-<link id="favicon" rel="icon" href="icon-light.png" type="image/png" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>タイム・ゾーン時計</title>
+  <link id="favicon" rel="icon" href="icon-light.png" type="image/png" />
   <style>
     :root {
       --bg-light: #f4fdf6;
@@ -114,7 +114,7 @@
     }
   </style>
 </head>
-<body class="theme-light">
+<body>
   <h1 id="main-title">タイム・ゾーン時計</h1>
   <div class="button-row">
     <button id="langBtn">English</button>
@@ -151,8 +151,9 @@
   <script>
     let baseUtc = new Date(new Date().toISOString());
     let startTime = new Date();
-    let currentLang = 'ja';
-    let currentTheme = 'light';
+
+    let currentLang = localStorage.getItem('lang') || 'ja';
+    let currentTheme = localStorage.getItem('theme') || 'light';
 
     function updateZones() {
       const now = new Date();
@@ -195,6 +196,17 @@
       });
     }
 
+    function updateFavicon() {
+      const favicon = document.getElementById('favicon');
+      favicon.href = currentTheme === 'dark' ? 'icon-dark.png' : 'icon-light.png';
+    }
+
+    function applyTheme() {
+      document.body.className = `theme-${currentTheme}`;
+      updateFavicon();
+      updateThemeButtonLabel();
+    }
+
     function updateThemeButtonLabel() {
       const isDark = currentTheme === 'dark';
       document.getElementById('themeBtn').textContent =
@@ -203,8 +215,7 @@
           : (isDark ? '☀️ Light Mode' : '🌙 Dark Mode');
     }
 
-    document.getElementById('langBtn').addEventListener('click', () => {
-      currentLang = currentLang === 'ja' ? 'en' : 'ja';
+    function updateLanguage() {
       document.getElementById('langBtn').textContent = currentLang === 'ja' ? 'English' : '日本語';
       document.getElementById('main-title').textContent = currentLang === 'ja' ? 'タイム・ゾーン時計' : 'Time Zone Clock';
       document.querySelectorAll('.zone-card').forEach(card => {
@@ -212,15 +223,23 @@
         card.querySelector('.zone-name').textContent = title;
       });
       updateThemeButtonLabel();
+    }
+
+    document.getElementById('langBtn').addEventListener('click', () => {
+      currentLang = currentLang === 'ja' ? 'en' : 'ja';
+      localStorage.setItem('lang', currentLang);
+      updateLanguage();
     });
 
     document.getElementById('themeBtn').addEventListener('click', () => {
       currentTheme = currentTheme === 'light' ? 'dark' : 'light';
-      document.body.className = `theme-${currentTheme}`;
-      updateThemeButtonLabel();
+      localStorage.setItem('theme', currentTheme);
+      applyTheme();
     });
 
-    // スタート
+    // 初期設定
+    applyTheme();
+    updateLanguage();
     updateZones();
     setInterval(updateZones, 1000);
   </script>
