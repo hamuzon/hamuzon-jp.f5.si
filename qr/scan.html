@@ -1,287 +1,481 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>QR Code Scanner</title>
-<link rel="icon" href="https://hamusata.f5.si/favicon.ico" type="image/x-icon">
-<style>
-  :root {
-    --color-accent: #3399ff;
-    --color-accent-hover: #1673e6;
-    --color-error: #d33;
-    --link-color: #4CAF50;
-    --card-bg: rgba(255, 255, 255, 0.88);
-    --bg-gradient: linear-gradient(180deg, #f9e6e7 0%, #fce8d8 30%, #d9f0e6 70%, #a8d0e6 100%);
-  }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR Code Scanner</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
 
-  * { box-sizing: border-box; }
+  <style>
+    :root {
+      --accent: #3399ff;
+      --accent-hover: #1673e6;
+      --error: #d33;
+      --link: #4CAF50;
+      --card-bg: rgba(255, 255, 255, .88);
+      --bg: linear-gradient(180deg, #f9e6e7 0%, #fce8d8 30%, #d9f0e6 70%, #a8d0e6 100%);
+      --font-main: 'Inter', 'Segoe UI', 'Hiragino Kaku Gothic ProN', Arial, sans-serif;
+    }
 
-  body {
-    margin: 0;
-    font-family: 'Inter', 'Segoe UI', 'Hiragino Kaku Gothic ProN', Arial, sans-serif;
-    background: var(--bg-gradient);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    padding: 1.5rem;
-  }
+    * {
+      box-sizing: border-box
+    }
 
-  main.container {
-    background: var(--card-bg);
-    backdrop-filter: blur(12px);
-    border-radius: 1.5rem;
-    padding: 2.5rem 2rem;
-    max-width: 480px;
-    width: 100%;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-    text-align: center;
-  }
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+    }
 
-  h1 {
-    font-size: 2rem;
-    margin-bottom: 1.8rem;
-    color: #333;
-    line-height: 1.3;
-  }
+    body {
+      display: grid;
+      place-items: center;
+      background: var(--bg);
+      font-family: var(--font-main);
+      padding: 1rem;
+    }
 
-  button {
-    padding: 0.85rem;
-    font-size: 1.15rem;
-    font-weight: bold;
-    border: none;
-    border-radius: 14px;
-    background-color: var(--color-accent);
-    color: white;
-    cursor: pointer;
-    box-shadow: 0 6px 15px rgba(51, 153, 255, 0.65);
-    margin: 0.6rem auto;
-    width: 80%;
-    max-width: 260px;
-    transition: background-color 0.25s ease;
-    display: block;
-  }
+    .container {
+      display: grid;
+      justify-items: center;
+      gap: 1rem;
+      width: min(92vw, 520px);
+      padding: 2.2rem 2rem;
+      background: var(--card-bg);
+      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px);
+      border-radius: 24px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, .12);
+    }
 
-  button:hover { background-color: var(--color-accent-hover); }
+    h1 {
+      margin: 0 0 1.5rem;
+      font-size: 1.8rem;
+      color: #333;
+      text-align: center;
+    }
 
-  #cameraSelect {
-    padding: 0.7rem;
-    font-size: 1rem;
-    font-weight: 600;
-    border-radius: 12px;
-    border: 2px solid #ccc;
-    width: 80%;
-    max-width: 240px;
-    margin: 0.5rem auto 1rem auto;
-    display: block;
-  }
+    button {
+      width: 80%;
+      max-width: 260px;
+      padding: .85rem;
+      font-size: 1rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 14px;
+      background: var(--accent);
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 6px 15px rgba(51, 153, 255, .6);
+      transition: background 0.3s, transform 0.2s;
+    }
 
-  #reader {
-    width: 100%;
-    max-width: 360px;
-    margin: 1.2rem auto;
-  }
+    button:hover {
+      background: var(--accent-hover)
+    }
 
-  #scanResult {
-    margin-top: 1rem;
-    font-weight: bold;
-    color: #000;
-    font-size: 1.15rem;
-    line-height: 1.5;
-    word-wrap: break-word;
-    max-width: 100%;
-    display: none;
-  }
+    button:active {
+      transform: scale(0.98);
+    }
 
-  #resetBtn {
-    margin-top: 0.8rem;
-    background: var(--color-error);
-    width: auto;
-    padding: 0.55rem 1rem;
-    font-size: 0.95rem;
-    border-radius: 12px;
-    display: none;
-  }
+    .controls {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+      width: 80%;
+      max-width: 260px;
+      justify-items: center;
+    }
 
-  #resetBtn:hover { background: #b00; }
+    .controls button {
+      width: 100%;
+      margin: 0;
+    }
 
-  input[type="file"] {
-    margin-top: 1rem;
-    font-size: 1rem;
-    border-radius: 12px;
-    border: 1px solid #ccc;
-    padding: 0.5rem;
-    width: 80%;
-    max-width: 240px;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    cursor: pointer;
-  }
+    /* カメラ起動中は2カラムにする（ライトがある場合のみ） */
+    .controls.active.has-torch {
+      grid-template-columns: 1fr 1fr;
+      width: 100%;
+      max-width: 320px;
+    }
 
-  footer {
-    margin-top: 2rem;
-    font-size: 0.85rem;
-    color: #555;
-    user-select: none;
-    line-height: 1.4;
-  }
+    button.secondary {
+      background-color: #6c757d;
+      box-shadow: 0 6px 15px rgba(108, 117, 125, 0.4);
+    }
 
-  a.link {
-    color: var(--link-color);
-    text-decoration: none;
-  }
-  a.link:hover { text-decoration: underline; }
+    button.secondary:hover {
+      background-color: #5a6268;
+    }
 
-</style>
+    #cameraSelect,
+    #fileInput {
+      width: 80%;
+      max-width: 240px;
+      padding: .8rem;
+      font-size: 1rem;
+      border-radius: 14px;
+      border: 1.5px solid var(--accent);
+      background-color: #fff;
+      outline: none;
+      box-shadow: 0 4px 10px rgba(51, 153, 255, 0.1);
+      transition: border-color 0.3s;
+    }
+
+    #cameraSelect:focus,
+    #fileInput:focus {
+      border-color: var(--accent-hover);
+      background-color: #f0f8ff;
+    }
+
+    #reader {
+      width: 100%;
+      max-width: 360px;
+    }
+
+    #scanResult {
+      display: block;
+      font-size: 1.15rem;
+      font-weight: 700;
+      word-break: break-all;
+      color: #333;
+      margin-bottom: 0.5rem;
+      min-height: 1.5rem;
+    }
+
+    #resultBox {
+      width: 100%;
+      text-align: center;
+      padding: 1rem;
+      background: rgba(255, 255, 255, 0.6);
+      border-radius: 12px;
+      display: none;
+    }
+
+    #resetBtn {
+      width: auto;
+      display: inline-block;
+      background: var(--error);
+      box-shadow: 0 4px 10px rgba(221, 51, 51, 0.4);
+      font-size: .95rem;
+      padding: .55rem 1rem;
+      margin-top: 0.5rem;
+    }
+
+    #resetBtn:hover {
+      background: #b00
+    }
+
+    footer {
+      font-size: .85rem;
+      color: #555;
+      text-align: center;
+      margin-top: 2rem;
+    }
+
+    a {
+      color: var(--link);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline
+    }
+  </style>
+  <style>
+    .upload-instruction {
+      margin: 1rem 0 0.5rem;
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    #torchBtn {
+      display: none;
+      background-color: #ffc107;
+      color: #333;
+    }
+
+    #torchBtn:hover {
+      background-color: #e0a800;
+    }
+  </style>
+
 </head>
+
 <body>
-<main class="container">
-  <h1>QR Code Scanner</h1>
 
-  <button id="cameraToggleBtn">カメラON</button>
+  <main class="container">
+    <h1>QR Code Scanner</h1>
 
-  <select id="cameraSelect">
-    <option value="">カメラ読み込み中...</option>
-  </select>
+    <select id="cameraSelect" aria-label="カメラを選択">
+      <option value="" disabled selected>カメラを読み込んでいます...</option>
+    </select>
 
-  <div id="reader"></div>
+    <div id="controls" class="controls">
+      <button id="cameraToggleBtn">カメラ起動</button>
+      <button id="torchBtn">ライト起動</button>
+    </div>
 
-  <p style="margin-top:1.5rem;">カメラで読み取れない場合は画像をアップロード:</p>
-  <input type="file" id="fileInput" accept="image/*">
+    <div id="reader"></div>
 
-  <div id="resultBox">
-    <span id="scanResult"></span><br>
-    <button id="resetBtn">リセット</button>
-  </div>
+    <div id="resultBox">
+      <div id="scanResult"></div>
+      <button id="resetBtn">閉じる</button>
+    </div>
 
-  <footer id="footer-copy"></footer>
-</main>
+    <p class="upload-instruction">カメラで読み取れない場合は画像をアップロード:</p>
+    <input type="file" id="fileInput" accept="image/*" aria-label="画像ファイルをアップロード">
 
-<script src="https://unpkg.com/html5-qrcode"></script>
-<script src="https://unpkg.com/jsqr/dist/jsQR.js"></script>
-<script>
-  const baseYear = 2025;
-  const currentYear = new Date().getFullYear();
-  const hostname = location.hostname;
-  const footer = document.getElementById("footer-copy");
-  const yearString = `${baseYear}${currentYear > baseYear ? "–" + currentYear : ""}`;
-  let footerHTML = "";
+    <footer id="footer-copy"></footer>
+  </main>
 
-  if (hostname === "hamuzon.github.io") {
-    footerHTML = `&copy; ${yearString} <a class="link" href="https://hamuzon.github.io" target="_blank" rel="noopener noreferrer">@hamuzon</a>`;
-  } else if (hostname.includes("hamuzon-jp.f5.si")) {
-    footerHTML = `&copy; ${yearString} <a class="link" href="https://hamuzon-jp.f5.si" target="_blank" rel="noopener noreferrer">@hamuzon</a>`;
-  } else if (hostname.includes("hamusata.f5.si")) {
-    footerHTML = `&copy; ${yearString} <a class="link" href="https://hamusata.f5.si" target="_blank" rel="noopener noreferrer">@hamusata</a>`;
-  } else if (hostname.includes("qr.link-s.f5.si")) {
-    footerHTML = `&copy; ${yearString} <a class="link" href="https://hamusata.f5.si" target="_blank" rel="noopener noreferrer">@hamusata</a>`;
-  } else if (hostname.includes("hamusata.f5.si")) {
-    footerHTML = `&copy; ${yearString} <a class="link" href="https://hamusata.f5.si" target="_blank" rel="noopener noreferrer">@hamusata</a>`;
-  } else {
-    footerHTML = `&copy; ${yearString} QR Code Scanner`;
-  }
+  <script src="https://unpkg.com/html5-qrcode"></script>
 
-  footerHTML += `<p>このサービスは 
-    <a class="link" href="https://unpkg.com/html5-qrcode" target="_blank" rel="noopener noreferrer">html5-qrcode</a> と 
-    <a class="link" href="https://unpkg.com/jsqr/dist/jsQR.js" target="_blank" rel="noopener noreferrer">jsQR</a> ライブラリを使用しています。</p>`;
+  <script src="https://unpkg.com/jsqr/dist/jsQR.js"></script>
 
-  footer.innerHTML = footerHTML;
+  <script>
+    const footer = document.getElementById("footer-copy");
+    const baseYear = 2025;
+    const currentYear = new Date().getFullYear();
+    const yearString = `${baseYear}${currentYear > baseYear ? "–" + currentYear : ""}`;
+    const hostname = location.hostname;
+    let footerHTML = "";
 
+    if (hostname === "hamuzon.github.io") {
+      footerHTML = `&copy; ${yearString} <a class="link" href="https://hamuzon.github.io" target="_blank" rel="noopener noreferrer">@hamuzon</a>`;
+    } else if (hostname.includes("hamuzon-jp.f5.si")) {
+      footerHTML = `&copy; ${yearString} <a class="link" href="https://hamuzon-jp.f5.si" target="_blank" rel="noopener noreferrer">@hamuzon</a>`;
+    } else if (hostname.includes("hamusata.f5.si")) {
+      footerHTML = `&copy; ${yearString} <a class="link" href="https://hamusata.f5.si" target="_blank" rel="noopener noreferrer">@hamusata</a>`;
+    } else if (hostname.includes("qr.link-s.f5.si")) {
+      footerHTML = `&copy; ${yearString} <a class="link" href="https://hamusata.f5.si" target="_blank" rel="noopener noreferrer">@hamusata</a>`;
+    } else {
+      footerHTML = `&copy; ${yearString} QR Code Scanner`;
+    }
+    footer.innerHTML = footerHTML;
+  </script>
 
-  const html5QrCode = new Html5Qrcode("reader");
-  const cameraToggleBtn = document.getElementById("cameraToggleBtn");
-  const cameraSelect = document.getElementById("cameraSelect");
-  const scanResult = document.getElementById("scanResult");
-  const resetBtn = document.getElementById("resetBtn");
-  const fileInput = document.getElementById("fileInput");
+  <script>
+    footerHTML += `<p>
+      このサービスは
+      <a class="link" href="https://unpkg.com/html5-qrcode" target="_blank">html5-qrcode</a> と
+      <a class="link" href="https://unpkg.com/jsqr/dist/jsQR.js" target="_blank">jsQR</a>
+      を使用しています。
+    </p>`;
+    footer.innerHTML = footerHTML;
 
-  let cameraRunning = false;
+    const html5QrCode = new Html5Qrcode("reader");
+    const controls = document.getElementById("controls");
+    const cameraToggleBtn = document.getElementById("cameraToggleBtn");
+    const torchBtn = document.getElementById("torchBtn");
+    const cameraSelect = document.getElementById("cameraSelect");
+    const scanResult = document.getElementById("scanResult");
+    const resultBox = document.getElementById("resultBox");
+    const resetBtn = document.getElementById("resetBtn");
+    const fileInput = document.getElementById("fileInput");
 
-  async function loadCameras(){
-    try{
-      const devices = await Html5Qrcode.getCameras();
-      cameraSelect.innerHTML = "";
-      devices.forEach((cam,index)=>{
-        const opt = document.createElement("option");
-        opt.value = cam.id;
-        opt.textContent = cam.label || `カメラ ${index+1}`;
-        cameraSelect.appendChild(opt);
-      });
-      if(devices.length > 0){
-        const backCam = devices.find(d => /back|rear|環境/i.test(d.label));
-        if(backCam) cameraSelect.value = backCam.id;
+    let isScanning = false;
+    let isTorchOn = false;
+
+    // カメラリスト取得
+    async function loadCameras() {
+      try {
+        // ユーザーに許可を求めるトリガーになる可能性がある
+        const devices = await Html5Qrcode.getCameras();
+        cameraSelect.innerHTML = "";
+
+        if (devices && devices.length) {
+          let selectedId = devices[0].id;
+
+          devices.forEach((cam, i) => {
+            const opt = document.createElement("option");
+            opt.value = cam.id;
+            opt.textContent = cam.label || `カメラ ${i + 1}`;
+            cameraSelect.appendChild(opt);
+
+            // 背面カメラを優先選択
+            if (cam.label.toLowerCase().includes("back") ||
+              cam.label.toLowerCase().includes("rear") ||
+              cam.label.toLowerCase().includes("environment")) {
+              selectedId = cam.id;
+            }
+          });
+
+          cameraSelect.value = selectedId;
+        } else {
+          cameraSelect.innerHTML = '<option value="">カメラが見つかりませんでした</option>';
+        }
+      } catch (err) {
+        console.error(err);
+        cameraSelect.innerHTML = '<option value="">カメラ権限が必要です</option>';
       }
-    } catch(err){
-      cameraSelect.innerHTML = '<option value="">カメラ取得エラー</option>';
     }
-  }
-  loadCameras();
 
-  function isURL(str){
-    return /^https?:\/\//i.test(str);
-  }
+    // 初期ロード
+    loadCameras();
 
-  function showResult(text){
-    if(isURL(text)){
-      scanResult.innerHTML = `<a class="link" href="${text}" target="_blank">${text}</a>`;
-    } else {
-      scanResult.textContent = text;
+    function isURL(str) {
+      return /^https?:\/\//i.test(str);
     }
-    scanResult.style.display = "inline-block";
-    resetBtn.style.display = "inline-block";
-  }
 
-  function resetScan(){
-    scanResult.textContent = "";
-    scanResult.style.display = "none";
-    resetBtn.style.display = "none";
-  }
+    function showResult(text) {
+      scanResult.innerHTML = isURL(text) ? `<a class="link" href="${text}" target="_blank">${text}</a>` : text;
+      resultBox.style.display = "block";
+    }
 
-  resetBtn.addEventListener("click", resetScan);
+    function clearResult() {
+      scanResult.textContent = "";
+      resultBox.style.display = "none";
+    }
+    resetBtn.onclick = clearResult;
 
-  cameraToggleBtn.addEventListener("click", async ()=>{
-    if(cameraRunning){
-      await html5QrCode.stop();
-      cameraRunning = false;
-      cameraToggleBtn.textContent = "カメラON";
-    } else {
-      const camId = cameraSelect.value || { facingMode:"environment" };
-      try{
-        resetScan();
+    // カメラスキャン開始・停止
+    async function startScanning(cameraId) {
+      clearResult();
+
+      // すでに動作中なら一度停止
+      if (isScanning) {
+        await stopScanning();
+      }
+
+      try {
+        if (!cameraId) {
+          // カメラIDがない場合はリスト再取得を試みる
+          await loadCameras();
+          cameraId = cameraSelect.value;
+          if (!cameraId) throw new Error("カメラが選択されていません");
+        }
+
         await html5QrCode.start(
-          camId,
-          { fps: 10, qrbox: 250 },
-          decoded => showResult(decoded)
+          cameraId,
+          { fps: 10, qrbox: { width: 250, height: 250 } },
+          (decodedText) => {
+            // QR検出時
+            showResult(decodedText);
+          },
+          (errorMessage) => {
+            // 解析エラーは無視
+          }
         );
-        cameraRunning = true;
-        cameraToggleBtn.textContent = "カメラOFF";
-      } catch(e){
-        alert("カメラ開始に失敗しました");
+
+        isScanning = true;
+        cameraToggleBtn.textContent = "カメラ停止";
+        cameraToggleBtn.classList.add("secondary");
+        controls.classList.add("active");
+        cameraSelect.disabled = false;
+
+        // ライト機能チェック（少し待ってから実行）
+        setTimeout(checkTorchCapability, 500);
+
+      } catch (err) {
+        console.error(err);
+        alert("カメラの起動に失敗しました。\n・ブラウザのカメラ権限を確認してください\n・HTTPS接続であることを確認してください\n\n詳細: " + err);
       }
     }
-  });
 
-  cameraSelect.addEventListener("change", resetScan);
+    async function stopScanning() {
+      if (html5QrCode.isScanning) {
+        try {
+          await html5QrCode.stop();
+          isScanning = false;
+          cameraToggleBtn.textContent = "カメラ起動";
+          cameraToggleBtn.classList.remove("secondary");
+          controls.classList.remove("active");
+          controls.classList.remove("has-torch");
 
-  fileInput.addEventListener("change", e=>{
-    resetScan();
-    const file = e.target.files[0];
-    if(!file) return;
-    const img = new Image();
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
-    img.onload = ()=>{
-      canvas.width = img.width;
-      canvas.height = img.height;
-      ctx.drawImage(img,0,0);
-      const code = jsQR(ctx.getImageData(0,0,img.width,img.height).data,img.width,img.height);
-      showResult(code ? code.data : "QRコードが見つかりません");
+          // ライト状態リセット
+          torchBtn.style.display = "none";
+          isTorchOn = false;
+          torchBtn.textContent = "ライト";
+
+        } catch (err) {
+          console.error("Stop failed", err);
+        }
+      }
+    }
+
+    // ライト機能の確認
+    function checkTorchCapability() {
+      try {
+        const capabilities = html5QrCode.getRunningTrackCapabilities();
+        if (capabilities && capabilities.torch) {
+          torchBtn.style.display = "inline-block";
+          controls.classList.add("has-torch");
+        } else {
+          torchBtn.style.display = "none";
+          controls.classList.remove("has-torch");
+        }
+      } catch (e) {
+        console.warn("Torch check failed", e);
+        torchBtn.style.display = "none";
+      }
+    }
+
+    // ボタンイベント
+    cameraToggleBtn.onclick = () => {
+      if (isScanning) {
+        stopScanning();
+      } else {
+        startScanning(cameraSelect.value);
+      }
     };
-    img.src = URL.createObjectURL(file);
-  });
 
-</script>
+    // カメラ切り替えイベント（起動中なら即切り替え）
+    cameraSelect.onchange = () => {
+      if (isScanning) {
+        startScanning(cameraSelect.value);
+      }
+    };
+
+    // ライト切り替え
+    torchBtn.onclick = async () => {
+      if (!isScanning) return;
+      try {
+        const applySettings = { advanced: [{ torch: !isTorchOn }] };
+        await html5QrCode.applyVideoConstraints({
+          advanced: [{ torch: !isTorchOn }]
+        });
+        isTorchOn = !isTorchOn;
+        torchBtn.textContent = isTorchOn ? "ライトOFF" : "ライトON";
+      } catch (err) {
+        console.error(err);
+        alert("ライトの切り替えに失敗しました");
+      }
+    };
+
+    // 画像ファイル読み込み
+    fileInput.onchange = e => {
+      clearResult();
+      // カメラが動いていたら止める（リソース節約と競合回避）
+      if (isScanning) stopScanning();
+
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const img = new Image();
+      img.onload = () => {
+        try {
+          const canvas = document.createElement("canvas");
+          const ctx = canvas.getContext("2d");
+          canvas.width = img.width;
+          canvas.height = img.height;
+          ctx.drawImage(img, 0, 0);
+          const imageData = ctx.getImageData(0, 0, img.width, img.height);
+          const code = jsQR(imageData.data, img.width, img.height);
+
+          showResult(code ? code.data : "QRコードが見つかりません");
+        } catch (err) {
+          console.error(err);
+          alert("画像の解析に失敗しました\n\n" + (err?.message ?? String(err)));
+        }
+      };
+      img.src = URL.createObjectURL(file);
+    };
+
+  </script>
+
 </body>
+
 </html>

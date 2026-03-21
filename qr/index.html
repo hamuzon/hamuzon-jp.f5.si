@@ -6,6 +6,7 @@
   <title>QR Tools Hub</title>
   <link rel="icon" href="icon.svg" type="image/svg+xml" />
   <style>
+
     * {
       margin: 0;
       padding: 0;
@@ -33,8 +34,8 @@
       padding: 2rem;
       border-radius: 1rem;
       background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
       box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
       flex: 1;
       display: flex;
@@ -96,6 +97,7 @@
       border-radius: 0.6rem;
       cursor: pointer;
       text-decoration: none;
+      -webkit-user-select: none;
       user-select: none;
       transition: all 0.3s ease;
       box-shadow: 0 4px 6px rgba(51, 153, 255, 0.3);
@@ -121,6 +123,7 @@
       font-size: 0.85rem;
       color: #333;
       text-align: center;
+      -webkit-user-select: none;
       user-select: none;
       margin: 2rem 0 1rem 0;
       text-shadow: 0 1px 2px rgba(255,255,255,0.8);
@@ -143,6 +146,7 @@
         padding: 1rem;
       }
     }
+    
   </style>
 </head>
 <body>
@@ -222,7 +226,9 @@
 
   </div>
 
-  <footer id="footer-copy"></footer>
+  <footer id="footer-copy">
+    &copy; 2025 QR Tools Hub
+  </footer>
 
   <script>
     const footer = document.getElementById("footer-copy");
@@ -239,8 +245,6 @@
     } else if (hostname.includes("hamusata.f5.si")) {
       footerHTML = `&copy; ${yearString} <a class="link" href="https://hamusata.f5.si" target="_blank" rel="noopener noreferrer">@hamusata</a>`;
     } else if (hostname.includes("qr.link-s.f5.si")) {
-      footerHTML = `&copy; ${yearString} <a class="link" href="https://hamusata.f5.si" target="_blank" rel="noopener noreferrer">@hamusata</a>`;
-    } else if (hostname.includes("hamusata.f5.si")) {
       footerHTML = `&copy; ${yearString} <a class="link" href="https://hamusata.f5.si" target="_blank" rel="noopener noreferrer">@hamusata</a>`;
     } else {
       footerHTML = `&copy; ${yearString} QR Tools Hub`;

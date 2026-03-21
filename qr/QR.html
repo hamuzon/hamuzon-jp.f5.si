@@ -34,6 +34,7 @@
     }
     main.container {
       background: rgba(255, 255, 255, 0.85);
+      -webkit-backdrop-filter: blur(10px);
       backdrop-filter: blur(10px);
       border-radius: 1.5rem;
       max-width: 500px;
@@ -76,6 +77,7 @@
       margin: 0.3rem;
       width: 48%;
       max-width: 240px;
+      -webkit-user-select: none;
       user-select: none;
       transition: background-color 0.3s ease;
     }
@@ -96,6 +98,7 @@
       margin-top: 3rem;
       font-size: 0.85rem;
       color: #666;
+      -webkit-user-select: none;
       user-select: none;
     }
     a.link {
@@ -155,8 +158,6 @@
         footerHTML = `&copy; ${yearString} <a class="link" href="https://hamusata.f5.si" target="_blank" rel="noopener noreferrer">@hamusata</a>`;
       } else if (hostname.includes("qr.link-s.f5.si")) {
         footerHTML = `&copy; ${yearString} <a class="link" href="https://hamusata.f5.si" target="_blank" rel="noopener noreferrer">@hamusata</a>`;
-      } else if (hostname.includes("hamusata.f5.si")) {
-        footerHTML = `&copy; ${yearString} <a class="link" href="https://hamusata.f5.si" target="_blank" rel="noopener noreferrer">@hamusata</a>`;
       } else {
         footerHTML = `&copy; ${yearString} QR Code Generator`;
       }
@@ -174,16 +175,22 @@
         alert("⚠️ 入力が空です");
         return;
       }
-
+      
+      
       QRCode.toCanvas(input, { width: 256 }, (err, canvas) => {
         if (err) {
-          alert("QRコードの生成に失敗しました");
           console.error(err);
+          alert(
+            "QRコードの生成に失敗しました\n\n" +
+            "エラー内容:\n" +
+            (err.message ?? String(err))
+          );
           return;
         }
-        qrDiv.appendChild(canvas);
-        downloadBtn.style.display = "inline-block";
-      });
+
+  qrDiv.appendChild(canvas);
+  downloadBtn.style.display = "inline-block";
+});
     }
 
     function downloadQRCode() {
@@ -206,7 +213,7 @@
       link.download = filename;
       link.href = canvas.toDataURL("image/png");
       link.click();
-    }
+    }  
   </script>
 </body>
 </html>
