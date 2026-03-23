@@ -134,6 +134,10 @@
     display: inline-block;
   }
 
+  .footer-copy {
+    margin: 0.5rem 0;
+  }
+
   footer a { color: #ffeb3b; text-decoration: none; }
   footer a:hover { text-decoration: underline; color: #fff; }
 
@@ -202,15 +206,13 @@
 <body>
 
 <div class="container">
-  <h1><a href="." class="tpww">Hamuzon Link Portal ???</a></h1>
+  <h1><a href="." class="tpww" onclick="location.reload()">Hamuzon Link Portal</a></h1>
   <ul id="site-list"></ul>
 </div>
 
-<footer id="main-footer">
+<footer>
   <div class="footer-inner-rotated">
-    <span id="footer-hamusata">&copy; <span id="year-hamusata"></span> <a href="https://home.hamusata.f5.si" target="_blank" rel="noopener noreferrer">@hamusata</a></span>
-    <span id="footer-hamuzon">&copy; <span id="year-hamuzon"></span> <a href="https://github.com/Hamuzon" target="_blank" rel="noopener noreferrer">@hamuzon</a></span>
-    <br>
+    <p class="footer-copy">&copy; <span id="year-range"></span> <a href="https://hamuzon-jp.f5.si">@hamuzon</a></p>
     <span id="default-message">April Fools' Day!<br>This page is a joke.</span>
   </div>
 </footer>
@@ -219,8 +221,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const host = window.location.hostname;
   const siteList = document.getElementById("site-list");
-  const footerHamusata = document.getElementById("footer-hamusata");
-  const footerHamuzon = document.getElementById("footer-hamuzon");
 
   const emojis = ['👺', '👹', '🍵', '🍡', '🌸', '🦊', '🤥', '🤪', '🌀', '', '⚠', '', '⚛', '☢', 'N/A'];
   setInterval(() => {
@@ -297,23 +297,11 @@ document.addEventListener("DOMContentLoaded", () => {
     })
     .catch(err => console.error('Failed to load links:', err));
 
-  // Footer logic
-  if(host.includes("hamusata.f5.si")){
-    footerHamusata.style.display="inline";
-    footerHamuzon.style.display="none";
-  } else {
-    // Default (e.g. hamuzon-jp.f5.si, github.io)
-    footerHamusata.style.display="none";
-    footerHamuzon.style.display="inline";
-  }
-
   const baseYear = 2025;
   const currentYear = new Date().getFullYear();
   const yearDisplay = `${baseYear}~${currentYear}`;
-  const yh = document.getElementById("year-hamusata");
-  if(yh) yh.textContent = yearDisplay;
-  const yz = document.getElementById("year-hamuzon");
-  if(yz) yz.textContent = yearDisplay;
+  const yr = document.getElementById("year-range");
+  if(yr) yr.textContent = yearDisplay;
 });
 </script>
 
