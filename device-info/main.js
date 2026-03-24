@@ -290,6 +290,13 @@
     btnLight.setAttribute('aria-pressed',!darkMode);
     btnDark.setAttribute('aria-pressed',darkMode);
     favicon.href=isDark?'icon-dark.png':'icon-light.png';
+    let metaThemeColor = document.querySelector('meta[name="theme-color"]');
+    if (!metaThemeColor) {
+      metaThemeColor = document.createElement('meta');
+      metaThemeColor.name = "theme-color";
+      document.head.appendChild(metaThemeColor);
+    }
+    metaThemeColor.content = isDark ? '#0f172a' : '#f5f7fa';
   }
 
   btnJa.addEventListener('click',()=>{ setLang('ja'); });

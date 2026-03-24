@@ -71,6 +71,7 @@ main {
   padding: 0.75rem;
   background-color: #fff8dc;
   cursor: pointer;
+  -webkit-user-select: none;
   user-select: none;
   transition: background-color 0.3s, border-color 0.3s;
   display: flex;

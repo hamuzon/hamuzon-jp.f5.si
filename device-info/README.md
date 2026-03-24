@@ -5,3 +5,8 @@
 This collects information sent when you visit the site.  
 The information may not be accurate.
 
+---
+
+## 旧バージョン / Old Version
+
+[device-info-old](https://github.com/hamuzon/device-info-old)

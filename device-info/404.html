@@ -3,95 +3,159 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>404 エラーコード - Error</title>
-  <link rel="icon" href="https://hamusata.f5.si/icon.svg" type="image/svg+xml" />
+  <title>404 - Not Found / 見つかりません</title>
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
   <style>
     :root {
-      --bg: #ccefff;
-      --text: #2a2a2a;
-      --accent: #33bfff;
-      --button-bg: #66d9ff;
-      --button-hover: #4dc0ff;
-      --subtext: #3399cc;
-      --shadow: rgba(0,0,0,0.15);
-    }
-
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #1b2a33;
-        --text: #ccefff;
-        --accent: #33bfff;
-        --button-bg: #3399cc;
-        --button-hover: #2a9acc;
-        --subtext: #66d9ff;
-        --shadow: rgba(0,0,0,0.4);
-      }
+      --bg-dark: #0f172a;
+      --bg-light: #f5f7fa;
+      --text-dark: #e0e7ff;
+      --text-light: #1f2937;
+      --accent-dark: #3b82f6;
+      --accent-light: #2563eb;
+      --border-dark: #334155;
+      --border-light: #cbd5e1;
+      --font-mono: 'Fira Code', monospace;
+      --radius: 12px;
     }
 
     * {
-      box-sizing: border-box;
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
     }
 
     body {
-      font-family: "Yu Mincho", "Hiragino Mincho ProN", serif;
-      background: var(--bg);
-      color: var(--text);
+      min-height: 100vh;
+      width: 100%;
+      font-family: var(--font-mono);
       display: flex;
       flex-direction: column;
-      justify-content: center;
       align-items: center;
-      height: 100vh;
+      justify-content: center;
+      color: var(--text-dark);
       text-align: center;
-      padding: 2rem;
-      background-image: radial-gradient(circle at center, rgba(255 255 255 / 0.3), transparent 70%);
+      padding: 20px;
+      background: var(--bg-dark);
+    }
+
+    .wrapper {
+      width: 100%;
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 2.2rem 1.8rem;
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-dark);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
     }
 
     h1 {
-      font-size: 5rem;
-      margin-bottom: 0.3em;
-      letter-spacing: 0.15em;
-      color: var(--accent);
-      text-shadow: 2px 2px 8px var(--shadow);
+      font-size: clamp(2.6rem, 9vw, 4.4rem);
+      margin-bottom: 0.25em;
+      letter-spacing: 0.04em;
+      color: var(--accent-dark);
     }
 
     p {
-      font-size: 1.2rem;
-      margin: 0.3em 0;
-      opacity: 0.9;
+      font-size: 1.03rem;
+      margin: 0.4em 0;
+      color: var(--text-dark);
+      line-height: 1.6;
     }
 
     .subtext {
-      font-size: 1rem;
-      color: var(--subtext);
-      margin-top: 0.5em;
-      opacity: 0.8;
+      font-size: 0.92rem;
+      color: #9ca3af;
+      margin-top: 0.35em;
     }
 
     a.back {
-      margin-top: 2rem;
-      padding: 0.75em 2em;
-      background-color: var(--button-bg);
-      color: var(--text);
+      display: inline-block;
+      margin-top: 1.8rem;
+      padding: 0.85rem 1.8rem;
+      font-size: 1rem;
+      background-color: var(--accent-dark);
+      color: #fff;
       text-decoration: none;
-      border-radius: 12px;
+      border-radius: 0.6rem;
       font-weight: bold;
-      box-shadow: 0 4px 8px var(--shadow);
+      border: 1px solid transparent;
+      box-shadow: 0 4px 6px rgba(59, 130, 246, 0.35);
       transition: all 0.3s ease;
       cursor: pointer;
     }
 
     a.back:hover {
-      background-color: var(--button-hover);
+      filter: brightness(1.08);
       transform: translateY(-2px);
-      box-shadow: 0 6px 12px var(--shadow);
+      box-shadow: 0 6px 12px rgba(59, 130, 246, 0.45);
+    }
+
+    footer {
+      margin-top: 2rem;
+      font-size: 0.85rem;
+      color: var(--text-dark);
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    a.link {
+      color: var(--accent-dark);
+      text-decoration: none;
+    }
+
+    a.link:hover {
+      text-decoration: underline;
+    }
+
+    @media (prefers-color-scheme: light) {
+      body {
+        background: var(--bg-light);
+        color: var(--text-light);
+      }
+
+      .wrapper {
+        background: #fff;
+        border-color: var(--border-light);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+      }
+
+      h1 {
+        color: var(--accent-light);
+      }
+
+      p {
+        color: var(--text-light);
+      }
+
+      .subtext {
+        color: #6b7280;
+      }
+
+      a.back {
+        background-color: var(--accent-light);
+        box-shadow: 0 4px 6px rgba(37, 99, 235, 0.3);
+      }
+
+      a.back:hover {
+        box-shadow: 0 6px 12px rgba(37, 99, 235, 0.35);
+      }
+
+      footer {
+        color: var(--text-light);
+      }
+
+      a.link {
+        color: var(--accent-light);
+      }
     }
 
     @media (max-width: 600px) {
-      h1 {
-        font-size: 3.5rem;
+      .wrapper {
+        padding: 1.8rem 1rem;
       }
+
       p {
         font-size: 1rem;
       }
@@ -99,9 +163,45 @@
   </style>
 </head>
 <body>
-  <h1>404 - error</h1>
-  <p>エラーが発生しました: 見つかりません</p>
-  <p class="subtext">Sorry, Not Found.</p>
-  <a id="backLink" class="back" href="/">トップページへ戻る</a>
+  <div class="wrapper">
+    <h1>404 - error</h1>
+    <p>エラーが発生しました: 見つかりません / Not Found</p>
+    <p class="subtext">Sorry, Not Found.</p>
+    <a id="backLink" class="back" href="/">トップページへ戻る / Back to Home</a>
+
+    <footer id="footer-copy"></footer>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (location.hostname === 'hamuzon.github.io') {
+        document.getElementById('backLink').href = 'https://hamuzon.github.io/Device-info/';
+      }
+    });
+
+    (() => {
+      const footer = document.getElementById("footer-copy");
+      if (!footer) {
+        return;
+      }
+
+      const baseYear = 2025;
+      const currentYear = new Date().getFullYear();
+      const hostname = location.hostname;
+      const yearString = `${baseYear}${currentYear > baseYear ? "–" + currentYear : ""}`;
+      let footerHTML = "";
+
+      if (hostname === "hamuzon.github.io") {
+        footerHTML = `&copy; ${yearString} <a class="link" href="https://hamuzon.github.io/" target="_blank" rel="noopener noreferrer">hamuzon</a>`;
+      } else if (hostname.includes("hamuzon-jp.f5.si")) {
+        footerHTML = `&copy; ${yearString} <a class="link" href="https://hamuzon-jp.f5.si" target="_blank" rel="noopener noreferrer">@hamuzon</a>`;
+      } else if (hostname.includes("hamusata.f5.si")) {
+        footerHTML = `&copy; ${yearString} <a class="link" href="https://hamusata.f5.si" target="_blank" rel="noopener noreferrer">@hamusata</a>`;
+      } else {
+        footerHTML = `&copy; ${yearString} Device-info`;
+      }
+      footer.innerHTML = footerHTML;
+    })();
+  </script>
 </body>
 </html>

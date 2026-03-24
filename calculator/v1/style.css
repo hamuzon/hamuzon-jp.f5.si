@@ -38,7 +38,7 @@ body {
   height: 60px;
   background: #eee;
   color: #222;
-  font-size: 4vw;
+  font-size: clamp(16px, 4vw, 36px);
   padding: 0 12px;
   border: none;
   border-radius: 8px;
@@ -46,8 +46,7 @@ body {
   text-align: right;
   box-sizing: border-box;
   min-height: 48px;
-  min-font-size: 16px;
-  max-font-size: 36px;
+  -webkit-user-select: none;
   user-select: none;
 }
 
@@ -60,10 +59,8 @@ body {
 
 button {
   height: 60px;
-  font-size: 3vw;
+  font-size: clamp(14px, 3vw, 26px);
   min-height: 40px;
-  min-font-size: 14px;
-  max-font-size: 26px;
   border: none;
   border-radius: 6px;
   background: #ddd;
@@ -71,6 +68,7 @@ button {
   cursor: pointer;
   padding: 0;
   transition: background 0.2s;
+  -webkit-user-select: none;
   user-select: none;
 }
 

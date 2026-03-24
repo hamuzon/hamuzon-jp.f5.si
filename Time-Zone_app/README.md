@@ -7,6 +7,3 @@ A simple multi-timezone clock web app.
 Uses JavaScript's Intl API to display current time, date, and timezone abbreviation of specified cities in real time.
 
 ---
-
-
-

@@ -26,6 +26,7 @@
     }
     .container {
       background: rgba(255, 255, 255, 0.85);
+      -webkit-backdrop-filter: blur(10px);
       backdrop-filter: blur(10px);
       border-radius: 1.5rem;
       max-width: 600px;
@@ -88,6 +89,7 @@
       padding: 1rem 1.5rem;
       font-family: monospace;
       font-size: 1.15rem;
+      -webkit-user-select: all;
       user-select: all;
       cursor: pointer;
       box-shadow: 0 6px 12px rgba(0,123,255,0.15);
@@ -115,6 +117,14 @@
     button:hover {
       background-color: #1673e6;
     }
+    .note {
+      font-size: 0.85rem;
+      color: #666;
+      margin-top: 2rem;
+      text-align: center;
+      -webkit-user-select: none;
+      user-select: none;
+    }
   </style>
 </head>
 <body>
@@ -129,25 +139,24 @@
       <div class="range-group">
         <label for="lengthRange">文字数 / Length:</label>
         <input type="range" id="lengthRange" min="8" max="64" value="16" />
-        <input type="number" id="lengthNumber" min="8" max="64" value="16" />
+        <input type="number" id="lengthNumber" min="8" max="64" value="16" aria-label="文字数入力" />
       </div>
       <div class="range-group">
         <label for="countRange">生成個数 / Count:</label>
         <input type="range" id="countRange" min="1" max="20" value="6" />
-        <input type="number" id="countNumber" min="1" max="20" value="6" />
+        <input type="number" id="countNumber" min="1" max="20" value="6" aria-label="生成個数入力" />
       </div>
       <button type="button" id="generateBtn">生成 / Generate</button>
     </form>
     <div id="results" aria-live="polite" aria-label="生成されたパスワード / Generated Passwords"></div>
 
-    <!-- 🔒 注意書き：ログや個人情報を保存しません -->
-    <p style="font-size:0.85rem; color:#666; margin-top:2rem; text-align:center; user-select:none;">
+    <p class="note">
       ※このパスワードapiはログの保存や個人情報の収集を一切行っていません。
     </p>
   </div>
 
   <script>
-    const apiUrl = "https://password-api.hamusata.workers.dev/api/password";
+    const apiUrl = "https://password-api.hamusata.f5.si/api/password";
 
     const chkLower = document.getElementById("chkLower");
     const chkUpper = document.getElementById("chkUpper");

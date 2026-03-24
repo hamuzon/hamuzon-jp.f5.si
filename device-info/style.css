@@ -34,6 +34,7 @@ body.light {
 h1 {
     margin: 0 0 1rem;
     font-size: 2rem;
+    -webkit-user-select: none;
     user-select: none;
 }
 
@@ -48,6 +49,7 @@ header {
     border-radius: var(--radius);
     background: rgba(59, 130, 246, 0.15);
     color: var(--accent-dark);
+    -webkit-user-select: none;
     user-select: none;
     transition: background var(--transition), color var(--transition);
 }
@@ -77,6 +79,7 @@ body.light header {
     cursor: pointer;
     border-radius: var(--radius);
     transition: var(--transition);
+    -webkit-user-select: none;
     user-select: none;
     flex: 0 1 auto;
 }
@@ -115,6 +118,7 @@ body.light section {
 section h2 {
     margin: 0 0 0.5rem 0;
     font-weight: 700;
+    -webkit-user-select: none;
     user-select: none;
     text-align: center;
 }
@@ -146,6 +150,7 @@ th {
     font-weight: 600;
     width: 40%;
     color: var(--accent-dark);
+    -webkit-user-select: none;
     user-select: none;
 }
 
@@ -172,6 +177,7 @@ tr {
     font-size: 0.95em;
     color: #9ca3af;
     margin-bottom: 0.3em;
+    -webkit-user-select: none;
     user-select: none;
     text-align: center;
 }
@@ -183,6 +189,7 @@ footer {
     padding-top: 1rem;
     color: var(--text-dark);
     transition: color var(--transition);
+    -webkit-user-select: none;
     user-select: none;
 }
 

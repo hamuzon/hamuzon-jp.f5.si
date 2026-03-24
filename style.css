@@ -43,8 +43,8 @@ li {
 a {
   display: block;
   background: rgba(20, 20, 20, 0.15);
-  backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
   color: #ddd;
   text-decoration: none;
   padding: 1rem;
@@ -55,6 +55,7 @@ a {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
   transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
   word-break: break-word;
+  -webkit-user-select: none;
   user-select: none;
 }
 a:hover {
@@ -71,6 +72,7 @@ footer {
 footer a {
   color: #fff8dd;
   text-decoration: underline;
+  -webkit-user-select: text;
   user-select: text;
 }
 @media (max-width: 480px) {

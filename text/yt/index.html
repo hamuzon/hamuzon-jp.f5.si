@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YouTube 共有リンク Markdown 出力 / YouTube Markdown Link</title>
+  <link rel="icon" href="https://hamusata.f5.si/favicon.ico" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Potta+One&display=swap" rel="stylesheet">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html, body { width:100%; height:100%; font-family:'Potta One', Arial, sans-serif; background:#fdf6e3; }
+
+    body { display:flex; flex-direction:column; justify-content:center; align-items:center; min-height:100vh; }
+
+    .content {
+      width:100%;
+      max-width:600px;
+      background: rgba(255,255,255,0.3);
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+      border-radius:20px;
+      padding:2rem;
+      text-align:center;
+      border:1px solid rgba(255,255,255,0.4);
+      display:flex;
+      flex-direction:column;
+      gap:1rem;
+      margin-bottom:1.5rem;
+    }
+
+    h1 { font-size:1.8rem; color:#3b2f2f; margin-bottom:0.5rem; }
+    p { font-size:1rem; color:#3b2f2f; }
+    a { color:#3b2f2f; text-decoration:none; }
+    a:hover { text-decoration:underline; }
+
+    input[type=text], textarea, button {
+      width:100%;
+      padding:0.7rem;
+      font-size:1rem;
+      border-radius:12px;
+      border:1px solid rgba(59,47,47,0.3);
+      background: rgba(255,255,255,0.3);
+      color:#3b2f2f;
+      -webkit-backdrop-filter: blur(5px);
+      backdrop-filter: blur(5px);
+      font-family:'Potta One', Arial, sans-serif;
+    }
+
+    button { cursor:pointer; font-weight:bold; transition:0.2s; }
+    button:hover { background: rgba(255,255,255,0.5); }
+    textarea { resize: vertical; }
+
+    .button-group { display:flex; flex-wrap:wrap; justify-content:center; gap:0.5rem; }
+
+    .option-group { display:flex; justify-content:center; align-items:center; gap:0.5rem; margin-bottom:0.5rem; }
+    .option-group label { font-size:0.95rem; color:#3b2f2f; cursor:pointer; }
+
+    footer { font-size:0.9rem; color:#3b2f2f; text-align:center; }
+    footer a { color:#3b2f2f; text-decoration:none; }
+    footer a:hover { text-decoration:underline; }
+
+    @media(max-width:768px){
+      h1 { font-size:1.5rem; }
+      p { font-size:0.9rem; }
+      .button-group { flex-direction: column; }
+      .option-group { flex-direction: column; gap:0.2rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="content">
+  <h1>YouTube 共有リンク Markdown 出力</h1>
+  <p>入力文字と YouTube URL から Markdown 形式で短縮リンクを生成します<br>
+     Generate short Markdown link from text & YouTube URL</p>
+
+  <input id="linkText" type="text" placeholder="リンク文字列を入力 / Enter link text">
+  <input id="inputUrl" type="text" placeholder="YouTube URLを入力 / Enter YouTube URL">
+
+  <div class="option-group">
+    <input type="checkbox" id="timeOption" checked>
+    <label for="timeOption">時間パラメータ保持 / Keep time parameter</label>
+  </div>
+
+  <div class="button-group">
+    <button id="convertBtn">Markdownに変換 / Convert</button>
+    <button id="copyBtn">コピー / Copy</button>
+  </div>
+
+  <textarea id="outputMarkdown" rows="3" readonly placeholder="Markdown形式で表示 / Markdown output"></textarea>
+</div>
+
+<footer id="footer-author">
+  &copy; 2025 YouTube Markdown Link
+</footer>
+
+<script>
+  // フッター更新
+  const footerAuthor = document.getElementById("footer-author");
+  const hostname = window.location.hostname;
+  const baseYear = 2025;
+  const currentYear = new Date().getFullYear();
+  const yearText = currentYear > baseYear ? `${baseYear}~${currentYear}` : `${baseYear}`;
+
+  if(hostname.includes("hamuzon.github.io")){
+    footerAuthor.innerHTML = `&copy; ${yearText} <a href="https://hamuzon.github.io" target="_blank" rel="noopener noreferrer">@hamuzon</a>`;
+  } else if(hostname.includes("hamusata.f5.si")){
+    footerAuthor.innerHTML = `&copy; ${yearText} <a href="https://hamusata.f5.si" target="_blank" rel="noopener noreferrer">@hamusata</a>`;
+  } else {
+    footerAuthor.innerHTML = `&copy; ${yearText} YouTube Markdown Link`;
+  }
+
+  // YouTube短縮リンク生成
+  function getMinimalYouTubeLink(url, keepTime){
+    try{
+      const u = new URL(url);
+      let videoId = null;
+      let timeParam = '';
+
+      if(keepTime){
+        if(u.searchParams.has('t')) timeParam = '?t=' + u.searchParams.get('t');
+        else if(u.searchParams.has('start')) timeParam = '?t=' + u.searchParams.get('start');
+      }
+
+      if(u.hostname==='youtu.be'){
+        videoId = u.pathname.slice(1);
+      } else if(u.hostname==='music.youtube.com' && u.pathname==='/watch'){
+        videoId = u.searchParams.get('v');
+      } else if(u.hostname.includes('youtube.com')){
+        if(u.pathname==='/watch') videoId = u.searchParams.get('v');
+        else if(u.pathname.startsWith('/shorts/')) videoId = u.pathname.split('/')[2];
+      }
+
+      if(!videoId) return null;
+
+      return `https://youtu.be/${videoId}${timeParam}`;
+    } catch(e){
+      return null;
+    }
+  }
+
+  const linkText = document.getElementById('linkText');
+  const inputUrl = document.getElementById('inputUrl');
+  const output = document.getElementById('outputMarkdown');
+  const convertBtn = document.getElementById('convertBtn');
+  const copyBtn = document.getElementById('copyBtn');
+  const timeOption = document.getElementById('timeOption');
+
+  convertBtn.addEventListener('click', ()=>{
+    const text = linkText.value.trim() || 'リンク';
+    const link = getMinimalYouTubeLink(inputUrl.value.trim(), timeOption.checked);
+    if(!link){
+      output.value = '無効なURL / Invalid URL';
+    } else {
+      output.value = `[${text}](${link})`;
+    }
+  });
+
+  copyBtn.addEventListener('click', ()=>{
+    output.select();
+    output.setSelectionRange(0, 99999);
+    document.execCommand('copy');
+    alert('Markdown copied!');
+  });
+</script>
+
+</body>
+</html>

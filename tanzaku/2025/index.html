@@ -125,6 +125,7 @@
     transform-origin: top center;
     animation: sway 3s ease-in-out infinite alternate;
     position: relative;
+    -webkit-user-select: none;
     user-select: none;
     white-space: pre-wrap;
     word-break: break-word;
@@ -183,6 +184,7 @@
   #postBtn:hover {
     background: #28a428;
   }
+  .d-none { display: none !important; }
   footer {
     margin-top: 40px;
     padding: 10px;
@@ -236,7 +238,7 @@
   </div>
 
   <!-- ユーザー短冊 -->
-  <div class="tanzaku-wrapper" id="ownWrapper" style="display:none;"></div>
+  <div class="tanzaku-wrapper d-none" id="ownWrapper"></div>
 
   <!-- 例の短冊 -->
   <div class="tanzaku-wrapper" id="exampleTanzaku">
@@ -283,7 +285,7 @@ function addOwn() {
     `<div class="tanzaku ${color}">` +
     `${safeText}<div class="name">${safeName ? safeName : ''}</div>` +
     `</div>`;
-  ownWrapper.style.display = 'flex';
+  ownWrapper.classList.remove('d-none');
   btnArea.style.display = 'flex';
 
   ownWrapper.dataset.wish = text;

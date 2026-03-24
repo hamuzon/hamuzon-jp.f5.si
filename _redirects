@@ -1,2 +1,6 @@
 /Device-info   /device-info   301
 /discord/*     /discord-tools/:splat 301
+/expo/*        https://expo.hamuzon-jp.f5.si/:splat 301
+/globe/*       https://globe.world.hamuzon-jp.f5.si/:splat 301
+/video-hub/*   https://video-hub.hamuzon-jp.f5.si/:splat 301
+/olympic/*     https://olympic.hamuzon-jp.f5.si/:splat 301

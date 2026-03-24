@@ -168,7 +168,7 @@ codeEl.addEventListener('scroll', () => {
 // --- フォント設定 ---
 fontsize.onchange = e => { codeEl.style.fontSize = e.target.value + 'px'; }
 fontfamily.onchange = e => { codeEl.style.fontFamily = e.target.value; }
-
+//
 // --- テーマ切替 ---
 themeToggle.onclick = () => {
   document.body.dataset.theme = document.body.dataset.theme === 'light' ? 'dark' : 'light';
@@ -219,9 +219,11 @@ saveThemeBtn.onclick = () => {
     fontSize: fontsize.value,
     fontFamily: fontfamily.value,
     themeMode: document.body.dataset.theme
+
   };
   const blob = new Blob([JSON.stringify(theme, null, 2)], { type: 'application/json' });
   const a = document.createElement('a');
+  a.title = "download theme";
   const now = new Date();
   a.download = `fileeditor_THEME_${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}_${now.getHours()}-${now.getMinutes()}-${now.getSeconds()}.json`;
   a.href = URL.createObjectURL(blob);
@@ -262,4 +264,8 @@ settingPanel.addEventListener('click', e => {
 document.addEventListener('DOMContentLoaded', () => {
   newTab();
   applyTheme();
+
+  // フッターの年度更新
+  const yearEl = document.getElementById('year');
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
 });
