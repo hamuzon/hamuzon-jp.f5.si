@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>404 Error / 404 エラー</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Potta+One&display=swap" rel="stylesheet" />
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <style>
+    body,
+    html {
+      margin: 0;
+      min-height: 100vh;
+      font-family: 'Potta One', cursive;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 2vw;
+    }
+
+    .container {
+      background: linear-gradient(145deg, #f0f4ff, #d9e4ff);
+      padding: 2rem 2.5rem;
+      border-radius: 1.25rem;
+      width: 100%;
+      max-width: 480px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.4rem, 6vw, 3rem);
+      color: #0a1f44;
+    }
+
+    p {
+      margin: 0;
+      font-size: clamp(1rem, 2.5vw, 1.1rem);
+      color: #002166;
+    }
+
+    .subtext {
+      color: #31508d;
+      font-size: clamp(0.9rem, 2vw, 1rem);
+    }
+
+    a.back {
+      display: inline-block;
+      text-decoration: none;
+      padding: 1rem 2rem;
+      font-size: 1.1rem;
+      border-radius: 0.75rem;
+      background: linear-gradient(90deg, #00c6ff, #0072ff);
+      color: white;
+      font-weight: 600;
+      transition: 0.3s;
+      width: 100%;
+      max-width: 300px;
+      text-align: center;
+    }
+
+    a.back:hover {
+      background: linear-gradient(90deg, #0072ff, #004aad);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>404 Error / 404 エラー</h1>
+    <p>Page not found / ページが見つかりません</p>
+    <p class="subtext">Sorry, Not Found. / 申し訳ありません、見つかりません。</p>
+    <a id="backLink" class="back" href="/">トップページへ戻る</a>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (location.hostname === 'hamuzon.github.io') {
+        document.getElementById('backLink').href = 'https://hamuzon.github.io/discord-tools';
+      }
+    });
+  </script>
+</body>
+</html>

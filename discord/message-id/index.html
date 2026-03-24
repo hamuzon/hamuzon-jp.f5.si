@@ -9,34 +9,122 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet" />
 
 <style>
-:root{
-  --bg-a:#071024; --bg-b:#071842;
-  --accent-1:#00B8D4; --accent-2:#7C3AED;
-  --text-main:#EAF6FF; --muted:rgba(234,246,255,0.75);
-  --max-width:600px;
+:root {
+    --bg-a: #071024;
+    --bg-b: #071842;
+    --accent-1: #00B8D4;
+    --accent-2: #7C3AED;
+    --text-main: #EAF6FF;
+    --muted: rgba(234, 246, 255, 0.75);
+    --max-width: 600px;
 }
-*,*::before,*::after{box-sizing:border-box;}
-html,body{height:100%;margin:0;}
-body{
-  font-family:"Inter","Noto Sans JP",system-ui;
-  background: radial-gradient(1200px 600px at 10% 10%, rgba(12,36,72,0.6), transparent 10%), linear-gradient(135deg,var(--bg-a),var(--bg-b) 60%);
-  display:flex; flex-direction:column; align-items:center; padding:16px; color:var(--text-main);
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
 }
-.container{
-  width:100%; max-width:var(--max-width); padding:20px; border-radius:18px; background: rgba(255,255,255,0.03); backdrop-filter:blur(12px); margin-bottom:16px;
+
+html,
+body {
+    min-height: 100vh;
+    margin: 0;
 }
-h1{margin:0 0 16px 0; font-weight:800; font-size:1.6rem; text-align:center; color:var(--text-main);}
-.controls{display:flex; gap:10px; margin-bottom:12px;}
-input{flex:1; padding:10px 12px; border-radius:10px; border:1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.02); color:var(--text-main); font-family: monospace;}
-button{padding:10px 16px; border:none; border-radius:10px; background: linear-gradient(90deg,var(--accent-1),var(--accent-2)); color:#02131A; cursor:pointer; font-weight:700;}
-button:hover{filter:brightness(1.05);}
-.result{
-  padding:12px; border-radius:12px; background: rgba(0,0,0,0.02); font-family: monospace; font-size:0.95rem; 
-  white-space:pre-wrap; word-break: break-all; overflow-wrap: break-word;
+
+body {
+    font-family: "Inter", "Noto Sans JP", system-ui;
+    background: radial-gradient(1200px 600px at 10% 10%, rgba(12, 36, 72, 0.6), transparent 10%), linear-gradient(135deg, var(--bg-a), var(--bg-b) 60%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    color: var(--text-main);
 }
-.explain{padding:12px; border-radius:12px; background: rgba(0,0,0,0.04); font-size:0.9rem; margin-top:12px; line-height:1.4; color:var(--muted);}
-.explain a{color:var(--accent-1); text-decoration:underline;}
-@media(max-width:600px){.controls{flex-direction:column;} button{width:100%;}}
+
+.container {
+    width: 100%;
+    max-width: var(--max-width);
+    padding: 20px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.03);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    margin-bottom: 16px;
+}
+
+h1 {
+    margin: 0 0 16px 0;
+    font-weight: 800;
+    font-size: 1.6rem;
+    text-align: center;
+    color: var(--text-main);
+}
+
+.controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+input {
+    flex: 1;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.02);
+    color: var(--text-main);
+    font-family: monospace;
+}
+
+button {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+    color: #02131A;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+button:hover {
+    filter: brightness(1.05);
+}
+
+.result {
+    padding: 12px;
+    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.02);
+    font-family: monospace;
+    font-size: 0.95rem;
+    white-space: pre-wrap;
+    word-break: break-all;
+    overflow-wrap: break-word;
+}
+
+.explain {
+    padding: 12px;
+    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.04);
+    font-size: 0.9rem;
+    margin-top: 12px;
+    line-height: 1.4;
+    color: var(--muted);
+}
+
+.explain a {
+    color: var(--accent-1);
+    text-decoration: underline;
+}
+
+@media(max-width:600px) {
+    .controls {
+        flex-direction: column;
+    }
+    button {
+        width: 100%;
+    }
+}
 </style>
 </head>
 <body>
@@ -59,51 +147,63 @@ button:hover{filter:brightness(1.05);}
 <li><strong>52〜63ビット:</strong> Sequence（同じミリ秒内での連番）</li>
 </ul>
 <p>Snowflake IDは単純な数字ではなく、<strong>日時順に増加</strong>する仕組みです。Binary/Hexで内部構造も確認できます。</p>
-<p>公式ドキュメント（英語）: <a href="https://discord.com/developers/docs/reference#snowflakes" target="_blank">Discord Snowflake Official Documentation</a></p>
+<p>公式ドキュメント（英語）: <a href="https://discord.com/developers/docs/reference#snowflakes" target="_blank" rel="noopener noreferrer">Discord Snowflake Official Documentation</a></p>
 <p>※この解析ツールはAI生成コードによる実装です。</p>
 </div>
 
 <script>
-function formatDate(date, locale='ja-JP', timeZone='Asia/Tokyo') {
-  return new Intl.DateTimeFormat(locale,{
-    year:'numeric', month:'2-digit', day:'2-digit',
-    hour:'2-digit', minute:'2-digit', second:'2-digit',
-    fractionalSecondDigits:3,
-    hour12:false,
-    timeZone
-  }).format(date);
+function formatDate(date, locale = 'ja-JP', timeZone = 'Asia/Tokyo') {
+    return new Intl.DateTimeFormat(locale, {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        fractionalSecondDigits: 3,
+        hour12: false,
+        timeZone
+    }).format(date);
 }
 
-function analyze(){
-  let input = document.getElementById('snowflakeInput').value;
-  const result = document.getElementById('result');
-  if(!input){ result.innerText=''; return; }
-
-  input = input.replace(/[\s\u3000]/g,''); 
-  if(!/^\d+$/.test(input)){ result.innerText='⚠️ 数字のみのIDを入力してください。'; return; }
-
-  try{
-    const id = BigInt(input);
-    const discordEpoch = 1420070400000n;
-    const timestampMsBigInt = (id >> 22n) + discordEpoch;
-
-    let date;
-    if(timestampMsBigInt <= BigInt(Number.MAX_SAFE_INTEGER)){
-      date = new Date(Number(timestampMsBigInt));
-    } else {
-      date = new Date(Number(discordEpoch + (id >> 22n & 0x1FFFFFn)));
+function analyze() {
+    let input = document.getElementById('snowflakeInput').value;
+    const result = document.getElementById('result');
+    
+    if (!input) {
+        result.innerText = '';
+        return;
     }
 
-    const utc = formatDate(date,'en-US','UTC');
-    const jst = formatDate(date,'ja-JP','Asia/Tokyo');
-    const elapsedMs = timestampMsBigInt - discordEpoch;
+    input = input.replace(/[\s\u3000]/g, '');
+    
+    if (!/^\d+$/.test(input)) {
+        result.innerText = '⚠️ 数字のみのIDを入力してください。';
+        return;
+    }
 
-    const workerId = (id >> 12n) & 0x3FFn;
-    const sequence = id & 0xFFFn;
-    const binary = id.toString(2).padStart(64,'0');
-    const hex = '0x'+id.toString(16).toUpperCase();
+    try {
+        const id = BigInt(input);
+        const discordEpoch = 1420070400000n;
+        const timestampMsBigInt = (id >> 22n) + discordEpoch;
 
-    result.innerText = `
+        let date;
+        if (timestampMsBigInt <= BigInt(Number.MAX_SAFE_INTEGER)) {
+            date = new Date(Number(timestampMsBigInt));
+        } else {
+            date = new Date(Number(discordEpoch + (id >> 22n & 0x1FFFFFn)));
+        }
+
+        const utc = formatDate(date, 'en-US', 'UTC');
+        const jst = formatDate(date, 'ja-JP', 'Asia/Tokyo');
+        const elapsedMs = timestampMsBigInt - discordEpoch;
+
+        const workerId = (id >> 12n) & 0x3FFn;
+        const sequence = id & 0xFFFn;
+        const binary = id.toString(2).padStart(64, '0');
+        const hex = '0x' + id.toString(16).toUpperCase();
+
+        result.innerText = `
 Snowflake ID: ${input}
 
 作成日時:
@@ -121,9 +221,10 @@ BigInt値: ${id}
 順序性目安: 数値が大きいほど新しいID
 `.trim();
 
-  } catch(e){
-    result.innerText='⚠️ 無効なIDです。';
-  }
+    }
+    catch (e) {
+        result.innerText = '⚠️ 無効なIDです。';
+    }
 }
 </script>
 

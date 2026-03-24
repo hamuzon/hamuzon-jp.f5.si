@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Discord Message-ID Converter</title>
 <link rel="icon" href="https://hamusata.f5.si/icon.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
@@ -17,60 +19,120 @@ body {
     min-height: 100vh;
     -webkit-font-smoothing: antialiased;
     padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
+
 .glass {
-    background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
     border-radius: 20px;
     padding: 32px 28px;
-    box-shadow: 0 10px 30px rgba(12,10,25,0.6), inset 0 1px 0 rgba(255,255,255,0.03);
-    border: 1px solid rgba(167,139,250,0.12);
+    box-shadow: 0 10px 30px rgba(12, 10, 25, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(167, 139, 250, 0.12);
     margin-bottom: 24px;
+    -webkit-backdrop-filter: blur(12px) saturate(120%);
     backdrop-filter: blur(12px) saturate(120%);
     transition: transform .18s ease, box-shadow .18s ease;
 }
-.glass:hover, .glass:focus-within { transform: translateY(-6px); }
+
+.glass:hover,
+.glass:focus-within {
+    transform: translateY(-6px);
+}
+
 .input-field {
-    width: 100%; padding: 12px 14px; border-radius: 12px;
-    border: 1px solid rgba(255,255,255,0.04);
-    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.16));
-    color: #e6eef8; font-size: 1rem; outline: none;
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(0, 0, 0, 0.16));
+    color: #e6eef8;
+    font-size: 1rem;
+    outline: none;
     transition: border .18s, box-shadow .18s;
 }
-.input-field:focus { border-color: rgba(124,77,255,0.95); box-shadow: 0 6px 20px rgba(124,77,255,0.08); }
+
+.input-field:focus {
+    border-color: rgba(124, 77, 255, 0.95);
+    box-shadow: 0 6px 20px rgba(124, 77, 255, 0.08);
+}
+
 .button {
-    padding: 10px 20px; border-radius: 12px; font-weight: 700;
-    color: #0b0b0d; background: linear-gradient(90deg, #8b5cf6 0%, #00d3ff 100%);
-    border: none; cursor: pointer; transition: transform .12s ease, box-shadow .12s ease;
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-weight: 700;
+    color: #0b0b0d;
+    background: linear-gradient(90deg, #8b5cf6 0%, #00d3ff 100%);
+    border: none;
+    cursor: pointer;
+    transition: transform .12s ease, box-shadow .12s ease;
 }
-.button.bg-accent { background: linear-gradient(90deg, #00d3ff 0%, #ff84c7 100%); color:#081018; }
-.button:hover { transform: translateY(-4px); }
+
+.button.bg-accent {
+    background: linear-gradient(90deg, #00d3ff 0%, #ff84c7 100%);
+    color: #081018;
+}
+
+.button:hover {
+    transform: translateY(-4px);
+}
+
 .discord-box {
-    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(10,10,12,0.16));
-    padding: 12px 14px; border-radius: 12px; cursor:pointer;
-    font-family: 'Fira Mono','Menlo','Consolas',monospace;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(10, 10, 12, 0.16));
+    padding: 12px 14px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-family: 'Fira Mono', 'Menlo', 'Consolas', monospace;
 }
-.flex-container { display:flex; flex-wrap:wrap; gap:24px; justify-content:center; }
-h1 { color:transparent; background: linear-gradient(90deg,#8b5cf6,#00d3ff); -webkit-background-clip:text; background-clip:text; }
-@media(max-width:640px){ .flex-container{flex-direction:column; gap:12px;} .glass{padding:18px 12px;} }
+
+.flex-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    justify-content: center;
+}
+
+h1 {
+    color: transparent;
+    background: linear-gradient(90deg, #8b5cf6, #00d3ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+
+.shadow-glow {
+    text-shadow: 0 2px 12px rgba(124, 58, 237, 0.27);
+}
+
+@media(max-width:640px) {
+    .flex-container {
+        flex-direction: column;
+        gap: 12px;
+    }
+    .glass {
+        padding: 18px 12px;
+    }
+}
 </style>
 </head>
 <body>
 
-<h1 class="text-4xl font-bold text-center mb-8 tracking-tight" style="text-shadow:0 2px 12px #7c3aed44;">Discord Message-ID Converter</h1>
+<h1 class="text-4xl font-bold text-center mb-8 tracking-tight shadow-glow">Discord Message-ID Converter</h1>
 
 <div class="flex-container w-full max-w-3xl mx-auto">
     <div class="glass flex-1 min-w-[300px]">
-        <h2 class="text-2xl font-semibold mb-3" style="color:#f472b6;">メッセージIDを入力</h2>
+        <h2 class="text-2xl font-semibold mb-3 text-pink-400">メッセージIDを入力</h2>
         <div class="flex flex-col sm:flex-row items-stretch gap-4 mb-4">
             <input type="text" id="msgIdInput" class="input-field" placeholder="DiscordメッセージIDを入力">
             <button class="button bg-accent" onclick="convert()">変換</button>
         </div>
 
-        <h2 class="text-2xl font-semibold mb-3" style="color:#a78bfa;">結果</h2>
-        <div id="result" class="discord-box text-base" style="white-space: pre-wrap;"></div>
+        <h2 class="text-2xl font-semibold mb-3 text-violet-400">結果</h2>
+        <div id="result" class="discord-box text-base whitespace-pre-wrap"></div>
 
-        <div class="mt-6 text-center text-sm text-muted">
-          © <span id="year-range"></span> <a href="https://hamusata.f5.si" target="_blank" class="underline">hamusata</a>
+        <div class="mt-6 text-center text-sm text-gray-400">
+          © <span id="year-range"></span> <a href="https://hamusata.f5.si" target="_blank" rel="noopener noreferrer" class="underline">hamusata</a>
         </div>
     </div>
 </div>
@@ -78,36 +140,59 @@ h1 { color:transparent; background: linear-gradient(90deg,#8b5cf6,#00d3ff); -web
 <script>
 const baseYear = 2025;
 const currentYear = new Date().getFullYear();
-document.getElementById('year-range').textContent = baseYear === currentYear ? baseYear : `${baseYear}–${currentYear}`;
+document.getElementById('year-range').textContent = baseYear === currentYear ? baseYear : `${baseYear} ~ ${currentYear}`;
 
-function pad2(n){ return String(n).padStart(2,'0'); }
-function pad3(n){ return String(n).padStart(3,'0'); }
+const copyrightLink = document.querySelector('.mt-6.text-center.text-sm.text-gray-400 a');
+if (copyrightLink) {
+    const h = window.location.hostname;
+    if (h.endsWith('hamusata.f5.si')) {
+        copyrightLink.textContent = 'hamusata';
+        copyrightLink.href = 'https://hamusata.f5.si';
+    } else if (h.endsWith('hamuzon-jp.f5.si') || h.endsWith('hamuzon.github.io')) {
+        copyrightLink.textContent = 'hamuzon';
+        copyrightLink.href = 'https://github.com/hamuzon';
+    } else {
+        copyrightLink.style.display = 'none';
+    }
+}
 
-function convert(){
+function pad2(n) {
+    return String(n).padStart(2, '0');
+}
+
+function pad3(n) {
+    return String(n).padStart(3, '0');
+}
+
+function convert() {
     const input = document.getElementById('msgIdInput').value.trim();
     const resultEl = document.getElementById('result');
-    if(!input){
+    
+    if (!input) {
         resultEl.innerText = '';
         return;
     }
-    try{
+    
+    try {
         const id = BigInt(input);
         const discordEpoch = 1420070400000n;
         const tsMs = (id >> 22n) + discordEpoch;
         const date = new Date(Number(tsMs));
         
         // JST
-        const jst = new Date(Number(tsMs) + 9*3600*1000);
-        const jstStr = `${jst.getFullYear()}/${pad2(jst.getMonth()+1)}/${pad2(jst.getDate())} ${pad2(jst.getHours())}:${pad2(jst.getMinutes())}:${pad2(jst.getSeconds())}.${pad3(jst.getMilliseconds())}`;
+        const jst = new Date(Number(tsMs) + 9 * 3600 * 1000);
+        const jstStr = `${jst.getFullYear()}/${pad2(jst.getMonth() + 1)}/${pad2(jst.getDate())} ` + 
+                       `${pad2(jst.getHours())}:${pad2(jst.getMinutes())}:${pad2(jst.getSeconds())}.${pad3(jst.getMilliseconds())}`;
 
         // UTC
-        const utc = date.toISOString().replace('T',' ').replace('Z','');
+        const utc = date.toISOString().replace('T', ' ').replace('Z', '');
 
         // Local
         const local = date.toLocaleString();
 
-        resultEl.innerText = `UNIX: ${Math.floor(Number(tsMs)/1000)}\nLocal: ${local}\nUTC: ${utc}\nJST: ${jstStr}`;
-    }catch(e){
+        resultEl.innerText = `UNIX: ${Math.floor(Number(tsMs) / 1000)}\nLocal: ${local}\nUTC: ${utc}\nJST: ${jstStr}`;
+    }
+    catch (e) {
         resultEl.innerText = '⚠️ 無効なIDです。';
     }
 }
