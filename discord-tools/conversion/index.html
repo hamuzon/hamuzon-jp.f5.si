@@ -132,7 +132,7 @@ h1 {
         <div id="result" class="discord-box text-base whitespace-pre-wrap"></div>
 
         <div class="mt-6 text-center text-sm text-gray-400">
-          © <span id="year-range"></span> <a href="https://hamusata.f5.si" target="_blank" rel="noopener noreferrer" class="underline">hamusata</a>
+          &copy; <span id="year-range"></span> <a href="https://hamusata.f5.si" target="_blank" rel="noopener noreferrer" class="underline">@hamusata</a>
         </div>
     </div>
 </div>
@@ -146,11 +146,14 @@ const copyrightLink = document.querySelector('.mt-6.text-center.text-sm.text-gra
 if (copyrightLink) {
     const h = window.location.hostname;
     if (h.endsWith('hamusata.f5.si')) {
-        copyrightLink.textContent = 'hamusata';
+        copyrightLink.textContent = '@hamusata';
         copyrightLink.href = 'https://hamusata.f5.si';
-    } else if (h.endsWith('hamuzon-jp.f5.si') || h.endsWith('hamuzon.github.io')) {
-        copyrightLink.textContent = 'hamuzon';
-        copyrightLink.href = 'https://github.com/hamuzon';
+    } else if (h.endsWith('hamuzon-jp.f5.si')) {
+        copyrightLink.textContent = '@hamuzon';
+        copyrightLink.href = 'https://hamuzon-jp.f5.si';
+    } else if (h.endsWith('hamuzon.github.io')) {
+        copyrightLink.textContent = '@hamuzon';
+        copyrightLink.href = 'https://hamuzon.github.io';
     } else {
         copyrightLink.style.display = 'none';
     }
