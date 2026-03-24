@@ -18,7 +18,7 @@
   { "title": "🎲 サイコロ 🎯", "url": "/dice/" },
   { "title": "🍀 おみくじ 🔮", "url": "/omikuji/" },
   { "title": "🔑 Password Generator App 🗝️ (apiversion)", "url": "/passapi/" },
-  { "title": "📱 Discord Tools 🖥️", "url": "/discord/" },
+  { "title": "📱 Discord Tools 🖥️", "url": "/discord-tools/" },
   { "title": "🔢 分数メーカー / Fraction Maker 🧮", "url": "/fraction/" },
   { "title": "🎨 ピクセル アート / Pixel Art 🖌️", "url": "/pixel-art/" },
   { "title": "📝 ファイルエディター / File Editor 📁", "url": "/editor/" },
