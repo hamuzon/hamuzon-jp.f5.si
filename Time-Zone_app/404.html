@@ -181,9 +181,7 @@
       applyTheme();
     });
 
-    if (location.hostname === 'hamuzon-jp.f5.si') {
-      document.getElementById('backLink').href = 'https://hamuzon-jp.f5.si/Time-Zone_app/';
-    }
+    document.getElementById('backLink').href = window.location.origin + '/Time-Zone_app/';
 
     applyTheme();
     updateLanguage();
