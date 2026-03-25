@@ -7,49 +7,68 @@
   <link id="favicon" rel="icon" href="icon-light.png" type="image/png" />
   <style>
     :root {
-      --bg-light: #f4fdf6;
-      --card-light: #d9efe0;
-      --text-light: #1a3d2f;
-
-      --bg-dark: #1a1a1a;
-      --card-dark: #2a2a2a;
-      --text-dark: #e0fbe9;
+      --bg-body: linear-gradient(135deg, #d9ead3, #e7f1e9);
+      --text-main: #1a3d2f;
+      --text-title: #145214;
+      --card-bg: #c3e0c8;
+      --card-shadow: rgba(0, 121, 61, 0.25);
+      --card-hover-bg: #a0c7a0;
+      --card-hover-shadow: rgba(0, 121, 61, 0.45);
+      --text-zone: #145214;
+      --text-sub: #405c33;
+      --text-time: #264d25;
     }
-
-    body {
-      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    body.theme-dark {
+      --bg-body: linear-gradient(135deg, #121212, #1e1e1e);
+      --text-main: #e0e0e0;
+      --text-title: #81c784;
+      --card-bg: #2c2c2c;
+      --card-shadow: rgba(0, 0, 0, 0.5);
+      --card-hover-bg: #3a3a3a;
+      --card-hover-shadow: rgba(0, 0, 0, 0.7);
+      --text-zone: #a5d6a7;
+      --text-sub: #81c784;
+      --text-time: #66bb6a;
+    }
+    * {
+      box-sizing: border-box;
       margin: 0;
-      padding: 2rem;
+      padding: 0;
+    }
+    body {
+      background: var(--bg-body);
+      color: var(--text-main);
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: start;
+      justify-content: center;
       min-height: 100vh;
-      transition: background 0.3s, color 0.3s;
-    }
-
-    .theme-light {
-      background: var(--bg-light);
-      color: var(--text-light);
-    }
-
-    .theme-dark {
-      background: var(--bg-dark);
-      color: var(--text-dark);
-    }
-
-    h1 {
-      font-size: 2.2rem;
-      margin-bottom: 1rem;
+      padding: 2rem;
       text-align: center;
+      -webkit-user-select: none; 
+      user-select: none;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
-
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      color: var(--text-title);
+      letter-spacing: 0.1em;
+      text-align: center;
+      text-transform: uppercase;
+      font-family: "Montserrat", sans-serif;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+    }
     .button-row {
       margin-bottom: 2rem;
       display: flex;
       gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
     }
-
     button {
       padding: 0.5rem 1rem;
       font-size: 1rem;
@@ -60,62 +79,87 @@
       color: white;
       transition: background 0.3s;
     }
-
     button:hover {
       background: #45a049;
     }
-
     .zones {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 1.5rem;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+      justify-items: center;
       width: 100%;
-      max-width: 1000px;
+      max-width: 960px;
     }
-
     .zone-card {
+      background-color: var(--card-bg);
       border-radius: 12px;
-      padding: 1.5rem;
+      padding: 1.5rem 2rem;
+      box-shadow: 0 4px 8px var(--card-shadow);
       text-align: center;
-      transition: background 0.3s, color 0.3s;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      width: 100%;
+      max-width: 440px;
+      min-height: 180px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      cursor: default;
     }
-
-    .theme-light .zone-card {
-      background-color: var(--card-light);
-      color: var(--text-light);
+    .zone-card:hover {
+      background-color: var(--card-hover-bg);
+      box-shadow: 0 6px 12px var(--card-hover-shadow);
     }
-
-    .theme-dark .zone-card {
-      background-color: var(--card-dark);
-      color: var(--text-dark);
-    }
-
     .zone-name {
-      font-size: 1.3rem;
-      margin-bottom: 0.5rem;
-      font-weight: bold;
+      font-size: 1.4rem;
+      margin-bottom: 0.2rem;
+      font-weight: 700;
+      color: var(--text-zone);
     }
-
-    .zone-offset, .date {
+    .zone-offset,
+    .date {
       font-size: 1rem;
-      margin-bottom: 0.3rem;
+      color: var(--text-sub);
+      margin-bottom: 0.4rem;
     }
-
     .time {
-      font-size: 2rem;
+      font-size: 2.2rem;
       font-family: monospace;
       font-weight: bold;
+      color: var(--text-time);
+      white-space: nowrap;
     }
-
-    @media (max-width: 600px) {
+    @media screen and (max-width: 768px) {
+      body {
+        padding: 1rem;
+        justify-content: flex-start;
+      }
+      h1 {
+        font-size: 2rem;
+      }
+      .zones {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+      .zone-card {
+        min-height: 140px;
+        padding: 1rem 1.5rem;
+      }
+      .zone-name {
+        font-size: 1.1rem;
+      }
+      .zone-offset,
+      .date {
+        font-size: 0.9rem;
+      }
       .time {
-        font-size: 1.5rem;
+        font-size: 1.6rem;
       }
     }
   </style>
 </head>
 <body>
   <h1 id="main-title">タイム・ゾーン時計</h1>
+
   <div class="button-row">
     <button id="langBtn">English</button>
     <button id="themeBtn">🌙 ダークモード</button>
@@ -128,18 +172,21 @@
       <div class="date"></div>
       <div class="time"></div>
     </div>
+
     <div class="zone-card" data-timezone="America/Los_Angeles" data-title-ja="アメリカ西海岸（ロサンゼルス）" data-title-en="US West Coast (Los Angeles)">
       <div class="zone-name">アメリカ西海岸（ロサンゼルス）</div>
       <div class="zone-offset"></div>
       <div class="date"></div>
       <div class="time"></div>
     </div>
+
     <div class="zone-card" data-timezone="America/New_York" data-title-ja="アメリカ東部（ニューヨーク）" data-title-en="US East Coast (New York)">
       <div class="zone-name">アメリカ東部（ニューヨーク）</div>
       <div class="zone-offset"></div>
       <div class="date"></div>
       <div class="time"></div>
     </div>
+
     <div class="zone-card" data-timezone="Etc/UTC" data-title-ja="世界標準時 (UTC)" data-title-en="Universal Time (UTC)">
       <div class="zone-name">世界標準時 (UTC)</div>
       <div class="zone-offset"></div>

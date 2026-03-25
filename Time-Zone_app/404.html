@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>404 Not Found - ページが見つかりません</title>
+  <link id="favicon" rel="icon" href="icon-light.png" type="image/png" />
+  <style>
+    :root {
+      --bg-light: #f4fdf6;
+      --card-light: #d9efe0;
+      --text-light: #1a3d2f;
+
+      --bg-dark: #1a1a1a;
+      --card-dark: #2a2a2a;
+      --text-dark: #e0fbe9;
+    }
+
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      transition: background 0.3s, color 0.3s;
+      box-sizing: border-box;
+    }
+
+    .theme-light {
+      background: var(--bg-light);
+      color: var(--text-light);
+    }
+
+    .theme-dark {
+      background: var(--bg-dark);
+      color: var(--text-dark);
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .button-row {
+      margin-bottom: 2rem;
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    button,
+    .back-link {
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background: #4caf50;
+      color: white;
+      transition: background 0.3s;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    button:hover,
+    .back-link:hover {
+      background: #45a049;
+    }
+
+    .zones {
+      display: grid;
+      grid-template-columns: minmax(260px, 520px);
+      gap: 1.5rem;
+      width: 100%;
+      justify-content: center;
+    }
+
+    .zone-card {
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .theme-light .zone-card {
+      background-color: var(--card-light);
+      color: var(--text-light);
+    }
+
+    .theme-dark .zone-card {
+      background-color: var(--card-dark);
+      color: var(--text-dark);
+    }
+
+    .error-code {
+      font-size: 3rem;
+      font-weight: bold;
+      margin: 0 0 0.5rem;
+      font-family: monospace;
+    }
+
+    .message {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .sub-message {
+      opacity: 0.8;
+      margin-bottom: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+  <h1 id="main-title">404 Not Found エラー</h1>
+
+  <div class="button-row">
+    <button id="langBtn">English</button>
+    <button id="themeBtn">🌙 ダークモード</button>
+  </div>
+
+  <div class="zones">
+    <div class="zone-card">
+      <p class="error-code">404</p>
+      <p class="message" id="notFoundText">ページが見つかりません</p>
+      <p class="sub-message" id="notFoundSubText">お探しのページは存在しないか、移動された可能性があります。</p>
+      <a class="back-link" id="backLink" href="/">トップページへ戻る</a>
+    </div>
+  </div>
+
+  <script>
+    let currentLang = localStorage.getItem('lang') || 'ja';
+    let currentTheme = localStorage.getItem('theme') || 'light';
+
+    function updateFavicon() {
+      const favicon = document.getElementById('favicon');
+      favicon.href = currentTheme === 'dark' ? 'icon-dark.png' : 'icon-light.png';
+    }
+
+    function updateThemeButtonLabel() {
+      const isDark = currentTheme === 'dark';
+      document.getElementById('themeBtn').textContent =
+        currentLang === 'ja'
+          ? (isDark ? '☀️ ライトモード' : '🌙 ダークモード')
+          : (isDark ? '☀️ Light Mode' : '🌙 Dark Mode');
+    }
+
+    function applyTheme() {
+      document.body.className = `theme-${currentTheme}`;
+      updateFavicon();
+      updateThemeButtonLabel();
+    }
+
+    function updateLanguage() {
+      const isJa = currentLang === 'ja';
+      document.documentElement.lang = isJa ? 'ja' : 'en';
+      document.title = isJa ? '404 Not Found - ページが見つかりません' : '404 - Page Not Found';
+      document.getElementById('main-title').textContent = isJa ? '404 Not Found エラー' : '404 Not Found Error';
+      document.getElementById('notFoundText').textContent = isJa ? 'ページが見つかりません' : 'Page Not Found';
+      document.getElementById('notFoundSubText').textContent = isJa
+        ? 'お探しのページは存在しないか、移動された可能性があります。'
+        : 'The page you are looking for may have been moved or does not exist.';
+      document.getElementById('backLink').textContent = isJa ? 'トップページへ戻る' : 'Back to Home';
+      document.getElementById('langBtn').textContent = isJa ? 'English' : '日本語';
+      updateThemeButtonLabel();
+    }
+
+    document.getElementById('langBtn').addEventListener('click', () => {
+      currentLang = currentLang === 'ja' ? 'en' : 'ja';
+      localStorage.setItem('lang', currentLang);
+      updateLanguage();
+    });
+
+    document.getElementById('themeBtn').addEventListener('click', () => {
+      currentTheme = currentTheme === 'light' ? 'dark' : 'light';
+      localStorage.setItem('theme', currentTheme);
+      applyTheme();
+    });
+
+    if (location.hostname === 'hamuzon.github.io') {
+      document.getElementById('backLink').href = 'https://hamuzon.github.io/Time-Zone_app/';
+    }
+
+    applyTheme();
+    updateLanguage();
+  </script>
+</body>
+</html>
