@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Discord Snowflake Analyzer & Info</title>
 
-<link rel="icon" href="https://hamusata.f5.si/icon.webp" type="image/webp" />
+<link rel="icon" href="../icon.webp" type="image/webp" />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet" />
 
 <style>
@@ -169,14 +169,14 @@ function formatDate(date, locale = 'ja-JP', timeZone = 'Asia/Tokyo') {
 function analyze() {
     let input = document.getElementById('snowflakeInput').value;
     const result = document.getElementById('result');
-    
+
     if (!input) {
         result.innerText = '';
         return;
     }
 
     input = input.replace(/[\s\u3000]/g, '');
-    
+
     if (!/^\d+$/.test(input)) {
         result.innerText = '⚠️ 数字のみのIDを入力してください。';
         return;
