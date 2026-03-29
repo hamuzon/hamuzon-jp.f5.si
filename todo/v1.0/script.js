@@ -1,13 +1,12 @@
 "use strict";
 
-const TODO_VERSION = "1.1";
-const SUPPORTED_VERSIONS = ["1.0", "1.1"];
-const STORAGE_KEY = "todo_events_V1.1";
+const TODO_VERSION = "1.0";
+const SUPPORTED_VERSIONS = ["1.0"];
+const STORAGE_KEY = "todo_events";
 
 let todos = {};
 let tagColors = {};
 let selectedDate = null;
-let isEditMode = false;
 
 document.addEventListener("DOMContentLoaded", () => {
   const listContainer = document.getElementById("todo-list-container");
@@ -66,11 +65,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
       block.appendChild(item);
 
-      block.onclick = () => openModal(dateKey, true);
+      block.onclick = () => openModal(dateKey);
       block.onkeydown = e => {
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
-          openModal(dateKey, true);
+          openModal(dateKey);
         }
       };
 
@@ -79,8 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // モーダル開く
-  function openModal(dateKey, editMode = false) {
-    isEditMode = editMode;
+  function openModal(dateKey) {
     selectedDate = dateKey;
     modalDate.textContent = `📅 ${formatDateJP(dateKey)}`;
 
@@ -111,6 +109,8 @@ document.addEventListener("DOMContentLoaded", () => {
   addBtn.onclick = () => {
     const todayKey = formatDateKey(new Date());
     openModal(todayKey);
+    todoTime.value = "";
+    todoText.value = "";
   };
 
   // 保存ボタン
@@ -129,15 +129,9 @@ document.addEventListener("DOMContentLoaded", () => {
       todoText.focus();
       return;
     }
-    const entry = time ? `${time} ${text}` : text;
 
-    // 既存データがある日付で、かつモーダルで開いた時の日付（selectedDate）と異なる日付へ変更して保存した場合は追記
-    if (todos[date] && date !== selectedDate) {
-      todos[date] = todos[date] + "\n" + entry;
-    } else {
-      // 既存ブロックの編集、または完全な新規登録の場合は上書き/新規作成
-      todos[date] = entry;
-    }
+    // 時刻が入力されていれば TODOテキストの先頭に付ける（任意）
+    todos[date] = time ? `${time} ${text}` : text;
 
     localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
     renderTodoList();
@@ -204,8 +198,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const json = JSON.parse(ev.target.result);
         loadFromJSON(json);
         alert("✅ 読み込み完了");
-      } catch {
-        alert("❌ 読み込みエラー: 不正なJSONです");
+      } catch (err) {
+        alert(`❌ 読み込みエラー: ${err.message}`);
       }
       loadInput.value = "";
     };
@@ -214,7 +208,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // JSONから復元
   function loadFromJSON(json) {
-    if (!json || typeof json !== "object") throw new Error("不正なJSON");
+    if (!json || typeof json !== "object") throw new Error("不正なJSONデータです");
 
     let settings = json.settings;
 
@@ -232,12 +226,16 @@ document.addEventListener("DOMContentLoaded", () => {
       };
     }
 
-    if (!settings || settings.app !== "todo-list" || !SUPPORTED_VERSIONS.includes(settings.version)) {
-      throw new Error("❌ 対応していない形式です");
+    if (!settings || settings.app !== "todo-list") {
+      throw new Error("対応していないアプリ形式です");
+    }
+
+    if (!SUPPORTED_VERSIONS.includes(settings.version)) {
+      throw new Error(`非対応Version: ${settings.version || "不明"}`);
     }
 
     if (!json.events || typeof json.events !== "object") {
-      throw new Error("❌ events がありません");
+      throw new Error("TODOデータ(events)が見つかりません");
     }
 
     todos = json.events;

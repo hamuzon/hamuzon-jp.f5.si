@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>404 Not Found / 404 ページが見つかりません</title>
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Yu Gothic", "Segoe UI", Tahoma, sans-serif;
+    }
+
+    body {
+      background-color: #fdf6e3;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+      padding: 2rem;
+      line-height: 1.5;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      body {
+        background-color: #1a1a1a;
+        color: #eee;
+      }
+    }
+
+    h1 {
+      font-size: 5rem;
+      margin-bottom: 0.3em;
+      color: #4c6cb3;
+      letter-spacing: 0.15em;
+    }
+
+    p {
+      font-size: 1.2rem;
+      margin: 0.3em 0;
+      color: inherit;
+    }
+
+    .subtext {
+      font-size: 1rem;
+      color: #666;
+      margin-top: 0.5em;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .subtext {
+        color: #bbb;
+      }
+    }
+
+    a.back {
+      margin-top: 2rem;
+      padding: 0.75em 2em;
+      background-color: #4c6cb3;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 4px;
+      transition: background-color 0.3s;
+      cursor: pointer;
+    }
+
+    a.back:hover {
+      background-color: #3a53a1;
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 3.5rem;
+      }
+      p {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>404</h1>
+  <p>Sorry, page not found.</p>
+  <p class="subtext">ページが見つかりません。</p>
+  <a id="backLink" class="back" href="/">Back to Home / トップページへ戻る</a>
+
+  <script>
+    // README/LICENSE へのアクセス（大文字小文字問わず）を判定してリダイレクト
+    (function() {
+      const path = window.location.pathname.toLowerCase();
+      if (path.includes('readme') || path.includes('license')) {
+        window.location.replace('./');
+      }
+    })();
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (location.hostname === 'hamuzon.github.io') {
+        document.getElementById('backLink').href = 'https://hamuzon.github.io/todo/';
+      }
+    });
+  </script>
+</body>
+</html>
