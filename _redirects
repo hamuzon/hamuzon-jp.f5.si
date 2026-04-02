@@ -5,6 +5,10 @@
 /discord/           /discord-tools 301
 /discord/*          /discord-tools/:splat 301
 
+/discord-tool            /discord-tools 301
+/discord-tool/           /discord-tools 301
+/discord-tool/*          /discord-tools/:splat 301
+
 /expo               https://expo.hamuzon-jp.f5.si 301
 /expo/              https://expo.hamuzon-jp.f5.si 301
 /expo/*             https://expo.hamuzon-jp.f5.si/:splat 301
