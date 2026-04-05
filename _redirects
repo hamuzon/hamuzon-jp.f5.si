@@ -24,3 +24,9 @@
 /olympic            https://olympic.hamuzon-jp.f5.si 301
 /olympic/           https://olympic.hamuzon-jp.f5.si 301
 /olympic/*          https://olympic.hamuzon-jp.f5.si/:splat 301
+
+/pixel            /pixel-art 301
+/pixel/*          /pixel-art/:splat 301
+
+/art            /pixel-art 301
+/art/*          /pixel-art/:splat 301
