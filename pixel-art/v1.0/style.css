@@ -196,6 +196,21 @@ footer {
   user-select: none;
 }
 
+.app-footer {
+  margin-top: 1rem;
+  border-top: 1px solid #808080;
+  padding-top: 10px;
+}
+
+.footer-inner-flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  font-size: 12px;
+}
+
 /* フッター初期非表示 (JSで制御) */
 #footer-hamusata, #footer-hamuzon, #footer-other {
   display: none;

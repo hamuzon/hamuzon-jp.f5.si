@@ -19,7 +19,7 @@
 
   const linkHamuzon = document.getElementById("link-hamuzon");
 
-  if (host === "pixel-art.hamusata.f5.si" || host === "home.hamusata.f5.si") {
+  if (host === "pixel-art.hamusata.f5.si") {
     footerHamusata.style.display = "inline";
   } else if (host === "hamuzon.github.io") {
     footerHamuzon.style.display = "inline";
