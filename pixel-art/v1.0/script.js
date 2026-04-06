@@ -96,7 +96,7 @@
 
   // リセット
   resetBtn.addEventListener("click", () => {
-    if(confirm("本当にボードをリセットして全てクリアしますか？")){
+    if(confirm(window.i18nGetText("confirm-clear-board"))){
       canvasEl.querySelectorAll(".pixel").forEach(p => {
         p.style.backgroundColor = palette[palette.length-1]; // 透明
         delete p.dataset.colorIndex;
@@ -120,35 +120,37 @@
   // JSONファイル読み込み
   fileLoadInput.addEventListener("change", e => {
     const file = e.target.files[0];
-    if(!file) return alert("ファイルが選択されていません。");
-    if(!file.name.endsWith(".json")) return alert("JSONファイルを選択してください。");
+    if(!file) return alert(window.i18nGetText("alert-file-not-selected"));
+    if(!file.name.endsWith(".json")) return alert(window.i18nGetText("alert-require-json"));
 
     const reader = new FileReader();
     reader.onload = ev => {
       try {
         const data = JSON.parse(ev.target.result);
-        if(data.app !== APP_NAME){
-          alert("このデータはこのアプリのものではありません。");
+        const appName = data.app || data.a;
+        const version = data.version || data.v;
+        if(appName !== APP_NAME){
+          alert(window.i18nGetText("alert-wrong-app"));
           return;
         }
-        if(!SUPPORTED_VERSIONS.includes(data.version)){
-          alert(`サポートされていないバージョンです。\n対応バージョン: ${SUPPORTED_VERSIONS.join(", ")}\n読み込んだバージョン: ${data.version}`);
+        if(!SUPPORTED_VERSIONS.includes(version)){
+          alert(`${window.i18nGetText("alert-unsupported-version")}\n(v${version})`);
           return;
         }
         if(data.width !== WIDTH || data.height !== HEIGHT){
-          alert("キャンバスサイズが異なります。");
+          alert(window.i18nGetText("alert-canvas-size"));
           return;
         }
         if(!Array.isArray(data.pixels)){
-          alert("ピクセルデータが不正です。");
+          alert(window.i18nGetText("alert-data-corrupt"));
           return;
         }
         if(!Array.isArray(data.palette)){
-          alert("パレットデータが不正です。");
+          alert(window.i18nGetText("alert-data-corrupt"));
           return;
         }
         if(JSON.stringify(data.palette) !== JSON.stringify(palette)){
-          alert("パレットがアプリと異なります。");
+          alert("【エラー: パレット不一致】\n使用されている色がこのアプリ（v1.0）の標準パレットと異なります。\n新しいバージョンで追加された色が含まれている可能性があります。");
           return;
         }
 
@@ -156,9 +158,9 @@
         titleInput.value = data.title || "";
         saveToLocalStorage();
 
-        alert(`バージョン ${data.version} の作品を読み込みました。`);
+        alert(window.i18nGetText("alert-load-success"));
       } catch {
-        alert("JSONファイルの読み込みに失敗しました。");
+        alert(window.i18nGetText("alert-load-fail"));
       }
     };
     reader.readAsText(file);
@@ -308,7 +310,7 @@
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-    alert("作品を保存しました。");
+    alert(window.i18nGetText("alert-load-success")); // Reusing success alert for save
   }
 
   // キャンバスの色インデックス取得

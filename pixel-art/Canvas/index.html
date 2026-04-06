@@ -262,7 +262,6 @@
         /* Utility Classes for replacing inline styles */
         .hidden { display: none; }
         .modal-title { margin-bottom: 20px; font-weight: 900; }
-        .text-accent { color: var(--accent); }
         .modal-scroll { max-height: 300px; overflow-y: auto; margin-bottom: 20px; }
         .btn-text { background: none; }
         .input-text { width: 100%; padding: 16px; margin: 20px 0; border-radius: 14px; background: var(--input); color: var(--text); border: 1px solid var(--border); font-weight: 700; }
@@ -301,6 +300,7 @@
         .project-size { font-size: 10px; color: var(--sub); }
         .project-del-btn { color: var(--danger); width: 32px; }
         .empty-gallery { text-align: center; padding: 40px; color: var(--sub); font-size: 13px; }
+        .btn-accent { color: var(--accent); }
     </style>
 </head>
 
@@ -348,7 +348,7 @@
             <button class="btn" onclick="app.undo()"><span class="material-symbols-rounded">undo</span></button>
             <button class="btn" onclick="app.redo()"><span class="material-symbols-rounded">redo</span></button>
             <button class="btn" onclick="ui.toggleTheme()"><span class="material-symbols-rounded" id="mode-icon">dark_mode</span></button>
-            <button class="btn text-accent" onclick="app.exportImage()"><span class="material-symbols-rounded">download</span></button>
+            <button class="btn btn-accent" onclick="app.exportImage()"><span class="material-symbols-rounded">download</span></button>
         </div>
     </header>
 

@@ -117,29 +117,29 @@
 
     const validateLoadedData = (d, { showAlert = false } = {}) => {
         const appName = String(d?.a || d?.app || "").trim();
-        const version = getDataVersion(d);
+        const fileVersion = getDataVersion(d);
+        let version = fileVersion;
         const pxData = d?.px || d?.pixels;
         const plData = d?.pl || d?.palette;
+
+        if (version === "1.0" && Array.isArray(plData) && plData.length > 7) {
+            version = "1.1"; // パレットが多いのに v1.0 判定になっている場合の救済
+        }
 
         const fail = (message) => {
             if (showAlert) alert(message);
             return null;
         };
 
-        if (appName !== APP_NAME) return fail("このデータはこのアプリのものではありません。");
-
+        if (appName !== APP_NAME) return fail(window.i18nGetText("alert-wrong-app"));
         if (!SUPPORTED_VERSIONS.includes(version)) {
-            return fail(`サポートされていないバージョンです。
-対応: ${SUPPORTED_VERSIONS.join(", ")}
-読み込んだ: ${version || "(不明)"}`);
+            return fail(`${window.i18nGetText("alert-unsupported-version")}\n(v${version})`);
         }
-
         if ((d?.width && d.width !== WIDTH) || (d?.height && d.height !== HEIGHT)) {
-            return fail("キャンバスサイズが異なります。");
+            return fail(window.i18nGetText("alert-canvas-size"));
         }
-
-        if (!Array.isArray(pxData)) return fail("ピクセルデータが不正です。");
-        if (plData !== undefined && !Array.isArray(plData)) return fail("パレットデータが不正です。");
+        if (!Array.isArray(pxData)) return fail(window.i18nGetText("alert-data-corrupt"));
+        if (plData !== undefined && !Array.isArray(plData)) return fail(window.i18nGetText("alert-data-corrupt"));
 
         return version;
     };
@@ -237,28 +237,31 @@
 
         fileLoadInput.addEventListener("change", e => {
             const file = e.target.files[0];
-            if (!file) return alert("ファイルが選択されていません。");
-            if (!file.name.toLowerCase().endsWith(".json")) return alert("JSONファイルを選択してください。");
+            if (!file) return alert(window.i18nGetText("alert-file-not-selected"));
+            if (!file.name.toLowerCase().endsWith(".json")) return alert(window.i18nGetText("alert-require-json"));
 
             const reader = new FileReader();
             reader.onload = ev => {
                 try {
                     const data = JSON.parse(ev.target.result);
                     const appName = String(data.a || data.app || "").trim();
-                    const version = getDataVersion(data);
+                    const fileVersion = getDataVersion(data);
+                    let version = fileVersion;
                     const pxData = data.px || data.pixels;
                     const plData = data.pl || data.palette;
 
-                    if (appName !== APP_NAME) { alert("このデータはこのアプリのものではありません。"); return; }
+                    if (version === "1.0" && Array.isArray(plData) && plData.length > 7) {
+                        version = "1.1"; // パレットが多いのに v1.0 判定になっている場合の救済
+                    }
+
+                    if (appName !== APP_NAME) { alert(window.i18nGetText("alert-wrong-app")); return; }
                     if (!SUPPORTED_VERSIONS.includes(version)) {
-                        alert(`サポートされていないバージョンです。
-対応: ${SUPPORTED_VERSIONS.join(", ")}
-読み込んだ: ${version || "(不明)"}`);
+                        alert(`${window.i18nGetText("alert-unsupported-version")}\n(v${version})`);
                         return;
                     }
-                    if ((data.width && data.width !== WIDTH) || (data.height && data.height !== HEIGHT)) { alert("キャンバスサイズが異なります。"); return; }
-                    if (!Array.isArray(pxData)) { alert("ピクセルデータが不正です。"); return; }
-                    if (plData !== undefined && !Array.isArray(plData)) { alert("パレットデータが不正です。"); return; }
+                    if ((data.width && data.width !== WIDTH) || (data.height && data.height !== HEIGHT)) { alert(window.i18nGetText("alert-canvas-size")); return; }
+                    if (!Array.isArray(pxData)) { alert(window.i18nGetText("alert-data-corrupt")); return; }
+                    if (plData !== undefined && !Array.isArray(plData)) { alert(window.i18nGetText("alert-data-corrupt")); return; }
 
                     if (Array.isArray(plData)) { palette = plData; createPalette(); }
                     else { createPalette(); }
@@ -266,9 +269,9 @@
                     decompress(pxData);
                     titleInput.value = data.t || data.title || "";
                     saveToLocal();
-                    alert(`バージョン ${version} の作品を読み込みました。`);
+                    alert(`${window.i18nGetText("alert-load-success")}\n(v${version})`);
                 } catch {
-                    alert("JSONファイルの読み込みに失敗しました。");
+                    alert(window.i18nGetText("alert-load-fail"));
                 }
             };
             reader.readAsText(file);
@@ -283,17 +286,17 @@
 
     if ($("btn-remove-color")) $("btn-remove-color").onclick = () => {
         if (currentColorIndex < FIXED_COLORS_START.length || currentColorIndex === palette.length - 1) {
-            alert("この色は削除できません。"); return;
+            alert(window.i18nGetText("alert-cannot-delete-color")); return;
         }
         palette.splice(currentColorIndex, 1); currentColorIndex = 0; createPalette(); saveToLocal();
     };
 
     if ($("btn-reset-palette")) $("btn-reset-palette").onclick = () => {
-        if (confirm("パレットをリセットしますか？")) { palette = [...FIXED_COLORS_START, FIXED_COLOR_END]; currentColorIndex = 0; createPalette(); saveToLocal(); }
+        if (confirm(window.i18nGetText("confirm-reset-palette"))) { palette = [...FIXED_COLORS_START, FIXED_COLOR_END]; currentColorIndex = 0; createPalette(); saveToLocal(); }
     };
 
     if ($("btn-reset")) $("btn-reset").onclick = () => {
-        if (confirm("クリアしますか？")) { pixels.forEach(p => { p.style.backgroundColor = "transparent"; p.dataset.colorIndex = palette.length - 1; }); saveToLocal(); }
+        if (confirm(window.i18nGetText("confirm-clear-board"))) { pixels.forEach(p => { p.style.backgroundColor = "transparent"; p.dataset.colorIndex = palette.length - 1; }); saveToLocal(); }
     };
 
     // --- 描画イベント ---
