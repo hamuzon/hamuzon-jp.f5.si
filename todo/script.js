@@ -207,7 +207,7 @@ document.addEventListener("DOMContentLoaded", () => {
       try {
         const json = JSON.parse(ev.target.result);
         loadFromJSON(json);
-        alert("✅ 読み込み完了（ブラウザにも保存されました）");
+        alert("✅ 読み込み完了");
       } catch (err) {
         alert("❌ 読み込みエラー: " + err.message);
       }
