@@ -28,13 +28,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // yyyy-mm-dd形式にフォーマット
   function formatDateKey(date) {
-    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2,"0")}-${String(date.getDate()).padStart(2,"0")}`;
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
   }
 
   // 表示用：2025年7月11日 みたいな形式に変換
   function formatDateJP(dateKey) {
-    const [y,m,d] = dateKey.split("-");
+    const [y, m, d] = dateKey.split("-");
     return `${y}年${parseInt(m)}月${parseInt(d)}日`;
+  }
+
+  // ローカルストレージに現在の状態を保存
+  function saveToLocalStorage() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
+    // tagColorsも必要ならここで保存（将来用）
+    localStorage.setItem(STORAGE_KEY + "_tags", JSON.stringify(tagColors));
   }
 
   // TODOリスト描画
@@ -90,7 +97,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (raw.trim() !== "") {
       todoText.value = raw;
-      // 時刻は任意なので、保存時に合わせて分離などしない限りはクリアでOK
       todoTime.value = "";
     } else {
       todoText.value = "";
@@ -131,15 +137,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     const entry = time ? `${time} ${text}` : text;
 
-    // 既存データがある日付で、かつモーダルで開いた時の日付（selectedDate）と異なる日付へ変更して保存した場合は追記
     if (todos[date] && date !== selectedDate) {
       todos[date] = todos[date] + "\n" + entry;
     } else {
-      // 既存ブロックの編集、または完全な新規登録の場合は上書き/新規作成
       todos[date] = entry;
     }
 
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
+    saveToLocalStorage();
     renderTodoList();
     closeModal();
   };
@@ -149,7 +153,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (selectedDate && todos[selectedDate]) {
       if (confirm("🗑️ このTODOを削除しますか？")) {
         delete todos[selectedDate];
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
+        saveToLocalStorage();
         renderTodoList();
         closeModal();
       }
@@ -203,9 +207,9 @@ document.addEventListener("DOMContentLoaded", () => {
       try {
         const json = JSON.parse(ev.target.result);
         loadFromJSON(json);
-        alert("✅ 読み込み完了");
-      } catch {
-        alert("❌ 読み込みエラー: 不正なJSONです");
+        alert("✅ 読み込み完了（ブラウザにも保存されました）");
+      } catch (err) {
+        alert("❌ 読み込みエラー: " + err.message);
       }
       loadInput.value = "";
     };
@@ -214,7 +218,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // JSONから復元
   function loadFromJSON(json) {
-    if (!json || typeof json !== "object") throw new Error("不正なJSON");
+    if (!json || typeof json !== "object") throw new Error("不正なJSONです");
 
     let settings = json.settings;
 
@@ -233,25 +237,52 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (!settings || settings.app !== "todo-list" || !SUPPORTED_VERSIONS.includes(settings.version)) {
-      throw new Error("❌ 対応していない形式です");
+      throw new Error("対応していない形式です");
     }
 
     if (!json.events || typeof json.events !== "object") {
-      throw new Error("❌ events がありません");
+      throw new Error("events がありません");
     }
 
     todos = json.events;
     tagColors = settings.tagColors || {};
+    saveToLocalStorage(); // 読込時に保存
     renderTodoList();
   }
 
-  // ローカルストレージから復元
-  const stored = localStorage.getItem(STORAGE_KEY);
-  if (stored) {
-    try {
-      todos = JSON.parse(stored);
-    } catch {}
+  // ローカルストレージから復元 (v1.1 と v1.0 の両方をケア)
+  function init() {
+    const storedV11 = localStorage.getItem(STORAGE_KEY);
+    const storedV10 = localStorage.getItem("todo_events"); // v1.0のキー
+
+    if (storedV11) {
+      try {
+        todos = JSON.parse(storedV11);
+      } catch (e) {
+        console.error("V1.1 parse error", e);
+      }
+    } else if (storedV10) {
+      // V1.1がなくてV1.0がある場合、移行
+      try {
+        todos = JSON.parse(storedV10);
+        console.log("Migrated from V1.0");
+        saveToLocalStorage();
+      } catch (e) {
+        console.error("V1.0 migration error", e);
+      }
+    }
+
+    // タグカラーの復元
+    const storedTags = localStorage.getItem(STORAGE_KEY + "_tags");
+    if (storedTags) {
+      try {
+        tagColors = JSON.parse(storedTags);
+      } catch (e) {}
+    }
+
+    renderTodoList();
   }
 
-  renderTodoList();
+  init();
 });
+
