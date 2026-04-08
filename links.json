@@ -4,6 +4,8 @@
   { "title": "🕰️ TimeZone - Hamuzon", "url": "/Time-Zone_app/" },
   { "title": "⏳ Expo Countdown⏰️", "url": "https://expo.hamuzon-jp.f5.si/" },
   { "title": "⏰ 時計 / Clock", "url": "/clock/" },
+  { "title": "⏰ 時計V2 / Clock V2 ", "url": "/clock-app/" },
+
   { "title": "🔢 Binary⇔Decimal Converter", "url": "/bin2dec/" },
   { "title": "🔢 Binary⇔Decimal Converter-old", "url": "/bin2dec/old/" },
   { "title": "🔍 Text Enlarger📝", "url": "/text/" },
