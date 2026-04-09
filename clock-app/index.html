@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+    <title>Clock</title>
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Potta+One&display=swap"
+          rel="stylesheet">
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: 
+                border-box;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            background: 
+                black;
+            color: 
+                white;
+            font-family: 
+                'Potta One', 
+                sans-serif;
+            -webkit-user-select: 
+                none;
+            user-select: 
+                none;
+            -webkit-touch-callout: 
+                none;
+            overflow: 
+                hidden;
+        }
+
+        #app {
+            width: 100%;
+            height: 100%;
+            display: 
+                flex;
+            flex-direction: 
+                column;
+        }
+
+        #clock {
+            flex: 1;
+            display: 
+                flex;
+            align-items: 
+                center;
+            justify-content: 
+                center;
+            overflow: 
+                hidden;
+        }
+
+        #center {
+            display: 
+                flex;
+            flex-direction: 
+                column;
+            align-items: 
+                center;
+            justify-content: 
+                center;
+            width: 100%;
+            padding: 
+                0 4vw;
+        }
+
+        #time {
+            text-align: 
+                center;
+            line-height: 
+                1;
+            white-space: 
+                nowrap;
+        }
+
+        #date {
+            text-align: 
+                center;
+            line-height: 
+                1.5;
+            opacity: 
+                0.8;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div id="clock">
+            <div id="center">
+                <div id="time">00:00:00</div>
+                <div id="date">00/00/00</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        const elTime = document
+            .getElementById('time')
+
+        const elDate = document
+            .getElementById('date')
+
+        let offset = 0
+
+        async function syncTime() {
+            try {
+                const res = await fetch(
+                    'https://worldtimeapi.org/api/ip'
+                )
+
+                const data = await res
+                    .json()
+
+                const serverTime = new Date(
+                    data.datetime
+                )
+                    .getTime()
+
+                const localTime = Date
+                    .now()
+
+                offset = serverTime - 
+                    localTime
+            } catch {
+                offset = 0
+            }
+        }
+
+        function nowTime() {
+            return new Date(
+                Date.now() + 
+                offset
+            )
+        }
+
+        function layout() {
+            const w = window
+                .innerWidth
+
+            const h = window
+                .innerHeight
+
+            const isLandscape = w > 
+                h
+
+            const timeSize = isLandscape 
+                ? Math.min(w * 0.12, h * 0.32) 
+                : w * 0.17
+
+            const dateSize = isLandscape 
+                ? timeSize * 0.48 
+                : timeSize * 0.52
+
+            elTime.style.fontSize = 
+                timeSize + 
+                'px'
+
+            elDate.style.fontSize = 
+                dateSize + 
+                'px'
+        }
+
+        function tick() {
+            const now = nowTime()
+
+            const h = now
+                .getHours()
+                .toString()
+                .padStart(
+                    2, 
+                    '0'
+                )
+
+            const m = now
+                .getMinutes()
+                .toString()
+                .padStart(
+                    2, 
+                    '0'
+                )
+
+            const s = now
+                .getSeconds()
+                .toString()
+                .padStart(
+                    2, 
+                    '0'
+                )
+
+            elTime.textContent = 
+                `${h}:${m}:${s}`
+
+            const y = (
+                now.getFullYear() % 100
+            )
+                .toString()
+                .padStart(
+                    2, 
+                    '0'
+                )
+
+            const mo = (
+                now.getMonth() + 1
+            )
+                .toString()
+                .padStart(
+                    2, 
+                    '0'
+                )
+
+            const d = now
+                .getDate()
+                .toString()
+                .padStart(
+                    2, 
+                    '0'
+                )
+
+            elDate.textContent = 
+                `${y}/${mo}/${d}`
+
+            requestAnimationFrame(tick)
+        }
+
+        window.addEventListener(
+            'resize', 
+            layout
+        )
+
+        layout()
+
+        syncTime()
+
+        setInterval(
+            syncTime, 
+            600000
+        )
+
+        requestAnimationFrame(tick)
+    </script>
+</body>
+</html>
