@@ -416,7 +416,7 @@ document.getElementById('postBtn').onclick = () => {
     tweetText += `🎋${name}🎋\n`;
   }
   tweetText += `🌟${wish}🌟\n🎋願いごと🎋\n#七夕 #TanzakuMaker`;
-  const url = encodeURIComponent('https://hamuzon.web.fc2.com/wish');
+  const url = encodeURIComponent('https://hamuzon-jp.f5.si/wish');
   const tweet = encodeURIComponent(tweetText);
   window.open(`https://twitter.com/intent/tweet?text=${tweet}&url=${url}`, '_blank');
 };

@@ -30,3 +30,7 @@
 
 /art            /pixel-art 301
 /art/*          /pixel-art/:splat 301
+
+/wish         /tanzaku 301
+/wish-2025         /tanzaku/2025 301
+/wish-2026         /tanzaku/2026 301

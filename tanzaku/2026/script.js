@@ -177,13 +177,21 @@ postBtn.onclick = () => {
   if (name) {
     postText += `🎋${name}🎋\n`;
   }
-  postText += `🌟${wish}🌟\n🎋願いごと🎋\n#七夕 #短冊 #願い事 #Tanabata #Tanzaku #Wish #StarFestival #JapaneseFestival`;
 
-  // URL（複数URLをまとめてエンコード）
-  const url = encodeURIComponent('https://hamuzon.web.fc2.com/wish \nhttps://hamuzon.web.fc2.com/wish-2026');
+  postText += `🌟${wish}🌟
+🎋願いごと🎋
 
-  // X（旧Twitter）投稿URL
+https://hamuzon-jp.f5.si/wish
+https://hamuzon-jp.f5.si/wish-2026
+
+#七夕 #短冊 #願い事 #Tanabata #Tanzaku #Wish #StarFestival #JapaneseFestival`;
+
+  // エンコード
   const postUrl = encodeURIComponent(postText);
-  window.open(`https://x.com/intent/post?text=${postUrl}&url=${url}`, '_blank');
-};
 
+  // X（旧Twitter）投稿
+  window.open(
+    `https://twitter.com/intent/tweet?text=${postUrl}`,
+    '_blank'
+  );
+};
