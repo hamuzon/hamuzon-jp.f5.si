@@ -23,7 +23,7 @@ async function syncTimeFromInternet() {
   let success = false;
   for (const url of timeSources) {
     try {
-      const res = await fetch(url);
+      const res = await fetch(url, { cache: "no-store" });
       if (!res.ok) throw new Error();
       const data = await res.json();
 
@@ -35,17 +35,16 @@ async function syncTimeFromInternet() {
         if (!formattedStr.includes("Z") && !formattedStr.includes("+")) {
           formattedStr += "Z";
         }
-        serverTime = new Date(formattedStr).getTime();
+        const serverTime = new Date(formattedStr).getTime();
+        timeOffset = serverTime - Date.now();
+        errorMessage.textContent = "";
+        success = true;
+        break;
       } else {
         throw new Error();
       }
-
-      timeOffset = serverTime - Date.now();
-      errorMessage.textContent = "";
-      success = true;
-      break;
     } catch (e) {
-      console.warn(`Failed: ${url}`);
+      console.warn(`Failed to fetch time from: ${url}`);
     }
   }
   if (!success) {
@@ -54,55 +53,62 @@ async function syncTimeFromInternet() {
   }
 }
 
-function addTimezone() {
-  const tz = timezoneSelect.value;
+function addTimezone(tz = timezoneSelect.value) {
   const uniqueId = "tz_" + tz.replace(/[^a-zA-Z0-9]/g, "_") + "_" + Date.now();
 
-  const container = document.createElement("div");
-  container.className = "timezone-item";
-  container.id = uniqueId;
-  container.innerHTML = `
+  const el = document.createElement("div");
+  el.className = "timezone";
+  el.id = uniqueId;
+
+  el.innerHTML = `
     <div class="label">${tz}</div>
-    <div class="time" id="${uniqueId}-time">--:--:--</div>
+    <div class="time" id="${uniqueId}-time">
+      <div>----</div>
+      <div>--:--:--</div>
+    </div>
     <button class="remove-button">×</button>
   `;
 
-  container.querySelector(".remove-button").addEventListener("click", () => {
-    removeTimezone(uniqueId);
-  });
+  el.querySelector("button").onclick = () => {
+    const i = clocksToUpdate.findIndex(c => c.id === uniqueId + "-time");
+    if (i >= 0) clocksToUpdate.splice(i, 1);
+    el.remove();
+  };
 
-  timezonesContainer.appendChild(container);
+  timezonesContainer.appendChild(el);
   clocksToUpdate.push({ id: uniqueId + "-time", tz: tz });
-}
-
-function removeTimezone(id) {
-  const idx = clocksToUpdate.findIndex(obj => obj.id === id + "-time");
-  if (idx !== -1) clocksToUpdate.splice(idx, 1);
-  const el = document.getElementById(id);
-  if (el) el.remove();
 }
 
 function updateClocks() {
   const correctedNow = new Date(Date.now() + timeOffset);
-  clocksToUpdate.forEach(clock => {
-    const el = document.getElementById(clock.id);
-    if (el) {
-      el.textContent = correctedNow.toLocaleString("ja-JP", {
-        timeZone: clock.tz,
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-        hourCycle: "h23" // 24時間表記を強制し、00時/24時のブレを防止
-      });
-    }
+  clocksToUpdate.forEach(c => {
+    const el = document.getElementById(c.id);
+    if (!el) return;
+
+    const parts = new Intl.DateTimeFormat("ja-JP", {
+      timeZone: c.tz,
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hourCycle: "h23"
+    }).formatToParts(correctedNow);
+
+    const g = t => parts.find(p => p.type === t)?.value;
+
+    el.children[0].textContent = `${g("year")}/${g("month")}/${g("day")}`;
+    el.children[1].textContent = `${g("hour")}:${g("minute")}:${g("second")}`;
   });
 }
 
 window.addEventListener("DOMContentLoaded", async () => {
   timezoneSelect.value = "Asia/Tokyo";
   await syncTimeFromInternet();
-  addTimezone();
+  addTimezone("Asia/Tokyo");
   setInterval(updateClocks, 1000);
+  setInterval(syncTimeFromInternet, 30000);
 });
 
-document.getElementById("add-button").addEventListener("click", addTimezone);
+document.getElementById("add-button").onclick = () => addTimezone();
