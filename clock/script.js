@@ -27,13 +27,15 @@ async function syncTimeFromInternet() {
       if (!res.ok) throw new Error();
       const data = await res.json();
 
-      let serverTime;
-      if (data.utc_datetime) {
-        serverTime = new Date(data.utc_datetime).getTime();
-      } else if (data.dateTime) {
-        serverTime = new Date(data.dateTime).getTime();
-      } else if (data.dateString) {
-        serverTime = new Date(data.dateString).getTime();
+      let rawDateStr = data.utc_datetime || data.dateTime || data.dateString;
+      if (rawDateStr) {
+        // 文字列がUTCであることを保証するため、Zがない場合は付与し、
+        // スペースが含まれる場合はTに置換してISO形式に整形する
+        let formattedStr = rawDateStr.replace(" ", "T");
+        if (!formattedStr.includes("Z") && !formattedStr.includes("+")) {
+          formattedStr += "Z";
+        }
+        serverTime = new Date(formattedStr).getTime();
       } else {
         throw new Error();
       }
@@ -83,15 +85,16 @@ function removeTimezone(id) {
 function updateClocks() {
   const correctedNow = new Date(Date.now() + timeOffset);
   clocksToUpdate.forEach(clock => {
-    const formatter = new Intl.DateTimeFormat("ja-JP", {
-      timeZone: clock.tz,
-      hour12: false,
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit"
-    });
     const el = document.getElementById(clock.id);
-    if (el) el.textContent = formatter.format(correctedNow);
+    if (el) {
+      el.textContent = correctedNow.toLocaleString("ja-JP", {
+        timeZone: clock.tz,
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hourCycle: "h23" // 24時間表記を強制し、00時/24時のブレを防止
+      });
+    }
   });
 }
 
