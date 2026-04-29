@@ -57,34 +57,36 @@ function addTimezone(tz = timezoneSelect.value) {
   const uniqueId = "tz_" + tz.replace(/[^a-zA-Z0-9]/g, "_") + "_" + Date.now();
 
   const el = document.createElement("div");
-  el.className = "timezone";
+  el.className = "timezone-item";
   el.id = uniqueId;
 
   el.innerHTML = `
     <div class="label">${tz}</div>
     <div class="time" id="${uniqueId}-time">
-      <div>----</div>
-      <div>--:--:--</div>
+      <div class="date-display">----/--/--</div>
+      <div class="time-display">--:--:--</div>
     </div>
     <button class="remove-button">×</button>
   `;
 
-  el.querySelector("button").onclick = () => {
+  el.querySelector(".remove-button").onclick = () => {
     const i = clocksToUpdate.findIndex(c => c.id === uniqueId + "-time");
     if (i >= 0) clocksToUpdate.splice(i, 1);
     el.remove();
   };
 
   timezonesContainer.appendChild(el);
-  clocksToUpdate.push({ id: uniqueId + "-time", tz: tz });
+  clocksToUpdate.push({ 
+    id: uniqueId + "-time", 
+    el: el.querySelector(".time"), 
+    tz: tz 
+  });
 }
 
 function updateClocks() {
   const correctedNow = new Date(Date.now() + timeOffset);
   clocksToUpdate.forEach(c => {
-    const el = document.getElementById(c.id);
-    if (!el) return;
-
+    const el = c.el;
     const parts = new Intl.DateTimeFormat("ja-JP", {
       timeZone: c.tz,
       year: "numeric",
@@ -98,8 +100,8 @@ function updateClocks() {
 
     const g = t => parts.find(p => p.type === t)?.value;
 
-    el.children[0].textContent = `${g("year")}/${g("month")}/${g("day")}`;
-    el.children[1].textContent = `${g("hour")}:${g("minute")}:${g("second")}`;
+    el.querySelector(".date-display").textContent = `${g("year")}/${g("month")}/${g("day")}`;
+    el.querySelector(".time-display").textContent = `${g("hour")}:${g("minute")}:${g("second")}`;
   });
 }
 

@@ -15,6 +15,9 @@ body {
   background-attachment: fixed;
   color: var(--md-sys-color-on-surface);
   padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 h1 {
@@ -30,6 +33,8 @@ h1 {
   gap: 0.5rem;
   justify-content: center;
   margin-bottom: 1rem;
+  width: 100%;
+  max-width: 600px;
 }
 
 select, button {
@@ -62,6 +67,7 @@ button:hover {
   flex-wrap: wrap;
   gap: 1rem;
   justify-content: center;
+  width: 100%;
 }
 
 .timezone-item {
@@ -84,10 +90,24 @@ button:hover {
 }
 
 .time {
-  font-family: monospace;
-  font-size: 1.4rem;
+  font-family: 'Courier New', Courier, monospace;
+  font-variant-numeric: tabular-nums;
   margin-bottom: 0.5rem;
   color: var(--md-sys-color-on-surface);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.date-display {
+  font-size: 1.1rem;
+  color: #666;
+  margin-bottom: 0.2rem;
+}
+
+.time-display {
+  font-size: 2.2rem;
+  font-weight: bold;
 }
 
 .remove-button {
