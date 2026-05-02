@@ -26,5 +26,8 @@
   { "title": "📝 ファイルエディター / File Editor 📁", "url": "/editor/" },
   { "title": "🌍️ アクセス位置共有 🌐 / (世界のどこからをリアルタイムで表示) / Hosted by Cloudflare Workers", "url": "https://globe.world.hamuzon-jp.f5.si/" },
   { "title": "📹️Video　Player Tool HUB　⏯️", "url": "https://video-hub.hamuzon-jp.f5.si/" },
-  { "title": "🏟️ Olympic Countdown / オリンピック関連カウントダウン 🎖️", "url": "https://olympic.hamuzon-jp.f5.si/" }
+  { "title": "🏟️ Olympic Countdown / オリンピック関連カウントダウン 🎖️", "url": "https://olympic.hamuzon-jp.f5.si/" },
+  {"title":"世界中たぶん対応時間対応時計 / World Time Clock (likely supports global time zones)","url":"https://world-time.hamuzon-jp.f5.si/"}
+
+
 ]
