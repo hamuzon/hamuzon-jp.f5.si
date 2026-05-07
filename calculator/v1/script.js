@@ -1,44 +1,54 @@
 const display = document.getElementById('display');
+let rawExpression = '';
+
+function renderDisplay() {
+  display.value = rawExpression.replace(/\*/g, '×').replace(/\//g, '÷');
+}
 
 function appendValue(value) {
   const ops = "+-*/^%";
-  const lastChar = display.value.slice(-1);
+  const lastChar = rawExpression.slice(-1);
 
   // 小数点重複防止
   if (value === '.') {
-    const tokens = display.value.split(/[\+\-\*\/\^%()]/);
+    const tokens = rawExpression.split(/[\+\-\*\/\^%()]/);
     const currentNum = tokens[tokens.length - 1];
     if (currentNum.includes('.')) return;
     if (currentNum.length === 0) value = '0.';
   }
 
   // 先頭の0対策
-  if (display.value === '0' && value !== '.') {
+  if (rawExpression === '0' && value !== '.') {
     if (!ops.includes(value)) {
-      display.value = value;
+      rawExpression = value;
+      renderDisplay();
       return;
     }
   }
 
   // 連続演算子の置き換え
   if (ops.includes(lastChar) && ops.includes(value)) {
-    display.value = display.value.slice(0, -1) + value;
+    rawExpression = rawExpression.slice(0, -1) + value;
+    renderDisplay();
     return;
   }
 
-  display.value += value;
+  rawExpression += value;
+  renderDisplay();
 }
 
 function clearDisplay() {
-  display.value = '';
+  rawExpression = '';
+  renderDisplay();
 }
 
 function backspace() {
-  display.value = display.value.slice(0, -1);
+  rawExpression = rawExpression.slice(0, -1);
+  renderDisplay();
 }
 
 function toggleSign() {
-  let exp = display.value;
+  let exp = rawExpression;
   if (!exp) return;
 
   // 数値部分のみ反転（最後の数値を探す）
@@ -49,18 +59,19 @@ function toggleSign() {
   const num = parseFloat(numStr);
   const inverted = (-num).toString();
 
-  display.value = exp.slice(0, match.index) + inverted;
+  rawExpression = exp.slice(0, match.index) + inverted;
+  renderDisplay();
 }
 
 function calculateResult() {
   try {
-    if (display.value.trim() === '') return;
+    if (rawExpression.trim() === '') return;
 
-    let exp = display.value;
+    let exp = rawExpression;
 
     // √ をMath.sqrt()へ変換
     exp = exp.replace(/√/g, 'Math.sqrt');
-
+    
     // ^を**に変換
     exp = exp.replace(/\^/g, '**');
 
@@ -70,15 +81,18 @@ function calculateResult() {
     let result = eval(exp);
 
     if (!isFinite(result) || isNaN(result)) {
-      display.value = 'Error';
+      rawExpression = 'Error';
+      renderDisplay();
       return;
     }
 
     result = parseFloat(result.toFixed(10));
 
-    display.value = result.toString();
+    rawExpression = result.toString();
+    renderDisplay();
   } catch {
-    display.value = 'Error';
+    rawExpression = 'Error';
+      renderDisplay();
   }
 }
 

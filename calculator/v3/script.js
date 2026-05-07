@@ -1,45 +1,56 @@
 const display = document.getElementById('display');
+let rawExpression = '';
+
+function renderDisplay() {
+  display.value = rawExpression.replace(/\*/g, '×').replace(/\//g, '÷');
+}
 function appendValue(value) {
   const ops = "+-*/^%";
-  const lastChar = display.value.slice(-1);
+  const lastChar = rawExpression.slice(-1);
   if (value === '.') {
-    const tokens = display.value.split(/[\+\-\*\/\^%()]/);
+    const tokens = rawExpression.split(/[\+\-\*\/\^%()]/);
     const currentNum = tokens[tokens.length - 1];
     if (currentNum.includes('.')) return;
     if (currentNum.length === 0) value = '0.';
   }
-  if (display.value === '0' && value !== '.') {
+  if (rawExpression === '0' && value !== '.') {
     if (!ops.includes(value)) {
-      display.value = value;
+      rawExpression = value;
+      renderDisplay();
       return;
     }
   }
   if (ops.includes(lastChar) && ops.includes(value)) {
-    display.value = display.value.slice(0, -1) + value;
+    rawExpression = rawExpression.slice(0, -1) + value;
+    renderDisplay();
     return;
   }
-  display.value += value;
+  rawExpression += value;
+  renderDisplay();
 }
 function clearDisplay() {
-  display.value = '';
+  rawExpression = '';
+  renderDisplay();
 }
 function backspace() {
-  display.value = display.value.slice(0, -1);
+  rawExpression = rawExpression.slice(0, -1);
+  renderDisplay();
 }
 function toggleSign() {
-  let exp = display.value;
+  let exp = rawExpression;
   if (!exp) return;
   const match = exp.match(/(-?\d+\.?\d*)$/);
   if (!match) return;
   const numStr = match[0];
   const num = parseFloat(numStr);
   const inverted = (-num).toString();
-  display.value = exp.slice(0, match.index) + inverted;
+  rawExpression = exp.slice(0, match.index) + inverted;
+  renderDisplay();
 }
 function calculateResult() {
   try {
-    if (display.value.trim() === '') return;
-    let exp = display.value;
+    if (rawExpression.trim() === '') return;
+    let exp = rawExpression;
     exp = exp.replace(/π/g, 'Math.PI');
     exp = exp.replace(/e/g, 'Math.E');
     exp = exp.replace(/log\(/g, 'Math.log10(');
@@ -48,17 +59,20 @@ function calculateResult() {
     exp = exp.replace(/cos\(/g, 'Math.cos(');
     exp = exp.replace(/tan\(/g, 'Math.tan(');
     exp = exp.replace(/√/g, 'Math.sqrt');
-    exp = exp.replace(/\^/g, '**');
+        exp = exp.replace(/\^/g, '**');
     exp = exp.replace(/(\d+(\.\d+)?)%/g, '($1/100)');
     let result = eval(exp);
     if (!isFinite(result) || isNaN(result)) {
-      display.value = 'Error';
+      rawExpression = 'Error';
+      renderDisplay();
       return;
     }
     result = parseFloat(result.toFixed(10));
-    display.value = result.toString();
+    rawExpression = result.toString();
+    renderDisplay();
   } catch {
-    display.value = 'Error';
+    rawExpression = 'Error';
+      renderDisplay();
   }
 }
 document.addEventListener('keydown', function(e) {
@@ -96,5 +110,6 @@ if (navigator.userAgentData) {
 }
 
 function clearEntry() {
-  display.value = '';
+  rawExpression = '';
+  renderDisplay();
 }

@@ -97,6 +97,14 @@
   <a id="backLink" class="back" href="/">トップページへ戻る</a>
 
   <script>
+    // README/LICENSE へのアクセス（大文字小文字問わず）を判定してリダイレクト
+    (function() {
+      const path = window.location.pathname.toLowerCase();
+      if (path.includes('readme') || path.includes('license')) {
+        window.location.replace('./');
+      }
+    })();
+
     const backLink = document.getElementById("backLink");
     const host = location.hostname;
     const path = location.pathname;
