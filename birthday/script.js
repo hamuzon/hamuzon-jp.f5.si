@@ -5,7 +5,7 @@
 
 const APP_NAME = "Birthday-counter";
 const CURRENT_SAVE_VERSION = "2.1";
-const SECRET_KEY_BASE = "bday-v2-core-cipher-9182"; 
+const SECRET_KEY_BASE = "bday-v2.1-core-cipher-9182"; 
 
 // v2.1 独自内部キー
 const propMapV21 = { 
