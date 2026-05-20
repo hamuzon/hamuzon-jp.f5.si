@@ -12,7 +12,7 @@
   { "title": "📱 Device Info Viewer", "url": "/device-info/" },
   { "title": "🔑 Password Generator Tool🗝️", "url": "/password/" },
   { "title": "🔢 計算機 / Calculator 🧮", "url": "/calculator/" },
-  { "title": "📅 カレンダー / Calendar 🗓️", "url": "/calendar/" },
+  { "title": "📅 カレンダー / Calendar 🗓️", "url": "https://calendar.hamuzon-jp.f5.si/" },
   { "title": "📝 Todo Lists ✏️", "url": "/todo/" },
   { "title": "🗂️ タスクボード / Task Board 📋", "url": "/task-board/" },
   { "title": "🎂 Birthday Counter 🔢", "url": "/birthday/" },
