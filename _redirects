@@ -8,6 +8,8 @@
 /discord-tool/      /discord-tools 301
 /discord-tool/*     /discord-tools/:splat 301
 
+/discord-tools/README.md     /discord-tools 301
+
 /calendar           https://calendar.hamuzon-jp.f5.si 301
 /calendar/          https://calendar.hamuzon-jp.f5.si 301
 /calendar/*         https://calendar.hamuzon-jp.f5.si/:splat 301
@@ -40,6 +42,9 @@
 
 /QR/*               /qr/:splat 301
 
+/index.html     /        301
+/LICENSE        /        301
+/README.md      /        301
 
 /dc   /?utm_source=discord&utm_medium=social   302
 /bky  /?utm_source=bluesky&utm_medium=social   302
