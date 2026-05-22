@@ -7,10 +7,20 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Potta+One&display=swap" rel="stylesheet" />
-<link rel="icon" href="https://home.hamusata.f5.si/icon.svg" type="image/svg+xml" />
+<link rel="icon" href="icon.svg" type="image/svg+xml" />
 <style>
-  body,
   html {
+    margin: 0;
+    min-height: 100vh;
+    font-family: 'Potta One', cursive;
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
+
+  body {
     margin: 0;
     min-height: 100vh;
     font-family: 'Potta One', cursive;
@@ -20,8 +30,8 @@
     align-items: center;
     text-align: center;
     padding: 2vw;
+    width: 100%;
   }
-
   .container {
     background: linear-gradient(145deg, #f0f4ff, #d9e4ff);
     padding: 2rem 2.5rem;
@@ -70,10 +80,22 @@
   <div class="container">
     <h1>Discord Tools</h1>
     <p>このページからDiscord関連のツールページに移動できます。</p>
-    <a class="button" href="timestamp/index.html">DiscordメッセージID 計算ページ</a>
-    <a class="button" href="dashboard/index.html">UNIX時間 → Discordタイムスタンプページ</a>
-    <a class="button" href="conversion/index.html">UNIX時間表示対応版 DiscordメッセージID 計算ページ</a>
-    <a class="button" href="message-id/index.html">メッセージIDの解析 (AICode)</a>
+    <a
+      class="button"
+      href="timestamp/index.html"
+    >DiscordメッセージID 計算ページ</a>
+    <a
+      class="button"
+      href="dashboard/index.html"
+    >UNIX時間 → Discordタイムスタンプページ</a>
+    <a
+      class="button"
+      href="conversion/index.html"
+    >UNIX時間表示対応版 DiscordメッセージID 計算ページ</a>
+    <a
+      class="button"
+      href="message-id/index.html"
+    >メッセージIDの解析 (AICode)</a>
   </div>
 </body>
 </html>

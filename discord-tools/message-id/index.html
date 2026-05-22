@@ -169,14 +169,14 @@ function formatDate(date, locale = 'ja-JP', timeZone = 'Asia/Tokyo') {
 function analyze() {
     let input = document.getElementById('snowflakeInput').value;
     const result = document.getElementById('result');
-
+    
     if (!input) {
         result.innerText = '';
         return;
     }
 
     input = input.replace(/[\s\u3000]/g, '');
-
+    
     if (!/^\d+$/.test(input)) {
         result.innerText = '⚠️ 数字のみのIDを入力してください。';
         return;

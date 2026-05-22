@@ -3,88 +3,173 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>404 Error / 404 エラー</title>
+  <title>404 Not Found | 404 見つかりません</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Potta+One&display=swap" rel="stylesheet" />
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
   <style>
-    body,
-    html {
+    :root {
+      --bg-start: #12264f;
+      --bg-end: #2d5ab3;
+      --panel-start: #f4f7ff;
+      --panel-end: #dce6ff;
+      --text-main: #0c1f46;
+      --text-sub: #2d4d8f;
+      --btn-start: #00c6ff;
+      --btn-end: #0065ff;
+      --btn-hover-start: #007dff;
+      --btn-hover-end: #004aad;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
       margin: 0;
       min-height: 100vh;
-      font-family: 'Potta One', cursive;
-      background: linear-gradient(135deg, #1e3c72, #2a5298);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      padding: 2vw;
+    }
+
+    body {
+      font-family: 'Potta One', system-ui, -apple-system, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, var(--bg-start), var(--bg-end));
+      color: var(--text-main);
+      display: grid;
+      place-items: center;
+      padding: clamp(1rem, 4vw, 2rem);
     }
 
     .container {
-      background: linear-gradient(145deg, #f0f4ff, #d9e4ff);
-      padding: 2rem 2.5rem;
-      border-radius: 1.25rem;
-      width: 100%;
-      max-width: 480px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      align-items: center;
-    }
-
-    h1 {
-      margin: 0;
-      font-size: clamp(2.4rem, 6vw, 3rem);
-      color: #0a1f44;
-    }
-
-    p {
-      margin: 0;
-      font-size: clamp(1rem, 2.5vw, 1.1rem);
-      color: #002166;
-    }
-
-    .subtext {
-      color: #31508d;
-      font-size: clamp(0.9rem, 2vw, 1rem);
-    }
-
-    a.back {
-      display: inline-block;
-      text-decoration: none;
-      padding: 1rem 2rem;
-      font-size: 1.1rem;
-      border-radius: 0.75rem;
-      background: linear-gradient(90deg, #00c6ff, #0072ff);
-      color: white;
-      font-weight: 600;
-      transition: 0.3s;
-      width: 100%;
-      max-width: 300px;
+      width: min(92vw, 560px);
+      background: linear-gradient(145deg, var(--panel-start), var(--panel-end));
+      border-radius: clamp(1rem, 3vw, 1.4rem);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      padding: clamp(1.25rem, 4vw, 2.25rem);
+      display: grid;
+      gap: clamp(0.75rem, 2.5vw, 1.25rem);
       text-align: center;
     }
 
-    a.back:hover {
-      background: linear-gradient(90deg, #0072ff, #004aad);
+    .code {
+      margin: 0;
+      font-size: clamp(2.6rem, 11vw, 4rem);
+      line-height: 1;
+      color: var(--text-main);
+    }
+
+    .title {
+      margin: 0;
+      font-size: clamp(1.1rem, 3.6vw, 1.5rem);
+      color: var(--text-main);
+    }
+
+    .description {
+      margin: 0;
+      font-size: clamp(0.95rem, 3vw, 1.1rem);
+      color: var(--text-sub);
+      line-height: 1.6;
+    }
+
+    .language-toggle {
+      display: flex;
+      justify-content: center;
+      gap: 0.55rem;
+      flex-wrap: wrap;
+    }
+
+    .lang-btn,
+    .back {
+      border: 0;
+      border-radius: 0.8rem;
+      cursor: pointer;
+      font: inherit;
+      text-decoration: none;
+    }
+
+    .lang-btn {
+      padding: 0.5rem 0.9rem;
+      font-size: clamp(0.78rem, 2.3vw, 0.92rem);
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.75);
+      transition: transform 0.2s, background 0.2s;
+    }
+
+    .lang-btn.active {
+      background: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    .back {
+      display: block;
+      width: 100%;
+      max-width: 320px;
+      margin: 0.3rem auto 0;
+      padding: 0.95rem 1.1rem;
+      color: #fff;
+      text-align: center;
+      background: linear-gradient(90deg, var(--btn-start), var(--btn-end));
+      font-size: clamp(0.95rem, 3.2vw, 1.05rem);
+      transition: background 0.25s ease, transform 0.2s ease;
+    }
+
+    .back:hover,
+    .back:focus-visible {
+      background: linear-gradient(90deg, var(--btn-hover-start), var(--btn-hover-end));
+      transform: translateY(-1px);
+    }
+
+    .hidden {
+      display: none;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>404 Error / 404 エラー</h1>
-    <p>Page not found / ページが見つかりません</p>
-    <p class="subtext">Sorry, Not Found. / 申し訳ありません、見つかりません。</p>
-    <a id="backLink" class="back" href="/">トップページへ戻る</a>
-  </div>
+  <main class="container" aria-live="polite">
+    <p class="code">404</p>
+
+    <h1 class="title" data-ja="ページが見つかりません" data-en="Page not found">ページが見つかりません</h1>
+
+    <p class="description" data-ja="アクセスしようとしたページは存在しないか、移動された可能性があります。"
+      data-en="The page you requested may not exist or may have been moved.">
+      アクセスしようとしたページは存在しないか、移動された可能性があります。
+    </p>
+
+
+    <a id="backLink" class="back" href="/" data-ja="トップページへ戻る" data-en="Back to Home">トップページへ戻る</a>
+  </main>
 
   <script>
+    (function() {
+      const path = window.location.pathname.toLowerCase();
+      if (path.includes('readme') || path.includes('license')) {
+        window.location.replace('./');
+      }
+    })();
+
     document.addEventListener('DOMContentLoaded', () => {
       if (location.hostname === 'hamuzon.github.io') {
         document.getElementById('backLink').href = 'https://hamuzon.github.io/discord-tools';
       }
+
+      const browserLang = (navigator.language || 'ja').toLowerCase().startsWith('ja') ? 'ja' : 'en';
+      const buttons = document.querySelectorAll('.lang-btn');
+      const translatable = document.querySelectorAll('[data-ja][data-en]');
+
+      const setLanguage = (lang) => {
+        translatable.forEach((el) => {
+          el.textContent = el.dataset[lang];
+        });
+        document.documentElement.lang = lang;
+        buttons.forEach((btn) => btn.classList.toggle('active', btn.dataset.lang === lang));
+      };
+
+      buttons.forEach((btn) => {
+        btn.addEventListener('click', () => setLanguage(btn.dataset.lang));
+      });
+
+      setLanguage(browserLang);
     });
   </script>
 </body>
