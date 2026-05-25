@@ -1,5 +1,9 @@
-/device-info        /Device-info/ 301
-/device-info/       /Device-info/ 301
+/device-info        https://device-info.hamuzon-jp.f5.si 301
+/device-info/       https://device-info.hamuzon-jp.f5.si 301
+/device-info/*      https://device-info.hamuzon-jp.f5.si/:splat 301
+/Device-info        https://device-info.hamuzon-jp.f5.si 301
+/Device-info/       https://device-info.hamuzon-jp.f5.si 301
+/Device-info/*      https://device-info.hamuzon-jp.f5.si/:splat 301
 
 /discord            /discord-tools 301
 /discord/           /discord-tools 301
