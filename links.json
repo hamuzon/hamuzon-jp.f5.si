@@ -1,6 +1,6 @@
 [
-  { "title": "🐱 Scratch user @hamusata", "url": "https://scratch.mit.edu/users/hamusata/" },
-  { "title": "🐱 Scratch user @hamuzon", "url": "https://scratch.mit.edu/users/hamuzon/" },
+  { "title": "🐱 Scratch user @hamusata", "url": "https://scratch.mit.edu/users/hamusata/", "target": "_blank" },
+  { "title": "🐱 Scratch user @hamuzon", "url": "https://scratch.mit.edu/users/hamuzon/", "target": "_blank" },
   { "title": "🕰️ TimeZone - Hamuzon", "url": "/Time-Zone_app/" },
   { "title": "⏳ Expo Countdown⏰️", "url": "https://expo.hamuzon-jp.f5.si/" },
   { "title": "⏰ 時計 / Clock", "url": "/clock/" },
