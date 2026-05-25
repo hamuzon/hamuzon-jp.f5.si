@@ -1,8 +1,8 @@
 /* ===== リセット ===== */
 *, *::before, *::after {
-  box-sizing: border-box;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 /* ===== 本体共通 ===== */
@@ -12,11 +12,11 @@ body {
   padding: 20px;
   width: 100%;
   max-width: 100%;
-  user-select: none;
   -webkit-user-select: none;
   -moz-user-select: none;
-  transition: background-color 0.4s, color 0.4s;
+  user-select: none;
   -webkit-transition: background-color 0.4s, color 0.4s;
+  transition: background-color 0.4s, color 0.4s;
 }
 
 /* ===== ヘッダー ===== */
@@ -45,10 +45,10 @@ select#colorModeSelect {
   cursor: pointer;
   font-weight: 700;
   letter-spacing: 0.05em;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-  appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
+  appearance: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
   background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg width='14' height='8' viewBox='0 0 14 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L7 7L13 1' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 14px center;
@@ -79,12 +79,12 @@ select#colorModeSelect:focus {
   font-weight: 900;
   font-size: 1.1rem;
   text-shadow: 0 0 6px var(--primary-glow);
-  transition: background 0.35s ease, box-shadow 0.3s ease, color 0.3s ease;
   border: none;
   background: linear-gradient(135deg, var(--primary-color), #2b8aff);
   color: #e0f7ff;
   -webkit-transition: all 0.35s ease;
   -moz-transition: all 0.35s ease;
+  transition: background 0.35s ease, box-shadow 0.3s ease, color 0.3s ease;
 }
 
 .tab button.active {
@@ -159,6 +159,8 @@ button.convert:focus-visible {
   font-size: 1.3rem;
   text-align: center;
   text-shadow: 0 0 8px var(--primary-glow-light);
+  -webkit-user-select: text;
+  -moz-user-select: text;
   user-select: text;
   transition: color 0.4s ease;
 }

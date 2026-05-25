@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>2進数 ⇔ 10進数 変換ツール</title>
 <meta name="description" content="2進数 ⇔ 10進数 変換ツール 相互の変換ができます 符号付き対応" />
 <link id="favicon" rel="icon" href="icon-light.png" type="image/png" />
@@ -19,6 +19,8 @@
     max-width: 480px;
     margin-left: auto;
     margin-right: auto;
+    -webkit-user-select: none;
+    -moz-user-select: none;
     user-select: none;
     transition: background-color 0.4s, color 0.4s;
   }
@@ -47,11 +49,13 @@
     cursor: pointer;
     font-weight: 700;
     letter-spacing: 0.05em;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    user-select: none;
-    appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
+    appearance: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
     background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg width='14' height='8' viewBox='0 0 14 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L7 7L13 1' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 14px center;
@@ -77,6 +81,8 @@
     padding: 14px 0;
     border-radius: 20px 20px 0 0;
     cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
     user-select: none;
     font-weight: 900;
     font-size: 1.1rem;
@@ -116,6 +122,8 @@
     font-family: 'Roboto Mono', monospace;
     box-shadow: inset 0 0 8px var(--input-shadow);
     transition: border-color 0.3s ease;
+    -webkit-user-select: text;
+    -moz-user-select: text;
     user-select: text;
     display: block;
     margin: 0 auto;
@@ -136,6 +144,8 @@
     border-radius: 20px;
     border: none;
     cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
     user-select: none;
     transition: background 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
     box-shadow: 0 0 20px var(--primary-glow);
@@ -156,6 +166,8 @@
     font-size: 1.3rem;
     text-align: center;
     text-shadow: 0 0 8px var(--primary-glow-light);
+    -webkit-user-select: text;
+    -moz-user-select: text;
     user-select: text;
     transition: color 0.4s ease;
   }
@@ -222,6 +234,10 @@
       border-radius: 16px;
     }
   }
+
+  .is-hidden {
+    display: none;
+  }
 </style>
 </head>
 <body>
@@ -248,14 +264,13 @@
     aria-label="2進数入力"
     autocomplete="off"
     autocorrect="off"
-    autocapitalize="none"
     spellcheck="false"
   />
   <button class="convert" onclick="convertBinToDec()">変換</button>
   <div class="result" id="binToDecResult" aria-live="polite"></div>
 </div>
 
-<div id="decToBin" class="content" role="tabpanel" tabindex="0" style="display:none;">
+<div id="decToBin" class="content is-hidden" role="tabpanel" tabindex="0">
   <input
     type="number"
     id="decimalInput"
@@ -322,7 +337,7 @@
   });
   function showTab(contentId, tabId) {
     ['binToDec', 'decToBin'].forEach(id => {
-      document.getElementById(id).style.display = (id === contentId) ? 'block' : 'none';
+      document.getElementById(id).classList.toggle('is-hidden', id !== contentId);
     });
     ['tabBinToDec', 'tabDecToBin'].forEach(id => {
       const tab = document.getElementById(id);
