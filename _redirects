@@ -1,10 +1,10 @@
-/device-info        https://device-info.hamuzon-jp.f5.si 301
-/device-info/       https://device-info.hamuzon-jp.f5.si 301
-/device-info/*      https://device-info.hamuzon-jp.f5.si/:splat 301
-/Device-info        https://device-info.hamuzon-jp.f5.si 301
-/Device-info/       https://device-info.hamuzon-jp.f5.si 301
-/Device-info/*      https://device-info.hamuzon-jp.f5.si/:splat 301
+# ===== Device Info =====
+/d           https://device-info.hamusata.f5.si/   301
+/d-1         https://device-info.hamusata.f5.si/   301
+/device      https://device-info.hamusata.f5.si/   301
+/device-info https://device-info.hamusata.f5.si/   301
 
+# ===== Discord Tools =====
 /discord            /discord-tools 301
 /discord/           /discord-tools 301
 /discord/*          /discord-tools/:splat 301
@@ -14,6 +14,7 @@
 
 /discord-tools/README.md     /discord-tools 301
 
+# ===== External Subdomains =====
 /calendar           https://calendar.hamuzon-jp.f5.si 301
 /calendar/          https://calendar.hamuzon-jp.f5.si 301
 /calendar/*         https://calendar.hamuzon-jp.f5.si/:splat 301
@@ -34,22 +35,27 @@
 /olympic/           https://olympic.hamuzon-jp.f5.si 301
 /olympic/*          https://olympic.hamuzon-jp.f5.si/:splat 301
 
+# ===== Pixel Art =====
 /pixel              /pixel-art 301
 /pixel/*            /pixel-art/:splat 301
 
 /art                /pixel-art 301
 /art/*              /pixel-art/:splat 301
 
+# ===== Tanzaku (Wish) =====
 /wish               /tanzaku 301
 /wish-2025          /tanzaku/2025 301
 /wish-2026          /tanzaku/2026 301
 
+# ===== QR Code =====
 /QR/*               /qr/:splat 301
 
+# ===== internal link =====
 /index.html     /        301
 /LICENSE        /        301
 /README.md      /        301
 
+# ===== Social Analytics =====
 /dc   /?utm_source=discord&utm_medium=social   302
 /bky  /?utm_source=bluesky&utm_medium=social   302
 /tx   /?utm_source=twitter&utm_medium=social   302
