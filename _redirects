@@ -1,5 +1,5 @@
-/Device-info        /device-info 301
-/Device-info/       /device-info 301
+/device-info        /Device-info/ 301
+/device-info/       /Device-info/ 301
 
 /discord            /discord-tools 301
 /discord/           /discord-tools 301

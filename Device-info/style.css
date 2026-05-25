@@ -38,26 +38,6 @@ h1 {
     user-select: none;
 }
 
-header {
-    width: 100%;
-    max-width: 900px;
-    margin: 1rem auto 1.5rem;
-    padding: 0.6rem 1rem;
-    font-size: 0.9rem;
-    line-height: 1.4;
-    font-weight: 600;
-    border-radius: var(--radius);
-    background: rgba(59, 130, 246, 0.15);
-    color: var(--accent-dark);
-    -webkit-user-select: none;
-    user-select: none;
-    transition: background var(--transition), color var(--transition);
-}
-
-body.light header {
-    background: rgba(37, 99, 235, 0.15);
-    color: var(--accent-light);
-}
 
 .controls {
     display: flex;
