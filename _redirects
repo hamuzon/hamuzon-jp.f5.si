@@ -42,12 +42,6 @@
 /art                /pixel-art 301
 /art/*              /pixel-art/:splat 301
 
-# ===== Web Auth =====
-/webauth            /webauth.html 301
-/auth               /webauth.html 301
-/web-auth-2026-06   /webauth.html 301
-/web-auth           /webauth.html 301
-
 # ===== Tanzaku (Wish) =====
 /wish               /tanzaku 301
 /wish-2025          /tanzaku/2025 301
