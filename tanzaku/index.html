@@ -17,10 +17,18 @@
   box-sizing:border-box;
 }
 
+html,
 body{
   margin:0;
-  min-height:100vh;
-  padding:2rem 1rem;
+}
+
+body{
+  min-height:100dvh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:1rem;
+
   font-family:"Yu Gothic","游ゴシック体","メイリオ",Meiryo,sans-serif;
   line-height:1.7;
   text-align:center;
@@ -31,7 +39,6 @@ body{
 .container{
   width:100%;
   max-width:900px;
-  margin:0 auto;
 }
 
 .message{
@@ -42,8 +49,9 @@ body{
 
 .link-container{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(300px,380px));
+  grid-template-columns:repeat(2,minmax(300px,380px));
   justify-content:center;
+  align-items:center;
   gap:2rem;
 }
 
@@ -61,13 +69,17 @@ body{
 }
 
 .btn:nth-child(even){
-  margin-top:40px;
+  transform:translateY(40px);
 }
 
 .btn:hover{
   background:var(--accent);
   color:#fff;
   transform:translateY(-4px);
+}
+
+.btn:nth-child(even):hover{
+  transform:translateY(36px);
 }
 
 .btn-main{
@@ -84,6 +96,10 @@ body{
 
 @media (max-width:700px){
 
+  body{
+    padding:1rem;
+  }
+
   .link-container{
     grid-template-columns:1fr;
     max-width:380px;
@@ -91,7 +107,12 @@ body{
   }
 
   .btn:nth-child(even){
-    margin-top:0;
+    transform:none;
+  }
+
+  .btn:hover,
+  .btn:nth-child(even):hover{
+    transform:translateY(-4px);
   }
 }
 
