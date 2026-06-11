@@ -21,6 +21,10 @@ body{
   margin:0;
   min-height:100vh;
   padding:2rem 1rem;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+
   font-family:"Yu Gothic","游ゴシック体","メイリオ",Meiryo,sans-serif;
   line-height:1.7;
   text-align:center;
@@ -30,8 +34,7 @@ body{
 
 .container{
   width:100%;
-  max-width:820px;
-  margin:0 auto;
+  max-width:900px;
 }
 
 .message{
@@ -42,37 +45,37 @@ body{
 
 .link-container{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(280px,340px));
+  grid-template-columns:repeat(2, minmax(300px, 380px));
   justify-content:center;
+  align-items:center;
   gap:2rem;
 }
 
 .btn{
   display:block;
   width:100%;
-  padding:1.2rem;
+  padding:1.4rem;
   text-decoration:none;
   border-radius:16px;
   background:var(--card-bg);
   color:var(--accent);
   border:2px solid var(--accent);
   box-shadow:0 4px 12px rgba(0,0,0,.08);
-  transition:
-    background .2s ease,
-    color .2s ease,
-    transform .2s ease,
-    box-shadow .2s ease;
+  transition:.2s;
 }
 
 .btn:nth-child(even){
-  margin-top:40px;
+  transform:translateY(40px);
 }
 
 .btn:hover{
   background:var(--accent);
   color:#fff;
   transform:translateY(-4px);
-  box-shadow:0 8px 20px rgba(26,115,232,.25);
+}
+
+.btn:nth-child(even):hover{
+  transform:translateY(36px);
 }
 
 .btn-main{
@@ -89,18 +92,27 @@ body{
 
 @media (max-width:700px){
 
+  body{
+    padding:1.5rem 1rem;
+    align-items:center;
+  }
+
   .link-container{
-    grid-template-columns:minmax(280px,340px);
-    justify-content:center;
+    grid-template-columns:1fr;
+    max-width:380px;
     margin:0 auto;
   }
 
   .btn:nth-child(even){
-    margin-top:0;
+    transform:none;
   }
 
-  .message{
-    font-size:1.15rem;
+  .btn:hover{
+    transform:translateY(-4px);
+  }
+
+  .btn:nth-child(even):hover{
+    transform:translateY(-4px);
   }
 }
 
