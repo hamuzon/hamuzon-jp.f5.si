@@ -9,7 +9,7 @@
       font-family: "Yu Gothic", "游ゴシック体", "メイリオ", meiryo, sans-serif;
       padding: 2rem 1rem;
       line-height: 1.6;
-      max-width: 600px;
+      max-width: 900px;
       margin: auto;
       color: #333;
       background-color: #f8f9fa;
@@ -24,15 +24,16 @@
 
     .link-container {
       display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-      align-items: center;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2rem;
+      align-items: flex-start;
+      padding: 1rem;
     }
 
     .btn {
-      display: block;
-      width: 100%;
-      max-width: 400px;
+      flex: 1 1 300px;
+      max-width: 380px;
       padding: 1.2rem;
       text-decoration: none;
       border-radius: 12px;
@@ -41,6 +42,10 @@
       border: 2px solid #1a73e8;
       box-shadow: 0 4px 6px rgba(0,0,0,0.05);
       transition: all 0.2s ease;
+    }
+
+    .btn:nth-child(even) {
+      margin-top: 2.5rem;
     }
 
     .btn:hover {
@@ -82,6 +87,12 @@
     @media (max-width: 480px) {
       body { padding: 1.5rem 0.5rem; }
       .btn { padding: 1rem; }
+      .btn:nth-child(even) {
+        margin-top: 1.5rem;
+      }
+      .link-container {
+        gap: 1.5rem;
+      }
     }
 
   </style>
