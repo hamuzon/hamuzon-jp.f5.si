@@ -4,9 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>短冊メーカー / Tanzaku Maker</title>
-  <noscript>
-    <meta http-equiv="refresh" content="0;url=2026/index.html">
-  </noscript>
   <style>
     body {
       font-family: "Yu Gothic", "游ゴシック体", "メイリオ", meiryo, sans-serif;
@@ -87,35 +84,10 @@
       .btn { padding: 1rem; }
     }
 
-    .footer-note {
-      margin-top: 2rem;
-      font-size: 0.8rem;
-      opacity: 0.6;
-    }
   </style>
-  <script>
-    (function() {
-      const now = new Date();
-      const year = now.getFullYear();
-
-      let targetYear = 2025;
-      if (year === 2026) targetYear = 2026;
-
-      const redirectUrl = `${targetYear}/index.html`;
-
-      window.location.replace(redirectUrl);
-
-      window.addEventListener("DOMContentLoaded", () => {
-        const msg = document.getElementById("message");
-        if (msg) {
-          msg.innerHTML = `短冊メーカー${targetYear}へ移動しています...`;
-        }
-      });
-    })();
-  </script>
 </head>
 <body>
-  <div class="message" id="message">読み込み中… / Loading...</div>
+  <div class="message" id="message">短冊メーカーを選択してください / Please choose a version</div>
 
   <div class="link-container">
     <a href="2026/index.html" class="btn">
@@ -129,9 +101,5 @@
     </a>
   </div>
 
-  <p class="footer-note">
-    自動的に進まない場合は、上のリンクをクリックしてください。<br>
-    If you are not redirected, please click the links above.
-  </p>
 </body>
 </html>
