@@ -1,106 +1,132 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>短冊メーカー / Tanzaku Maker</title>
+
   <style>
+    :root {
+      --text: #333;
+      --card-bg: #ffffff;
+      --accent: #1a73e8;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: "Yu Gothic", "游ゴシック体", "メイリオ", meiryo, sans-serif;
+      font-family: "Yu Gothic", "游ゴシック体", "メイリオ", Meiryo, sans-serif;
+      margin: 0;
       padding: 2rem 1rem;
-      line-height: 1.6;
       max-width: 900px;
-      margin: auto;
-      color: #333;
-      background-color: #f8f9fa;
-      transition: background-color 0.3s, color 0.3s;
+      margin-inline: auto;
+      line-height: 1.7;
       text-align: center;
+      color: var(--text);
+      background: linear-gradient(to bottom, #f8f9fa, #eef3ff);
+      transition: background-color 0.3s, color 0.3s;
     }
 
     .message {
-      margin-bottom: 2rem;
+      margin-bottom: 2.5rem;
+      font-size: 1.3rem;
       font-weight: bold;
     }
 
     .link-container {
-      display: flex;
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 380px));
       justify-content: center;
       gap: 2rem;
-      align-items: flex-start;
-      padding: 1rem;
+      padding: 1rem 0;
     }
 
     .btn {
-      flex: 1 1 300px;
-      max-width: 380px;
-      padding: 1.2rem;
+      display: block;
+      width: 100%;
+      padding: 1.4rem;
       text-decoration: none;
-      border-radius: 12px;
-      background: #ffffff;
-      color: #1a73e8;
-      border: 2px solid #1a73e8;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-      transition: all 0.2s ease;
+      border-radius: 16px;
+      background: var(--card-bg);
+      color: var(--accent);
+      border: 2px solid var(--accent);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        color 0.2s ease,
+        box-shadow 0.2s ease;
     }
 
     .btn:nth-child(even) {
-      margin-top: 2.5rem;
+      transform: translateY(40px);
     }
 
     .btn:hover {
-      background: #1a73e8;
+      background: var(--accent);
       color: #fff;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 12px rgba(26, 115, 232, 0.2);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px rgba(26, 115, 232, 0.25);
     }
 
     .btn-main {
-      font-size: 1.2rem;
+      display: block;
+      font-size: 1.3rem;
       font-weight: bold;
     }
 
     .btn-sub {
-      font-size: 0.9rem;
       display: block;
-      margin-top: 0.4rem;
-      opacity: 0.8;
-      padding-left: 1rem;
+      margin-top: 0.5rem;
+      font-size: 0.95rem;
+      opacity: 0.85;
+    }
+
+    @media (max-width: 700px) {
+      .link-container {
+        grid-template-columns: minmax(280px, 380px);
+        justify-content: center;
+      }
+
+      .btn:nth-child(even) {
+        transform: none;
+      }
+
+      .message {
+        font-size: 1.15rem;
+      }
     }
 
     @media (prefers-color-scheme: dark) {
+      :root {
+        --text: #eeeeee;
+        --card-bg: #1e1e1e;
+        --accent: #8ab4f8;
+      }
+
       body {
-        background-color: #121212;
-        color: #eee;
+        background: linear-gradient(to bottom, #121212, #1a2233);
       }
-      .btn {
-        background: #1e1e1e;
-        border-color: #8ab4f8;
-        color: #8ab4f8;
-      }
+
       .btn:hover {
-        background: #8ab4f8;
+        background: var(--accent);
         color: #121212;
       }
     }
-
-    @media (max-width: 480px) {
-      body { padding: 1.5rem 0.5rem; }
-      .btn { padding: 1rem; }
-      .btn:nth-child(even) {
-        margin-top: 1.5rem;
-      }
-      .link-container {
-        gap: 1.5rem;
-      }
-    }
-
   </style>
 </head>
+
 <body>
-  <div class="message" id="message">短冊メーカーを選択してください / Please choose a version</div>
+
+  <div class="message">
+    短冊メーカーを選択してください<br>
+    Please choose a version
+  </div>
 
   <div class="link-container">
+
     <a href="2026/index.html" class="btn">
       <span class="btn-main">🎋 短冊メーカー 2026</span>
       <span class="btn-sub">Tanzaku Maker 2026</span>
@@ -110,6 +136,7 @@
       <span class="btn-main">🎋 短冊メーカー 2025</span>
       <span class="btn-sub">Tanzaku Maker 2025</span>
     </a>
+
   </div>
 
 </body>
