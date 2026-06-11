@@ -1,56 +1,38 @@
-"use strict";
-
 const ownWrapper = document.getElementById('ownWrapper');
 const btnArea = document.getElementById('btnArea');
-const wishInput = document.getElementById('wishInput');
-const nameInput = document.getElementById('nameInput');
-const colorSelect = document.getElementById('colorSelect');
-const saveBtn = document.getElementById('saveBtn');
-const postBtn = document.getElementById('postBtn');
 
-// 特殊文字エスケープ
 function escapeHtml(text) {
   const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
   return text.replace(/[&<>"']/g, m => map[m]);
 }
 
-// 画面に縦書き短冊表示
 function addOwn() {
-  const text = wishInput.value.trim();
+  const text = document.getElementById('wishInput').value.trim();
   if (!text) {
     alert('願い事を書いてください');
     return;
   }
-  const name = nameInput.value.trim();
-  const color = colorSelect.value;
+  const name = document.getElementById('nameInput').value.trim();
+  const color = document.getElementById('colorSelect').value;
 
   const safeText = escapeHtml(text);
   const safeName = escapeHtml(name);
 
-  // 改行ごとに分割して、少しずつ開始位置を下げる（段差をつける）
-  const linesHtml = safeText.split('\n').map((line, i) => {
-    return `<div style="padding-top: ${i * 1.5}rem;">${line}</div>`;
-  }).join('');
-
+  // 画面表示（縦書き）
   ownWrapper.innerHTML =
     '<div class="string"></div>' +
     `<div class="tanzaku ${color}">` +
-    `${linesHtml}` +
-    `<div class="name">${safeName ? (safeName.startsWith('　') ? safeName : '　' + safeName) : ''}</div>` +
+    `${safeText}<div class="name">${safeName ? safeName : ''}</div>` +
     `</div>`;
-
-  ownWrapper.style.display = 'flex';
-  btnArea.style.display = 'flex';
   ownWrapper.classList.remove('hidden');
-  btnArea.classList.remove('hidden');
+  btnArea.style.display = 'flex';
 
   ownWrapper.dataset.wish = text;
   ownWrapper.dataset.name = name;
   ownWrapper.dataset.color = color;
 }
 
-// ファイル名生成
-function generateFilename(color) {
+function generateFilename() {
   const now = new Date();
   const yyyy = now.getFullYear();
   const mm = String(now.getMonth() + 1).padStart(2, '0');
@@ -58,11 +40,11 @@ function generateFilename(color) {
   const hh = String(now.getHours()).padStart(2, '0');
   const mi = String(now.getMinutes()).padStart(2, '0');
   const ss = String(now.getSeconds()).padStart(2, '0');
-  return `wish-2026_${color}_${yyyy}-${mm}_${dd}-${hh}-${mi}-${ss}.png`;
+  return `tanzaku_${yyyy}${mm}${dd}_${hh}${mi}${ss}.png`;
 }
 
-// 画像生成用短冊作成
 function createImageTanzaku(wish, name, color) {
+  // 色ごとのスタイルマップ
   const colorStyles = {
     red: {
       background: 'linear-gradient(90deg, #f9c0c0, #f4a1a1)',
@@ -114,7 +96,7 @@ function createImageTanzaku(wish, name, color) {
   wrapper.style.position = "relative";
   wrapper.style.lineHeight = "1.3";
 
-  if (name) {
+  if(name) {
     const nameP = document.createElement('p');
     nameP.style.margin = "0 0 12px 0";
     nameP.style.fontSize = "20px";
@@ -123,32 +105,22 @@ function createImageTanzaku(wish, name, color) {
     wrapper.appendChild(nameP);
   }
 
-  // 願い事を改行で分割して段差（多段）表示（水平カード用）
-  const lines = wish.split('\n');
-  lines.forEach((line, i) => {
-    const wishP = document.createElement('p');
-    wishP.style.margin = "0";
-    wishP.style.width = "100%";
-    wishP.style.textAlign = "center";
-    // 2行目以降にインデント（段差）をつけて見やすく
-    wishP.style.paddingLeft = `${i * 1.5}rem`; 
-    
-    wishP.textContent = (i === 0 ? '🌟' : '') + line + (i === lines.length - 1 ? '🌟' : '');
-    wrapper.appendChild(wishP);
-  });
+  const wishP = document.createElement('p');
+  wishP.style.margin = "0";
+  wishP.textContent = `🌟${wish}🌟`;
+  wrapper.appendChild(wishP);
 
   const footerP = document.createElement('p');
   footerP.style.margin = "12px 0 0 0";
   footerP.style.fontSize = "14px";
   footerP.style.color = "#999";
-  footerP.textContent = "🎋短冊 2026 / Tanzaku 2026🎋";
+  footerP.textContent = "🎋願いごと🎋";
   wrapper.appendChild(footerP);
 
   return wrapper;
 }
 
-// 保存ボタン
-saveBtn.onclick = () => {
+document.getElementById('saveBtn').onclick = () => {
   const wish = ownWrapper.dataset.wish;
   if (!wish) {
     alert('短冊がありません。願い事を書いてください。');
@@ -157,75 +129,44 @@ saveBtn.onclick = () => {
   const name = ownWrapper.dataset.name || '';
   const color = ownWrapper.dataset.color || 'red';
   const imgTanzaku = createImageTanzaku(wish, name, color);
-
-  // 画面外に配置してレンダリング
-  imgTanzaku.style.position = 'fixed';
-  imgTanzaku.style.left = '-9999px';
-  imgTanzaku.style.top = '0';
   document.body.appendChild(imgTanzaku);
-
-  // html-to-image を使用して画像を生成
-  setTimeout(() => {
-    htmlToImage.toPng(imgTanzaku, { backgroundColor: null, pixelRatio: 2 })
-      .then(dataUrl => {
-        const a = document.createElement('a');
-        a.href = dataUrl;
-        a.download = generateFilename(color);
-        a.click();
-        document.body.removeChild(imgTanzaku);
-      })
-      .catch(err => {
-        alert('画像生成に失敗しました: ' + err.message);
-        document.body.removeChild(imgTanzaku);
-      });
-  }, 500);
+  html2canvas(imgTanzaku, { backgroundColor: null, scale: 2 }).then(canvas => {
+    canvas.toBlob(blob => {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = generateFilename();
+      a.click();
+      URL.revokeObjectURL(url);
+      document.body.removeChild(imgTanzaku);
+    });
+  });
 };
 
-// 投稿ボタン（X共有）
-postBtn.onclick = () => {
+document.getElementById('postBtn').onclick = () => {
   const wish = ownWrapper.dataset.wish || '';
   const name = ownWrapper.dataset.name || '';
-
   if (!wish) {
     alert('願い事を書いてください');
     return;
   }
 
-  // 投稿テキスト作成
-  let postText = '';
+  let tweetText = '';
   if (name) {
-    postText += `🎋${name}🎋\n`;
+    tweetText += `🎋${name}🎋\n`;
   }
 
-  postText += `🌟${wish}🌟
-🎋願いごと / Wish🎋
+  tweetText += `🌟${wish}🌟\n`;
+  tweetText += `🎋願いごと🎋\n\n`;
 
-https://hamuzon-jp.f5.si/wish
-https://hamuzon-jp.f5.si/wish-2026
+  tweetText +=
+    'https://hamuzon-jp.f5.si/wish\n' +
+    'https://hamuzon-jp.f5.si/wish-2025\n\n';
 
-#七夕 #Tanabata #StarFestival #Tanzaku`;
+  tweetText += '#七夕 #TanzakuMaker';
 
-  // エンコード
-  const postUrl = encodeURIComponent(postText);
-
-  // X（旧Twitter）投稿
   window.open(
-    `https://twitter.com/intent/tweet?text=${postUrl}`,
+    `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`,
     '_blank'
   );
 };
-
-// ページ読み込み時にURLパラメータ（w, n, c）があれば反映して表示
-window.addEventListener('DOMContentLoaded', () => {
-  const params = new URLSearchParams(window.location.search);
-  const wish = params.get('w') || params.get('wish');
-  const name = params.get('n') || params.get('name');
-  const color = params.get('c') || params.get('color');
-
-  if (wish) {
-    wishInput.value = wish;
-    if (name) nameInput.value = name;
-    if (color) colorSelect.value = color;
-    addOwn();
-  }
-});

@@ -52,8 +52,11 @@
 
 # ===== Tanzaku (Wish) =====
 /wish               /tanzaku 301
+/wish/              /tanzaku 301
 /wish-2025          /tanzaku/2025 301
+/wish-2025/         /tanzaku/2025 301
 /wish-2026          /tanzaku/2026 301
+/wish-2026/         /tanzaku/2026 301
 
 # ===== QR Code =====
 /QR/*               /qr/:splat 301

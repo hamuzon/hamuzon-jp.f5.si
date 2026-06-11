@@ -3,58 +3,98 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>短冊メーカー / Tanazaku Maker - Redirecting...</title>
+  <title>短冊メーカー / Tanzaku Maker</title>
+  <noscript>
+    <meta http-equiv="refresh" content="0;url=2026/index.html">
+  </noscript>
   <style>
     body {
       font-family: "Yu Gothic", "游ゴシック体", "メイリオ", meiryo, sans-serif;
-      padding: 1rem;
+      padding: 2rem 1rem;
       line-height: 1.6;
       max-width: 600px;
       margin: auto;
       color: #333;
-      background-color: #fff;
+      background-color: #f8f9fa;
       transition: background-color 0.3s, color 0.3s;
+      text-align: center;
     }
-    a {
-      color: #1a73e8;
+
+    .message {
+      margin-bottom: 2rem;
+      font-weight: bold;
+    }
+
+    .link-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .btn {
+      display: block;
+      width: 100%;
+      max-width: 400px;
+      padding: 1.2rem;
       text-decoration: none;
-      border-bottom: 1px solid #1a73e8;
+      border-radius: 12px;
+      background: #ffffff;
+      color: #1a73e8;
+      border: 2px solid #1a73e8;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+      transition: all 0.2s ease;
     }
-    a:hover,
-    a:focus {
-      text-decoration: underline;
-      outline: none;
+
+    .btn:hover {
+      background: #1a73e8;
+      color: #fff;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(26, 115, 232, 0.2);
     }
-    p {
-      font-size: 1rem;
+
+    .btn-main {
+      font-size: 1.2rem;
+      font-weight: bold;
     }
-    @media (max-width: 480px) {
-      body {
-        padding: 0.5rem;
-        font-size: 0.9rem;
-      }
-      p {
-        font-size: 0.9rem;
-      }
+
+    .btn-sub {
+      font-size: 0.9rem;
+      display: block;
+      margin-top: 0.4rem;
+      opacity: 0.8;
+      padding-left: 1rem;
     }
-    /* ダークモード対応 */
+
     @media (prefers-color-scheme: dark) {
       body {
         background-color: #121212;
         color: #eee;
       }
-      a {
+      .btn {
+        background: #1e1e1e;
+        border-color: #8ab4f8;
         color: #8ab4f8;
-        border-bottom-color: #8ab4f8;
       }
-      a:hover,
-      a:focus {
-        text-decoration: underline;
+      .btn:hover {
+        background: #8ab4f8;
+        color: #121212;
       }
+    }
+
+    @media (max-width: 480px) {
+      body { padding: 1.5rem 0.5rem; }
+      .btn { padding: 1rem; }
+    }
+
+    .footer-note {
+      margin-top: 2rem;
+      font-size: 0.8rem;
+      opacity: 0.6;
     }
   </style>
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
+    (function() {
       const now = new Date();
       const year = now.getFullYear();
 
@@ -63,30 +103,35 @@
 
       const redirectUrl = `${targetYear}/index.html`;
 
-      setTimeout(() => {
-        location.href = redirectUrl;
-      }, 0);
+      window.location.replace(redirectUrl);
 
-      const p = document.getElementById("message");
-      p.innerHTML =
-        `短冊メーカー${targetYear}へ自動で移動しています。<br>` +
-        `もし自動的に進まない場合は、<a href="${redirectUrl}">こちら</a> をクリックしてください。<br><br>` +
-        `Redirecting to Tanazaku Maker ${targetYear}.<br>` +
-        `If you are not redirected automatically, please click <a href="${redirectUrl}">here</a>.`;
-    });
+      window.addEventListener("DOMContentLoaded", () => {
+        const msg = document.getElementById("message");
+        if (msg) {
+          msg.innerHTML = `短冊メーカー${targetYear}へ移動しています...`;
+        }
+      });
+    })();
   </script>
 </head>
 <body>
-  <p id="message">読み込み中…</p>
+  <div class="message" id="message">読み込み中… / Loading...</div>
 
-  <noscript>
-    <p>
-      自動で移動できないようです。お手数ですが、下のリンクからお進みください。<br />
+  <div class="link-container">
+    <a href="2026/index.html" class="btn">
+      <span class="btn-main">🎋 短冊メーカー 2026</span>
+      <span class="btn-sub">Tanzaku Maker 2026</span>
+    </a>
 
-      <a href="2026/index.html">短冊メーカー2026へ</a><br><br>
-      Automatic redirection is not working. Please use the links below to proceed.<br />
-      <a href="2026/index.html">Tanazaku Maker 2026</a>
-    </p>
-  </noscript>
+    <a href="2025/index.html" class="btn">
+      <span class="btn-main">🎋 短冊メーカー 2025</span>
+      <span class="btn-sub">Tanzaku Maker 2025</span>
+    </a>
+  </div>
+
+  <p class="footer-note">
+    自動的に進まない場合は、上のリンクをクリックしてください。<br>
+    If you are not redirected, please click the links above.
+  </p>
 </body>
 </html>

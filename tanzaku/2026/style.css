@@ -119,8 +119,8 @@ header {
   font-size: 1.3rem;
   color: #222;
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  flex-direction: column; /* 縦書きRLでは、columnは「右から左」のカラム方向になります */
+  align-items: flex-start; /* 縦書きの開始位置（上端）に揃える */
   justify-content: center;
   -webkit-user-select: none;
   user-select: none;
@@ -132,11 +132,12 @@ header {
 }
 
 .tanzaku .name {
-  margin-top: 12px;
+  margin-top: auto; /* 他の要素から離して下部へ */
+  padding-top: 30px; /* 前の行との間隔 */
   font-size: 0.85rem;
   color: #444;
-  writing-mode: vertical-rl;
-  text-orientation: mixed;
+  align-self: flex-end; /* 縦書きRLでの下端（左下）に配置 */
+  white-space: nowrap;
 }
 
 .red {
@@ -232,6 +233,10 @@ footer a {
 
 footer a:hover {
   text-decoration: underline;
+}
+
+.hidden {
+  display: none !important;
 }
 
 @media (max-width: 480px) {
