@@ -9,12 +9,16 @@
 <style>
 :root{
   --text:#333;
-  --card-bg:#fff;
+  --card-bg:#ffffff;
   --accent:#1a73e8;
 }
 
 *{
   box-sizing:border-box;
+}
+
+html{
+  width:100%;
 }
 
 body{
@@ -29,34 +33,43 @@ body{
 }
 
 .container{
-  width:min(100%,900px);
-  margin-inline:auto;
+  width:100%;
+  max-width:900px;
+  margin:0 auto;
 }
 
 .message{
   margin-bottom:2rem;
-  font-size:1.3rem;
+  font-size:clamp(1.1rem,2vw,1.3rem);
   font-weight:bold;
 }
 
 .link-container{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-  gap:2rem;
+  display:flex;
+  flex-wrap:wrap;
   justify-content:center;
-  align-items:start;
+  align-items:flex-start;
+  gap:2rem;
 }
 
 .btn{
-  display:block;
+  flex:1 1 320px;
+  max-width:380px;
   width:100%;
+
+  display:block;
   padding:1.4rem;
+
   text-decoration:none;
+
+  border:2px solid var(--accent);
   border-radius:16px;
+
   background:var(--card-bg);
   color:var(--accent);
-  border:2px solid var(--accent);
+
   box-shadow:0 4px 12px rgba(0,0,0,.08);
+
   transition:
     background .2s ease,
     color .2s ease,
@@ -84,30 +97,32 @@ body{
 .btn-sub{
   display:block;
   margin-top:.5rem;
-  opacity:.8;
+  font-size:.95rem;
+  opacity:.85;
 }
 
-@media (max-width:700px){
+@media (max-width:768px){
 
   .link-container{
-    grid-template-columns:1fr;
+    flex-direction:column;
+    align-items:center;
+    gap:1.5rem;
+  }
+
+  .btn{
+    width:100%;
     max-width:420px;
-    margin:0 auto;
   }
 
   .btn:nth-child(even){
     margin-top:0;
-  }
-
-  .message{
-    font-size:1.15rem;
   }
 }
 
 @media (prefers-color-scheme:dark){
 
   :root{
-    --text:#eee;
+    --text:#eeeeee;
     --card-bg:#1e1e1e;
     --accent:#8ab4f8;
   }
