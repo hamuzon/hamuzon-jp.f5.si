@@ -99,6 +99,7 @@ header h1 {
   background: #d4a72c;
 }
 
+
 .bamboo {
   position: absolute;
   top: 0;
@@ -110,6 +111,7 @@ header h1 {
   opacity: 0.2;
   z-index: 1;
 }
+
 
 .tanzaku-wrapper {
   margin-top: 20px;
@@ -160,12 +162,35 @@ header h1 {
   color: #555;
 }
 
-/* 色バリエーション */
-.red { background: linear-gradient(90deg, #f9c0c0, #f4a1a1); border-color: #d45454; color: #4a0b0b; }
-.blue { background: linear-gradient(90deg, #a7c9f9, #7fa8f4); border-color: #3b5da3; color: #102353; }
-.yellow { background: linear-gradient(90deg, #fff7b3, #fff1a5); border-color: #d4c245; color: #4a420b; }
-.green { background: linear-gradient(90deg, #b7f4b6, #8ae68a); border-color: #4da34d; color: #0b3a0b; }
-.purple { background: linear-gradient(90deg, #dab6f4, #c692f4); border-color: #774da3; color: #3a0b53; }
+.red {
+  background: linear-gradient(90deg, #f9c0c0, #f4a1a1);
+  border-color: #d45454;
+  color: #4a0b0b;
+}
+
+.blue {
+  background: linear-gradient(90deg, #a7c9f9, #7fa8f4);
+  border-color: #3b5da3;
+  color: #102353;
+}
+
+.yellow {
+  background: linear-gradient(90deg, #fff7b3, #fff1a5);
+  border-color: #d4c245;
+  color: #4a420b;
+}
+
+.green {
+  background: linear-gradient(90deg, #b7f4b6, #8ae68a);
+  border-color: #4da34d;
+  color: #0b3a0b;
+}
+
+.purple {
+  background: linear-gradient(90deg, #dab6f4, #c692f4);
+  border-color: #774da3;
+  color: #3a0b53;
+}
 
 @keyframes sway {
   0% { transform: rotate(4deg); }
@@ -177,11 +202,32 @@ header h1 {
   opacity: 0.8;
 }
 
-#exampleTanzaku .tanzaku.red { border-color: #d45454; color: #4a0b0b; }
-#exampleTanzaku .tanzaku.blue { border-color: #3b5da3; color: #102353; }
-#exampleTanzaku .tanzaku.yellow { border-color: #d4c245; color: #4a420b; }
-#exampleTanzaku .tanzaku.green { border-color: #4da34d; color: #0b3a0b; }
-#exampleTanzaku .tanzaku.purple { border-color: #774da3; color: #3a0b53; }
+
+#exampleTanzaku .tanzaku.red {
+  border-color: #d45454;
+  color: #4a0b0b;
+}
+
+#exampleTanzaku .tanzaku.blue {
+  border-color: #3b5da3;
+  color: #102353;
+}
+
+#exampleTanzaku .tanzaku.yellow {
+  border-color: #d4c245;
+  color: #4a420b;
+}
+
+#exampleTanzaku .tanzaku.green {
+  border-color: #4da34d;
+  color: #0b3a0b;
+}
+
+#exampleTanzaku .tanzaku.purple {
+  border-color: #774da3;
+  color: #3a0b53;
+}
+
 
 .btn-area {
   margin-top: 20px;
@@ -219,6 +265,7 @@ header h1 {
   background: #28a428;
 }
 
+
 footer {
   margin-top: 40px;
   padding: 10px;
@@ -233,6 +280,7 @@ footer a {
   color: rgba(255, 255, 255, 0.6);
   text-decoration: none;
 }
+
 
 @media (max-width: 480px) {
   .tanzaku {
@@ -252,6 +300,7 @@ footer a {
     min-width: 140px;
   }
 }
+
 
 .hidden {
   display: none !important;

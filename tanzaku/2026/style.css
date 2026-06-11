@@ -1,7 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Kosugi+Maru&display=swap');
 
 body {
-  margin: 0; padding: 0;
+  margin: 0;
+  padding: 0;
   background: linear-gradient(to bottom, #001e3c, #000814);
   font-family: 'Kosugi Maru', sans-serif;
   color: #fff;
@@ -16,7 +17,10 @@ body {
 body::before {
   content: "";
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   pointer-events: none;
   background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="10" cy="20" r="1" fill="white"/><circle cx="30" cy="40" r="1" fill="white"/><circle cx="50" cy="70" r="1" fill="white"/><circle cx="80" cy="10" r="1" fill="white"/><circle cx="70" cy="80" r="1" fill="white"/></svg>') repeat;
   opacity: 0.15;
@@ -119,8 +123,8 @@ header {
   font-size: 1.3rem;
   color: #222;
   display: flex;
-  flex-direction: column; /* 縦書きRLでは、columnは「右から左」のカラム方向になります */
-  align-items: flex-start; /* 縦書きの開始位置（上端）に揃える */
+  flex-direction: column;
+  align-items: flex-start;
   justify-content: center;
   -webkit-user-select: none;
   user-select: none;
@@ -132,11 +136,11 @@ header {
 }
 
 .tanzaku .name {
-  margin-top: auto; /* 他の要素から離して下部へ */
-  padding-top: 30px; /* 前の行との間隔 */
+  margin-top: auto;
+  padding-top: 30px;
   font-size: 0.85rem;
   color: #444;
-  align-self: flex-end; /* 縦書きRLでの下端（左下）に配置 */
+  align-self: flex-end;
   white-space: nowrap;
 }
 
@@ -214,6 +218,7 @@ header {
   box-shadow: 0 0 14px #28a428;
 }
 
+
 footer {
   text-align: center;
   padding: 15px 10px;
@@ -235,25 +240,30 @@ footer a:hover {
   text-decoration: underline;
 }
 
+
 .hidden {
   display: none !important;
 }
+
 
 @media (max-width: 480px) {
   .container {
     width: 95vw;
   }
+
   .tanzaku {
     width: 90px;
     height: 220px;
     font-size: 1.1rem;
     padding: 12px 6px;
   }
+
   .input-area input[type="text"],
   .input-area select {
     min-width: 120px;
     font-size: 1rem;
   }
+
   .btn-area button {
     padding: 10px 20px;
     font-size: 1rem;

@@ -123,14 +123,12 @@ function createImageTanzaku(wish, name, color) {
     wrapper.appendChild(nameP);
   }
 
-  // 願い事を改行で分割して段差（多段）表示（水平カード用）
   const lines = wish.split('\n');
   lines.forEach((line, i) => {
     const wishP = document.createElement('p');
     wishP.style.margin = "0";
     wishP.style.width = "100%";
     wishP.style.textAlign = "center";
-    // 2行目以降にインデント（段差）をつけて見やすく
     wishP.style.paddingLeft = `${i * 1.5}rem`; 
     
     wishP.textContent = (i === 0 ? '🌟' : '') + line + (i === lines.length - 1 ? '🌟' : '');
