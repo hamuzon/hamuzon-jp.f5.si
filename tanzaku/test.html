@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>短冊メーカー / Tanzaku Maker</title>
+
+  <style>
+    :root {
+      --text: #333;
+      --card-bg: #ffffff;
+      --accent: #1a73e8;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 2rem 1rem;
+      font-family: "Yu Gothic", "游ゴシック体", "メイリオ", Meiryo, sans-serif;
+      line-height: 1.7;
+      text-align: center;
+      color: var(--text);
+      background: linear-gradient(to bottom, #f8f9fa, #eef3ff);
+    }
+
+    .container {
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .message {
+      margin-bottom: 2rem;
+      font-size: 1.3rem;
+      font-weight: bold;
+    }
+
+    .link-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 2rem;
+    }
+
+    .btn {
+      flex: 0 1 380px;
+      width: 100%;
+      max-width: 380px;
+      padding: 1.4rem;
+      text-decoration: none;
+      border-radius: 16px;
+      background: var(--card-bg);
+      color: var(--accent);
+      border: 2px solid var(--accent);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+    }
+
+    .btn:nth-child(even) {
+      margin-top: 40px;
+    }
+
+    .btn:hover {
+      background: var(--accent);
+      color: #fff;
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px rgba(26, 115, 232, 0.25);
+    }
+
+    .btn-main {
+      display: block;
+      font-size: 1.3rem;
+      font-weight: bold;
+    }
+
+    .btn-sub {
+      display: block;
+      margin-top: 0.5rem;
+      font-size: 0.95rem;
+      opacity: 0.85;
+    }
+
+    @media (max-width: 700px) {
+      .link-container {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .btn {
+        width: 100%;
+        max-width: 380px;
+      }
+
+      .btn:nth-child(even) {
+        margin-top: 0;
+      }
+
+      .message {
+        font-size: 1.15rem;
+      }
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --text: #eeeeee;
+        --card-bg: #1e1e1e;
+        --accent: #8ab4f8;
+      }
+
+      body {
+        background: linear-gradient(to bottom, #121212, #1a2233);
+      }
+
+      .btn:hover {
+        background: var(--accent);
+        color: #121212;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="message">
+      短冊メーカーを選択してください<br>
+      Please choose a version
+    </div>
+
+    <div class="link-container">
+
+      <a href="2026/index.html" class="btn">
+        <span class="btn-main">🎋 短冊メーカー 2026</span>
+        <span class="btn-sub">Tanzaku Maker 2026</span>
+      </a>
+
+      <a href="2025/index.html" class="btn">
+        <span class="btn-main">🎋 短冊メーカー 2025</span>
+        <span class="btn-sub">Tanzaku Maker 2025</span>
+      </a>
+
+    </div>
+
+  </div>
+
+</body>
+</html>
