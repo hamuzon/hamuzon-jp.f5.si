@@ -27,16 +27,10 @@ function addOwn() {
   const safeText = escapeHtml(text);
   const safeName = escapeHtml(name);
 
-  // 改行ごとに分割して、少しずつ開始位置を下げる（段差をつける）
-  const linesHtml = safeText.split('\n').map((line, i) => {
-    return `<div style="padding-top: ${i * 1.5}rem;">${line}</div>`;
-  }).join('');
-
   ownWrapper.innerHTML =
     '<div class="string"></div>' +
     `<div class="tanzaku ${color}">` +
-    `${linesHtml}` +
-    `<div class="name">${safeName ? (safeName.startsWith('　') ? safeName : '　' + safeName) : ''}</div>` +
+    `${safeText}<div class="name">${safeName ? safeName : ''}</div>` +
     `</div>`;
 
   ownWrapper.style.display = 'flex';
@@ -123,17 +117,10 @@ function createImageTanzaku(wish, name, color) {
     wrapper.appendChild(nameP);
   }
 
-  const lines = wish.split('\n');
-  lines.forEach((line, i) => {
-    const wishP = document.createElement('p');
-    wishP.style.margin = "0";
-    wishP.style.width = "100%";
-    wishP.style.textAlign = "center";
-    wishP.style.paddingLeft = `${i * 1.5}rem`; 
-    
-    wishP.textContent = (i === 0 ? '🌟' : '') + line + (i === lines.length - 1 ? '🌟' : '');
-    wrapper.appendChild(wishP);
-  });
+  const wishP = document.createElement('p');
+  wishP.style.margin = "0";
+  wishP.textContent = `🌟${wish}🌟`;
+  wrapper.appendChild(wishP);
 
   const footerP = document.createElement('p');
   footerP.style.margin = "12px 0 0 0";
@@ -162,21 +149,17 @@ saveBtn.onclick = () => {
   imgTanzaku.style.top = '0';
   document.body.appendChild(imgTanzaku);
 
-  // html-to-image を使用して画像を生成
-  setTimeout(() => {
-    htmlToImage.toPng(imgTanzaku, { backgroundColor: null, pixelRatio: 2 })
-      .then(dataUrl => {
-        const a = document.createElement('a');
-        a.href = dataUrl;
-        a.download = generateFilename(color);
-        a.click();
-        document.body.removeChild(imgTanzaku);
-      })
-      .catch(err => {
-        alert('画像生成に失敗しました: ' + err.message);
-        document.body.removeChild(imgTanzaku);
-      });
-  }, 500);
+  html2canvas(imgTanzaku, { backgroundColor: null, scale: 2, useCORS: true, logging: false }).then(canvas => {
+    const dataUrl = canvas.toDataURL('image/png');
+    const a = document.createElement('a');
+    a.href = dataUrl;
+    a.download = generateFilename(color);
+    a.click();
+    document.body.removeChild(imgTanzaku);
+  }).catch(err => {
+    alert('画像生成に失敗しました: ' + err.message);
+    document.body.removeChild(imgTanzaku);
+  });
 };
 
 // 投稿ボタン（X共有）
@@ -198,8 +181,8 @@ postBtn.onclick = () => {
   postText += `🌟${wish}🌟
 🎋願いごと / Wish🎋
 
-https://hamuzon-jp.f5.si/wish
-https://hamuzon-jp.f5.si/wish-2026
+https://hamuzon.web.fc2.com/wish
+https://hamuzon.web.fc2.com/wish-2026
 
 #七夕 #Tanabata #StarFestival #Tanzaku`;
 
