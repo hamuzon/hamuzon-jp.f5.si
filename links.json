@@ -5,11 +5,11 @@
   { "title": "⏳ Expo Countdown⏰️", "url": "https://expo.hamuzon-jp.f5.si/" },
   { "title": "⏰ 時計 / Clock", "url": "/clock/" },
   { "title": "⏰ 時計V2 / Clock V2 ", "url": "/clock-app/" },
-
   { "title": "🔢 Binary⇔Decimal Converter", "url": "/bin2dec/" },
   { "title": "🔢 Binary⇔Decimal Converter-old", "url": "/bin2dec/old/" },
   { "title": "🔍 Text Enlarger📝", "url": "/text/" },
-  { "title": "📱 Device Info Viewer", "url": "https://device-info.hamuzon-jp.f5.si/" },
+  { "title": "📱 Device Info Viewer 💻️", "url": "https://device-info.hamuzon-jp.f5.si/" },
+  { "title": "📱 Old Device Info Viewer 🖲️", "url": "https://device-info-old.hamuzon-jp.f5.si/" },
   { "title": "🔑 Password Generator Tool🗝️", "url": "/password/" },
   { "title": "🔢 計算機 / Calculator 🧮", "url": "/calculator/" },
   { "title": "📅 カレンダー / Calendar 🗓️", "url": "https://calendar.hamuzon-jp.f5.si/" },
