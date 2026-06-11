@@ -1,157 +1,152 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>短冊メーカー / Tanzaku Maker</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    :root {
-      --text: #333;
-      --card-bg: #ffffff;
-      --accent: #1a73e8;
-    }
+<title>短冊メーカー / Tanzaku Maker</title>
 
-    * {
-      box-sizing: border-box;
-    }
+<style>
+:root{
+  --text:#333;
+  --card-bg:#fff;
+  --accent:#1a73e8;
+}
 
-    body {
-      margin: 0;
-      min-height: 100vh;
-      padding: 2rem 1rem;
-      font-family: "Yu Gothic", "游ゴシック体", "メイリオ", Meiryo, sans-serif;
-      line-height: 1.7;
-      text-align: center;
-      color: var(--text);
-      background: linear-gradient(to bottom, #f8f9fa, #eef3ff);
-    }
+*{
+  box-sizing:border-box;
+}
 
-    .container {
-      width: 100%;
-      max-width: 900px;
-      margin: 0 auto;
-    }
+body{
+  margin:0;
+  min-height:100vh;
+  padding:2rem 1rem;
+  font-family:"Yu Gothic","游ゴシック体","メイリオ",Meiryo,sans-serif;
+  line-height:1.7;
+  text-align:center;
+  color:var(--text);
+  background:linear-gradient(to bottom,#f8f9fa,#eef3ff);
+}
 
-    .message {
-      margin-bottom: 2rem;
-      font-size: 1.3rem;
-      font-weight: bold;
-    }
+.container{
+  width:min(100%,900px);
+  margin-inline:auto;
+}
 
-    .link-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      align-items: flex-start;
-      gap: 2rem;
-    }
+.message{
+  margin-bottom:2rem;
+  font-size:1.3rem;
+  font-weight:bold;
+}
 
-    .btn {
-      flex: 0 1 380px;
-      width: 100%;
-      max-width: 380px;
-      padding: 1.4rem;
-      text-decoration: none;
-      border-radius: 16px;
-      background: var(--card-bg);
-      color: var(--accent);
-      border: 2px solid var(--accent);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-      transition:
-        background 0.2s ease,
-        color 0.2s ease,
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
-    }
+.link-container{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+  gap:2rem;
+  justify-content:center;
+  align-items:start;
+}
 
-    .btn:nth-child(even) {
-      margin-top: 40px;
-    }
+.btn{
+  display:block;
+  width:100%;
+  padding:1.4rem;
+  text-decoration:none;
+  border-radius:16px;
+  background:var(--card-bg);
+  color:var(--accent);
+  border:2px solid var(--accent);
+  box-shadow:0 4px 12px rgba(0,0,0,.08);
+  transition:
+    background .2s ease,
+    color .2s ease,
+    transform .2s ease,
+    box-shadow .2s ease;
+}
 
-    .btn:hover {
-      background: var(--accent);
-      color: #fff;
-      transform: translateY(-4px);
-      box-shadow: 0 8px 20px rgba(26, 115, 232, 0.25);
-    }
+.btn:nth-child(even){
+  margin-top:40px;
+}
 
-    .btn-main {
-      display: block;
-      font-size: 1.3rem;
-      font-weight: bold;
-    }
+.btn:hover{
+  background:var(--accent);
+  color:#fff;
+  transform:translateY(-4px);
+  box-shadow:0 8px 20px rgba(26,115,232,.25);
+}
 
-    .btn-sub {
-      display: block;
-      margin-top: 0.5rem;
-      font-size: 0.95rem;
-      opacity: 0.85;
-    }
+.btn-main{
+  display:block;
+  font-size:1.3rem;
+  font-weight:bold;
+}
 
-    @media (max-width: 700px) {
-      .link-container {
-        flex-direction: column;
-        align-items: center;
-      }
+.btn-sub{
+  display:block;
+  margin-top:.5rem;
+  opacity:.8;
+}
 
-      .btn {
-        width: 100%;
-        max-width: 380px;
-      }
+@media (max-width:700px){
 
-      .btn:nth-child(even) {
-        margin-top: 0;
-      }
+  .link-container{
+    grid-template-columns:1fr;
+    max-width:420px;
+    margin:0 auto;
+  }
 
-      .message {
-        font-size: 1.15rem;
-      }
-    }
+  .btn:nth-child(even){
+    margin-top:0;
+  }
 
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --text: #eeeeee;
-        --card-bg: #1e1e1e;
-        --accent: #8ab4f8;
-      }
+  .message{
+    font-size:1.15rem;
+  }
+}
 
-      body {
-        background: linear-gradient(to bottom, #121212, #1a2233);
-      }
+@media (prefers-color-scheme:dark){
 
-      .btn:hover {
-        background: var(--accent);
-        color: #121212;
-      }
-    }
-  </style>
+  :root{
+    --text:#eee;
+    --card-bg:#1e1e1e;
+    --accent:#8ab4f8;
+  }
+
+  body{
+    background:linear-gradient(to bottom,#121212,#1a2233);
+  }
+
+  .btn:hover{
+    color:#121212;
+  }
+}
+</style>
 </head>
 
 <body>
 
-  <div class="container">
+<div class="container">
 
-    <div class="message">
-      短冊メーカーを選択してください<br>
-      Please choose a version
-    </div>
+  <div class="message">
+    短冊メーカーを選択してください<br>
+    Please choose a version
+  </div>
 
-    <div class="link-container">
+  <div class="link-container">
 
-      <a href="2026/index.html" class="btn">
-        <span class="btn-main">🎋 短冊メーカー 2026</span>
-        <span class="btn-sub">Tanzaku Maker 2026</span>
-      </a>
+    <a href="2026/index.html" class="btn">
+      <span class="btn-main">🎋 短冊メーカー 2026</span>
+      <span class="btn-sub">Tanzaku Maker 2026</span>
+    </a>
 
-      <a href="2025/index.html" class="btn">
-        <span class="btn-main">🎋 短冊メーカー 2025</span>
-        <span class="btn-sub">Tanzaku Maker 2025</span>
-      </a>
-
-    </div>
+    <a href="2025/index.html" class="btn">
+      <span class="btn-main">🎋 短冊メーカー 2025</span>
+      <span class="btn-sub">Tanzaku Maker 2025</span>
+    </a>
 
   </div>
+
+</div>
 
 </body>
 </html>
