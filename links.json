@@ -15,7 +15,7 @@
   { "title": "📅 カレンダー / Calendar 🗓️", "url": "https://calendar.hamuzon-jp.f5.si/" },
   { "title": "📝 Todo Lists ✏️", "url": "/todo/" },
   { "title": "🗂️ タスクボード / Task Board 📋", "url": "/task-board/" },
-  { "title": "🎂 Birthday Counter 🔢", "url": "/birthday/" },
+  { "title": "🎂 Birthday Counter 🔢", "url": "https://birthday.hamuzon-jp.f5.si/" },
   { "title": "🔳 QR 🔗", "url": "/qr/" },
   { "title": "🎲 サイコロ 🎯", "url": "/dice/" },
   { "title": "🍀 おみくじ 🔮", "url": "/omikuji/" },

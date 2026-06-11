@@ -15,6 +15,10 @@
 /discord-tools/README.md     /discord-tools 301
 
 # ===== External Subdomains =====
+/birthday           https://birthday.hamuzon-jp.f5.si 301
+/birthday/          https://birthday.hamuzon-jp.f5.si 301
+/birthday/*         https://birthday.hamuzon-jp.f5.si/:splat 301
+
 /calendar           https://calendar.hamuzon-jp.f5.si 301
 /calendar/          https://calendar.hamuzon-jp.f5.si 301
 /calendar/*         https://calendar.hamuzon-jp.f5.si/:splat 301
