@@ -18,7 +18,7 @@ function addOwn() {
   const safeText = escapeHtml(text);
   const safeName = escapeHtml(name);
 
-  // 画面表示（縦書き）
+  // 画面表示
   ownWrapper.innerHTML =
     '<div class="string"></div>' +
     `<div class="tanzaku ${color}">` +
@@ -32,7 +32,7 @@ function addOwn() {
   ownWrapper.dataset.color = color;
 }
 
-function generateFilename() {
+function generateFilename(color) {
   const now = new Date();
   const yyyy = now.getFullYear();
   const mm = String(now.getMonth() + 1).padStart(2, '0');
@@ -40,7 +40,7 @@ function generateFilename() {
   const hh = String(now.getHours()).padStart(2, '0');
   const mi = String(now.getMinutes()).padStart(2, '0');
   const ss = String(now.getSeconds()).padStart(2, '0');
-  return `tanzaku_${yyyy}${mm}${dd}_${hh}${mi}${ss}.png`;
+  return `wish-2025_${color}_${yyyy}-${mm}_${dd}-${hh}-${mi}-${ss}.png`;
 }
 
 function createImageTanzaku(wish, name, color) {
@@ -135,7 +135,7 @@ document.getElementById('saveBtn').onclick = () => {
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = generateFilename();
+      a.download = generateFilename(color);
       a.click();
       URL.revokeObjectURL(url);
       document.body.removeChild(imgTanzaku);
