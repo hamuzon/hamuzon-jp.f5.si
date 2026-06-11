@@ -20,13 +20,17 @@
       font-family: "Yu Gothic", "游ゴシック体", "メイリオ", Meiryo, sans-serif;
       margin: 0;
       padding: 2rem 1rem;
-      max-width: 900px;
-      margin-inline: auto;
+      min-height: 100vh;
       line-height: 1.7;
       text-align: center;
       color: var(--text);
       background: linear-gradient(to bottom, #f8f9fa, #eef3ff);
       transition: background-color 0.3s, color 0.3s;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
     }
 
     .message {
@@ -120,22 +124,26 @@
 
 <body>
 
-  <div class="message">
-    短冊メーカーを選択してください<br>
-    Please choose a version
-  </div>
+  <div class="container">
 
-  <div class="link-container">
+    <div class="message">
+      短冊メーカーを選択してください<br>
+      Please choose a version
+    </div>
 
-    <a href="2026/index.html" class="btn">
-      <span class="btn-main">🎋 短冊メーカー 2026</span>
-      <span class="btn-sub">Tanzaku Maker 2026</span>
-    </a>
+    <div class="link-container">
 
-    <a href="2025/index.html" class="btn">
-      <span class="btn-main">🎋 短冊メーカー 2025</span>
-      <span class="btn-sub">Tanzaku Maker 2025</span>
-    </a>
+      <a href="2026/index.html" class="btn">
+        <span class="btn-main">🎋 短冊メーカー 2026</span>
+        <span class="btn-sub">Tanzaku Maker 2026</span>
+      </a>
+
+      <a href="2025/index.html" class="btn">
+        <span class="btn-main">🎋 短冊メーカー 2025</span>
+        <span class="btn-sub">Tanzaku Maker 2025</span>
+      </a>
+
+    </div>
 
   </div>
 
