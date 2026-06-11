@@ -35,9 +35,13 @@
 /video-hub/         https://video-hub.hamuzon-jp.f5.si 301
 /video-hub/*        https://video-hub.hamuzon-jp.f5.si/:splat 301
 
-/olympic            https://olympic.hamuzon-jp.f5.si 301
-/olympic/           https://olympic.hamuzon-jp.f5.si 301
-/olympic/*          https://olympic.hamuzon-jp.f5.si/:splat 301
+/olympic            https://olympic-countdown.hamuzon-jp.f5.si 301
+/olympic/           https://olympic-countdown.hamuzon-jp.f5.si 301
+/olympic/*          https://olympic-countdown.hamuzon-jp.f5.si/:splat 301
+
+/olympic-countdown  https://olympic-countdown.hamuzon-jp.f5.si 301
+/olympic-countdown/ https://olympic-countdown.hamuzon-jp.f5.si 301
+/olympic-countdown/* https://olympic-countdown.hamuzon-jp.f5.si/:splat 301
 
 # ===== Pixel Art =====
 /pixel              /pixel-art 301
