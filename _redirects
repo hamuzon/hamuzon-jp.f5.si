@@ -34,9 +34,7 @@
 /expo2025                   https://expo.hamuzon-jp.f5.si 301
 /expo2025/*                 https://expo.hamuzon-jp.f5.si/:splat 301
 
-/globe              https://globe.world.hamuzon-jp.f5.si 301
-/globe/             https://globe.world.hamuzon-jp.f5.si 301
-/globe/*            https://globe.world.hamuzon-jp.f5.si/:splat 301
+
 
 /video-hub          https://video-hub.hamuzon-jp.f5.si 301
 /video-hub/         https://video-hub.hamuzon-jp.f5.si 301
