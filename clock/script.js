@@ -14,9 +14,7 @@ allTimezones.forEach(tz => {
 });
 
 const timeSources = [
-  "https://worldtimeapi.org/api/timezone/Etc/UTC",
-  "https://timeapi.io/api/Time/current/zone?timeZone=UTC",
-  "https://nowapi.vercel.app/api/now"
+  "https://timeapi.io/api/Time/current/zone?timeZone=UTC"
 ];
 
 async function syncTimeFromInternet() {
