@@ -1,24 +1,23 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>WORLDtime</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet" />
-  <link rel="icon" href="icon-light.png" type="image/png" />
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WORLDtime</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>WORLD-time</h1>
-
-  <div class="controls">
-    <select id="timezone-select" aria-label="タイムゾーンを選択"></select>
-    <button id="add-button">追加</button>
-  </div>
-
-  <div class="error-message" id="error-message"></div>
-  <div class="timezone-container" id="timezones"></div>
-
-  <script src="script.js"></script>
+<h1>WORLD-time</h1>
+<div class="controls">
+<select id="timezone-select" title="表示するタイムゾーンを選択"></select>
+<button id="add-button">追加</button>
+</div>
+<div id="error-message"></div>
+<div class="timezone-container" id="timezones"></div>
+<script src="script.js" data-cfasync="false"></script>
 </body>
 </html>
