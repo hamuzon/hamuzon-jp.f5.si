@@ -60,13 +60,13 @@ async function syncTimeFromInternet() {
 function addTimezone(tz = timezoneSelect.value) {
   const uniqueId = "tz_" + tz.replace(/[^a-zA-Z0-9]/g, "_") + "_" + Date.now();
   const el = document.createElement("div");
-  el.className = "timezone";
+  el.className = "timezone-item";
   el.id = uniqueId;
   el.innerHTML = `
     <div class="label">${tz}</div>
     <div class="time" id="${uniqueId}-time">
-      <div>----</div>
-      <div>--:--:--</div>
+      <div class="date-display">----/--/--</div>
+      <div class="time-display">--:--:--</div>
     </div>
     <button class="remove-button">×</button>
   `;
