@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UUID v4 Generator</title>
+    <style>
+        :root {
+            --sky-bg: #bae6fd;
+            --sky-accent: #0ea5e9;
+            --glass-white: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.4);
+            --text-main: #0c4a6e;
+            --text-sub: #334155;
+        }
+
+        body {
+            margin: 0;
+            padding: 24px;
+            font-family: system-ui, sans-serif;
+            background: var(--sky-bg);
+            background-image:
+                radial-gradient(at 0% 0%, #e0f2fe 0%, transparent 50%),
+                radial-gradient(at 100% 0%, #7dd3fc 0%, transparent 50%),
+                radial-gradient(at 50% 100%, #38bdf8 0%, transparent 50%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--text-main);
+        }
+
+        .card {
+            width: 100%;
+            max-width: 520px;
+            padding: 40px;
+            background: var(--glass-white);
+            border: 1px solid var(--glass-border);
+            border-radius: 32px;
+            -webkit-backdrop-filter: blur(16px);
+            backdrop-filter: blur(16px);
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(12, 74, 110, 0.1);
+        }
+
+        h1 {
+            margin: 0 0 12px 0;
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        .sub {
+            color: var(--text-sub);
+            margin-bottom: 40px;
+        }
+
+        .uuid-viewer {
+            min-height: 1.5em;
+            padding: 24px;
+            margin-bottom: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: monospace;
+            font-size: 1.1rem;
+            font-weight: bold;
+            word-break: break-all;
+            background: rgba(255, 255, 255, 0.5);
+            border: 2px solid white;
+            border-radius: 16px;
+            color: var(--sky-accent);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
+        }
+
+        .actions {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            flex: 1;
+            min-width: 140px;
+            padding: 16px 24px;
+            border: none;
+            border-radius: 100px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s ease;
+        }
+
+        .btn-main {
+            background: var(--sky-accent);
+            color: white;
+            box-shadow: 0 8px 20px rgba(14, 165, 233, 0.3);
+        }
+
+        .btn-main:hover {
+            transform: translateY(-2px);
+            background: #0284c7;
+        }
+
+        .btn-sub {
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid #e2e8f0;
+            color: var(--text-main);
+        }
+
+        .btn-sub:hover {
+            background: white;
+            border-color: var(--sky-accent);
+        }
+
+        #msg {
+            min-height: 1em;
+            margin-top: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--sky-accent);
+        }
+
+        @media(max-width:480px) {
+            .card {
+                padding: 32px 24px;
+                border-radius: 20px;
+            }
+            .actions {
+                flex-direction: column;
+            }
+            h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h1>UUID v4</h1>
+    <p class="sub">RFC 4122</p>
+
+    <div class="uuid-viewer" id="output">...</div>
+
+    <div class="actions">
+        <button class="btn-main" onclick="generate()">Generate</button>
+        <button class="btn-sub" onclick="copy()">Copy</button>
+    </div>
+
+    <p id="msg"></p>
+</div>
+
+<script>
+    const STORAGE_KEY = "xp_uuid_v4_last";
+
+    function getUUIDv4() {
+        // crypto.randomUUID() は安全な乱数に基づいて UUID v4 を生成します。
+        // https://developer.mozilla.org/ja/docs/Web/API/Crypto/randomUUID
+        return crypto.randomUUID();
+    }
+
+    function showMsg(txt) {
+        const m = document.getElementById("msg");
+        m.innerText = txt;
+        setTimeout(() => { m.innerText = ""; }, 2000);
+    }
+
+    function generate() {
+        const id = getUUIDv4();
+        document.getElementById("output").innerText = id;
+
+        if (typeof localStorage !== "undefined") {
+            localStorage.setItem(STORAGE_KEY, id);
+        }
+        showMsg("New UUID v4 Generated");
+    }
+
+    function copy() {
+        const text = document.getElementById("output").innerText;
+
+        if (navigator.clipboard?.writeText) {
+            navigator.clipboard.writeText(text)
+                .then(() => showMsg("Copied to clipboard!"));
+            return;
+        }
+
+        const area = document.createElement("textarea");
+        area.value = text;
+        document.body.appendChild(area);
+        area.select();
+
+        try {
+            document.execCommand("copy");
+            showMsg("Copied!");
+        } catch {
+            showMsg("Copy failed");
+        }
+
+        document.body.removeChild(area);
+    }
+
+    window.onload = function() {
+        if (typeof localStorage !== "undefined") {
+            const last = localStorage.getItem(STORAGE_KEY);
+            if (last) {
+                document.getElementById("output").innerText = last;
+                return;
+            }
+        }
+        generate();
+    };
+</script>
+
+</body>
+</html>
