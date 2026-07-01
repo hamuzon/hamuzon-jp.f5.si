@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UUID Generator</title>
+    <title>UUID Generator / UUIDジェネレーター</title>
 
     <style>
         :root {
@@ -55,11 +55,21 @@
             font-size: 2.2rem;
             font-weight: 800;
             letter-spacing: -0.02em;
+            line-height: 1.3;
         }
 
         .sub {
             color: var(--text-sub);
             margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .jp {
+            display: block;
+            margin-top: 6px;
+            font-size: 0.7em;
+            font-weight: 500;
+            opacity: 0.85;
         }
 
         .actions {
@@ -71,27 +81,22 @@
         .btn {
             display: block;
             padding: 16px 24px;
-            border: none;
             border-radius: 100px;
-            font-size: 1rem;
-            font-weight: 600;
-            text-decoration: none;
-            transition: 0.3s ease;
-            cursor: pointer;
-        }
-
-        .btn-main {
             background: var(--sky-accent);
             color: #fff;
-            box-shadow: 0 8px 20px rgba(14, 165, 233, 0.3);
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: .3s ease;
+            box-shadow: 0 8px 20px rgba(14,165,233,.3);
         }
 
-        .btn-main:hover {
+        .btn:hover {
             transform: translateY(-2px);
             background: #0284c7;
         }
 
-        @media (max-width: 480px) {
+        @media (max-width:480px) {
             .card {
                 padding: 32px 20px;
                 border-radius: 20px;
@@ -110,43 +115,21 @@
 <body>
 
 <div class="card">
-    <h1 id="page-title">UUID Generator</h1>
-    <p class="sub" id="page-subtitle">Choose a version to generate.</p>
+    <h1>
+        UUID Generator
+        <span class="jp">UUIDジェネレーター</span>
+    </h1>
+
+    <p class="sub">
+        Choose a version to generate.
+        <span class="jp">生成するバージョンを選択してください。</span>
+    </p>
 
     <div class="actions">
-        <a href="UUIDV4.html" class="btn btn-main">UUID v4</a>
-        <a href="UUIDV7.html" class="btn btn-main">UUID v7</a>
+        <a href="UUIDV4.html" class="btn">UUID v4</a>
+        <a href="UUIDV7.html" class="btn">UUID v7</a>
     </div>
 </div>
-
-<script>
-const translations = {
-    en: {
-        title: "UUID Generator",
-        pageTitle: "UUID Generator",
-        pageSubtitle: "Choose a version to generate."
-    },
-    ja: {
-        title: "UUIDジェネレーター",
-        pageTitle: "UUIDジェネレーター",
-        pageSubtitle: "生成するバージョンを選択してください。"
-    }
-};
-
-function setLanguage() {
-    const userLang = navigator.language || navigator.userLanguage;
-    const lang = userLang.toLowerCase().startsWith("ja") ? "ja" : "en";
-
-    const t = translations[lang];
-
-    document.documentElement.lang = lang;
-    document.title = t.title;
-    document.getElementById("page-title").textContent = t.pageTitle;
-    document.getElementById("page-subtitle").textContent = t.pageSubtitle;
-}
-
-document.addEventListener("DOMContentLoaded", setLanguage);
-</script>
 
 </body>
 </html>
