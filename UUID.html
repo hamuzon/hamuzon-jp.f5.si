@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UUID Generator</title>
+    <style>
+        :root {
+            --sky-bg: #bae6fd;
+            --sky-accent: #0ea5e9;
+            --glass-white: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.4);
+            --text-main: #0c4a6e;
+            --text-sub: #334155;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+ 
+        body {
+            margin: 0;
+            padding: 24px;
+            font-family: system-ui, sans-serif;
+            background: var(--sky-bg);
+            background-image:
+                radial-gradient(at 0% 0%, #e0f2fe 0%, transparent 50%),
+                radial-gradient(at 100% 0%, #7dd3fc 0%, transparent 50%),
+                radial-gradient(at 50% 100%, #38bdf8 0%, transparent 50%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--text-main);
+        }
+
+        .card {
+            width: 100%;
+            max-width: 520px;
+            padding: 40px;
+            background: var(--glass-white);
+            border: 1px solid var(--glass-border);
+            border-radius: 32px;
+            -webkit-backdrop-filter: blur(16px);
+            backdrop-filter: blur(16px);
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(12, 74, 110, 0.1);
+        }
+
+        h1 {
+            margin: 0 0 12px 0;
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        .sub {
+            color: var(--text-sub);
+            margin-bottom: 40px;
+        }
+
+        .actions {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .btn {
+            display: block;
+            padding: 16px 24px;
+            border: none;
+            border-radius: 100px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: 0.3s ease;
+            cursor: pointer;
+        }
+
+        .btn-main {
+            background: var(--sky-accent);
+            color: white;
+            box-shadow: 0 8px 20px rgba(14, 165, 233, 0.3);
+        }
+
+        .btn-main:hover {
+            transform: translateY(-2px);
+            background: #0284c7;
+        }
+
+        @media(max-width:480px) {
+            .card {
+                padding: 32px 20px;
+                border-radius: 20px;
+            }
+            h1 {
+                font-size: 1.8rem;
+            }
+            .sub {
+                margin-bottom: 32px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h1 id="page-title">UUID Generator</h1>
+    <p class="sub" id="page-subtitle">Choose a version to generate.</p>
+
+    <div class="actions">
+        <a href="UUIDV4.html" class="btn btn-main">
+            UUID v4
+        </a>
+        <a href="UUIDV7.html" class="btn btn-main">
+            UUID v7
+        </a>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const translations = {
+            ja: {
+                title: "UUIDジェネレーター",
+                pageTitle: "UUIDジェネレーター",
+                pageSubtitle: "生成するバージョンを選択してください。"
+            },
+        };
+
+        const setLanguage = () => {
+            const userLang = navigator.language || navigator.userLanguage;
+            const lang = userLang.startsWith('ja') ? 'ja' : 'en';
+
+            const t = translations[lang];
+            if (!t) return;
+
+            document.documentElement.lang = lang;
+            document.title = t.title;
+            document.getElementById('page-title').textContent = t.pageTitle;
+            document.getElementById('page-subtitle').textContent = t.pageSubtitle;
+        };
+
+        setLanguage();
+    });
+</script>
+
+</body>
+</html>
