@@ -3,8 +3,7 @@
   { "title": "🐱 Scratch user @hamuzon", "url": "https://scratch.mit.edu/users/hamuzon/", "target": "_blank" },
   { "title": "🕰️ TimeZone - Hamuzon", "url": "/Time-Zone_app/" },
   { "title": "⏳ Expo Countdown⏰️", "url": "https://expo.hamuzon-jp.f5.si/" },
-  { "title": "⏰ 時計 / Clock", "url": "/clock/" },
-  { "title": "⏰ 時計V2 / Clock V2 ", "url": "/clock-app/" },
+  { "title": "⏰ 時計 / Clock ", "url": "/clock-app/" },
   { "title": "🔢 Binary⇔Decimal Converter", "url": "/bin2dec/" },
   { "title": "🔢 Binary⇔Decimal Converter-old", "url": "/bin2dec/old/" },
   { "title": "🔍 Text Enlarger📝", "url": "/text/" },
@@ -27,6 +26,4 @@
   { "title": "📹️Video　Player Tool HUB　⏯️", "url": "https://video-hub.hamuzon-jp.f5.si/" },
   { "title": "🏟️ Olympic Countdown / オリンピック関連カウントダウン 🎖️", "url": "https://olympic-countdown.hamuzon-jp.f5.si/" },
   {"title":"世界中たぶん対応時間対応時計 / World Time Clock (likely supports global time zones)","url":"https://world-time.hamuzon-jp.f5.si/"}
-
-
 ]
