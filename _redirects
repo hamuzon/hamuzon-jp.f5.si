@@ -55,6 +55,7 @@
 /art                /pixel-art 301
 /art/*              /pixel-art/:splat 301
 
+
 # ===== Tanzaku (Wish) =====
 /wish               /tanzaku 301
 /wish/              /tanzaku 301
@@ -65,6 +66,11 @@
 
 # ===== QR Code =====
 /QR/*               /qr/:splat 301
+
+# ===== Clock =====
+/clock            /clock-app 301
+/clock/           /clock-app 301
+/clock/*          /clock-app/:splat 301
 
 # ===== internal link =====
 /index.html     /        301
