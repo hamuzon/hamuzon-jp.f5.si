@@ -71,6 +71,9 @@
 /clock            /clock-app 301
 /clock/           /clock-app 301
 /clock/*          /clock-app/:splat 301
+/clockapp      /clock-app      301
+/clockapp/     /clock-app      301
+/clockapp/*    /clock-app/:splat 301
 
 # ===== internal link =====
 /index.html     /        301
