@@ -181,8 +181,8 @@ postBtn.onclick = () => {
   postText += `🌟${wish}🌟
 🎋願いごと / Wish🎋
 
-https://hamuzon.web.fc2.com/wish
-https://hamuzon.web.fc2.com/wish-2026
+https://hamuzon-jp.f5.si/wish
+https://hamuzon-jp.f5.si/wish-2026
 
 #七夕 #Tanabata #StarFestival #Tanzaku`;
 
