@@ -7,14 +7,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>短冊画像プレビュー 2026 / Tanzaku Image Preview</title>
   <meta name="description" content="七夕短冊メーカーで作成された短冊の画像です。/ This is an image of a tanzaku created with the Tanzaku Maker.">
-  <link rel="canonical" href="https://hamuzon-jp.f5.si/tanzaku/2026/image.html">
+  <link rel="canonical" href="https://hamuzon-jp.f5.si/tanzaku/2026/image.html" />
 
   <!-- OGP -->
   <meta property="og:title" content="七夕短冊 2026 / Tanzaku 2026">
-  <meta property="og:description" content="七夕短冊メーカーで作成された短冊の画像です。/ This is an image of a tanzaku created with the Tanzaku Maker.">
+  <meta property="og:description" content="願い事を書いた短冊の画像プレビューです。画像を保存してシェアしましょう！ / This is a preview of the tanzaku image with your wish. Save and share it!">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://hamuzon-jp.f5.si/tanzaku/2026/image.html">
-  <meta property="og:image" content="https://hamuzon-jp.f5.si/tanzaku/2026/ogp.png">
+  <meta property="og:image" content="https://hamuzon-jp.f5.si/tanzaku/2026/image-ogp.png">
   <meta property="og:site_name" content="七夕短冊メーカー 2026">
 
   <!-- Twitter Card -->
@@ -250,7 +250,7 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script>
-    window.addEventListener('DOMContentLoaded', () => {
+    window.addEventListener('DOMContentLoaded', async () => {
       const params = new URLSearchParams(window.location.search);
       const wish = params.get('w') || params.get('wish');
       const name = params.get('n') || params.get('name') || '';
@@ -266,41 +266,40 @@
       const renderTarget = document.getElementById('render-target');
       renderTarget.appendChild(imgTanzaku);
 
-      setTimeout(() => {
-        htmlToImage.toPng(imgTanzaku, {
+      try {
+        const canvas = await html2canvas(imgTanzaku, {
           backgroundColor: null,
           pixelRatio: 2
-        })
-          .then(dataUrl => {
-            const img = document.createElement('img');
-            img.src = dataUrl;
-            img.className = 'tanzaku-img';
-            img.alt = 'Tanzaku';
+        });
+        const dataUrl = canvas.toDataURL('image/png');
 
-            const dlLink = document.createElement('a');
-            dlLink.href = dataUrl;
-            dlLink.download = generateFilename(color);
-            dlLink.className = 'action-btn';
-            dlLink.textContent = '💾 画像を保存 / Download';
+        const img = document.createElement('img');
+        img.src = dataUrl;
+        img.className = 'tanzaku-img';
+        img.alt = 'Tanzaku';
 
-            const imageWrapper = document.getElementById('imageWrapper');
-            imageWrapper.appendChild(img);
+        const dlLink = document.createElement('a');
+        dlLink.href = dataUrl;
+        dlLink.download = generateFilename(color);
+        dlLink.className = 'action-btn';
+        dlLink.textContent = '💾 画像を保存 / Download';
 
-            const btnRow = document.createElement('div');
-            btnRow.style.cssText = 'display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin: 12px 0;';
-            btnRow.appendChild(dlLink);
-            imageWrapper.after(btnRow);
+        const imageWrapper = document.getElementById('imageWrapper');
+        imageWrapper.appendChild(img);
 
-            document.getElementById('loadingArea').classList.add('hidden');
-            document.getElementById('resultArea').classList.remove('hidden');
+        const btnRow = document.createElement('div');
+        btnRow.style.cssText = 'display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin: 12px 0;';
+        btnRow.appendChild(dlLink);
+        imageWrapper.after(btnRow);
 
-            renderTarget.removeChild(imgTanzaku);
-          })
-          .catch(err => {
-            console.error(err);
-            renderTarget.removeChild(imgTanzaku);
-          });
-      }, 500);
+        document.getElementById('loadingArea').classList.add('hidden');
+        document.getElementById('resultArea').classList.remove('hidden');
+      } catch (err) {
+        console.error('Image generation failed:', err);
+        // TODO: エラー発生時のUI表示を実装
+      } finally {
+        renderTarget.removeChild(imgTanzaku);
+      }
     });
 
     // ファイル名生成
