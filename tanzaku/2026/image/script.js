@@ -9,7 +9,9 @@ window.addEventListener('DOMContentLoaded', async () => {
   const errorArea = document.getElementById('errorArea');
   const renderTarget = document.getElementById('render-target');
 
-  if (!wish?.trim()) {
+  const imageWrapper = document.getElementById('imageWrapper');
+
+  if (!wish || !wish.trim()) {
     loadingArea.classList.add('hidden');
     errorArea.classList.remove('hidden');
     return;
@@ -24,24 +26,28 @@ window.addEventListener('DOMContentLoaded', async () => {
   renderTarget.appendChild(imgTanzaku);
 
   try {
-
     await new Promise(requestAnimationFrame);
     await new Promise(requestAnimationFrame);
-    await new Promise(resolve => setTimeout(resolve, 80));
+    await new Promise(r => setTimeout(r, 150));
 
     if (document.fonts?.ready) {
       await document.fonts.ready;
     }
 
+    const rect = imgTanzaku.getBoundingClientRect();
+    if (rect.width === 0 || rect.height === 0) {
+      throw new Error('Element has zero size');
+    }
 
     const canvas = await Promise.race([
       html2canvas(imgTanzaku, {
         backgroundColor: null,
-        scale: 1,
-        useCORS: true
+        scale: window.devicePixelRatio || 2,
+        useCORS: true,
+        allowTaint: true
       }),
       new Promise((_, reject) =>
-        setTimeout(() => reject(new Error('html2canvas timeout')), 10000)
+        setTimeout(() => reject(new Error('html2canvas timeout')), 15000)
       )
     ]);
 
@@ -58,7 +64,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     dlLink.className = 'action-btn';
     dlLink.textContent = '💾 画像を保存 / Download';
 
-    const imageWrapper = document.getElementById('imageWrapper');
+    imageWrapper.innerHTML = '';
     imageWrapper.appendChild(img);
 
     const btnRow = document.createElement('div');
@@ -78,14 +84,12 @@ window.addEventListener('DOMContentLoaded', async () => {
     errorArea.classList.remove('hidden');
 
   } finally {
-    if (renderTarget && imgTanzaku && renderTarget.contains(imgTanzaku)) {
+    if (renderTarget && renderTarget.contains(imgTanzaku)) {
       renderTarget.removeChild(imgTanzaku);
     }
   }
 });
 
-
-// ファイル名生成
 function generateFilename(color) {
   const now = new Date();
   const yyyy = now.getFullYear();
@@ -98,8 +102,6 @@ function generateFilename(color) {
   return `wish-2026_${color}_${yyyy}-${mm}-${dd}-${hh}-${mi}-${ss}.png`;
 }
 
-
-// 短冊生成
 function createImageTanzaku(wish, name, color) {
   const colorStyles = {
     red: {
@@ -156,7 +158,6 @@ function createImageTanzaku(wish, name, color) {
     overflow: "hidden"
   });
 
-  // 名前
   if (name) {
     const nameP = document.createElement('p');
     Object.assign(nameP.style, {
@@ -168,13 +169,11 @@ function createImageTanzaku(wish, name, color) {
     wrapper.appendChild(nameP);
   }
 
-  // 願い
   const wishP = document.createElement('p');
   wishP.style.margin = "0";
   wishP.textContent = `🌟${wish}🌟`;
   wrapper.appendChild(wishP);
 
-  // フッター
   const footerP = document.createElement('p');
   Object.assign(footerP.style, {
     margin: "12px 0 0 0",
