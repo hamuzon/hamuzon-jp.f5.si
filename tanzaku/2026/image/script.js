@@ -24,14 +24,20 @@ window.addEventListener('DOMContentLoaded', async () => {
   renderTarget.appendChild(imgTanzaku);
 
   try {
-    await document.fonts.ready;
+
     await new Promise(requestAnimationFrame);
     await new Promise(requestAnimationFrame);
+    await new Promise(resolve => setTimeout(resolve, 80));
+
+    if (document.fonts?.ready) {
+      await document.fonts.ready;
+    }
+
 
     const canvas = await Promise.race([
       html2canvas(imgTanzaku, {
         backgroundColor: null,
-        scale: 2,
+        scale: 1,
         useCORS: true
       }),
       new Promise((_, reject) =>
