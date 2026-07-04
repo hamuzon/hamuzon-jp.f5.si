@@ -1,15 +1,14 @@
 <!DOCTYPE html>
 <html lang="ja">
-
 <head>
 
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>短冊画像プレビュー 2026 / Tanzaku Image Preview</title>
+
   <meta name="description" content="七夕短冊メーカーで作成された短冊の画像です。/ This is an image of a tanzaku created with the Tanzaku Maker.">
   <link rel="canonical" href="https://hamuzon-jp.f5.si/tanzaku/2026/image.html" />
 
-  <!-- OGP -->
   <meta property="og:title" content="七夕短冊 2026 / Tanzaku 2026">
   <meta property="og:description" content="願い事を書いた短冊の画像プレビューです。画像を保存してシェアしましょう！ / This is a preview of the tanzaku image with your wish. Save and share it!">
   <meta property="og:type" content="website">
@@ -17,15 +16,14 @@
   <meta property="og:image" content="https://hamuzon-jp.f5.si/tanzaku/2026/image-ogp.png">
   <meta property="og:site_name" content="七夕短冊メーカー 2026">
 
-  <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
 
   <link rel="stylesheet" href="/tanzaku/2026/image/style.css" />
   <link rel="icon" href="icon.svg" type="image/svg+xml" />
 
 </head>
-<body>
 
+<body>
 
   <header>
     🎋 七夕短冊 2026 / Tanzaku 2026 🎋
@@ -33,6 +31,7 @@
 
   <div class="container">
     <div class="image-container">
+
       <div id="loadingArea">
         <div class="loading-spinner"></div>
         <p>短冊の画像を生成しています...🌟<br>Generating tanzaku image...</p>
@@ -40,29 +39,46 @@
 
       <div id="resultArea" class="hidden">
         <div id="imageWrapper"></div>
-        <p class="instruction">💡 この画像を保存して願い事をシェアしましょう！<br>Save this image and share your wish!</p>
+        <p class="instruction">
+          💡 この画像を保存して願い事をシェアしましょう！<br>
+          Save this image and share your wish!
+        </p>
         <a href="index.html" class="action-btn">🎋 自分も短冊を作る / Create Yours</a>
       </div>
 
       <div id="errorArea" class="hidden">
         <p class="error-message">⚠️ 内容が指定されていません</p>
-        <p>URLにパラメータを指定して画像を作成できます：<br><code>?w=願い事&amp;n=名前&amp;c=blue</code></p>
+        <p>
+          URLにパラメータを指定して画像を作成できます：<br>
+          <code>?w=願い事&amp;n=名前&amp;c=blue</code>
+        </p>
+
         <hr class="error-hr">
+
         <p class="error-details">
-          <strong>🎨 色の指定 (color / c):</strong><br>red (赤), blue (青), yellow (黄), green (緑), purple (紫)
-        </p><br>
+          <strong>🎨 色の指定:</strong><br>
+          red / blue / yellow / green / purple
+        </p>
+
+        <br>
+
         <a href="index.html" class="action-btn">🎋 短冊メーカーに戻る / Go Back</a>
       </div>
+
     </div>
   </div>
 
   <div id="render-target"></div>
 
   <footer>
-    &copy; 2026 <a href="https://hamuzon-jp.f5.si/" target="_blank" rel="noopener noreferrer">@hamuzon</a>
+    &copy; 2026
+    <a href="https://hamuzon-jp.f5.si/" target="_blank" rel="noopener noreferrer">
+      @hamuzon
+    </a>
   </footer>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="/tanzaku/2026/image/script.js"></script>
-</body>
 
+</body>
 </html>
