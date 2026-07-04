@@ -72,7 +72,6 @@ window.addEventListener('DOMContentLoaded', async () => {
     errorArea.classList.remove('hidden');
 
   } finally {
-    // ★安全削除（null対策）
     if (renderTarget && imgTanzaku && renderTarget.contains(imgTanzaku)) {
       renderTarget.removeChild(imgTanzaku);
     }
