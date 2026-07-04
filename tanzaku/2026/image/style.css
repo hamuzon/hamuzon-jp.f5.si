@@ -13,7 +13,7 @@ body {
 }
 
 header {
-  margin: 1rem 0 1.5rem;
+  margin: 1rem 0 1.5rem 0;
   font-size: 1.5rem;
   font-weight: bold;
   text-align: center;
@@ -27,8 +27,8 @@ header {
   padding: 1.5rem;
   width: 90vw;
   max-width: 500px;
+  box-shadow: 0 0 20px rgba(249, 200, 70, 0.3);
   text-align: center;
-  box-shadow: 0 0 20px rgba(249, 200, 70, 0.25);
 }
 
 .action-btn {
@@ -40,13 +40,13 @@ header {
   text-decoration: none;
   border-radius: 8px;
   font-weight: bold;
-  box-shadow: 0 0 10px rgba(249, 200, 70, 0.6);
+  box-shadow: 0 0 10px #f9c846;
   transition: background 0.2s, box-shadow 0.2s;
 }
 
 .action-btn:hover {
   background: #d4a72c;
-  box-shadow: 0 0 16px rgba(212, 167, 44, 0.8);
+  box-shadow: 0 0 16px #d4a72c;
 }
 
 .instruction {
@@ -59,21 +59,22 @@ header {
   width: 40px;
   height: 40px;
   margin: 20px auto;
-  border: 4px solid rgba(255, 255, 255, 0.25);
+  border: 4px solid rgba(255,255,255,0.3);
   border-top: 4px solid #f9c846;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 footer {
   margin-top: auto;
   padding: 20px 0;
   font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255,255,255,0.5);
 }
 
 footer a {
@@ -92,15 +93,12 @@ footer a:hover {
   display: block;
   margin: 0 auto;
   border-radius: 8px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
 }
 
 .gtm-iframe {
-  display: none !important;
-  visibility: hidden !important;
-  height: 0 !important;
-  width: 0 !important;
-  pointer-events: none;
+  display: none;
+  visibility: hidden;
 }
 
 .error-hr {
@@ -128,12 +126,6 @@ footer a:hover {
 }
 
 #render-target {
-  position: fixed;
-  left: -99999px;
-  top: -99999px;
-  width: 0;
-  height: 0;
-  overflow: hidden;
-  opacity: 0;
-  pointer-events: none;
+  position: absolute;
+  left: -9999px;
 }
