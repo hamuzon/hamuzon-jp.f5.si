@@ -4,16 +4,9 @@ window.addEventListener('DOMContentLoaded', async () => {
   const name = params.get('n') || params.get('name') || '';
   const color = params.get('c') || params.get('color') || 'red';
 
-  const loadingArea = document.getElementById('loadingArea');
-  const resultArea = document.getElementById('resultArea');
-  const errorArea = document.getElementById('errorArea');
-  const renderTarget = document.getElementById('render-target');
-
-  const imageWrapper = document.getElementById('imageWrapper');
-
-  if (!wish || !wish.trim()) {
-    loadingArea.classList.add('hidden');
-    errorArea.classList.remove('hidden');
+  if (!wish?.trim()) {
+    document.getElementById('loadingArea').classList.add('hidden');
+    document.getElementById('errorArea').classList.remove('hidden');
     return;
   }
 
@@ -23,33 +16,15 @@ window.addEventListener('DOMContentLoaded', async () => {
     color
   );
 
+  const renderTarget = document.getElementById('render-target');
   renderTarget.appendChild(imgTanzaku);
 
   try {
-    await new Promise(requestAnimationFrame);
-    await new Promise(requestAnimationFrame);
-    await new Promise(r => setTimeout(r, 150));
-
-    if (document.fonts?.ready) {
-      await document.fonts.ready;
-    }
-
-    const rect = imgTanzaku.getBoundingClientRect();
-    if (rect.width === 0 || rect.height === 0) {
-      throw new Error('Element has zero size');
-    }
-
-    const canvas = await Promise.race([
-      html2canvas(imgTanzaku, {
-        backgroundColor: null,
-        scale: window.devicePixelRatio || 2,
-        useCORS: true,
-        allowTaint: true
-      }),
-      new Promise((_, reject) =>
-        setTimeout(() => reject(new Error('html2canvas timeout')), 15000)
-      )
-    ]);
+    const canvas = await html2canvas(imgTanzaku, {
+      backgroundColor: null,
+      scale: 2,
+      useCORS: true
+    });
 
     const dataUrl = canvas.toDataURL('image/png');
 
@@ -64,7 +39,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     dlLink.className = 'action-btn';
     dlLink.textContent = '💾 画像を保存 / Download';
 
-    imageWrapper.innerHTML = '';
+    const imageWrapper = document.getElementById('imageWrapper');
     imageWrapper.appendChild(img);
 
     const btnRow = document.createElement('div');
@@ -74,22 +49,18 @@ window.addEventListener('DOMContentLoaded', async () => {
     btnRow.appendChild(dlLink);
     imageWrapper.after(btnRow);
 
-    loadingArea.classList.add('hidden');
-    resultArea.classList.remove('hidden');
+    document.getElementById('loadingArea').classList.add('hidden');
+    document.getElementById('resultArea').classList.remove('hidden');
 
   } catch (err) {
     console.error('Image generation failed:', err);
-
-    loadingArea.classList.add('hidden');
-    errorArea.classList.remove('hidden');
-
   } finally {
-    if (renderTarget && renderTarget.contains(imgTanzaku)) {
-      renderTarget.removeChild(imgTanzaku);
-    }
+    renderTarget.removeChild(imgTanzaku);
   }
 });
 
+
+// ファイル名生成
 function generateFilename(color) {
   const now = new Date();
   const yyyy = now.getFullYear();
@@ -99,8 +70,10 @@ function generateFilename(color) {
   const mi = String(now.getMinutes()).padStart(2, '0');
   const ss = String(now.getSeconds()).padStart(2, '0');
 
-  return `wish-2026_${color}_${yyyy}-${mm}-${dd}-${hh}-${mi}-${ss}.png`;
+  return `wish-2026_${color}_${yyyy}-${mm}_${dd}-${hh}-${mi}-${ss}.png`;
 }
+
+
 
 function createImageTanzaku(wish, name, color) {
   const colorStyles = {
@@ -158,6 +131,7 @@ function createImageTanzaku(wish, name, color) {
     overflow: "hidden"
   });
 
+  // 名前
   if (name) {
     const nameP = document.createElement('p');
     Object.assign(nameP.style, {
@@ -169,11 +143,13 @@ function createImageTanzaku(wish, name, color) {
     wrapper.appendChild(nameP);
   }
 
+  // 願い
   const wishP = document.createElement('p');
   wishP.style.margin = "0";
   wishP.textContent = `🌟${wish}🌟`;
   wrapper.appendChild(wishP);
 
+  // フッター
   const footerP = document.createElement('p');
   Object.assign(footerP.style, {
     margin: "12px 0 0 0",
