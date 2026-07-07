@@ -8,7 +8,6 @@ const colorSelect = document.getElementById('colorSelect');
 const saveBtn = document.getElementById('saveBtn');
 const postBtn = document.getElementById('postBtn');
 
-// 特殊文字エスケープ
 function escapeHtml(text) {
   const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
   return text.replace(/[&<>"']/g, m => map[m]);
