@@ -182,7 +182,7 @@ postBtn.onclick = () => {
 https://hamuzon-jp.f5.si/wish
 https://hamuzon-jp.f5.si/wish-2026
 
-#七夕 #Tanabata #StarFestival #Tanzaku`;
+#七夕短冊メーカー2026 #七夕 #Tanabata #StarFestival #Tanzaku`;
 
   // エンコード
   const postUrl = encodeURIComponent(postText);
