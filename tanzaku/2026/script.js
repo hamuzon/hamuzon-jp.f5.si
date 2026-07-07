@@ -141,8 +141,7 @@ saveBtn.onclick = () => {
   const name = ownWrapper.dataset.name || '';
   const color = ownWrapper.dataset.color || 'red';
   const imgTanzaku = createImageTanzaku(wish, name, color);
-
-  // 画面外に配置してレンダリング
+
   imgTanzaku.style.position = 'fixed';
   imgTanzaku.style.left = '-9999px';
   imgTanzaku.style.top = '0';
