@@ -1,9 +1,13 @@
 [
+  {
+    "title": "🏠 hamusata.f5.si - メインサイト / Main Site",
+    "url": "https://hamusata.f5.si/"
+  },
   { "title": "🐱 Scratch user @hamusata", "url": "https://scratch.mit.edu/users/hamusata/", "target": "_blank" },
   { "title": "🐱 Scratch user @hamuzon", "url": "https://scratch.mit.edu/users/hamuzon/", "target": "_blank" },
   { "title": "🕰️ TimeZone - Hamuzon", "url": "/Time-Zone_app/" },
   { "title": "⏳ Expo Countdown⏰️", "url": "https://expo.hamuzon-jp.f5.si/" },
-  { "title": "⏰ 時計 / Clock ", "url": "/clock-app/" },
+  { "title": "⏰ 時計 / Clock", "url": "/clock-app/" },
   { "title": "🔢 Binary⇔Decimal Converter", "url": "/bin2dec/" },
   { "title": "🔢 Binary⇔Decimal Converter-old", "url": "/bin2dec/old/" },
   { "title": "🔍 Text Enlarger📝", "url": "/text/" },
@@ -18,12 +22,12 @@
   { "title": "🔳 QR 🔗", "url": "/qr/" },
   { "title": "🎲 サイコロ 🎯", "url": "/dice/" },
   { "title": "🍀 おみくじ 🔮", "url": "/omikuji/" },
-  { "title": "🔑 Password Generator App 🗝️ (apiversion)", "url": "/passapi/" },
+  { "title": "🔑 Password Generator App 🗝️ (API Version)", "url": "/passapi/" },
   { "title": "📱 Discord Tools 🖥️", "url": "/discord-tools/" },
   { "title": "🔢 分数メーカー / Fraction Maker 🧮", "url": "/fraction/" },
-  { "title": "🎨 ピクセル アート / Pixel Art 🖌️", "url": "/pixel-art/" },
+  { "title": "🎨 ピクセルアート / Pixel Art 🖌️", "url": "/pixel-art/" },
   { "title": "📝 ファイルエディター / File Editor 📁", "url": "/editor/" },
-  { "title": "📹️Video　Player Tool HUB　⏯️", "url": "https://video-hub.hamuzon-jp.f5.si/" },
+  { "title": "📹 Video Player Tool HUB ⏯️", "url": "https://video-hub.hamuzon-jp.f5.si/" },
   { "title": "🏟️ Olympic Countdown / オリンピック関連カウントダウン 🎖️", "url": "https://olympic-countdown.hamuzon-jp.f5.si/" },
-  {"title":"世界中たぶん対応時間対応時計 / World Time Clock (likely supports global time zones)","url":"https://world-time.hamuzon-jp.f5.si/"}
+  { "title": "🌍 世界時計 / World Time Clock", "url": "https://world-time.hamuzon-jp.f5.si/" }
 ]
