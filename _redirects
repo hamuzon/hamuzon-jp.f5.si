@@ -1,119 +1,127 @@
 # ===== Device Info =====
 
-/d             https://device-info.hamuzon-jp.f5.si/                     301
-/d-1           https://device-info.hamuzon-jp.f5.si/                     301
-/device        https://device-info.hamuzon-jp.f5.si/                     301
-/device-info   https://device-info.hamuzon-jp.f5.si/                     301
+/d             https://device-info.hamuzon-jp.f5.si/                      301
+/d-1           https://device-info.hamuzon-jp.f5.si/                      301
+/device        https://device-info.hamuzon-jp.f5.si/                      301
+/device-info   https://device-info.hamuzon-jp.f5.si/                      301
 
 
 # ===== Discord Tools =====
 
-/discord                    /discord-tools                              301
-/discord/                   /discord-tools                              301
-/discord/*                 /discord-tools/:splat                        301
+/discord                     /discord-tools                               301
+/discord/                    /discord-tools                               301
+/discord/*                   /discord-tools/:splat                        301
 
-/discord-tool               /discord-tools                              301
-/discord-tool/              /discord-tools                              301
-/discord-tool/*             /discord-tools/:splat                       301
+/discord-tool                /discord-tools                               301
+/discord-tool/               /discord-tools                               301
+/discord-tool/*              /discord-tools/:splat                        301
 
-/discord-tools/README.md    /discord-tools                              301
+/discord-tools/README.md     /discord-tools                               301
 
 
 # ===== External Subdomains =====
 
-/birthday                   https://birthday.hamuzon-jp.f5.si            301
-/birthday/                  https://birthday.hamuzon-jp.f5.si            301
-/birthday/*                 https://birthday.hamuzon-jp.f5.si/:splat      301
+## Birthday
 
-/calendar                   https://calendar.hamuzon-jp.f5.si            301
-/calendar/                  https://calendar.hamuzon-jp.f5.si            301
-/calendar/*                 https://calendar.hamuzon-jp.f5.si/:splat      301
+/birthday                    https://birthday.hamuzon-jp.f5.si            301
+/birthday/                   https://birthday.hamuzon-jp.f5.si            301
+/birthday/*                  https://birthday.hamuzon-jp.f5.si/:splat     301
 
-/expo                       https://expo.hamuzon-jp.f5.si                301
-/expo/                      https://expo.hamuzon-jp.f5.si                301
-/expo/*                     https://expo.hamuzon-jp.f5.si/:splat          301
+## Calendar
+
+/calendar                    https://calendar.hamuzon-jp.f5.si            301
+/calendar/                   https://calendar.hamuzon-jp.f5.si            301
+/calendar/*                  https://calendar.hamuzon-jp.f5.si/:splat     301
+
+## Expo
+
+/expo                        https://expo.hamuzon-jp.f5.si                301
+/expo/                       https://expo.hamuzon-jp.f5.si                301
+/expo/*                      https://expo.hamuzon-jp.f5.si/:splat         301
 
 
 # ===== Expo 2025 Counter =====
 
-/expo2025-counter           https://expo.hamuzon-jp.f5.si                301
-/expo2025-counter/          https://expo.hamuzon-jp.f5.si                301
-/expo2025-counter/*         https://expo.hamuzon-jp.f5.si/:splat          301
+/expo2025-counter            https://expo.hamuzon-jp.f5.si                301
+/expo2025-counter/           https://expo.hamuzon-jp.f5.si                301
+/expo2025-counter/*          https://expo.hamuzon-jp.f5.si/:splat         301
 
-/expo2025                   https://expo.hamuzon-jp.f5.si                301
-/expo2025/*                 https://expo.hamuzon-jp.f5.si/:splat          301
+/expo2025                    https://expo.hamuzon-jp.f5.si                301
+/expo2025/*                  https://expo.hamuzon-jp.f5.si/:splat         301
 
 
 # ===== Video Hub =====
 
-/video-hub                  https://video-hub.hamuzon-jp.f5.si            301
-/video-hub/                 https://video-hub.hamuzon-jp.f5.si            301
-/video-hub/*                https://video-hub.hamuzon-jp.f5.si/:splat      301
+/video-hub                   https://video-hub.hamuzon-jp.f5.si           301
+/video-hub/                  https://video-hub.hamuzon-jp.f5.si           301
+/video-hub/*                 https://video-hub.hamuzon-jp.f5.si/:splat    301
 
 
 # ===== Olympic Countdown =====
 
-/olympic                    https://olympic-countdown.hamuzon-jp.f5.si    301
-/olympic/                   https://olympic-countdown.hamuzon-jp.f5.si    301
-/olympic/*                  https://olympic-countdown.hamuzon-jp.f5.si/:splat 301
+/olympic                     https://olympic-countdown.hamuzon-jp.f5.si   301
+/olympic/                    https://olympic-countdown.hamuzon-jp.f5.si   301
+/olympic/*                   https://olympic-countdown.hamuzon-jp.f5.si/:splat 301
 
-/olympic-countdown          https://olympic-countdown.hamuzon-jp.f5.si    301
-/olympic-countdown/         https://olympic-countdown.hamuzon-jp.f5.si    301
-/olympic-countdown/*        https://olympic-countdown.hamuzon-jp.f5.si/:splat 301
+/olympic-countdown           https://olympic-countdown.hamuzon-jp.f5.si   301
+/olympic-countdown/          https://olympic-countdown.hamuzon-jp.f5.si   301
+/olympic-countdown/*         https://olympic-countdown.hamuzon-jp.f5.si/:splat 301
 
 
 # ===== Pixel Art =====
 
-/pixel                      /pixel-art                                  301
-/pixel/*                    /pixel-art/:splat                            301
+/pixel                       /pixel-art                                   301
+/pixel/*                     /pixel-art/:splat                            301
 
-/art                        /pixel-art                                  301
-/art/*                      /pixel-art/:splat                            301
+/art                         /pixel-art                                   301
+/art/*                       /pixel-art/:splat                            301
 
 
 # ===== Tanzaku (Wish) =====
 
-/wish                       /tanzaku                                    301
-/wish/                      /tanzaku                                    301
-/wish-2025                  /tanzaku/2025                               301
-/wish-2025/                 /tanzaku/2025                               301
-/wish-2026                  /tanzaku/2026                               301
-/wish-2026/                 /tanzaku/2026                               301
+/wish                        /tanzaku                                     301
+/wish/                       /tanzaku                                     301
+
+/wish-2025                   /tanzaku/2025                                301
+/wish-2025/                  /tanzaku/2025                                301
+
+/wish-2026                   /tanzaku/2026                                301
+/wish-2026/                  /tanzaku/2026                                301
 
 
 # ===== QR Code =====
 
-/QR/*                        /qr/:splat                                  301
+/QR/*                        /qr/:splat                                   301
 
 
 # ===== Clock =====
 
-/clock                       /clock-app                                  301
-/clock/                      /clock-app                                  301
+/clock                       /clock-app                                   301
+/clock/                      /clock-app                                   301
 /clock/*                     /clock-app/:splat                            301
 
-/clockapp                    /clock-app                                  301
-/clockapp/                   /clock-app                                  301
+/clockapp                    /clock-app                                   301
+/clockapp/                   /clock-app                                   301
 /clockapp/*                  /clock-app/:splat                            301
 
 
 # ===== Internal Links =====
 
-/index.html                  /                                           301
-/LICENSE                     /                                           301
-/README.md                   /                                           301
+/index.html                  /                                            301
+/LICENSE                     /                                            301
+/README.md                   /                                            301
 
 
 # ===== Social Analytics =====
 
-/dc                          /?utm_source=discord&utm_medium=social      302
-/bky                         /?utm_source=bluesky&utm_medium=social      302
-/tx                          /?utm_source=twitter&utm_medium=social      302
-/lit                         /?utm_source=litlink&utm_medium=social      302
-/tre                         /?utm_source=linktree&utm_medium=social     302
-/nos                         /?utm_source=nostr&utm_medium=social        302
+/dc                          /?utm_source=discord&utm_medium=social       302
+/bky                         /?utm_source=bluesky&utm_medium=social       302
+/tx                          /?utm_source=twitter&utm_medium=social       302
+/lit                         /?utm_source=litlink&utm_medium=social       302
+/tre                         /?utm_source=linktree&utm_medium=social      302
+/nos                         /?utm_source=nostr&utm_medium=social         302
 
-/ig                          /?utm_source=instagram&utm_medium=social    302
-/fb                          /?utm_source=facebook&utm_medium=social     302
-/th                          /?utm_source=threads&utm_medium=social      302
-/meta                        /?utm_source=meta&utm_medium=social         302
+/ig                          /?utm_source=instagram&utm_medium=social     302
+/fb                          /?utm_source=facebook&utm_medium=social      302
+/th                          /?utm_source=threads&utm_medium=social       302
+/meta                        /?utm_source=meta&utm_medium=social          302
