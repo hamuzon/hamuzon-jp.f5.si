@@ -1,8 +1,5 @@
 [
-  {
-    "title": "🏠 hamusata.f5.si - メインサイト / Main Site",
-    "url": "https://hamusata.f5.si/"
-  },
+  {"title":"🏠 hamusata.f5.si - メインサイト / Main Site","url":"https://hamusata.f5.si/",  "target": "_blank" },
   { "title": "🐱 Scratch user @hamusata", "url": "https://scratch.mit.edu/users/hamusata/", "target": "_blank" },
   { "title": "🐱 Scratch user @hamuzon", "url": "https://scratch.mit.edu/users/hamuzon/", "target": "_blank" },
   { "title": "🕰️ TimeZone - Hamuzon", "url": "/Time-Zone_app/" },
