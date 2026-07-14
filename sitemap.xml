@@ -12,27 +12,62 @@
   <url><loc>https://expo-countdown.hamuzon-jp.f5.si/2030/en</loc></url>
   <url><loc>https://expo-countdown.hamuzon-jp.f5.si/2030/ja</loc></url>
   <url><loc>https://expo.hamuzon-jp.f5.si/</loc></url>
-  <url><loc>https://hamuzon-jp.f5.si/bin2dec/</loc></url>
-  <url><loc>https://hamuzon-jp.f5.si/bin2dec/old/</loc></url>
-  <url><loc>https://hamuzon-jp.f5.si/calculator/</loc></url>
-  <url><loc>https://hamuzon-jp.f5.si/clock-app/</loc></url>
-  <url><loc>https://hamuzon-jp.f5.si/dice/</loc></url>
-  <url><loc>https://hamuzon-jp.f5.si/discord-tools/</loc></url>
-  <url><loc>https://hamuzon-jp.f5.si/editor/</loc></url>
-  <url><loc>https://hamuzon-jp.f5.si/fraction/</loc></url>
-  <url><loc>https://hamuzon-jp.f5.si/omikuji/</loc></url>
-  <url><loc>https://hamuzon-jp.f5.si/passapi/</loc></url>
-  <url><loc>https://hamuzon-jp.f5.si/password/</loc></url>
-  <url><loc>https://hamuzon-jp.f5.si/pixel-art/</loc></url>
-  <url><loc>https://hamuzon-jp.f5.si/qr/</loc></url>
-  <url><loc>https://hamuzon-jp.f5.si/task-board/</loc></url>
-  <url><loc>https://hamuzon-jp.f5.si/text/</loc></url>
-  <url><loc>https://hamuzon-jp.f5.si/Time-Zone_app/</loc></url>
-  <url><loc>https://hamuzon-jp.f5.si/todo/</loc></url>
-  <url><loc>https://hamuzon-jp.f5.si/UUID/</loc></url>
-  <url><loc>https://hamuzon-jp.f5.si/UUIDV4/</loc></url>
-  <url><loc>https://hamuzon-jp.f5.si/UUIDV7/</loc></url>
   <url><loc>https://olympic-countdown.hamuzon-jp.f5.si/</loc></url>
   <url><loc>https://video-hub.hamuzon-jp.f5.si/</loc></url>
   <url><loc>https://world-time.hamuzon-jp.f5.si/</loc></url>
+  <url><loc>https://hamuzon-jp.f5.si/</loc></url>
+  <url><loc>https://hamuzon-jp.f5.si/aprilfool</loc></url>
+  <url><loc>https://hamuzon-jp.f5.si/UUID</loc></url>
+  <url><loc>https://hamuzon-jp.f5.si/UUIDV4</loc></url>
+  <url><loc>https://hamuzon-jp.f5.si/UUIDV7</loc></url>
+  <url><loc>https://hamuzon-jp.f5.si/bin2dec/</loc></url>
+  <url><loc>https://hamuzon-jp.f5.si/bin2dec/old/</loc></url>
+  <url><loc>https://hamuzon-jp.f5.si/calculator/</loc></url>
+  <url><loc>https://hamuzon-jp.f5.si/calculator/v1/</loc></url>
+  <url><loc>https://hamuzon-jp.f5.si/calculator/v2/</loc></url>
+  <url><loc>https://hamuzon-jp.f5.si/calculator/v3/</loc></url>
+  <url><loc>https://hamuzon-jp.f5.si/clock-app/</loc></url>
+  <url><loc>https://hamuzon-jp.f5.si/dice/</loc></url>
+  <url><loc>https://hamuzon-jp.f5.si/discord-tools/</loc></url>
+  <url><loc>https://hamuzon-jp.f5.si/discord-tools/conversion/</loc></url>
+  <url><loc>https://hamuzon-jp.f5.si/discord-tools/dashboard/</loc></url>
+  <url><loc>https://hamuzon-jp.f5.si/discord-tools/message-id/</loc></url>
+  <url><loc>https://hamuzon-jp.f5.si/discord-tools/timestamp/</loc></url>
+  <url><loc>https://hamuzon-jp.f5.si/editor/</loc></url>
+  <url><loc>https://hamuzon-jp.f5.si/fraction/</loc></url>
+  <url><loc>https://hamuzon-jp.f5.si/fraction/fraction</loc></url>
+  <url><loc>https://hamuzon-jp.f5.si/fraction/legacy</loc></url>
+  <url><loc>https://hamuzon-jp.f5.si/omikuji/</loc></url>
+  <url><loc>https://hamuzon-jp.f5.si/omikuji/V1/</loc></url>
+  <url><loc>https://hamuzon-jp.f5.si/omikuji/V2/</loc></url>
+  <url><loc>https://hamuzon-jp.f5.si/passapi/</loc></url>
+  <url><loc>https://hamuzon-jp.f5.si/password/</loc></url>
+  <url><loc>https://hamuzon-jp.f5.si/pixel-art/</loc></url>
+  <url><loc>https://hamuzon-jp.f5.si/pixel-art/Canvas/</loc></url>
+  <url><loc>https://hamuzon-jp.f5.si/pixel-art/v1.0/</loc></url>
+  <url><loc>https://hamuzon-jp.f5.si/pixel-art/v1.1/</loc></url>
+  <url><loc>https://hamuzon-jp.f5.si/pixel-art/v2.0/</loc></url>
+  <url><loc>https://hamuzon-jp.f5.si/pixel-art/v2.1/</loc></url>
+  <url><loc>https://hamuzon-jp.f5.si/qr/</loc></url>
+  <url><loc>https://hamuzon-jp.f5.si/qr/Image-qr-scanner</loc></url>
+  <url><loc>https://hamuzon-jp.f5.si/qr/mail</loc></url>
+  <url><loc>https://hamuzon-jp.f5.si/qr/mc-qr</loc></url>
+  <url><loc>https://hamuzon-jp.f5.si/qr/QR</loc></url>
+  <url><loc>https://hamuzon-jp.f5.si/qr/qrcode-tool</loc></url>
+  <url><loc>https://hamuzon-jp.f5.si/qr/scan-old</loc></url>
+  <url><loc>https://hamuzon-jp.f5.si/qr/scan</loc></url>
+  <url><loc>https://hamuzon-jp.f5.si/qr/short-url-qr</loc></url>
+  <url><loc>https://hamuzon-jp.f5.si/tanzaku/</loc></url>
+  <url><loc>https://hamuzon-jp.f5.si/tanzaku/2025/</loc></url>
+  <url><loc>https://hamuzon-jp.f5.si/tanzaku/2026/</loc></url>
+  <url><loc>https://hamuzon-jp.f5.si/tanzaku/2026/image</loc></url>
+  <url><loc>https://hamuzon-jp.f5.si/task-board/</loc></url>
+  <url><loc>https://hamuzon-jp.f5.si/text/</loc></url>
+  <url><loc>https://hamuzon-jp.f5.si/text/legacy</loc></url>
+  <url><loc>https://hamuzon-jp.f5.si/text/text</loc></url>
+  <url><loc>https://hamuzon-jp.f5.si/text/yt/</loc></url>
+  <url><loc>https://hamuzon-jp.f5.si/Time-Zone_app/</loc></url>
+  <url><loc>https://hamuzon-jp.f5.si/todo/</loc></url>
+  <url><loc>https://hamuzon-jp.f5.si/todo/v1.0/</loc></url>
+  <url><loc>https://hamuzon-jp.f5.si/WORLD-time/</loc></url>
 </urlset>
