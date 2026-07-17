@@ -92,6 +92,7 @@
 # ===== QR Code =====
 
 /QR/*                        /qr/:splat                                   301
+/qr/qr                       /qr/QR                                       301
 
 
 # ===== Clock =====
