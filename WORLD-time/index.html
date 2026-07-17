@@ -1,25 +1,41 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta name="description" content="世界時計ツールです。主要な都市や地域の現在時刻を並べて比較・検索できます。">
-  <link rel="canonical" href="https://hamuzon-jp.f5.si/WORLD-time/">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>WORLDtime</title>
+
+<title>世界時計 | WORLD Time - 世界各国の現在時刻</title>
+
+<meta name="description" content="世界中の現在時刻を表示できる世界時計。UTC・GMTなどの各国のタイムゾーンや時差を一覧で確認できます。">
+
+<meta name="keywords" content="世界時計, ワールドタイム, World Time, World Clock, 現在時刻, 世界時間, タイムゾーン, Time Zone, Timezone, UTC, GMT, 時差, 世界時刻, 海外時間, 各国の時刻, UTC時計, GMT時計, 日本時間, Tokyo Time, Clock, IANA Time Zone">
+
+<meta name="author" content="hamuzon (hamusata)">
+
+<link rel="canonical" href="https://hamuzon-jp.f5.si/WORLD-time/">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
 <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-<h1>WORLD-time</h1>
+
+<h1>WORLD Time</h1>
+
 <div class="controls">
-<select id="timezone-select" title="表示するタイムゾーンを選択"></select>
-<button id="add-button">追加</button>
+  <select id="timezone-select" title="表示するタイムゾーンを選択"></select>
+  <button id="add-button">追加</button>
 </div>
+
 <div id="error-message"></div>
+
 <div class="timezone-container" id="timezones"></div>
+
 <script src="script.js" data-cfasync="false"></script>
+
 </body>
 </html>
