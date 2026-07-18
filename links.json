@@ -12,6 +12,7 @@
   { "title": "📱 Old Device Info Viewer 🖲️", "url": "https://device-info-old.hamuzon-jp.f5.si/" },
   { "title": "🔑 Password Generator Tool🗝️", "url": "/password/" },
   { "title": "🔢 計算機 / Calculator 🧮", "url": "/calculator/" },
+  { "title": "📡 電子レンジ時間計算 / Microwave Time Calculator 🍽️", "url": "/microwave/" },
   { "title": "📅 カレンダー / Calendar 🗓️", "url": "https://calendar.hamuzon-jp.f5.si/" },
   { "title": "📝 Todo Lists ✏️", "url": "/todo/" },
   { "title": "🗂️ タスクボード / Task Board 📋", "url": "/task-board/" },
