@@ -121,21 +121,18 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-  } else if(host.includes("hamuzon.github.io")){
-    sitesData.hamuzonGitHubIO.forEach(site => siteList.appendChild(createLinkItem(site)));
-    siteList.style.display="grid"; publicList.style.display="none";
-    document.getElementById("footer-hamusata").style.display="none";
-    document.getElementById("footer-hamuzon").style.display="inline";
-  } else {
-    [...sitesData.publicSites, ...(sitesData.winter||[])].forEach(site => publicList.appendChild(createLinkItem(site)));
-    siteList.style.display="none"; publicList.style.display="grid";
-    footer.innerHTML = `<span class="footer-notice">
-      このサイトは公式ではなく、一部の情報は異なる場合があります。<br>
-      This version may differ from the original official site.
-    </span>`;
-  }
-
+  // 雪ON/OFF
+  const toggleBtn = document.getElementById('winter-toggle');
+  if (!toggleBtn) return;
+  let winterOn = true;
+  toggleBtn.addEventListener('click', () => {
+    winterOn = !winterOn;
+    if (window.winterControl) {
+      winterOn ? window.winterControl.show() : window.winterControl.hide();
+    }
+    toggleBtn.textContent = winterOn ? '雪ON' : '雪OFF';
   });
+});
 </script>
 
 </body>

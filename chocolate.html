@@ -153,36 +153,17 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-  } else if (host.includes("hamuzon.github.io")) {
-    sitesData.hamuzonGitHubIO.forEach(site => siteList.appendChild(createLinkItem(site)));
-    siteList.style.display = "grid";
-    publicList.style.display = "none";
-    document.getElementById("footer-hamusata").style.display = "none";
-    document.getElementById("footer-hamuzon").style.display = "inline";
-  } else {
-    [...sitesData.publicSites, ...(sitesData.winter || [])].forEach(site => publicList.appendChild(createLinkItem(site)));
-    siteList.style.display = "none";
-    publicList.style.display = "grid";
-    footer.innerHTML = `
-      <span class="footer-notice">
-        このサイトは公式ではなく、一部の情報は異なる場合があります。<br>
-        This version may differ from the original official site.
-      </span>
-    `;
-  }
-
-  const baseYear = 2025;
-  const currentYear = new Date().getFullYear();
-  const yearDisplay = currentYear > baseYear ? `${baseYear}~${currentYear}` : `${baseYear}`;
-  const yearHamusata = document.getElementById("year-hamusata");
-  const yearHamuzon = document.getElementById("year-hamuzon");
-
-  if (yearHamusata) {
-    yearHamusata.textContent = yearDisplay;
-  }
-  if (yearHamuzon) {
-    yearHamuzon.textContent = yearDisplay;
-  }
+  // Chocolate ON/OFF
+  const toggleBtn = document.getElementById('chocolate-toggle');
+  if (!toggleBtn) return;
+  let chocolateOn = true;
+  toggleBtn.addEventListener('click', () => {
+    chocolateOn = !chocolateOn;
+    if (window.chocolateControl) {
+      chocolateOn ? window.chocolateControl.show() : window.chocolateControl.hide();
+    }
+    toggleBtn.textContent = chocolateOn ? 'Chocolate ON' : 'Chocolate OFF';
+  });
 });
 </script>
 

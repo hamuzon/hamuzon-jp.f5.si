@@ -1,4 +1,5 @@
 (() => {
+  // 花火を描画するためのCanvas要素を取得
   const canvas = document.getElementById('fireworksCanvas');
   if (!canvas) {
     console.warn('fireworks.js: canvas#fireworksCanvas が見つかりません');
@@ -7,16 +8,16 @@
   const ctx = canvas.getContext('2d');
   let cw, ch;
 
+  // ウィンドウサイズに合わせてCanvasの解像度と描画サイズを最適化する関数
   function resize() {
     cw = window.innerWidth;
     ch = window.innerHeight;
-    const dpr = window.devicePixelRatio || 1;
-    canvas.width = cw * dpr;
-    canvas.height = ch * dpr;
+    canvas.width = cw * devicePixelRatio;
+    canvas.height = ch * devicePixelRatio;
     canvas.style.width = cw + 'px';
     canvas.style.height = ch + 'px';
     ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.scale(dpr, dpr);
+    ctx.scale(devicePixelRatio, devicePixelRatio);
   }
   window.addEventListener('resize', resize);
   resize();
@@ -28,6 +29,8 @@
     return Math.floor(random(min, max));
   }
 
+  // 花火が爆発した後の「火花」の1粒1粒を表現・管理するクラス
+  // 物理演算（重力、空気抵抗）や描画（軌跡、光り方）を担当
   class Particle {
     constructor(x, y, vx, vy, hue, brightness, decay, size, friction = 0.98, gravity = 0.05, flickering = false) {
       this.x = x;
@@ -70,12 +73,12 @@
         for (let i = 1; i < this.trail.length; i++) {
           ctx.lineTo(this.trail[i].x, this.trail[i].y);
         }
-        ctx.strokeStyle = `hsla(${this.hue}, 100%, ${this.brightness}%, ${Math.max(0, this.alpha) * 0.5})`;
+        ctx.strokeStyle = `hsla(${this.hue}, 100%, ${this.brightness}%, ${this.alpha * 0.5})`;
         ctx.lineWidth = this.size;
         ctx.stroke();
       }
 
-      let currentAlpha = Math.max(0, this.alpha);
+      let currentAlpha = this.alpha;
       if (this.flickering && Math.random() < 0.2) {
         currentAlpha *= 0.5;
       }
@@ -93,6 +96,8 @@
     }
   }
 
+  // 花火の管理
+  // 牡丹、菊、柳、ハートなどの様々な花火の形状その他打ち上げ等
   class Firework {
     constructor(x, y, targetY, hue) {
       this.x = x;
@@ -130,7 +135,9 @@
     }
     explode() {
       this.isExploded = true;
+
       this.createFlash();
+
       const baseCount = 35 + randomInt(0, 35);
       switch (this.type) {
         case 0: this.createPeony(baseCount); break;
@@ -235,6 +242,7 @@
     }
   }
 
+  // 打ち上げのタイミングの管理
   class FireworksManager {
     constructor() {
       this.fireworks = [];
@@ -263,6 +271,7 @@
     }
     launchFirework() {
       if (this.fireworks.length > 10) return;
+
       const x = random(cw * 0.1, cw * 0.9);
       const y = ch;
       const targetY = random(ch * 0.1, ch * 0.5);
@@ -274,9 +283,7 @@
       if (now - this.lastLaunchTime > this.launchInterval) {
         this.launchFirework();
         if (Math.random() < 0.2) {
-          setTimeout(() => {
-            if (this.running) this.launchFirework();
-          }, randomInt(100, 300));
+          setTimeout(() => this.launchFirework(), randomInt(100, 300));
         }
         this.lastLaunchTime = now;
       }
@@ -285,6 +292,7 @@
     }
     draw() {
       ctx.clearRect(0, 0, cw, ch);
+
       this.fireworks.forEach(fw => fw.draw(ctx));
     }
     loop() {
@@ -303,11 +311,7 @@
   window.fireworksControl.stop = () => manager.stop();
   window.fireworksControl.isRunning = () => manager.isRunning();
 
-  if (document.readyState === 'complete' || document.readyState === 'interactive') {
+  window.addEventListener('load', () => {
     manager.start();
-  } else {
-    window.addEventListener('DOMContentLoaded', () => {
-      manager.start();
-    });
-  }
+  });
 })();
