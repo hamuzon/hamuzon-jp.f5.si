@@ -4,7 +4,7 @@
 /d-1           https://device-info.hamuzon-jp.f5.si/                      301
 /device        https://device-info.hamuzon-jp.f5.si/                      301
 /device-info   https://device-info.hamuzon-jp.f5.si/                      301
-
+/device-info/   https://device-info.hamuzon-jp.f5.si/                      301
 
 # ===== Discord Tools =====
 
