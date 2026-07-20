@@ -1,19 +1,25 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta name="description" content="タスク管理を視覚的に行えるかんばんボードツールです。ToDoや進行中のタスクを整理し、進捗を簡単に検索・管理できます。">
+  <meta name="description" content="タスク管理をウェブサイトでやれるタスクボードツールです。Todoや進行中、完了した作業などをわかりやすく管理できます。">
+  <meta name="keywords" content="タスク管理, タスクボード, かんばん, ToDoリスト, プロジェクト管理, 進捗管理, Task Management, Task Board, Kanban, ToDo List, Todo, Project Management, Progress Management, Web App, Tool">
   <link rel="canonical" href="https://hamuzon-jp.f5.si/task-board/">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta property="og:title" content="Task Board">
+  <meta property="og:description" content="タスク管理をウェブサイトでやれるタスクボードツールです。Todoや進行中、完了した作業などをわかりやすく管理できます。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://hamuzon-jp.f5.si/task-board/">
+  <meta property="og:site_name" content="Task Board">
   <title>Task Board</title>
   <link rel="icon" href="icon.svg" />
   <style>
     :root {
-      --bg-light:#eaf4f1;
-      --text-light:#2a3a34;
-      --bg-dark:#1f2a28;
-      --text-dark:#c6d8d3;
-      --accent:#2e7d32;
+      --bg-light: #f8f9fa;
+      --text-light: #212529;
+      --bg-dark: #212529;
+      --text-dark: #e9ecef;
+      --accent: #0d6efd;
       --border-radius:8px;
     }
 
@@ -44,7 +50,7 @@
       flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
-      box-shadow: 0 3px 8px rgba(46,125,50,0.5);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
     header h1 {
@@ -70,14 +76,14 @@
       cursor: pointer;
       font-weight: 600;
       color: var(--accent);
-      box-shadow: 0 1px 3px rgba(46,125,50,0.3);
-      transition: background-color 0.3s, color 0.3s;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
     }
 
     button:hover {
       background-color: var(--accent);
       color: white;
-      box-shadow: 0 0 12px rgba(46,125,50,0.8);
+      box-shadow: 0 2px 8px rgba(13, 110, 253, 0.5);
     }
 
     main {
@@ -90,7 +96,7 @@
 
     .progress-overall {
       height: 12px;
-      background: #cde6d0;
+      background: #e9ecef;
       border-radius: var(--border-radius);
       overflow: hidden;
       margin-bottom: 0.3rem;
@@ -103,7 +109,6 @@
       background-color: var(--accent);
       width: 0%;
       transition: width 0.3s ease;
-      box-shadow: 0 0 6px var(--accent);
     }
 
     .progress-overall > span {
@@ -120,10 +125,9 @@
 
     @media (prefers-color-scheme: dark) {
       .progress-overall {
-        background: #3a5a40;
+        background: #343a40;
         box-shadow: inset 0 1px 3px rgba(0,0,0,0.6);
       }
-      .progress-overall > div { box-shadow: 0 0 10px var(--accent); }
       .progress-overall > span {
         color: var(--text-dark);
         text-shadow: 0 0 5px #1f2a28cc;
@@ -132,27 +136,32 @@
 
     .groups {
       display: flex;
-      gap: 1rem;
       flex-wrap: wrap;
+      gap: 1rem;
       justify-content: center;
     }
-
+    
     .group {
-      background-color: #d8ead7;
+      background-color: #e9ecef;
       border-radius: var(--border-radius);
       flex: 1 1 280px;
       max-width: 280px;
       display: flex;
       flex-direction: column;
       padding: 1rem;
-      box-shadow: 0 2px 6px rgba(46,125,50,0.15);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
       transition: background-color 0.3s;
+    }
+
+    .group.drag-over {
+      background-color: #dde8ff;
+      border: 2px dashed var(--accent);
     }
 
     @media (prefers-color-scheme: dark) {
       .group {
-        background-color: #2c4230;
-        box-shadow: 0 2px 8px rgba(46,125,50,0.7);
+        background-color: #343a40;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.5);
       }
     }
 
@@ -177,7 +186,7 @@
 
     .group-progress {
       height: 8px;
-      background: #b8d1b1;
+      background: #dee2e6;
       border-radius: var(--border-radius);
       overflow: hidden;
       margin-bottom: 0.3rem;
@@ -190,7 +199,6 @@
       background-color: var(--accent);
       width: 0%;
       transition: width 0.3s ease;
-      box-shadow: 0 0 5px var(--accent);
     }
 
     .group-progress > span {
@@ -208,7 +216,7 @@
 
     @media (prefers-color-scheme: dark) {
       .group-progress {
-        background: #3c6b39;
+        background: #495057;
         box-shadow: inset 0 1px 2px rgba(0,0,0,0.6);
       }
       .group-progress > span {
@@ -227,20 +235,25 @@
       display: flex;
       align-items: center;
       margin-bottom: 0.6rem;
-      background: #f3f9f5;
+      background: #fff;
       padding: 0.4rem 0.6rem;
       border-radius: var(--border-radius);
-      box-shadow: 0 1px 3px rgba(46,125,50,0.1);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.08);
       transition: background-color 0.3s;
+    }
+
+    .task.drag-over {
+      background-color: #e9f1ff;
+      border-top: 2px solid var(--accent);
     }
 
     @media (prefers-color-scheme: dark) {
       .task {
-        background: #34662c80;
-        box-shadow: 0 1px 4px rgba(46,125,50,0.6);
+        background: #495057;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.5);
       }
     }
-
+    
     .task input[type="checkbox"] {
       margin-right: 0.6rem;
       width: 18px;
@@ -260,12 +273,12 @@
 
     .task-text[contenteditable]:empty::before {
       content: attr(data-placeholder);
-      color: #97b88d;
+      color: #adb5bd;
     }
 
     @media (prefers-color-scheme: dark) {
       .task-text { color: var(--text-dark); }
-      .task-text[contenteditable]:empty::before { color: #88b36eaa; }
+      .task-text[contenteditable]:empty::before { color: #6c757d; }
     }
 
     .task-delete {
@@ -289,13 +302,13 @@
       padding: 0.6rem;
       cursor: pointer;
       font-weight: 700;
-      box-shadow: 0 2px 8px rgba(46,125,50,0.8);
+      box-shadow: 0 2px 6px rgba(13, 110, 253, 0.4);
       transition: background-color 0.3s, box-shadow 0.3s;
     }
 
     .add-task-btn:hover {
-      background-color: #27632a;
-      box-shadow: 0 2px 12px rgba(39,99,42,1);
+      background-color: #0b5ed7;
+      box-shadow: 0 2px 10px rgba(13, 110, 253, 0.6);
     }
 
     .group-delete-btn {
@@ -375,8 +388,11 @@
     groupDiv.addEventListener('dragend', e => {
       dragSrcGroupIdx = null;
       groupDiv.style.opacity = '';
+      document.querySelectorAll('.group.drag-over').forEach(el => el.classList.remove('drag-over'));
     });
     groupDiv.addEventListener('dragover', e => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; });
+    groupDiv.addEventListener('dragenter', () => { if (dragSrcGroupIdx !== null && dragSrcGroupIdx !== groupIndex) groupDiv.classList.add('drag-over'); });
+    groupDiv.addEventListener('dragleave', () => groupDiv.classList.remove('drag-over'));
     groupDiv.addEventListener('drop', e => {
       e.preventDefault();
       if (dragSrcGroupIdx === null || dragSrcGroupIdx === groupIndex) return;
@@ -431,7 +447,9 @@
     // タスクコンテナ
     const tasksDiv = document.createElement('div');
     tasksDiv.className = 'tasks';
-    tasksDiv.addEventListener('dragover', e => e.preventDefault());
+    tasksDiv.addEventListener('dragover', e => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; });
+    tasksDiv.addEventListener('dragenter', () => { if (dragSrcGroupIdx !== null && dragSrcTaskIdx !== null) groupDiv.classList.add('drag-over'); });
+    tasksDiv.addEventListener('dragleave', () => groupDiv.classList.remove('drag-over'));
     tasksDiv.addEventListener('drop', e => {
       e.preventDefault();
       if (dragSrcGroupIdx === null || dragSrcTaskIdx === null) return;
@@ -457,10 +475,14 @@
       taskDiv.addEventListener('dragend', e => {
         dragSrcGroupIdx = null;
         dragSrcTaskIdx = null;
+        document.querySelectorAll('.task.drag-over').forEach(el => el.classList.remove('drag-over'));
         taskDiv.style.opacity = '';
       });
-      taskDiv.addEventListener('dragover', e => e.preventDefault());
+      taskDiv.addEventListener('dragover', e => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; });
+      taskDiv.addEventListener('dragenter', () => { if (dragSrcGroupIdx !== null && dragSrcTaskIdx !== null) taskDiv.classList.add('drag-over'); });
+      taskDiv.addEventListener('dragleave', () => taskDiv.classList.remove('drag-over'));
       taskDiv.addEventListener('drop', e => {
+        e.stopPropagation(); // 親(tasksDiv)へのイベント伝播を停止
         e.preventDefault();
         if (dragSrcGroupIdx === null || dragSrcTaskIdx === null) return;
         if (dragSrcGroupIdx === groupIndex) {
@@ -517,7 +539,8 @@
     addTaskBtn.className = 'add-task-btn';
     addTaskBtn.textContent = '＋ タスク追加';
     addTaskBtn.addEventListener('click', () => {
-      taskData[groupIndex].tasks.push({ text: '新しいタスク', done: false });
+      const taskCount = taskData[groupIndex].tasks.length + 1;
+      taskData[groupIndex].tasks.push({ text: `タスク(${taskCount})`, done: false });
       saveToStorage();
       render();
     });
@@ -527,8 +550,17 @@
   }
 
   function render() {
+    const scrollPositions = [];
+    document.querySelectorAll('.tasks').forEach((el, index) => {
+      const groupIndex = el.closest('.group')?.dataset.groupIndex;
+      if (groupIndex) scrollPositions[groupIndex] = el.scrollTop;
+    });
     groupsContainer.innerHTML = '';
     taskData.forEach((g, i) => groupsContainer.appendChild(createGroupElement(g, i)));
+    document.querySelectorAll('.tasks').forEach((el, i) => {
+      const groupIndex = el.closest('.group')?.dataset.groupIndex;
+      if (groupIndex && scrollPositions[groupIndex] !== undefined) el.scrollTop = scrollPositions[groupIndex];
+    });
     const allTasks = taskData.flatMap(g => g.tasks);
     const overallPercent = calcProgress(allTasks);
     overallProgressBar.style.width = overallPercent + '%';
@@ -575,7 +607,12 @@
   }
 
   // イベント設定
-  addGroupBtn.addEventListener('click', () => { taskData.push({ title:'新しいグループ', tasks:[] }); saveToStorage(); render(); });
+  addGroupBtn.addEventListener('click', () => {
+    const groupCount = taskData.length + 1;
+    taskData.push({ title: `グループ(${groupCount})`, tasks: [] });
+    saveToStorage();
+    render();
+  });
   saveBtn.addEventListener('click', saveToFile);
   loadBtn.addEventListener('click', () => loadInput.click());
   loadInput.addEventListener('change', e => { if (e.target.files.length) loadFromFile(e.target.files[0]); });
