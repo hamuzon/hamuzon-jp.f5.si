@@ -249,7 +249,7 @@ input:focus, select:focus {
             <span class="unit">分</span>
         </div>
         <div class="input-with-unit">
-            <input type="number" id="sec" min="0" max="59" value="0" placeholder="秒" aria-label="元の加熱時間（秒）">
+            <input type="number" id="sec" min="0" value="0" placeholder="秒" aria-label="元の加熱時間（秒）">
             <span class="unit">秒</span>
         </div>
     </div>
@@ -281,55 +281,70 @@ input:focus, select:focus {
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const fromInput = document.getElementById('from');
-        const toInput = document.getElementById('to');
-        const minInput = document.getElementById("min");
-        const secInput = document.getElementById("sec");
-        const answerEl = document.getElementById("answer");
-        const secondsEl = document.getElementById("seconds");
+document.addEventListener('DOMContentLoaded', () => {
+    const fromInput = document.getElementById('from');
+    const toInput = document.getElementById('to');
+    const minInput = document.getElementById("min");
+    const secInput = document.getElementById("sec");
+    const answerEl = document.getElementById("answer");
+    const secondsEl = document.getElementById("seconds");
 
-        // localStorageから値を読み込んでフォームに設定
-        fromInput.value = localStorage.getItem('microwave-from') || '500';
-        toInput.value = localStorage.getItem('microwave-to') || '600';
-        minInput.value = localStorage.getItem('microwave-min') || '2';
-        secInput.value = localStorage.getItem('microwave-sec') || '0';
+    // localStorageから値を読み込んでフォームに設定
+    fromInput.value = localStorage.getItem('microwave-from') || '500';
+    toInput.value = localStorage.getItem('microwave-to') || '600';
+    minInput.value = localStorage.getItem('microwave-min') || '2';
+    secInput.value = localStorage.getItem('microwave-sec') || '0';
 
-        function calc() {
-            const from = Number(fromInput.value) || 0;
-            const to = Number(toInput.value) || 0;
-            const min = Number(minInput.value) || 0;
-            const sec = Number(secInput.value) || 0;
+    function calc() {
+        const from = Number(fromInput.value) || 0;
+        const to = Number(toInput.value) || 0;
 
-            const totalSeconds = min * 60 + sec;
+        let min = Number(minInput.value) || 0;
+        let sec = Number(secInput.value) || 0;
 
-            // 入力値をlocalStorageに保存
-            localStorage.setItem('microwave-from', fromInput.value);
-            localStorage.setItem('microwave-to', toInput.value);
-            localStorage.setItem('microwave-min', minInput.value);
-            localStorage.setItem('microwave-sec', secInput.value);
+        // 秒が60以上なら自動で分へ繰り上げ
+        if (sec >= 60) {
+            min += Math.floor(sec / 60);
+            sec = sec % 60;
 
-            if (to === 0) {
-                answerEl.textContent = "-";
-                secondsEl.textContent = "変換後のW数を入力";
-                return;
-            }
-
-            const resultSeconds = Math.round(totalSeconds * from / to);
-            const resultMin = Math.floor(resultSeconds / 60);
-            const resultSec = resultSeconds % 60;
-
-            answerEl.textContent = `${resultMin}分${resultSec}秒`;
-            secondsEl.textContent = `${resultSeconds} 秒`;
+            minInput.value = min;
+            secInput.value = sec;
         }
 
-        [fromInput, toInput, minInput, secInput].forEach(el => {
-            el.addEventListener('input', calc);
-        });
+        const totalSeconds = min * 60 + sec;
 
-        calc();
+        // 入力値をlocalStorageに保存
+        localStorage.setItem('microwave-from', fromInput.value);
+        localStorage.setItem('microwave-to', toInput.value);
+        localStorage.setItem('microwave-min', minInput.value);
+        localStorage.setItem('microwave-sec', secInput.value);
+
+        if (from <= 0) {
+            answerEl.textContent = "-";
+            secondsEl.textContent = "元のW数を入力";
+            return;
+        }
+
+        if (to <= 0) {
+            answerEl.textContent = "-";
+            secondsEl.textContent = "変換後のW数を入力";
+            return;
+        }
+
+        const resultSeconds = Math.round(totalSeconds * from / to);
+        const resultMin = Math.floor(resultSeconds / 60);
+        const resultSec = resultSeconds % 60;
+
+        answerEl.textContent = `${resultMin}分${resultSec}秒`;
+        secondsEl.textContent = `${resultSeconds} 秒`;
+    }
+
+    [fromInput, toInput, minInput, secInput].forEach(el => {
+        el.addEventListener('input', calc);
     });
 
+    calc();
+});
 </script>
 
 </body>
