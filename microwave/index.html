@@ -118,6 +118,7 @@ select{
     line-height:1.3;
     -webkit-appearance:none;
     appearance:none;
+    caret-color:#89b1f7;
 }
 
 input:focus,
@@ -133,8 +134,21 @@ select:focus{
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button{
     opacity:1;
-    height:auto;
+    margin:0;
+    width:18px;
+    min-height:42px;
     cursor:pointer;
+    filter:invert(.85) brightness(1.2);
+    transition:filter .2s ease;
+}
+
+input[type="number"]::-webkit-inner-spin-button:hover,
+input[type="number"]::-webkit-outer-spin-button:hover{
+    filter:invert(1) brightness(1.5);
+}
+
+input[type="number"]{
+    -moz-appearance:textfield;
 }
 
 .time{
@@ -219,6 +233,11 @@ input[type="number"]::-webkit-outer-spin-button{
 
     .big{
         font-size:30px;
+    }
+
+    input,
+    select{
+        font-size:16px;
     }
 }
 </style>
