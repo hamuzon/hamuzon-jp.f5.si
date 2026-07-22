@@ -284,12 +284,12 @@ input:focus, select:focus {
 document.addEventListener('DOMContentLoaded', () => {
     const fromInput = document.getElementById('from');
     const toInput = document.getElementById('to');
-    const minInput = document.getElementById("min");
-    const secInput = document.getElementById("sec");
-    const answerEl = document.getElementById("answer");
-    const secondsEl = document.getElementById("seconds");
+    const minInput = document.getElementById('min');
+    const secInput = document.getElementById('sec');
+    const answerEl = document.getElementById('answer');
+    const secondsEl = document.getElementById('seconds');
 
-    // localStorageから値を読み込んでフォームに設定
+    // localStorageから値を読み込む
     fromInput.value = localStorage.getItem('microwave-from') || '500';
     toInput.value = localStorage.getItem('microwave-to') || '600';
     minInput.value = localStorage.getItem('microwave-min') || '2';
@@ -302,18 +302,18 @@ document.addEventListener('DOMContentLoaded', () => {
         let min = Number(minInput.value) || 0;
         let sec = Number(secInput.value) || 0;
 
-        // 秒が60以上なら自動で分へ繰り上げ
-        if (sec >= 60) {
-            min += Math.floor(sec / 60);
-            sec = sec % 60;
-
-            minInput.value = min;
-            secInput.value = sec;
+        // 秒が60以上なら分へ繰り上げ
+        while (sec >= 60) {
+            min++;
+            sec -= 60;
         }
+
+        minInput.value = min;
+        secInput.value = sec;
 
         const totalSeconds = min * 60 + sec;
 
-        // 入力値をlocalStorageに保存
+        // localStorage保存
         localStorage.setItem('microwave-from', fromInput.value);
         localStorage.setItem('microwave-to', toInput.value);
         localStorage.setItem('microwave-min', minInput.value);
@@ -338,6 +338,21 @@ document.addEventListener('DOMContentLoaded', () => {
         answerEl.textContent = `${resultMin}分${resultSec}秒`;
         secondsEl.textContent = `${resultSeconds} 秒`;
     }
+
+    // 秒が0のとき↓キーで 59秒＋分を1減らす
+    secInput.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowDown') {
+            const sec = Number(secInput.value) || 0;
+            const min = Number(minInput.value) || 0;
+
+            if (sec === 0 && min > 0) {
+                e.preventDefault();
+                minInput.value = min - 1;
+                secInput.value = 59;
+                calc();
+            }
+        }
+    });
 
     [fromInput, toInput, minInput, secInput].forEach(el => {
         el.addEventListener('input', calc);
