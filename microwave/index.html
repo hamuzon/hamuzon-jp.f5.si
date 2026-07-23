@@ -100,7 +100,7 @@ label{
     background:rgba(0,0,0,.2);
     border:1px solid rgba(255,255,255,.25);
     border-radius:10px;
-    transition:.2s;
+    transition:border-color .2s,box-shadow .2s;
 }
 
 input,
@@ -130,7 +130,7 @@ select:focus{
 }
 
 
-/* 数値入力の上下ボタン非表示 */
+/* 数値入力 上下ボタン非表示 */
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button{
     -webkit-appearance:none;
@@ -190,6 +190,12 @@ input[type="number"]{
 
 .note p{
     margin:0;
+}
+
+
+/* 英語注意文 非表示 */
+.lang-en{
+    display:none;
 }
 
 
