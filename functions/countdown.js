@@ -9,7 +9,7 @@ export async function onRequest(context) {
     const yearDisplay = currentYear > baseYear ? `${baseYear}–${currentYear}` : baseYear;
 
     let copyrightContent = "";
-      else if (hostname.includes("hamusata.f5.si")) {
+      if (hostname.includes("hamusata.f5.si")) {
         copyrightContent = `&copy; ${yearDisplay} <a href="https://hamusata.f5.si" target="_blank" rel="noopener noreferrer">@hamusata</a>`;
     } else if (hostname.includes("hamuzon-jp.f5.si")) {
         copyrightContent = `&copy; ${yearDisplay} <a href="https://hamusata.f5.si" target="_blank" rel="noopener noreferrer">@hamuzon</a>`;
