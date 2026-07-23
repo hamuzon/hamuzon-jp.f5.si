@@ -1,169 +1,54 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <link rel="canonical" href="https://hamuzon-jp.f5.si/text/text">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Text Enlargement App</title>
-<meta name="description" content="入力したテキストを自由に拡大表示できるツールです。文字の確認やプレゼン、視覚補助に便利で、設定を検索・調整できます。">
-<link rel="icon" href="icon-light.png" type="image/png">
+<title>文字拡大アプリ - Text Enlargement App</title>
+<meta name="description" content="入力した文字を大きく表示できる、文字拡大アプリです。フォントサイズ、太さ、行間、フォント種類を自由に変更できます。">
+<meta name="keywords" content="文字拡大,テキスト拡大,文字表示,大きい文字,フォント変更,文字ツール">
+<meta name="author" content="Text Enlargement App">
 
-<!-- Google Fonts -->
+<!-- OGP -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="文字拡大アプリ - 大きな文字で表示">
+<meta property="og:description" content="入力した文字を自由なサイズ・フォントで大きく表示できる無料ツールです。">
+<meta property="og:site_name" content="Text Enlargement App">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="文字拡大アプリ - 大きな文字で表示">
+<meta name="twitter:description" content="文字サイズやフォントを変更して見やすく表示できます。">
+
+<meta name="application-name" content="文字拡大アプリ">
+<meta name="theme-color" content="#00793d">
+
+<link rel="icon" href="icon-light.png" type="image/png">
+<link rel="apple-touch-icon" href="icon-light.png">
+
 <link href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic&family=BIZ+UDPMincho&family=Zen+Kaku+Gothic+New&family=Zen+Maru+Gothic&family=Noto+Sans+JP&family=Noto+Serif+JP&family=Sawarabi+Gothic&family=Sawarabi+Mincho&family=Potta+One&family=Kosugi&family=Kosugi+Maru&family=Kiwi+Maru&family=M+PLUS+1p&family=M+PLUS+Rounded+1c&family=Shippori+Mincho&family=Shippori+Antique&family=Hina+Mincho&family=Yusei+Magic&family=Rampart+One&family=DotGothic16&family=Yuji+Syuku&family=Yuji+Mai&family=Yuji+Boku&family=Stick&family=Train+One&family=RocknRoll+One&family=Reggae+One&family=Dela+Gothic+One&family=New+Tegomin&family=Kaisei+Opti&family=Kaisei+Decol&family=Kaisei+HarunoUmi&family=Kaisei+Tokumin&family=IBM+Plex+Sans+JP&family=IBM+Plex+Serif+JP&family=Source+Han+Sans+JP&family=Source+Han+Serif+JP&display=swap" rel="stylesheet">
 
-<style>
-:root {
-  --color-primary: #00793d;
-  --color-secondary: #4a6354;
-  --color-background: #ffffff;
-  --color-on-background: #1a1c19;
-  --shape-corner-medium: 12px;
-}
-
-* { box-sizing: border-box; }
-
-body {
-  margin: 0;
-  font-family: 'Noto Serif JP', serif;
-  background-color: var(--color-background);
-  color: var(--color-on-background);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  line-height: 1.6;
-  word-break: break-word;
-}
-
-header {
-  background-color: var(--color-primary);
-  color: #ffffff;
-  padding: 1.5rem 1rem;
-  font-weight: 700;
-  font-size: clamp(1.8rem, 6vw, 2.2rem);
-  text-align: center;
-  letter-spacing: 0.08em;
-}
-
-main {
-  flex-grow: 1;
-  width: 100%;
-  max-width: 900px;
-  margin: 1.5rem auto;
-  padding: 0 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 2.5rem;
-}
-
-section { display: flex; flex-direction: column; gap: 1rem; }
-
-textarea#textInput {
-  width: 100%;
-  font-size: clamp(1.5rem,5vw,2.5rem);
-  min-height: 140px;
-  padding: 1rem;
-  border-radius: var(--shape-corner-medium);
-  border: 2px solid var(--color-primary);
-  resize: vertical;
-  background-color: var(--color-background);
-  color: var(--color-on-background);
-  transition: all 0.2s ease;
-}
-
-#displayArea {
-  width: 100%;
-  font-size: clamp(2rem,10vw,8rem);
-  font-weight: 600;
-  line-height: 1.4;
-  padding: 1rem;
-  border-radius: var(--shape-corner-medium);
-  background-color: var(--color-background);
-  border: 2px solid var(--color-primary);
-  box-shadow: 0 0 16px var(--color-primary);
-  white-space: pre-wrap;
-  word-break: break-word;
-  color: #000000;
-  overflow-wrap: break-word;
-  overflow-x: hidden;
-  transition: all 0.2s ease;
-}
-
-#buttons {
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-  margin-top: 0.5rem;
-}
-
-button {
-  padding: 0.6rem 1.2rem;
-  font-size: 1rem;
-  border-radius: var(--shape-corner-medium);
-  border: none;
-  cursor: pointer;
-  font-weight: 600;
-  transition: all 0.2s ease;
-}
-
-#copyButton { background-color: var(--color-primary); color: #fff; }
-#resetButton { background-color: var(--color-secondary); color: #fff; }
-
-#settings {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.5rem;
-  justify-content: center;
-  align-items: flex-start;
-}
-
-.setting-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-width: 140px;
-}
-
-.setting-item label {
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-  text-align: center;
-}
-
-.setting-item input[type=range],
-.setting-item select,
-.setting-item input[type=color] { width: 100%; }
-
-footer#footer {
-  text-align: center;
-  font-size: 0.85rem;
-  color: var(--color-secondary);
-  padding: 1.5rem 0 2.5rem 0;
-}
-
-footer#footer a {
-  color: var(--color-primary);
-  text-decoration: none;
-}
-
-footer#footer a:hover { text-decoration: underline; }
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 <header id="appTitle">文字拡大アプリ</header>
 
 <main>
-<section>
-<h2>入力</h2>
+<section aria-label="入力エリア">
 <textarea id="textInput" placeholder="ここにテキストを入力してください"></textarea>
+<div class="button-row" aria-label="操作">
+  <button class="copy-button" type="button" data-action="copy">Copy URL</button>
+  <button class="clear-button" type="button" data-action="clear">Clear Text</button>
+  <button class="reset-button" type="button" data-action="reset">Reset</button>
+</div>
 </section>
 
-<section>
-<h2>出力</h2>
+<section aria-label="出力エリア">
 <div id="displayArea">test</div>
-<div id="buttons">
-  <button id="copyButton">Copy URL</button>
-  <button id="resetButton">Reset</button>
+<div class="button-row" aria-label="操作">
+  <button class="copy-button" type="button" data-action="copy">Copy URL</button>
+  <button class="clear-button" type="button" data-action="clear">Clear Text</button>
+  <button class="reset-button" type="button" data-action="reset">Reset</button>
 </div>
 </section>
 
@@ -252,186 +137,6 @@ footer#footer a:hover { text-decoration: underline; }
 </div>
 </footer>
 
-<script>
-const textInput = document.getElementById("textInput");
-const displayArea = document.getElementById("displayArea");
-const header = document.getElementById("appTitle");
-const fontSizeSlider = document.getElementById("fontSizeSlider");
-const fontSizeValue = document.getElementById("fontSizeValue");
-const fontWeightSlider = document.getElementById("fontWeightSlider");
-const fontWeightValue = document.getElementById("fontWeightValue");
-const lineHeightSlider = document.getElementById("lineHeightSlider");
-const lineHeightValue = document.getElementById("lineHeightValue");
-const fontSelector = document.getElementById("fontSelector");
-const accentSelector = document.getElementById("accentSelector");
-const copyButton = document.getElementById("copyButton");
-const resetButton = document.getElementById("resetButton");
-
-const initialState = {
-  text: "",
-  font: "'Noto Serif JP', serif",
-  weight: "600",
-  size: "120",
-  line: "1.4",
-  color: "#00793d",
-  background: "#fff",
-  colorText: "#000"
-};
-
-// コントラスト計算
-function luminance(r,g,b){
-  const a=[r,g,b].map(v=>{v/=255;return v<=0.03928?v/12.92:Math.pow((v+0.055)/1.055,2.4);});
-  return 0.2126*a[0]+0.7152*a[1]+0.0722*a[2];
-}
-function getContrastColor(hex){
-  const r=parseInt(hex.substr(1,2),16);
-  const g=parseInt(hex.substr(3,2),16);
-  const b=parseInt(hex.substr(5,2),16);
-  return luminance(r,g,b)>0.5?"#000":"#fff";
-}
-
-function getEdgeColorOnWhite(hex){
-  const r=parseInt(hex.substr(1,2),16);
-  const g=parseInt(hex.substr(3,2),16);
-  const b=parseInt(hex.substr(5,2),16);
-  const lightness=luminance(r,g,b);
-  return lightness>0.9?"#b8b8b8":hex;
-}
-
-// スタイル更新
-function updateStyles(){
-  displayArea.style.fontSize = fontSizeSlider.value + "px";
-  displayArea.style.fontWeight = fontWeightSlider.value;
-  displayArea.style.lineHeight = lineHeightSlider.value;
-  displayArea.style.fontFamily = fontSelector.value;
-
-  let accent = accentSelector.value;
-  const edgeColor = getEdgeColorOnWhite(accent);
-  textInput.style.borderColor = edgeColor;
-  displayArea.style.borderColor = edgeColor;
-  displayArea.style.boxShadow = `0 0 16px ${edgeColor}`;
-  header.style.backgroundColor = accent;
-  header.style.color = getContrastColor(accent);
-  header.style.borderBottom = `2px solid ${edgeColor}`;
-  copyButton.style.backgroundColor = accent;
-  copyButton.style.color = getContrastColor(accent);
-  copyButton.style.border = `1px solid ${edgeColor}`;
-  resetButton.style.backgroundColor = accent;
-  resetButton.style.color = getContrastColor(accent);
-  resetButton.style.border = `1px solid ${edgeColor}`;
-
-  document.body.style.backgroundColor = initialState.background;
-  displayArea.style.backgroundColor = initialState.background;
-  displayArea.style.color = initialState.colorText;
-  textInput.style.backgroundColor = initialState.background;
-  textInput.style.color = initialState.colorText;
-}
-
-// 表示更新
-function updateDisplay(){
-  displayArea.textContent = textInput.value.trim() || "test";
-}
-
-// URL更新
-function updateURLParams(){
-  const url = new URL(window.location);
-  const params = new URLSearchParams(url.search);
-  if(textInput.value!==initialState.text) params.set("text", textInput.value);
-  if(fontSelector.value!==initialState.font) params.set("font", fontSelector.value);
-  if(fontWeightSlider.value!==initialState.weight) params.set("weight", fontWeightSlider.value);
-  if(fontSizeSlider.value!==initialState.size) params.set("size", fontSizeSlider.value);
-  if(lineHeightSlider.value!==initialState.line) params.set("line", lineHeightSlider.value);
-  if(accentSelector.value.toLowerCase()!==initialState.color.toLowerCase()) params.set("color", accentSelector.value);
-  const newURL = window.location.origin + window.location.pathname + "?" + params.toString();
-  window.history.replaceState({}, "", newURL);
-}
-
-// ローカル保存・ロード
-function saveToLocal(){
-  const state={text:textInput.value,font:fontSelector.value,weight:fontWeightSlider.value,size:fontSizeSlider.value,line:lineHeightSlider.value,color:accentSelector.value};
-  localStorage.setItem('textAppState',JSON.stringify(state));
-}
-function loadFromLocal(){
-  const state=JSON.parse(localStorage.getItem('textAppState')||'{}');
-  if(state.text) textInput.value=state.text;
-  if(state.font) fontSelector.value=state.font;
-  if(state.weight) fontWeightSlider.value=state.weight;
-  if(state.size) fontSizeSlider.value=state.size;
-  if(state.line) lineHeightSlider.value=state.line;
-  if(state.color) accentSelector.value=state.color;
-}
-
-// URLパラメータ読み込み
-function loadFromURL(){
-  const params = new URLSearchParams(window.location.search);
-  if(params.get("text")) textInput.value = params.get("text");
-  if(params.get("font")) fontSelector.value = params.get("font");
-  if(params.get("weight")) fontWeightSlider.value = params.get("weight");
-  if(params.get("size")) fontSizeSlider.value = params.get("size");
-  if(params.get("line")) lineHeightSlider.value = params.get("line");
-  if(params.get("color")) accentSelector.value = params.get("color");
-}
-
-// イベント
-textInput.addEventListener("input",()=>{updateDisplay(); saveToLocal(); updateURLParams();});
-fontSizeSlider.addEventListener("input",()=>{fontSizeValue.textContent=fontSizeSlider.value; updateStyles(); saveToLocal(); updateURLParams();});
-fontWeightSlider.addEventListener("input",()=>{fontWeightValue.textContent=fontWeightSlider.value; updateStyles(); saveToLocal(); updateURLParams();});
-lineHeightSlider.addEventListener("input",()=>{lineHeightValue.textContent=lineHeightSlider.value; updateStyles(); saveToLocal(); updateURLParams();});
-fontSelector.addEventListener("input",()=>{updateStyles(); saveToLocal(); updateURLParams();});
-accentSelector.addEventListener("input",()=>{updateStyles(); saveToLocal(); updateURLParams();});
-
-// Copy
-copyButton.addEventListener("click",()=>{
-  const url=new URL(window.location.origin+window.location.pathname);
-  const params=new URLSearchParams();
-  const order=["text","font","weight","size","line","color"];
-  const current={text:textInput.value,font:fontSelector.value,weight:fontWeightSlider.value,size:fontSizeSlider.value,line:lineHeightSlider.value,color:accentSelector.value};
-  order.forEach(k=>{if(current[k]!==initialState[k]) params.set(k,current[k]);});
-  url.search=params.toString();
-  navigator.clipboard.writeText(url.toString()).then(()=>{alert("URLコピーしました");});
-});
-
-// Reset
-resetButton.addEventListener("click",()=>{
-  textInput.value=initialState.text;
-  fontSelector.value=initialState.font;
-  fontWeightSlider.value=initialState.weight;
-  fontSizeSlider.value=initialState.size;
-  lineHeightSlider.value=initialState.line;
-  accentSelector.value=initialState.color;
-  fontSizeValue.textContent=fontSizeSlider.value;
-  fontWeightValue.textContent=fontWeightSlider.value;
-  lineHeightValue.textContent=lineHeightSlider.value;
-  updateDisplay();
-  updateStyles();
-  saveToLocal();
-  const url=window.location.origin+window.location.pathname;
-  window.history.replaceState({}, "", url);
-  localStorage.removeItem('textAppState');
-});
-
-// 初期ロード
-loadFromLocal();
-loadFromURL();
-fontSizeValue.textContent = fontSizeSlider.value;
-fontWeightValue.textContent = fontWeightSlider.value;
-lineHeightValue.textContent = lineHeightSlider.value;
-updateDisplay();
-updateStyles();
-
-// フッター更新
-const footerAuthor=document.getElementById("footer-author");
-const hostname=window.location.hostname;
-const baseYear=2025;
-const currentYear=new Date().getFullYear();
-const yearText=currentYear>baseYear?`${baseYear}~${currentYear}`:`${baseYear}`;
-if(hostname.includes("hamuzon-jp.f5.si")){
-  footerAuthor.innerHTML=`&copy;${yearText} <a href="https://hamuzon-jp.f5.si" target="_blank">@hamuzon</a>`;
-}else if(hostname.includes("hamusata.f5.si")){
-  footerAuthor.innerHTML=`&copy;${yearText} <a href="https://hamusata.f5.si" target="_blank">@hamusata</a>`;
-}else{
-  footerAuthor.innerHTML=`&copy;${yearText} Text Enlargement App`;
-}
-</script>
+<script src="script.js" defer></script>
 </body>
 </html>
