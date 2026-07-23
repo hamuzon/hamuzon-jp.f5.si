@@ -28,6 +28,10 @@ export async function onRequest(context) {
 <meta property="og:description" content="来年 (${nextYear})年の元旦までの残り時間をリアルタイムでカウントダウン！">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary">
+<script>
+    const theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    document.documentElement.className = theme;
+</script>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;700&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 <style>
     * {
@@ -183,10 +187,6 @@ export async function onRequest(context) {
         gap: 1rem;
     }
 </style>
-<script>
-    const theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    document.documentElement.className = theme;
-</script>
 </head>
 <body>
     <header>
