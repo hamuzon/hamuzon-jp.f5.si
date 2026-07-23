@@ -1,10 +1,11 @@
 # ===== Device Info =====
 
-/d             https://device-info.hamuzon-jp.f5.si/                      301
-/d-1           https://device-info.hamuzon-jp.f5.si/                      301
-/device        https://device-info.hamuzon-jp.f5.si/                      301
-/device-info   https://device-info.hamuzon-jp.f5.si/                      301
-/device-info/   https://device-info.hamuzon-jp.f5.si/                      301
+/d                           https://device-info.hamuzon-jp.f5.si/          301
+/d-1                         https://device-info.hamuzon-jp.f5.si/          301
+/device                      https://device-info.hamuzon-jp.f5.si/          301
+/device-info                 https://device-info.hamuzon-jp.f5.si/          301
+/device-info/                https://device-info.hamuzon-jp.f5.si/          301
+
 
 # ===== Discord Tools =====
 
@@ -33,39 +34,35 @@
 /calendar/                   https://calendar.hamuzon-jp.f5.si            301
 /calendar/*                  https://calendar.hamuzon-jp.f5.si/:splat     301
 
-## Expo
+## Expo Countdown
 
-/expo                        https://expo.hamuzon-jp.f5.si                301
-/expo/                       https://expo.hamuzon-jp.f5.si                301
-/expo/*                      https://expo.hamuzon-jp.f5.si/:splat         301
+/expo                        https://expo-countdown.hamuzon-jp.f5.si      301
+/expo/                       https://expo-countdown.hamuzon-jp.f5.si      301
+/expo/*                      https://expo-countdown.hamuzon-jp.f5.si/:splat 301
 
-
-# ===== Expo 2025 Counter =====
-
-/expo2025-counter            https://expo.hamuzon-jp.f5.si                301
-/expo2025-counter/           https://expo.hamuzon-jp.f5.si                301
-/expo2025-counter/*          https://expo.hamuzon-jp.f5.si/:splat         301
-
-/expo2025                    https://expo.hamuzon-jp.f5.si                301
-/expo2025/*                  https://expo.hamuzon-jp.f5.si/:splat         301
-
-
-# ===== Video Hub =====
+## Video Hub
 
 /video-hub                   https://video-hub.hamuzon-jp.f5.si           301
 /video-hub/                  https://video-hub.hamuzon-jp.f5.si           301
 /video-hub/*                 https://video-hub.hamuzon-jp.f5.si/:splat    301
 
-
-# ===== Olympic Countdown =====
+## Olympic Countdown
 
 /olympic                     https://olympic-countdown.hamuzon-jp.f5.si   301
 /olympic/                    https://olympic-countdown.hamuzon-jp.f5.si   301
 /olympic/*                   https://olympic-countdown.hamuzon-jp.f5.si/:splat 301
-
 /olympic-countdown           https://olympic-countdown.hamuzon-jp.f5.si   301
 /olympic-countdown/          https://olympic-countdown.hamuzon-jp.f5.si   301
 /olympic-countdown/*         https://olympic-countdown.hamuzon-jp.f5.si/:splat 301
+
+
+# ===== Expo 2025 Counter =====
+
+/expo2025-counter            https://expo-countdown.hamuzon-jp.f5.si/2025      301
+/expo2025-counter/           https://expo-countdown.hamuzon-jp.f5.si/2025      301
+/expo2025-counter/*          https://expo-countdown.hamuzon-jp.f5.si/2025      301
+/expo2025                    https://expo-countdown.hamuzon-jp.f5.si/2025      301
+/expo2025/*                  https://expo-countdown.hamuzon-jp.f5.si/2025      301
 
 
 # ===== Pixel Art =====
@@ -106,6 +103,13 @@
 /clockapp/*                  /clock-app/:splat                            301
 
 
+# ===== World Time =====
+
+/world-time                  /WORLD-time                                  301
+/world-time/                 /WORLD-time                                  301
+/world-time/*                /WORLD-time/:splat                           301
+
+
 # ===== Internal Links =====
 
 /index.html                  /                                            301
@@ -121,7 +125,6 @@
 /lit                         /?utm_source=litlink&utm_medium=social       302
 /tre                         /?utm_source=linktree&utm_medium=social      302
 /nos                         /?utm_source=nostr&utm_medium=social         302
-
 /ig                          /?utm_source=instagram&utm_medium=social     302
 /fb                          /?utm_source=facebook&utm_medium=social      302
 /th                          /?utm_source=threads&utm_medium=social       302
