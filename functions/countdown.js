@@ -41,6 +41,18 @@ export async function onRequest(context) {
         font-family: 'Noto Sans JP', 'Arial', sans-serif;
     }
 
+    html {
+        background: #0a0a0a;
+    }
+
+    html.light {
+        background: #fde2ea;
+    }
+
+    html.dark {
+        background: #0a0a0a;
+    }
+
     body {
         min-height: 100dvh;
         display: flex;
