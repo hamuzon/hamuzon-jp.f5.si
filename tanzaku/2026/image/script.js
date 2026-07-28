@@ -17,17 +17,11 @@ window.addEventListener('DOMContentLoaded', async () => {
   );
 
   const renderTarget = document.getElementById('render-target');
+  renderTarget.style.opacity = '0';
   renderTarget.appendChild(imgTanzaku);
 
   try {
-    const canvas = await html2canvas(imgTanzaku, {
-      backgroundColor: null,
-      scale: 2,
-      useCORS: true
-    });
-
-    const dataUrl = canvas.toDataURL('image/png');
-
+    const dataUrl = await htmlToImage.toPng(imgTanzaku, { pixelRatio: 2 });
     const img = document.createElement('img');
     img.src = dataUrl;
     img.className = 'tanzaku-img';
