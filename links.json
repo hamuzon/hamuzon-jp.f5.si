@@ -17,7 +17,7 @@
   { "title": "📝 Todo Lists ✏️", "url": "/todo/" },
   { "title": "🗂️ タスクボード / Task Board 📋", "url": "/task-board/" },
   { "title": "🎂 Birthday Counter 🔢", "url": "https://birthday.hamuzon-jp.f5.si/" },
-  { "title": "🔳 QR 🔗", "url": "/qr/" },
+  { "title": "🔳 QR 🔗", "url": "https://qr.hamuzon-jp.f5.si/" },
   { "title": "🎲 サイコロ 🎯", "url": "/dice/" },
   { "title": "🍀 おみくじ 🔮", "url": "/omikuji/" },
   { "title": "🔑 Password Generator App 🗝️ (API Version)", "url": "/passapi/" },
