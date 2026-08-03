@@ -92,10 +92,11 @@
 /wish-2026/                  /tanzaku/2026                                301
 
 
-# ===== QR Code =====
+# ===== QR Subdomain =====
 
-/QR/*                        /qr/:splat                                   301
-/qr/qr                       /qr/QR                                       301
+/qr                         https://qr.hamuzon-jp.f5.si                  301
+/qr/                        https://qr.hamuzon-jp.f5.si                  301
+/qr/*                       https://qr.hamuzon-jp.f5.si/:splat           301
 
 
 # ===== Clock =====
