@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>404 - Not Found / 見つかりません</title>
+    <script>
+        (function() {
+            const saved = localStorage.getItem('tool_theme') || 'system';
+            let target = saved;
+            if (saved === 'system') {
+                target = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            }
+            document.documentElement.className = target;
+        })();
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;900&family=Roboto+Mono:wght@500&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        html.light {
+            --primary: #78a9cc;
+            --primary-text: #ffffff;
+            --text: #5a6d7d;
+            --card: #ffffff;
+            --bg: #ebf1f5;
+            --border: #cedde8;
+            --shadow: rgba(120, 169, 204, 0.15);
+            --link: #5c93bb;
+            background: var(--bg);
+        }
+        html.dark {
+            --primary: #5c93bb;
+            --primary-text: #e0f0fa;
+            --text: #b0c4d1;
+            --card: #1e2630;
+            --bg: #12181f;
+            --border: #323f4d;
+            --shadow: rgba(0, 0, 0, 0.5);
+            --link: #88b4d4;
+            background: var(--bg);
+        }
+        body {
+            font-family: 'M PLUS Rounded 1c', sans-serif;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: var(--text);
+            text-align: center;
+        }
+        main {
+            background: var(--card);
+            border-radius: 35px;
+            padding: 40px 20px;
+            border: 1px solid var(--border);
+            box-shadow: 0 20px 40px var(--shadow);
+            max-width: 450px;
+            width: 100%;
+        }
+        .error-num {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 5rem;
+            font-weight: 900;
+            color: var(--primary);
+            line-height: 1;
+            margin-bottom: 5px;
+        }
+        .error-bin {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.85rem;
+            opacity: 0.6;
+            margin-bottom: 25px;
+        }
+        h1 {
+            font-size: 1.4rem;
+            font-weight: 900;
+            margin: 0 0 15px 0;
+        }
+        .title-hiragana {
+            font-size: 0.85rem;
+            font-weight: 700;
+            opacity: 0.8;
+            display: block;
+            margin: 2px 0 4px 0;
+        }
+        .title-en {
+            font-size: 1rem;
+            font-weight: 700;
+            opacity: 0.7;
+            display: block;
+        }
+        p {
+            font-size: 0.95rem;
+            margin-bottom: 30px;
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+        .back-btn {
+            display: inline-block;
+            padding: 16px 32px;
+            background: var(--primary);
+            color: var(--primary-text);
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 900;
+            box-shadow: 0 5px 0 var(--border);
+            transition: var(--transition);
+        }
+        .back-btn:hover {
+            transform: translateY(3px);
+            box-shadow: 0 2px 0 var(--border);
+            opacity: 0.9;
+        }
+        .btn-hiragana {
+            font-size: 0.75rem;
+            font-weight: 700;
+            opacity: 0.85;
+            display: block;
+            margin: 2px 0;
+        }
+        .btn-en {
+            font-size: 0.8rem;
+            font-weight: 700;
+            opacity: 0.8;
+            display: block;
+        }
+        footer {
+            margin-top: 40px;
+            font-weight: 700;
+            font-size: 0.75rem;
+            color: var(--text);
+        }
+        a.footer-link {
+            color: var(--link);
+            text-decoration: none;
+        }
+        a.footer-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <div class="error-num">404</div>
+        
+        <h1>
+            <div>ページが見つかりません</div>
+            <span class="title-hiragana">ぺーじがみつかりません</span>
+            <div class="title-en">Page Not Found</div>
+        </h1>
+        <p>お探しのページは移動したか、URLが間違っている可能性があります。<br>The page you are looking for might have been removed or had its name changed.</p>
+        <a id="backLink" class="back-btn" href="/">
+            <div>トップページへ戻る</div>
+            <span class="btn-hiragana">とっぷぺーじへもどる</span>
+            <div class="btn-en">Back to Home</div>
+        </a>
+    </main>
+    <footer id="footer-copy"></footer>
+    <script>
+        const normalizeHostname = (hostname) => hostname.toLowerCase();
+        const isHamuzonHost = (hostname) => {
+            const normalized = normalizeHostname(hostname);
+            return normalized === "hamuzon.github.io"
+                || normalized === "hamuzon-jp.f5.si"
+                || normalized.endsWith(".hamuzon-jp.f5.si");
+        };
+        const isHamusataHost = (hostname) => {
+            const normalized = normalizeHostname(hostname);
+            return normalized === "hamusata.f5.si"
+                || normalized.endsWith(".hamusata.f5.si");
+        };
+        const getHomeURL = (hostname) => {
+            const normalized = normalizeHostname(hostname);
+            if (normalized === "hamuzon.github.io") {
+                return "https://hamuzon.github.io/binary-decimal-converter/";
+            }
+            if (isHamusataHost(normalized)) {
+                return "https://hamusata.f5.si/binary-decimal-converter/";
+            }
+            return "/";
+        };
+
+        // README/LICENSE へのアクセス（大文字小文字問わず）を判定してトップへリダイレクト
+        (function() {
+            const path = window.location.pathname.toLowerCase();
+            if (path.includes('readme') || path.includes('license')) {
+                window.location.replace(getHomeURL(location.hostname));
+            }
+        })();
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const backLink = document.getElementById('backLink');
+            backLink.href = getHomeURL(location.hostname);
+
+            const footer = document.getElementById("footer-copy");
+            const baseYear = 2025;
+            const currentYear = new Date().getFullYear();
+            const hostname = location.hostname;
+            const yearString = `${baseYear}${currentYear > baseYear ? "–" + currentYear : ""}`;
+            let footerHTML = `&copy; ${yearString} `;
+            if (normalizeHostname(hostname) === "hamuzon.github.io") {
+                footerHTML += `<a class="footer-link" href="https://hamuzon.github.io" target="_blank">@hamuzon</a>`;
+            } else if (isHamuzonHost(hostname)) {
+                footerHTML += `<a class="footer-link" href="https://hamuzon-jp.f5.si" target="_blank">@hamuzon</a>`;
+            } else if (isHamusataHost(hostname)) {
+                footerHTML += `<a class="footer-link" href="https://hamusata.f5.si" target="_blank">@hamusata</a>`;
+            } else {
+                footerHTML += `Binary &harr; Decimal Converter`;
+            }
+            footer.innerHTML = footerHTML;
+        });
+        window.matchMedia('(prefers-color-scheme: dark)').onchange = () => {
+            const saved = localStorage.getItem('tool_theme') || 'system';
+            if (saved === 'system') {
+                document.documentElement.className = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            }
+        };
+    </script>
+</body>
+</html>

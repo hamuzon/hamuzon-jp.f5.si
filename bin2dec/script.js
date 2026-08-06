@@ -77,8 +77,8 @@ inBin.onkeydown = (e) => handleStep(e, 'bin');
 inDec.onkeydown = (e) => handleStep(e, 'dec');
 
 const switchTab = (isBin) => {
-    document.getElementById('panelBin').classList.toggle('is-hidden', !isBin);
-    document.getElementById('panelDec').classList.toggle('is-hidden', isBin);
+    document.getElementById('panelBin').style.display = isBin ? 'block' : 'none';
+    document.getElementById('panelDec').style.display = isBin ? 'none' : 'block';
     document.getElementById('tabBin').className = isBin ? 'active' : '';
     document.getElementById('tabDec').className = isBin ? '' : 'active';
 };
@@ -99,29 +99,14 @@ themeSelect.onchange = (e) => {
     applyTheme(e.target.value);
 };
 
-window.onload = () => {
-    const baseYear = 2025;
-    const currentYear = new Date().getFullYear();
-    const hostname = location.hostname;
-    const footer = document.getElementById("footer-copy");
+const savedTheme = localStorage.getItem('tool_theme') || 'system';
+themeSelect.value = savedTheme;
+applyTheme(savedTheme);
 
-    let copyrightYear = currentYear > baseYear ? `${baseYear}~${currentYear}` : `${baseYear}`;
-    let footerHTML = `&copy; ${copyrightYear} `;
-
-    if (hostname.includes("hamuzon-jp.f5.si") || hostname.includes("hamuzon.web.fc2.com") || hostname.includes("hamuzon.github.io")) {
-        footerHTML += `<a href="#" target="_blank">@hamuzon</a>`;
-    } else if (hostname.includes("hamusata.f5.si")) {
-        footerHTML += `<a href="#" target="_blank">@hamusata</a>`;
-    } else {
-        footerHTML += `Binary &harr; Decimal Converter`;
-    }
-
-    if (footer) footer.innerHTML = footerHTML;
-
-    const saved = localStorage.getItem('tool_theme') || 'system';
-    themeSelect.value = saved;
-    applyTheme(saved);
-};
+const baseYear = 2025;
+const currentYear = new Date().getFullYear();
+const copyrightYear = currentYear > baseYear ? `${baseYear}–${currentYear}` : `${baseYear}`;
+document.getElementById("footer-copy").innerHTML = `&copy; ${copyrightYear} <a href="https://github.com/hamusata/hamuzon-jp.f5.si" target="_blank">hamusata</a>`;
 
 window.matchMedia('(prefers-color-scheme: dark)').onchange = () => {
     if (themeSelect.value === 'system') applyTheme('system');
