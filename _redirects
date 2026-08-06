@@ -7,6 +7,13 @@
 /device-info/                https://device-info.hamuzon-jp.f5.si/          301
 
 
+# ===== Binary Decimal Converter =====
+
+/binary-decimal-converter     /bin2dec                                    301
+/binary-decimal-converter/    /bin2dec                                    301
+/binary-decimal-converter/*   /bin2dec/:splat                             301
+
+
 # ===== Discord Tools =====
 
 /discord                     /discord-tools                               301
