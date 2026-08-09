@@ -44,19 +44,34 @@ allTimezones.forEach(tz => {
   timezoneSelect.appendChild(option);
 });
 
+function pickOne(arr) {
+  return arr.length > 0 ? [arr[Math.floor(Math.random() * arr.length)]] : [];
+}
+
 function getTimeApiEndpoints(targetZone) {
   const tz = targetZone || (timezoneSelect && timezoneSelect.value) || LOCAL_TIMEZONE || 'UTC';
-  const encodedTz = encodeURIComponent(tz);
-  return [
-    { url: `https://api-time.hamuzon-jp.f5.si/api/Time/current/zone?timeZone=${encodedTz}`, hint: tz },
-    { url: `https://api-time.hamusata.f5.si/api/Time/current/zone?timeZone=${encodedTz}`, hint: tz },
-    { url: `https://timeapi.io/api/Time/current/zone?timeZone=${encodedTz}`, hint: tz },
-    { url: "https://api-time.hamuzon-jp.f5.si/api/Time/?timeZone=UTC", hint: 'UTC' },
-    { url: "https://api-time.hamuzon-jp.f5.si/api/Time/?timeZone=JST", hint: 'Asia/Tokyo' },
-    { url: "https://api-time.hamusata.f5.si/api/Time/?timeZone=UTC", hint: 'UTC' },
-    { url: "https://api-time.hamusata.f5.si/api/Time/?timeZone=JST", hint: 'Asia/Tokyo' },
-    { url: "https://timeapi.io/api/Time/current/zone?timeZone=UTC", hint: 'UTC' }
-  ];
+  const timezonesToQuery = Array.from(new Set([tz, 'UTC', 'Asia/Tokyo']));
+
+  const endpoints = [];
+  timezonesToQuery.forEach(zone => {
+    const encodedZone = encodeURIComponent(zone);
+    const hamuEndpoints = [
+      { url: `https://api-time.hamuzon-jp.f5.si/api/Time/current/zone?timeZone=${encodedZone}`, hint: zone },
+      { url: `https://api-time.hamusata.f5.si/api/Time/current/zone?timeZone=${encodedZone}`, hint: zone }
+    ];
+    const otherEndpoints = [
+      { url: `https://timeapi.io/api/Time/current/zone?timeZone=${encodedZone}`, hint: zone }
+    ];
+
+    endpoints.push(...pickOne(hamuEndpoints));
+    endpoints.push(...pickOne(otherEndpoints));
+  });
+
+  endpoints.push(...pickOne([
+      { url: "https://api-time.hamuzon-jp.f5.si/api/Time/?timeZone=UTC", hint: 'UTC' },
+      { url: "https://api-time.hamusata.f5.si/api/Time/?timeZone=UTC", hint: 'UTC' }
+  ]));
+  return endpoints;
 }
 
 function buildFreshUrl(url) {
@@ -194,32 +209,29 @@ function resolveServerTime(data, hint = 'UTC') {
 
 async function syncTimeFromInternet(targetZone) {
   try {
-    const endpoints = getTimeApiEndpoints(targetZone);
-    const fetches = await Promise.allSettled(endpoints.map(endpoint => fetchTimeApiWithLatency(endpoint)));
-
-    const results = fetches
-      .filter(result => result.status === 'fulfilled')
-      .map(result => result.value);
-
-    if (results.length === 0) {
-      throw new Error('All time endpoints failed');
-    }
+    const processEndpoint = async (endpoint) => {
+      const result = await fetchTimeApiWithLatency(endpoint);
+      const serverTime = resolveServerTime(result.data, result.hint);
+      if (isNaN(serverTime)) {
+        throw new Error(`Invalid time format from ${result.url}`);
+      }
+      const roundTripDelay = result.responseDateNow - result.requestDateNow;
+      return serverTime + roundTripDelay / 2;
+    };
 
     let correctedTime = null;
-    for (const result of results) {
+    const endpoints = getTimeApiEndpoints(targetZone);
+    for (const endpoint of endpoints) {
       try {
-        const serverTime = resolveServerTime(result.data, result.hint);
-        if (isNaN(serverTime)) continue;
-        const roundTripDelay = result.responseDateNow - result.requestDateNow;
-        correctedTime = serverTime + roundTripDelay / 2;
+        correctedTime = await processEndpoint(endpoint);
         break;
       } catch (e) {
-        console.warn(`Time API format unsupported for ${result.url}:`, e);
+        console.warn(`Failed to get time from ${endpoint.url}:`, e.message);
       }
     }
 
-    if (correctedTime === null || isNaN(correctedTime)) {
-      throw new Error('No usable time API response format found');
+    if (correctedTime === null) {
+      throw new Error("All time sync attempts failed.");
     }
 
     const deviceTimeNow = Date.now();
@@ -299,14 +311,16 @@ window.addEventListener("DOMContentLoaded", async () => {
   await syncTimeFromInternet(defaultTz);
   addTimezone(defaultTz);
   setInterval(updateClocks, 1000);
-  setInterval(() => syncTimeFromInternet(timezoneSelect.value), 60000);
 
-  timezoneSelect.addEventListener("change", () => syncTimeFromInternet(timezoneSelect.value));
+  let syncIntervalMs = 30 * 60 * 1000;
+  if (navigator.connection && (navigator.connection.type === 'wifi' || navigator.connection.type === 'ethernet')) {
+    syncIntervalMs = 10 * 60 * 1000;
+  }
+  setInterval(() => syncTimeFromInternet(), syncIntervalMs);
   const addButton = document.getElementById("add-button");
   if (addButton) {
     addButton.onclick = () => {
-      addTimezone();
-      syncTimeFromInternet(timezoneSelect.value);
+      addTimezone(timezoneSelect.value);
     };
   }
 });
