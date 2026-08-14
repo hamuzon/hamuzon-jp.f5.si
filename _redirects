@@ -35,11 +35,13 @@
 /birthday/                   https://birthday.hamuzon-jp.f5.si            301
 /birthday/*                  https://birthday.hamuzon-jp.f5.si/:splat     301
 
+
 ## Calendar
 
 /calendar                    https://calendar.hamuzon-jp.f5.si            301
 /calendar/                   https://calendar.hamuzon-jp.f5.si            301
 /calendar/*                  https://calendar.hamuzon-jp.f5.si/:splat     301
+
 
 ## Expo Countdown
 
@@ -47,20 +49,22 @@
 /expo/                       https://expo-countdown.hamuzon-jp.f5.si      301
 /expo/*                      https://expo-countdown.hamuzon-jp.f5.si/:splat 301
 
+
 ## Video Hub
 
 /video-hub                   https://video-hub.hamuzon-jp.f5.si           301
 /video-hub/                  https://video-hub.hamuzon-jp.f5.si           301
-/video-hub/*                 https://video-hub.hamuzon-jp.f5.si/:splat    301
+/video-hub/*                https://video-hub.hamuzon-jp.f5.si/:splat    301
+
 
 ## Olympic Countdown
 
 /olympic                     https://olympic-countdown.hamuzon-jp.f5.si   301
 /olympic/                    https://olympic-countdown.hamuzon-jp.f5.si   301
 /olympic/*                   https://olympic-countdown.hamuzon-jp.f5.si/:splat 301
-/olympic-countdown           https://olympic-countdown.hamuzon-jp.f5.si   301
-/olympic-countdown/          https://olympic-countdown.hamuzon-jp.f5.si   301
-/olympic-countdown/*         https://olympic-countdown.hamuzon-jp.f5.si/:splat 301
+/olympic-countdown            https://olympic-countdown.hamuzon-jp.f5.si   301
+/olympic-countdown/           https://olympic-countdown.hamuzon-jp.f5.si   301
+/olympic-countdown/*          https://olympic-countdown.hamuzon-jp.f5.si/:splat 301
 
 
 # ===== Expo 2025 Counter =====
@@ -124,6 +128,41 @@
 /world-time/*                /WORLD-time/:splat                           301
 
 
+# ===== Time-Zone App =====
+
+/Time-Zone                   /Time-Zone_app/                               301
+/Time-Zone/                  /Time-Zone_app/                               301
+/Time-Zone/*                 /Time-Zone_app/:splat                         301
+
+/TimeZone                    /Time-Zone_app/                               301
+/TimeZone/                   /Time-Zone_app/                               301
+/TimeZone/*                  /Time-Zone_app/:splat                         301
+
+/time-zone                   /Time-Zone_app/                               301
+/time-zone/                  /Time-Zone_app/                               301
+/time-zone/*                /Time-Zone_app/:splat                         301
+
+/timezone                    /Time-Zone_app/                               301
+/timezone/                   /Time-Zone_app/                               301
+/timezone/*                 /Time-Zone_app/:splat                         301
+
+/Time-Zone-app               /Time-Zone_app/                               301
+/Time-Zone-app/              /Time-Zone_app/                               301
+/Time-Zone-app/*             /Time-Zone_app/:splat                         301
+
+/TimeZone-app                /Time-Zone_app/                               301
+/TimeZone-app/               /Time-Zone_app/                               301
+/TimeZone-app/*              /Time-Zone_app/:splat                         301
+
+/time-zone-app               /Time-Zone_app/                               301
+/time-zone-app/              /Time-Zone_app/                               301
+/time-zone-app/*             /Time-Zone_app/:splat                         301
+
+/timezone-app                /Time-Zone_app/                               301
+/timezone-app/               /Time-Zone_app/                               301
+/timezone-app/*              /Time-Zone_app/:splat                         301
+
+
 # ===== Internal Links =====
 
 /index.html                  /                                            301
@@ -134,12 +173,12 @@
 # ===== Social Analytics =====
 
 /dc                          /?utm_source=discord&utm_medium=social       302
-/bky                         /?utm_source=bluesky&utm_medium=social       302
-/tx                          /?utm_source=twitter&utm_medium=social       302
+/bky                         /?utm_source=bluesky&utm_medium=social        302
+/tx                          /?utm_source=twitter&utm_medium=social        302
 /lit                         /?utm_source=litlink&utm_medium=social       302
 /tre                         /?utm_source=linktree&utm_medium=social      302
 /nos                         /?utm_source=nostr&utm_medium=social         302
 /ig                          /?utm_source=instagram&utm_medium=social     302
-/fb                          /?utm_source=facebook&utm_medium=social      302
-/th                          /?utm_source=threads&utm_medium=social       302
-/meta                        /?utm_source=meta&utm_medium=social          302
+/fb                          /?utm_source=facebook&utm_medium=social       302
+/th                          /?utm_source=threads&utm_medium=social        302
+/meta                        /?utm_source=meta&utm_medium=social           302
