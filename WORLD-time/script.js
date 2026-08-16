@@ -319,8 +319,10 @@ window.addEventListener("DOMContentLoaded", async () => {
   setInterval(() => syncTimeFromInternet(), syncIntervalMs);
   const addButton = document.getElementById("add-button");
   if (addButton) {
-    addButton.onclick = () => {
-      addTimezone(timezoneSelect.value);
+    addButton.onclick = async () => {
+      const tz = timezoneSelect.value;
+      addTimezone(tz);
+      await syncTimeFromInternet(tz);
     };
   }
 });
