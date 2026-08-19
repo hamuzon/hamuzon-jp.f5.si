@@ -111,7 +111,7 @@ rollBtn.addEventListener('click', async () => {
     }
 
     const appName = "サイコロアプリ / dice app";
-    const footerHTML = `&copy; ${copyrightYear} ${footerContent ? `${footerContent} | ${appName}` : appName}`;
+    const footerHTML = `&copy; ${copyrightYear} ${footerContent ? `${footerContent}<br>${appName}` : appName}`;
 
     if (footer) footer.innerHTML = footerHTML;
 })();
