@@ -52,7 +52,8 @@ rollBtn.addEventListener('click', async () => {
         }
 
         if (data.message) {
-            html += `<div>${data.message}</div>`;
+            const formattedMessage = data.message.replace('、', '、<br>');
+            html += `<div>${formattedMessage}</div>`;
         }
 
         if (data.rolls && data.rolls.length > 1) {
