@@ -113,6 +113,7 @@ button:disabled {
     display: block;
     max-width: 100%;
     text-align: center;
+
     overflow: hidden;
 }
 
