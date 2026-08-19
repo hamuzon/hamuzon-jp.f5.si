@@ -98,16 +98,20 @@ rollBtn.addEventListener('click', async () => {
     const footer = document.getElementById("footer-copy");
 
     let copyrightYear = baseYear + (currentYear > baseYear ? "~" + currentYear : "");
-    let footerHTML = `&copy; ${copyrightYear} `;
+    let footerContent = "";
 
     if (hostname.includes("hamuzon-jp.f5.si")) {
-        footerHTML += `<a href="https://hamuzon-jp.f5.si" target="_blank">@hamuzon</a>`;
+        footerContent = `<a href="https://hamuzon-jp.f5.si" target="_blank">@hamuzon</a>`;
+    } else if (hostname.includes("hamuzon.web.fc2.com")) {
+        footerContent = `<a href="https://hamuzon.web.fc2.com" target="_blank">@hamuzon</a>`;
     } else if (hostname.includes("hamuzon.github.io")) {
-        footerHTML += `<a href="https://hamuzon.github.io" target="_blank">@hamuzon</a>`;
+        footerContent = `<a href="https://hamuzon.github.io" target="_blank">@hamuzon</a>`;
     } else if (hostname.includes("hamusata.f5.si")) {
-        footerHTML += `<a href="https://hamusata.f5.si" target="_blank">@hamusata</a>`;
-    } else {
-        footerHTML += `サイコロアプリ / dice app`;
+        footerContent = `<a href="https://hamusata.f5.si" target="_blank">@hamusata</a>`;
     }
+
+    const appName = "サイコロアプリ / dice app";
+    const footerHTML = `&copy; ${copyrightYear} ${footerContent ? `${footerContent} | ${appName}` : appName}`;
+
     if (footer) footer.innerHTML = footerHTML;
 })();
