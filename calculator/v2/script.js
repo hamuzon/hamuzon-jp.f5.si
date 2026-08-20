@@ -6,6 +6,10 @@ function renderDisplay() {
 }
 function appendValue(value) {
   const ops = "+-*/^%";
+  if (rawExpression === 'Error') {
+    rawExpression = ops.includes(value) ? '0' : '';
+  }
+
   const lastChar = rawExpression.slice(-1);
   if (value === '.') {
     const tokens = rawExpression.split(/[\+\-\*\/\^%()]/);

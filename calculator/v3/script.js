@@ -7,6 +7,12 @@ function renderDisplay() {
 function appendValue(value) {
   const ops = "+-*/^%";
   const lastChar = rawExpression.slice(-1);
+
+  // Error表示後にボタンが押されたら表示をリセット
+  if (rawExpression === 'Error') {
+    rawExpression = ops.includes(value) ? '0' : '';
+  }
+
   if (value === '.') {
     const tokens = rawExpression.split(/[\+\-\*\/\^%()]/);
     const currentNum = tokens[tokens.length - 1];

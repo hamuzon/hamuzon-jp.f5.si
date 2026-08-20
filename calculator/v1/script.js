@@ -9,6 +9,11 @@ function appendValue(value) {
   const ops = "+-*/^%";
   const lastChar = rawExpression.slice(-1);
 
+  // Error表示後にボタンが押されたら表示をリセット
+  if (rawExpression === 'Error') {
+    rawExpression = ops.includes(value) ? '0' : '';
+  }
+
   // 小数点重複防止
   if (value === '.') {
     const tokens = rawExpression.split(/[\+\-\*\/\^%()]/);
