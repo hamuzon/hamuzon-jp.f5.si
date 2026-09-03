@@ -427,8 +427,8 @@
 
       const homeUrl =
         host === 'hamuzon.github.io'
-          ? 'https://hamuzon.github.io/tsuikimi/'
-          : `${location.origin}/tsuikimi/`;
+          ? 'https://hamuzon.github.io/tsukimi/'
+          : `${location.origin}/tsukimi/`;
 
       const backButton =
         document.getElementById('back-btn');
@@ -466,10 +466,7 @@
       let linkHref = '';
       let linkText = '';
 
-      if (
-        host.includes('pixel-art.hamusata.f5.si') ||
-        host === 'hamusata.f5.si'
-      ) {
+      if (host === 'hamusata.f5.si') {
         linkHref =
           'https://hamusata.f5.si';
 
