@@ -13,7 +13,9 @@
       color: #fff8dc;
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       min-height: 100vh;
@@ -135,7 +137,10 @@
       transform: translateY(-2px);
     }
 
-    button:focus-visible { outline: 2px solid #fff8dc; outline-offset: 4px; }
+    button:focus-visible {
+      outline: 2px solid #fff8dc;
+      outline-offset: 4px;
+    }
 
     .btn-subtext {
       display: block;
@@ -155,17 +160,38 @@
       font-size: 0.7rem;
     }
 
+    footer a {
+      color: rgba(255, 248, 220, 0.7);
+      text-decoration: none;
+      transition: color 180ms ease;
+    }
+
+    footer a:hover,
+    footer a:focus-visible {
+      color: #fff0a4;
+      text-decoration: underline;
+    }
+
     @keyframes panelShow {
-      from { opacity: 0; transform: translateY(14px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(14px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
   </style>
 </head>
 <body>
   <canvas id="moon-canvas" aria-hidden="true"></canvas>
+
   <main class="not-found" role="alertdialog" aria-labelledby="not-found-title">
     <div class="window-body">
       <span class="not-found-code">404</span>
+
       <h1 id="not-found-title">お月見 - 404 Not Found</h1>
 
       <div class="message-area">
@@ -173,6 +199,7 @@
           <p><strong>エラーが発生しました</strong></p>
           <span class="subtext">Something went wrong.</span>
         </div>
+
         <div class="message-item">
           <p>指定されたページは見つかりません。</p>
           <span class="subtext">The page you are looking for doesn't exist or may have been moved.</span>
@@ -186,7 +213,9 @@
         </button>
       </div>
 
-      <footer>&copy; <span class="year"></span> お月見<span id="footer-link-container"></span></footer>
+      <footer>
+        &copy; <span class="year"></span> お月見<span id="footer-link-container"></span>
+      </footer>
     </div>
   </main>
 
@@ -207,28 +236,95 @@
 
         canvas.width = width * devicePixelRatio;
         canvas.height = height * devicePixelRatio;
-        context.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+
+        context.setTransform(
+          devicePixelRatio,
+          0,
+          0,
+          devicePixelRatio,
+          0,
+          0
+        );
+
         context.clearRect(0, 0, width, height);
 
-        const corona = context.createRadialGradient(moonX, moonY, radius * 0.8, moonX, moonY, radius * 3.6);
-        corona.addColorStop(0, 'rgba(255,235,140,0.30)');
-        corona.addColorStop(0.5, 'rgba(255,210,80,0.08)');
-        corona.addColorStop(1, 'rgba(0,0,0,0)');
+        const corona = context.createRadialGradient(
+          moonX,
+          moonY,
+          radius * 0.8,
+          moonX,
+          moonY,
+          radius * 3.6
+        );
+
+        corona.addColorStop(
+          0,
+          'rgba(255,235,140,0.30)'
+        );
+
+        corona.addColorStop(
+          0.5,
+          'rgba(255,210,80,0.08)'
+        );
+
+        corona.addColorStop(
+          1,
+          'rgba(0,0,0,0)'
+        );
+
         context.fillStyle = corona;
         context.beginPath();
-        context.arc(moonX, moonY, radius * 3.6, 0, Math.PI * 2);
+
+        context.arc(
+          moonX,
+          moonY,
+          radius * 3.6,
+          0,
+          Math.PI * 2
+        );
+
         context.fill();
 
         context.save();
         context.beginPath();
-        context.arc(moonX, moonY, radius, 0, Math.PI * 2);
-        const moonGradient = context.createRadialGradient(
-          moonX - radius * 0.15, moonY - radius * 0.15, 0, moonX, moonY, radius
+
+        context.arc(
+          moonX,
+          moonY,
+          radius,
+          0,
+          Math.PI * 2
         );
-        moonGradient.addColorStop(0, '#fffef8');
-        moonGradient.addColorStop(0.5, '#fff2b5');
-        moonGradient.addColorStop(0.88, '#f2d458');
-        moonGradient.addColorStop(1, '#d8b028');
+
+        const moonGradient = context.createRadialGradient(
+          moonX - radius * 0.15,
+          moonY - radius * 0.15,
+          0,
+          moonX,
+          moonY,
+          radius
+        );
+
+        moonGradient.addColorStop(
+          0,
+          '#fffef8'
+        );
+
+        moonGradient.addColorStop(
+          0.5,
+          '#fff2b5'
+        );
+
+        moonGradient.addColorStop(
+          0.88,
+          '#f2d458'
+        );
+
+        moonGradient.addColorStop(
+          1,
+          '#d8b028'
+        );
+
         context.fillStyle = moonGradient;
         context.shadowColor = 'rgba(255,220,90,0.65)';
         context.shadowBlur = 22;
@@ -237,34 +333,76 @@
 
         context.save();
         context.beginPath();
-        context.arc(moonX, moonY, radius, 0, Math.PI * 2);
+
+        context.arc(
+          moonX,
+          moonY,
+          radius,
+          0,
+          Math.PI * 2
+        );
+
         context.clip();
         context.filter = `blur(${radius * 0.16}px)`;
         context.fillStyle = 'rgba(155,118,42,0.20)';
-        [[-0.28, -0.04, 0.26], [-0.10, 0.36, 0.30], [0.33, 0.20, 0.22],
-          [0.09, -0.26, 0.18], [0.42, -0.15, 0.17], [-0.44, -0.30, 0.15]]
-          .forEach(([offsetX, offsetY, size]) => {
-            context.beginPath();
-            context.arc(moonX + offsetX * radius, moonY + offsetY * radius, size * radius, 0, Math.PI * 2);
-            context.fill();
-          });
+
+        [
+          [-0.28, -0.04, 0.26],
+          [-0.10, 0.36, 0.30],
+          [0.33, 0.20, 0.22],
+          [0.09, -0.26, 0.18],
+          [0.42, -0.15, 0.17],
+          [-0.44, -0.30, 0.15]
+        ].forEach(([offsetX, offsetY, size]) => {
+          context.beginPath();
+
+          context.arc(
+            moonX + offsetX * radius,
+            moonY + offsetY * radius,
+            size * radius,
+            0,
+            Math.PI * 2
+          );
+
+          context.fill();
+        });
+
         context.filter = 'none';
         context.restore();
 
         context.beginPath();
-        context.arc(moonX, moonY, radius, 0, Math.PI * 2);
-        context.strokeStyle = 'rgba(255,255,220,0.3)';
+
+        context.arc(
+          moonX,
+          moonY,
+          radius,
+          0,
+          Math.PI * 2
+        );
+
+        context.strokeStyle =
+          'rgba(255,255,220,0.3)';
+
         context.lineWidth = 1.5;
         context.stroke();
       }
 
       drawMoon();
-      window.addEventListener('resize', drawMoon);
+
+      window.addEventListener(
+        'resize',
+        drawMoon
+      );
     })();
 
     (() => {
-      const path = window.location.pathname.toLowerCase();
-      if (path.includes('readme') || path.includes('license')) {
+      const path =
+        window.location.pathname.toLowerCase();
+
+      if (
+        path.includes('readme') ||
+        path.includes('license')
+      ) {
         window.location.replace('./');
       }
     })();
@@ -272,50 +410,100 @@
     (() => {
       const startYear = 2026;
       const currentYear = new Date().getFullYear();
-      const yearDisplay = startYear === currentYear
-        ? `${startYear}`
-        : `${Math.min(startYear, currentYear)} ~ ${Math.max(startYear, currentYear)}`;
 
-      document.querySelectorAll('.year').forEach((element) => {
-        element.textContent = yearDisplay;
-      });
+      const yearDisplay =
+        startYear === currentYear
+          ? `${startYear}`
+          : `${Math.min(startYear, currentYear)} ~ ${Math.max(startYear, currentYear)}`;
 
-      const host = location.hostname.toLowerCase();
-      const isGithubPages = host.endsWith('github.io');
-      const pathSegments = location.pathname.split('/').filter(Boolean);
-      const repoBase = isGithubPages && pathSegments.length > 0 ? `/${pathSegments[0]}/` : '/';
-      const homeUrl = `${location.origin}${repoBase}`;
+      document
+        .querySelectorAll('.year')
+        .forEach((element) => {
+          element.textContent = yearDisplay;
+        });
 
-      const backButton = document.getElementById('back-btn');
+      const host =
+        location.hostname.toLowerCase();
+
+      const homeUrl =
+        host === 'hamuzon.github.io'
+          ? 'https://hamuzon.github.io/tsuikimi/'
+          : `${location.origin}/tsuikimi/`;
+
+      const backButton =
+        document.getElementById('back-btn');
+
       if (backButton) {
-        backButton.addEventListener('click', () => { location.href = homeUrl; });
+        backButton.addEventListener(
+          'click',
+          () => {
+            location.href = homeUrl;
+          }
+        );
       }
 
-      const closeButton = document.getElementById('close-btn');
+      const closeButton =
+        document.getElementById('close-btn');
+
       if (closeButton) {
-        closeButton.addEventListener('click', () => { location.href = homeUrl; });
+        closeButton.addEventListener(
+          'click',
+          () => {
+            location.href = homeUrl;
+          }
+        );
       }
 
-      const container = document.getElementById('footer-link-container');
-      if (!container) return;
+      const container =
+        document.getElementById(
+          'footer-link-container'
+        );
+
+      if (!container) {
+        return;
+      }
 
       let linkHref = '';
       let linkText = '';
 
-      if (host.includes('pixel-art.hamusata.f5.si') || host === 'hamusata.f5.si') {
-        linkHref = 'https://hamusata.f5.si';
-        linkText = '@hamusata';
-      } else if (host === 'hamuzon.github.io' || host === 'hamuzon-jp.f5.si') {
-        linkHref = host === 'hamuzon.github.io' ? 'https://github.com/Hamuzon' : 'https://hamuzon-jp.f5.si';
-        linkText = '@hamuzon';
+      if (
+        host.includes('pixel-art.hamusata.f5.si') ||
+        host === 'hamusata.f5.si'
+      ) {
+        linkHref =
+          'https://hamusata.f5.si';
+
+        linkText =
+          '@hamusata';
+      } else if (
+        host === 'hamuzon.github.io' ||
+        host === 'hamuzon-jp.f5.si'
+      ) {
+        linkHref =
+          host === 'hamuzon.github.io'
+            ? 'https://github.com/Hamuzon'
+            : 'https://hamuzon-jp.f5.si';
+
+        linkText =
+          '@hamuzon';
       }
 
       if (linkHref) {
-        const link = document.createElement('a');
-        link.href = linkHref;
-        link.target = '_blank';
-        link.rel = 'noopener noreferrer';
-        link.textContent = ` ${linkText}`;
+        const link =
+          document.createElement('a');
+
+        link.href =
+          linkHref;
+
+        link.target =
+          '_blank';
+
+        link.rel =
+          'noopener noreferrer';
+
+        link.textContent =
+          ` ${linkText}`;
+
         container.appendChild(link);
       }
     })();
