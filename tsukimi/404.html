@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 Not Found - お月見</title>
+  <meta name="description" content="お探しのページは見つかりませんでした。">
+  <style>
+    :root {
+      color-scheme: dark;
+      font-family: 'Shippori Mincho', 'Yu Mincho', serif;
+      background: #050914;
+      color: #fff8dc;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      overflow: hidden;
+      display: grid;
+      place-items: center;
+      padding: 1.5rem;
+      background:
+        radial-gradient(circle at 15% 18%, rgba(255, 255, 255, 0.7) 0 1px, transparent 1.5px),
+        radial-gradient(circle at 34% 31%, rgba(255, 255, 255, 0.55) 0 1px, transparent 1.5px),
+        radial-gradient(circle at 84% 12%, rgba(255, 255, 255, 0.65) 0 1px, transparent 1.5px),
+        linear-gradient(155deg, #111b36 0%, #080d1d 48%, #03050c 100%);
+      background-size: 19rem 15rem, 23rem 19rem, 17rem 14rem, auto;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      left: -5vw;
+      right: -5vw;
+      bottom: -11vh;
+      height: 29vh;
+      z-index: -1;
+      border-radius: 50% 50% 0 0;
+      background: linear-gradient(180deg, #17212c 0%, #080d15 70%);
+      box-shadow: 0 -18px 30px rgba(5, 8, 16, 0.35);
+    }
+
+    #moon-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+    }
+
+    .not-found {
+      width: min(100%, 34rem);
+      padding: clamp(2rem, 7vw, 3.5rem) clamp(1.5rem, 7vw, 3rem);
+      text-align: center;
+      background: rgba(8, 13, 28, 0.74);
+      border: 1px solid rgba(255, 229, 137, 0.35);
+      box-shadow: 0 22px 55px rgba(0, 0, 0, 0.38), 0 0 40px rgba(255, 212, 77, 0.08);
+      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(8px);
+      animation: panelShow 700ms ease-out both;
+    }
+
+    .window-body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.8rem;
+    }
+
+    .not-found-code {
+      display: block;
+      color: #f5cf62;
+      font-size: clamp(5rem, 22vw, 8rem);
+      line-height: 0.9;
+      letter-spacing: 0.08em;
+      text-shadow: 0 0 25px rgba(255, 222, 104, 0.6);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(1.25rem, 5vw, 1.8rem);
+      letter-spacing: 0.12em;
+    }
+
+    .message-area {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .message-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .message-item p {
+      margin: 0;
+      font-family: sans-serif;
+      font-size: clamp(0.95rem, 4vw, 1.05rem);
+      line-height: 1.4;
+    }
+
+    .subtext {
+      color: rgba(255, 248, 220, 0.7);
+      font-family: sans-serif;
+      font-size: 0.8rem;
+      line-height: 1.4;
+    }
+
+    .back-btn-wrapper {
+      width: 100%;
+      margin-top: 0.2rem;
+    }
+
+    button {
+      min-width: 190px;
+      padding: 0.75rem 1.3rem;
+      border: 1px solid rgba(255, 248, 220, 0.55);
+      color: #241b12;
+      background: #f5cf62;
+      cursor: pointer;
+      font-family: sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      transition: background-color 180ms ease, transform 180ms ease;
+    }
+
+    button:hover,
+    button:focus-visible {
+      background: #fff0a4;
+      transform: translateY(-2px);
+    }
+
+    button:focus-visible { outline: 2px solid #fff8dc; outline-offset: 4px; }
+
+    .btn-subtext {
+      display: block;
+      margin-top: 0.2rem;
+      color: #514020;
+      font-size: 0.72rem;
+      font-weight: 400;
+    }
+
+    footer {
+      width: 100%;
+      margin-top: 1.2rem;
+      padding-top: 0.8rem;
+      border-top: 1px solid rgba(255, 248, 220, 0.2);
+      color: rgba(255, 248, 220, 0.55);
+      font-family: sans-serif;
+      font-size: 0.7rem;
+    }
+
+    @keyframes panelShow {
+      from { opacity: 0; transform: translateY(14px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="moon-canvas" aria-hidden="true"></canvas>
+  <main class="not-found" role="alertdialog" aria-labelledby="not-found-title">
+    <div class="window-body">
+      <span class="not-found-code">404</span>
+      <h1 id="not-found-title">お月見 - 404 Not Found</h1>
+
+      <div class="message-area">
+        <div class="message-item">
+          <p><strong>エラーが発生しました</strong></p>
+          <span class="subtext">Something went wrong.</span>
+        </div>
+        <div class="message-item">
+          <p>指定されたページは見つかりません。</p>
+          <span class="subtext">The page you are looking for doesn't exist or may have been moved.</span>
+        </div>
+      </div>
+
+      <div class="back-btn-wrapper">
+        <button id="back-btn" type="button">
+          トップページへ戻る
+          <span class="btn-subtext">Return to Home</span>
+        </button>
+      </div>
+
+      <footer>&copy; <span class="year"></span> お月見<span id="footer-link-container"></span></footer>
+    </div>
+  </main>
+
+  <script>
+    (() => {
+      const canvas = document.getElementById('moon-canvas');
+      const context = canvas.getContext('2d');
+      const devicePixelRatio = window.devicePixelRatio || 1;
+      const moonXRatio = 0.65;
+      const moonYRatio = 0.28;
+
+      function drawMoon() {
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+        const moonX = width * moonXRatio;
+        const moonY = height * moonYRatio;
+        const radius = Math.min(width, height) * 0.12 + 16;
+
+        canvas.width = width * devicePixelRatio;
+        canvas.height = height * devicePixelRatio;
+        context.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+        context.clearRect(0, 0, width, height);
+
+        const corona = context.createRadialGradient(moonX, moonY, radius * 0.8, moonX, moonY, radius * 3.6);
+        corona.addColorStop(0, 'rgba(255,235,140,0.30)');
+        corona.addColorStop(0.5, 'rgba(255,210,80,0.08)');
+        corona.addColorStop(1, 'rgba(0,0,0,0)');
+        context.fillStyle = corona;
+        context.beginPath();
+        context.arc(moonX, moonY, radius * 3.6, 0, Math.PI * 2);
+        context.fill();
+
+        context.save();
+        context.beginPath();
+        context.arc(moonX, moonY, radius, 0, Math.PI * 2);
+        const moonGradient = context.createRadialGradient(
+          moonX - radius * 0.15, moonY - radius * 0.15, 0, moonX, moonY, radius
+        );
+        moonGradient.addColorStop(0, '#fffef8');
+        moonGradient.addColorStop(0.5, '#fff2b5');
+        moonGradient.addColorStop(0.88, '#f2d458');
+        moonGradient.addColorStop(1, '#d8b028');
+        context.fillStyle = moonGradient;
+        context.shadowColor = 'rgba(255,220,90,0.65)';
+        context.shadowBlur = 22;
+        context.fill();
+        context.restore();
+
+        context.save();
+        context.beginPath();
+        context.arc(moonX, moonY, radius, 0, Math.PI * 2);
+        context.clip();
+        context.filter = `blur(${radius * 0.16}px)`;
+        context.fillStyle = 'rgba(155,118,42,0.20)';
+        [[-0.28, -0.04, 0.26], [-0.10, 0.36, 0.30], [0.33, 0.20, 0.22],
+          [0.09, -0.26, 0.18], [0.42, -0.15, 0.17], [-0.44, -0.30, 0.15]]
+          .forEach(([offsetX, offsetY, size]) => {
+            context.beginPath();
+            context.arc(moonX + offsetX * radius, moonY + offsetY * radius, size * radius, 0, Math.PI * 2);
+            context.fill();
+          });
+        context.filter = 'none';
+        context.restore();
+
+        context.beginPath();
+        context.arc(moonX, moonY, radius, 0, Math.PI * 2);
+        context.strokeStyle = 'rgba(255,255,220,0.3)';
+        context.lineWidth = 1.5;
+        context.stroke();
+      }
+
+      drawMoon();
+      window.addEventListener('resize', drawMoon);
+    })();
+
+    (() => {
+      const path = window.location.pathname.toLowerCase();
+      if (path.includes('readme') || path.includes('license')) {
+        window.location.replace('./');
+      }
+    })();
+
+    (() => {
+      const startYear = 2026;
+      const currentYear = new Date().getFullYear();
+      const yearDisplay = startYear === currentYear
+        ? `${startYear}`
+        : `${Math.min(startYear, currentYear)} ~ ${Math.max(startYear, currentYear)}`;
+
+      document.querySelectorAll('.year').forEach((element) => {
+        element.textContent = yearDisplay;
+      });
+
+      const host = location.hostname.toLowerCase();
+      const isGithubPages = host.endsWith('github.io');
+      const pathSegments = location.pathname.split('/').filter(Boolean);
+      const repoBase = isGithubPages && pathSegments.length > 0 ? `/${pathSegments[0]}/` : '/';
+      const homeUrl = `${location.origin}${repoBase}`;
+
+      const backButton = document.getElementById('back-btn');
+      if (backButton) {
+        backButton.addEventListener('click', () => { location.href = homeUrl; });
+      }
+
+      const closeButton = document.getElementById('close-btn');
+      if (closeButton) {
+        closeButton.addEventListener('click', () => { location.href = homeUrl; });
+      }
+
+      const container = document.getElementById('footer-link-container');
+      if (!container) return;
+
+      let linkHref = '';
+      let linkText = '';
+
+      if (host.includes('pixel-art.hamusata.f5.si') || host === 'hamusata.f5.si') {
+        linkHref = 'https://hamusata.f5.si';
+        linkText = '@hamusata';
+      } else if (host === 'hamuzon.github.io' || host === 'hamuzon-jp.f5.si') {
+        linkHref = host === 'hamuzon.github.io' ? 'https://github.com/Hamuzon' : 'https://hamuzon-jp.f5.si';
+        linkText = '@hamuzon';
+      }
+
+      if (linkHref) {
+        const link = document.createElement('a');
+        link.href = linkHref;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.textContent = ` ${linkText}`;
+        container.appendChild(link);
+      }
+    })();
+  </script>
+</body>
+</html>
