@@ -1,190 +1,153 @@
 # ===== Device Info =====
-
-/d                           https://device-info.hamuzon-jp.f5.si/          301
-/d-1                         https://device-info.hamuzon-jp.f5.si/          301
-/device                      https://device-info.hamuzon-jp.f5.si/          301
-/device-info                 https://device-info.hamuzon-jp.f5.si/          301
-/device-info/                https://device-info.hamuzon-jp.f5.si/          301
+/d                           https://device-info.hamuzon-jp.f5.si/                  301
+/d-1                         https://device-info.hamuzon-jp.f5.si/                  301
+/device                      https://device-info.hamuzon-jp.f5.si/                  301
+/device-info                 https://device-info.hamuzon-jp.f5.si/                  301
+/device-info/                https://device-info.hamuzon-jp.f5.si/                  301
 
 
 # ===== Binary Decimal Converter =====
-
-/binary-decimal-converter    /bin2dec                                    301
-/binary-decimal-converter/   /bin2dec                                    301
-/binary-decimal-converter/*  /bin2dec/:splat                             301
+/binary-decimal-converter   /bin2dec                                               301
+/binary-decimal-converter/  /bin2dec                                               301
+/binary-decimal-converter/* /bin2dec/:splat                                        301
 
 
 # ===== Discord Tools =====
-
-/discord                      /discord-tools                              301
-/discord/                     /discord-tools                              301
-/discord/*                    /discord-tools/:splat                       301
-
-/discord-tool                 /discord-tools                              301
-/discord-tool/                /discord-tools                              301
-/discord-tool/*               /discord-tools/:splat                       301
-
-/discord-tools/README.md      /discord-tools                              301
+/discord                     /discord-tools                                         301
+/discord/                    /discord-tools                                         301
+/discord/*                   /discord-tools/:splat                                  301
+/discord-tool                /discord-tools                                         301
+/discord-tool/               /discord-tools                                         301
+/discord-tool/*              /discord-tools/:splat                                  301
+/discord-tools/README.md     /discord-tools                                         301
 
 
 # ===== External Subdomains =====
 
 ## Birthday
-
-/birthday                     https://birthday.hamuzon-jp.f5.si            301
-/birthday/                    https://birthday.hamuzon-jp.f5.si            301
-/birthday/*                   https://birthday.hamuzon-jp.f5.si/:splat     301
-
+/birthday                    https://birthday.hamuzon-jp.f5.si                     301
+/birthday/                   https://birthday.hamuzon-jp.f5.si                     301
+/birthday/*                  https://birthday.hamuzon-jp.f5.si/:splat              301
 
 ## Calendar
-
-/calendar                     https://calendar.hamuzon-jp.f5.si            301
-/calendar/                    https://calendar.hamuzon-jp.f5.si            301
-/calendar/*                   https://calendar.hamuzon-jp.f5.si/:splat     301
-
+/calendar                    https://calendar.hamuzon-jp.f5.si                    301
+/calendar/                   https://calendar.hamuzon-jp.f5.si                    301
+/calendar/*                  https://calendar.hamuzon-jp.f5.si/:splat             301
 
 ## Expo Countdown
-
-/expo                         https://expo-countdown.hamuzon-jp.f5.si      301
-/expo/                        https://expo-countdown.hamuzon-jp.f5.si      301
-/expo/*                       https://expo-countdown.hamuzon-jp.f5.si/:splat 301
-
+/expo                        https://expo-countdown.hamuzon-jp.f5.si              301
+/expo/                       https://expo-countdown.hamuzon-jp.f5.si              301
+/expo/*                      https://expo-countdown.hamuzon-jp.f5.si/:splat       301
 
 ## Video Hub
-
-/video-hub                    https://video-hub.hamuzon-jp.f5.si           301
-/video-hub/                   https://video-hub.hamuzon-jp.f5.si           301
-/video-hub/*                  https://video-hub.hamuzon-jp.f5.si/:splat    301
-
+/video-hub                   https://video-hub.hamuzon-jp.f5.si                   301
+/video-hub/                  https://video-hub.hamuzon-jp.f5.si                   301
+/video-hub/*                 https://video-hub.hamuzon-jp.f5.si/:splat            301
 
 ## Olympic Countdown
-
-/olympic                      https://olympic-countdown.hamuzon-jp.f5.si   301
-/olympic/                     https://olympic-countdown.hamuzon-jp.f5.si   301
-/olympic/*                    https://olympic-countdown.hamuzon-jp.f5.si/:splat 301
-
-/olympic-countdown             https://olympic-countdown.hamuzon-jp.f5.si   301
-/olympic-countdown/            https://olympic-countdown.hamuzon-jp.f5.si   301
-/olympic-countdown/*           https://olympic-countdown.hamuzon-jp.f5.si/:splat 301
+/olympic                     https://olympic-countdown.hamuzon-jp.f5.si            301
+/olympic/                    https://olympic-countdown.hamuzon-jp.f5.si            301
+/olympic/*                   https://olympic-countdown.hamuzon-jp.f5.si/:splat     301
+/olympic-countdown           https://olympic-countdown.hamuzon-jp.f5.si            301
+/olympic-countdown/          https://olympic-countdown.hamuzon-jp.f5.si            301
+/olympic-countdown/*         https://olympic-countdown.hamuzon-jp.f5.si/:splat     301
 
 
 # ===== Expo 2025 Counter =====
-
-/expo2025-counter             https://expo-countdown.hamuzon-jp.f5.si/2025       301
-/expo2025-counter/            https://expo-countdown.hamuzon-jp.f5.si/2025       301
-/expo2025-counter/*           https://expo-countdown.hamuzon-jp.f5.si/2025       301
-
-/expo2025                     https://expo-countdown.hamuzon-jp.f5.si/2025       301
-/expo2025/*                   https://expo-countdown.hamuzon-jp.f5.si/2025       301
+/expo2025-counter            https://expo-countdown.hamuzon-jp.f5.si/2025          301
+/expo2025-counter/           https://expo-countdown.hamuzon-jp.f5.si/2025          301
+/expo2025-counter/*          https://expo-countdown.hamuzon-jp.f5.si/2025          301
+/expo2025                    https://expo-countdown.hamuzon-jp.f5.si/2025          301
+/expo2025/*                  https://expo-countdown.hamuzon-jp.f5.si/2025          301
 
 
 # ===== Pixel Art =====
-
-/art                          /pixel-art                                   301
-/art/                         /pixel-art                                   301
-/art/*                        /pixel-art/:splat                            301
-
-/pixel                        /pixel-art                                   301
-/pixel/                       /pixel-art                                   301
-/pixel/*                      /pixel-art/:splat                            301
-
-/pixelart                     /pixel-art                                   301
-/pixelart/                    /pixel-art                                   301
-/pixelart/*                   /pixel-art/:splat                            301
+/art                         /pixel-art                                             301
+/art/                        /pixel-art                                             301
+/art/*                       /pixel-art/:splat                                      301
+/pixel                       /pixel-art                                             301
+/pixel/                      /pixel-art                                             301
+/pixel/*                     /pixel-art/:splat                                      301
+/pixelart                    /pixel-art                                             301
+/pixelart/                   /pixel-art                                             301
+/pixelart/*                  /pixel-art/:splat                                      301
 
 
 # ===== Tanzaku (Wish) =====
-
-/wish                         /tanzaku                                     301
-/wish/                        /tanzaku                                     301
-
-/wish-2025                    /tanzaku/2025                                301
-/wish-2025/                   /tanzaku/2025                                301
-
-/wish-2026                    /tanzaku/2026                                301
-/wish-2026/                   /tanzaku/2026                                301
+/wish                        /tanzaku                                               301
+/wish/                       /tanzaku                                               301
+/wish-2025                   /tanzaku/2025                                          301
+/wish-2025/                  /tanzaku/2025                                          301
+/wish-2026                   /tanzaku/2026                                          301
+/wish-2026/                  /tanzaku/2026                                          301
 
 
 # ===== QR Subdomain =====
-
-/qr                           https://qr.hamuzon-jp.f5.si                  301
-/qr/                          https://qr.hamuzon-jp.f5.si                  301
-/qr/*                         https://qr.hamuzon-jp.f5.si/:splat           301
+/qr                          https://qr.hamuzon-jp.f5.si                            301
+/qr/                         https://qr.hamuzon-jp.f5.si                            301
+/qr/*                        https://qr.hamuzon-jp.f5.si/:splat                     301
 
 
 # ===== Clock =====
-
-/clock                        /clock-app                                   301
-/clock/                       /clock-app                                   301
-/clock/*                      /clock-app/:splat                            301
-
-/clockapp                     /clock-app                                   301
-/clockapp/                    /clock-app                                   301
-/clockapp/*                   /clock-app/:splat                            301
+/clock                       /clock-app                                             301
+/clock/                      /clock-app                                             301
+/clock/*                     /clock-app/:splat                                      301
+/clockapp                    /clock-app                                             301
+/clockapp/                   /clock-app                                             301
+/clockapp/*                  /clock-app/:splat                                      301
 
 
 # ===== World Time =====
-
-/world-time                   /WORLD-time                                  301
-/world-time/                  /WORLD-time                                  301
-/world-time/*                 /WORLD-time/:splat                           301
-
-/WORLD-time                   https://world-time.hamuzon-jp.f5.si           301
-/WORLD-time/                  https://world-time.hamuzon-jp.f5.si           301
-/WORLD-time/*                 https://world-time.hamuzon-jp.f5.si/:splat    301
+/world-time                  /WORLD-time                                            301
+/world-time/                 /WORLD-time                                            301
+/world-time/*                /WORLD-time/:splat                                     301
+/WORLD-time                  https://world-time.hamuzon-jp.f5.si                    301
+/WORLD-time/                 https://world-time.hamuzon-jp.f5.si                    301
+/WORLD-time/*                https://world-time.hamuzon-jp.f5.si/:splat             301
 
 
 # ===== Time-Zone App =====
-
-/Time-Zone                    /Time-Zone_app/                              301
-/Time-Zone/                   /Time-Zone_app/                              301
-/Time-Zone/*                  /Time-Zone_app/:splat                        301
-
-/TimeZone                     /Time-Zone_app/                              301
-/TimeZone/                    /Time-Zone_app/                              301
-/TimeZone/*                   /Time-Zone_app/:splat                        301
-
-/time-zone                    /Time-Zone_app/                              301
-/time-zone/                   /Time-Zone_app/                              301
-/time-zone/*                  /Time-Zone_app/:splat                        301
-
-/timezone                     /Time-Zone_app/                              301
-/timezone/                    /Time-Zone_app/                              301
-/timezone/*                   /Time-Zone_app/:splat                        301
-
-/Time-Zone-app                /Time-Zone_app/                              301
-/Time-Zone-app/               /Time-Zone_app/                              301
-/Time-Zone-app/*              /Time-Zone_app/:splat                        301
-
-/TimeZone-app                 /Time-Zone_app/                              301
-/TimeZone-app/                /Time-Zone_app/                              301
-/TimeZone-app/*               /Time-Zone_app/:splat                        301
-
-/time-zone-app                /Time-Zone_app/                              301
-/time-zone-app/               /Time-Zone_app/                              301
-/time-zone-app/*              /Time-Zone_app/:splat                        301
-
-/timezone-app                 /Time-Zone_app/                              301
-/timezone-app/                /Time-Zone_app/                              301
-/timezone-app/*               /Time-Zone_app/:splat                        301
+/Time-Zone                   /Time-Zone_app/                                        301
+/Time-Zone/                  /Time-Zone_app/                                        301
+/Time-Zone/*                 /Time-Zone_app/:splat                                  301
+/TimeZone                    /Time-Zone_app/                                        301
+/TimeZone/                   /Time-Zone_app/                                        301
+/TimeZone/*                  /Time-Zone_app/:splat                                  301
+/time-zone                   /Time-Zone_app/                                        301
+/time-zone/                  /Time-Zone_app/                                        301
+/time-zone/*                 /Time-Zone_app/:splat                                  301
+/timezone                    /Time-Zone_app/                                        301
+/timezone/                   /Time-Zone_app/                                        301
+/timezone/*                  /Time-Zone_app/:splat                                  301
+/Time-Zone-app               /Time-Zone_app/                                        301
+/Time-Zone-app/              /Time-Zone_app/                                        301
+/Time-Zone-app/*             /Time-Zone_app/:splat                                  301
+/TimeZone-app                /Time-Zone_app/                                        301
+/TimeZone-app/               /Time-Zone_app/                                        301
+/TimeZone-app/*              /Time-Zone_app/:splat                                  301
+/time-zone-app               /Time-Zone_app/                                        301
+/time-zone-app/              /Time-Zone_app/                                        301
+/time-zone-app/*             /Time-Zone_app/:splat                                  301
+/timezone-app                /Time-Zone_app/                                        301
+/timezone-app/               /Time-Zone_app/                                        301
+/timezone-app/*              /Time-Zone_app/:splat                                  301
 
 
 # ===== Internal Links =====
-
-/index.html                   /                                            301
-/LICENSE                      /                                            301
-/README.md                    /                                            301
+/index.html                  /                                                       301
+/LICENSE                     /                                                       301
+/README.md                   /                                                       301
 
 
 # ===== Social Analytics =====
-
-/dc                           /?utm_source=discord&utm_medium=social       302
-/bky                          /?utm_source=bluesky&utm_medium=social       302
-/tx                           /?utm_source=twitter&utm_medium=social       302
-/lit                          /?utm_source=litlink&utm_medium=social       302
-/tre                          /?utm_source=linktree&utm_medium=social       302
-/nos                          /?utm_source=nostr&utm_medium=social         302
-/ig                           /?utm_source=instagram&utm_medium=social      302
-/fb                           /?utm_source=facebook&utm_medium=social       302
-/th                           /?utm_source=threads&utm_medium=social       302
-/meta                         /?utm_source=meta&utm_medium=social           302
+/dc                          /?utm_source=discord&utm_medium=social                  302
+/bky                         /?utm_source=bluesky&utm_medium=social                  302
+/tx                          /?utm_source=twitter&utm_medium=social                  302
+/lit                         /?utm_source=litlink&utm_medium=social                  302
+/tre                         /?utm_source=linktree&utm_medium=social                 302
+/nos                         /?utm_source=nostr&utm_medium=social                    302
+/ig                          /?utm_source=instagram&utm_medium=social                302
+/fb                          /?utm_source=facebook&utm_medium=social                 302
+/th                          /?utm_source=threads&utm_medium=social                  302
+/meta                        /?utm_source=meta&utm_medium=social                     302
+/karotter                    /?utm_source=karotter&utm_medium=social                 302
