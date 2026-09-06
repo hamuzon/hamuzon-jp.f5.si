@@ -3,6 +3,7 @@ export async function onRequest(context) {
 
   if (url.hostname.endsWith(".")) {
     url.hostname = url.hostname.slice(0, -1);
+    return Response.redirect(url.toString(), 308);
   }
 
   if (url.hostname === "m.hamuzon-jp.f5.si") {
