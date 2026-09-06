@@ -1,18 +1,27 @@
 export async function onRequest(context) {
   const url = new URL(context.request.url);
+  const originalHostname = url.hostname;
 
-  if (url.hostname.endsWith(".")) {
-    url.hostname = url.hostname.slice(0, -1);
+  if (originalHostname.endsWith(".")) {
+    url.hostname = originalHostname.slice(0, -1);
     return Response.redirect(url.toString(), 308);
   }
 
-  if (url.hostname === "m.hamuzon-jp.f5.si") {
-    const userAgent = context.request.headers.get("User-Agent") || "";
+  const userAgent = context.request.headers.get("User-Agent") || "";
 
-    const isMobile =
-      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile/i.test(userAgent);
+  const isMobile =
+    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile/i.test(userAgent);
 
-    if (!isMobile) {
+  if (
+    originalHostname === "www.m.hamuzon-jp.f5.si" ||
+    originalHostname === "m.hamuzon-jp.f5.si"
+  ) {
+    if (isMobile) {
+      if (originalHostname === "www.m.hamuzon-jp.f5.si") {
+        url.hostname = "m.hamuzon-jp.f5.si";
+        return Response.redirect(url.toString(), 308);
+      }
+    } else {
       url.hostname = "hamuzon-jp.f5.si";
       return Response.redirect(url.toString(), 308);
     }
