@@ -3,10 +3,9 @@ export async function onRequest(context) {
     const url = new URL(request.url);
     const hostname = url.hostname;
 
-    // 末尾スラッシュがある場合はスラッシュなしにリダイレクト
     if (url.pathname.endsWith('/') && url.pathname !== '/') {
         const cleanUrl = url.toString().replace(/\/+$/, '');
-        return Response.redirect(cleanUrl, 301);
+        return Response.redirect(cleanUrl, 308);
     }
 
     const baseYear = 2025;
