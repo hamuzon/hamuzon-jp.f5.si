@@ -1,31 +1,31 @@
 export async function onRequest(context) {
-const url = new URL(context.request.url);
-const originalHostname = url.hostname;
+  const url = new URL(context.request.url);
+  const originalHostname = url.hostname;
 
-if (originalHostname.endsWith(".")) {
-url.hostname = originalHostname.slice(0, -1);
-return Response.redirect(url.toString(), 308);
-}
+  if (originalHostname.endsWith(".")) {
+    url.hostname = originalHostname.slice(0, -1);
+    return Response.redirect(url.toString(), 308);
+  }
 
-const userAgent = context.request.headers.get("User-Agent") || "";
+  const userAgent = context.request.headers.get("User-Agent") || "";
 
-const isMobile =
-/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile/i.test(userAgent);
+  const isMobile =
+    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile/i.test(userAgent);
 
-if (
-originalHostname === "www.m.hamuzon-jp.f5.si" ||
-originalHostname === "m.hamuzon-jp.f5.si"
-) {
-if (isMobile) {
-if (originalHostname === "www.m.hamuzon-jp.f5.si") {
-url.hostname = "m.hamuzon-jp.f5.si";
-return Response.redirect(url.toString(), 308);
-}
-} else {
-url.hostname = "hamuzon-jp.f5.si";
-return Response.redirect(url.toString(), 308);
-}
-}
+  if (
+    originalHostname === "www.m.hamuzon-jp.f5.si" ||
+    originalHostname === "m.hamuzon-jp.f5.si"
+  ) {
+    if (isMobile) {
+      if (originalHostname === "www.m.hamuzon-jp.f5.si") {
+        url.hostname = "m.hamuzon-jp.f5.si";
+        return Response.redirect(url.toString(), 308);
+      }
+    } else {
+      url.hostname = "hamuzon-jp.f5.si";
+      return Response.redirect(url.toString(), 308);
+    }
+  }
 
-return context.next();
+  return context.next();
 }
