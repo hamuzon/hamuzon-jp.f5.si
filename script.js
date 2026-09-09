@@ -18,19 +18,29 @@ fetch('links.json')
   });
 
 (function () {
-  const params = new URLSearchParams(window.location.search);
-  let changed = false;
+  setTimeout(() => {
+    const params = new URLSearchParams(window.location.search);
+    let changed = false;
 
-  for (const key of Array.from(params.keys())) {
-    if (key === '_gl' || key.startsWith('_ga')) {
-      params.delete(key);
-      changed = true;
+    for (const key of Array.from(params.keys())) {
+      if (
+        key === '_gl' ||
+        key.startsWith('_ga') ||
+        key.startsWith('utm_') ||
+        key === 'gclid' ||
+        key === 'dclid' ||
+        key === 'gbraid' ||
+        key === 'wbraid'
+      ) {
+        params.delete(key);
+        changed = true;
+      }
     }
-  }
 
-  if (changed) {
-    const query = params.toString();
-    const url = location.pathname + (query ? `?${query}` : '') + location.hash;
-    history.replaceState(null, '', url);
-  }
+    if (changed) {
+      const query = params.toString();
+      const url = location.pathname + (query ? `?${query}` : '') + location.hash;
+      history.replaceState(null, '', url);
+    }
+  }, 5000);
 })();
