@@ -2,13 +2,11 @@ export async function onRequest(context) {
   const url = new URL(context.request.url);
   const originalHostname = url.hostname;
 
-  // 末尾のドットを削除
   if (originalHostname.endsWith(".")) {
     url.hostname = originalHostname.slice(0, -1);
     return Response.redirect(url.toString(), 308);
   }
 
-  // アクセス元・広告・Analytics系のパラメータを削除
   const trackingParams = new Set([
     "utm_source",
     "utm_medium",
@@ -41,17 +39,12 @@ export async function onRequest(context) {
     }
   }
 
-  // トラッキングパラメータがあるアクセスだけリダイレクト
   if (hasTrackingParams) {
     return Response.redirect(url.toString(), 308);
   }
 
   const userAgent = context.request.headers.get("User-Agent") || "";
-
-  const isMobile =
-    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile/i.test(
-      userAgent
-    );
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile/i.test(userAgent);
 
   if (
     originalHostname === "www.m.hamuzon-jp.f5.si" ||
