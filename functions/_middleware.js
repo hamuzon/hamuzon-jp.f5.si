@@ -2,11 +2,15 @@ export async function onRequest(context) {
   const url = new URL(context.request.url);
   const originalHostname = url.hostname;
 
-  let shouldRedirect = false;
+  for (const key of Array.from(url.searchParams.keys())) {
+    if (key === "_gl" || key.startsWith("_ga")) {
+      url.searchParams.delete(key);
+    }
+  }
 
   if (originalHostname.endsWith(".")) {
     url.hostname = originalHostname.slice(0, -1);
-    shouldRedirect = true;
+    return Response.redirect(url.toString(), 308);
   }
 
   const userAgent = context.request.headers.get("User-Agent") || "";
@@ -23,23 +27,12 @@ export async function onRequest(context) {
     if (isMobile) {
       if (originalHostname === "www.m.hamuzon-jp.f5.si") {
         url.hostname = "m.hamuzon-jp.f5.si";
-        shouldRedirect = true;
+        return Response.redirect(url.toString(), 308);
       }
     } else {
       url.hostname = "hamuzon-jp.f5.si";
-      shouldRedirect = true;
+      return Response.redirect(url.toString(), 308);
     }
-  }
-
-  for (const key of Array.from(url.searchParams.keys())) {
-    if (key === "_gl" || key.startsWith("_ga")) {
-      url.searchParams.delete(key);
-      shouldRedirect = true;
-    }
-  }
-
-  if (shouldRedirect) {
-    return Response.redirect(url.toString(), 308);
   }
 
   return context.next();
