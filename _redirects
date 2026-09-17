@@ -4,6 +4,8 @@
 /device                      https://device-info.hamuzon-jp.f5.si/                  301
 /device-info                 https://device-info.hamuzon-jp.f5.si/                  301
 /device-info/                https://device-info.hamuzon-jp.f5.si/                  301
+/Device-info                 https://device-info.hamuzon-jp.f5.si/                  301
+/Device-info/                https://device-info.hamuzon-jp.f5.si/                  301
 
 
 # ===== Binary Decimal Converter =====
