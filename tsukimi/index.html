@@ -1,110 +1,145 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>お月見 — TSUKIMI</title>
-  <meta name="description" content="秋の夜、月明かりに照らされた山と田んぼとススキの風景を楽しめる、お月見のページです。">
-  <meta name="description" lang="en" content="Enjoy a peaceful Japanese moon-viewing scene with mountains, rice fields, pampas grass, and moonlight on an autumn night.">
-  <meta name="keywords" content="お月見, 月見, 秋の夜, 月, 月明かり, ススキ, 日本の秋, tsukimi, moon viewing, Japanese autumn">
-  <meta name="robots" content="index, follow">
-  <meta name="author" content="hamusata">
-  <link rel="canonical" href="https://hamuzon-jp.f5.si/tsukimi/">
-  <meta property="og:locale" content="ja_JP">
-  <meta property="og:locale:alternate" content="en_US">
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="月見 | お月見できるページ">
-  <meta property="og:description" content="秋の夜、月明かりに照らされた山と田んぼとススキの風景を楽しめる、お月見のページです。">
-  <meta property="og:url" content="https://hamuzon-jp.f5.si/tsukimi/">
-  <meta property="og:image" content="https://hamuzon-jp.f5.si/tsukimi/og-Image.png">
-  <meta property="og:image:alt" content="月明かりに照らされた秋の夜のお月見風景">
-  <meta property="og:site_name" content="月見">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="月見 | お月見できるページ">
-  <meta name="twitter:description" content="秋の夜、月明かりに照らされた山と田んぼとススキの風景を楽しめる、お月見のページです。">
-  <meta name="twitter:image" content="https://hamuzon-jp.f5.si/tsukimi/og-Image.png">
-  <meta name="twitter:image:alt" content="月明かりに照らされた秋の夜のお月見風景">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>お月見 — TSUKIMI</title>
+    <meta
+      name="description"
+      content="秋の夜、月明かりに照らされた山と田んぼとススキの風景を楽しめる、お月見のページです。"
+    />
+    <meta
+      name="description"
+      lang="en"
+      content="Enjoy a peaceful Japanese moon-viewing scene with mountains, rice fields, pampas grass, and moonlight on an autumn night."
+    />
+    <meta
+      name="keywords"
+      content="お月見, 月見, 秋の夜, 月, 月明かり, ススキ, 日本の秋, tsukimi, moon viewing, Japanese autumn"
+    />
+    <meta name="robots" content="index, follow" />
+    <meta name="author" content="hamusata" />
+    <link rel="canonical" href="https://hamuzon-jp.f5.si/tsukimi/" />
+    <meta property="og:locale" content="ja_JP" />
+    <meta property="og:locale:alternate" content="en_US" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="月見 | お月見できるページ" />
+    <meta
+      property="og:description"
+      content="秋の夜、月明かりに照らされた山と田んぼとススキの風景を楽しめる、お月見のページです。"
+    />
+    <meta property="og:url" content="https://hamuzon-jp.f5.si/tsukimi/" />
+    <meta
+      property="og:image"
+      content="https://hamuzon-jp.f5.si/tsukimi/og-Image.png"
+    />
+    <meta
+      property="og:image:alt"
+      content="月明かりに照らされた秋の夜のお月見風景"
+    />
+    <meta property="og:site_name" content="月見" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="月見 | お月見できるページ" />
+    <meta
+      name="twitter:description"
+      content="秋の夜、月明かりに照らされた山と田んぼとススキの風景を楽しめる、お月見のページです。"
+    />
+    <meta
+      name="twitter:image"
+      content="https://hamuzon-jp.f5.si/tsukimi/og-Image.png"
+    />
+    <meta
+      name="twitter:image:alt"
+      content="月明かりに照らされた秋の夜のお月見風景"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <canvas id="sky"></canvas>
 
-  <canvas id="sky"></canvas>
-
-  <div class="title-wrap" aria-hidden="true">
-    <span>お</span><span>月</span><span>見</span>
-  </div>
-
-  <div class="tree" aria-hidden="true">
-    <div class="tree-crown"></div>
-    <div class="tree-trunk"></div>
-    <span class="tree-branch tree-branch-one"></span>
-    <span class="tree-branch tree-branch-two"></span>
-    <span class="tree-branch tree-branch-three"></span>
-    <span class="tree-branch tree-branch-four"></span>
-    <span class="tree-branch tree-branch-five"></span>
-  </div>
-
-  <div class="tree tree-front-two" aria-hidden="true">
-    <div class="tree-crown"></div>
-    <div class="tree-trunk"></div>
-    <span class="tree-branch tree-branch-one"></span>
-    <span class="tree-branch tree-branch-three"></span>
-  </div>
-
-  <div class="tree tree-front-three" aria-hidden="true">
-    <div class="tree-crown"></div>
-    <div class="tree-trunk"></div>
-    <span class="tree-branch tree-branch-two"></span>
-    <span class="tree-branch tree-branch-four"></span>
-  </div>
-
-  <div class="tree tree-front-four" aria-hidden="true">
-    <div class="tree-crown"></div>
-    <div class="tree-trunk"></div>
-    <span class="tree-branch tree-branch-one"></span>
-    <span class="tree-branch tree-branch-four"></span>
-  </div>
-
-  <div class="tree tree-front-five" aria-hidden="true">
-    <div class="tree-crown"></div>
-    <div class="tree-trunk"></div>
-    <span class="tree-branch tree-branch-two"></span>
-    <span class="tree-branch tree-branch-three"></span>
-  </div>
-
-  <div class="rocks" aria-hidden="true">
-    <span class="rock rock-one"></span>
-    <span class="rock rock-two"></span>
-    <span class="rock rock-three"></span>
-    <span class="rock rock-four"></span>
-    <span class="rock rock-five"></span>
-  </div>
-
-  <div class="mountain-trees" aria-hidden="true">
-    <span class="hill-tree hill-tree-one"></span>
-    <span class="hill-tree hill-tree-two"></span>
-    <span class="hill-tree hill-tree-three"></span>
-  </div>
-
-  <div class="engawa" aria-hidden="true">
-    <div class="engawa-rail"></div>
-    <div class="engawa-floor"></div>
-  </div>
-
-  <div class="sanbo-wrap">
-    <div class="sanbo-set">
-      <div class="dango-tower">
-        <div class="dango-row"><span class="dango"></span></div>
-        <div class="dango-row"><span class="dango"></span><span class="dango"></span></div>
-        <div class="dango-row"><span class="dango"></span><span class="dango"></span><span class="dango"></span></div>
-      </div>
-      <div class="sanbo-tray"></div>
-      <div class="sanbo-skirt"></div>
+    <div class="title-wrap" aria-hidden="true">
+      <span>お</span><span>月</span><span>見</span>
     </div>
-  </div>
 
-  <script src="script.js"></script>
-</body>
+    <div class="tree" aria-hidden="true">
+      <div class="tree-crown"></div>
+      <div class="tree-trunk"></div>
+      <span class="tree-branch tree-branch-one"></span>
+      <span class="tree-branch tree-branch-two"></span>
+      <span class="tree-branch tree-branch-three"></span>
+      <span class="tree-branch tree-branch-four"></span>
+      <span class="tree-branch tree-branch-five"></span>
+    </div>
+
+    <div class="tree tree-front-two" aria-hidden="true">
+      <div class="tree-crown"></div>
+      <div class="tree-trunk"></div>
+      <span class="tree-branch tree-branch-one"></span>
+      <span class="tree-branch tree-branch-three"></span>
+    </div>
+
+    <div class="tree tree-front-three" aria-hidden="true">
+      <div class="tree-crown"></div>
+      <div class="tree-trunk"></div>
+      <span class="tree-branch tree-branch-two"></span>
+      <span class="tree-branch tree-branch-four"></span>
+    </div>
+
+    <div class="tree tree-front-four" aria-hidden="true">
+      <div class="tree-crown"></div>
+      <div class="tree-trunk"></div>
+      <span class="tree-branch tree-branch-one"></span>
+      <span class="tree-branch tree-branch-four"></span>
+    </div>
+
+    <div class="tree tree-front-five" aria-hidden="true">
+      <div class="tree-crown"></div>
+      <div class="tree-trunk"></div>
+      <span class="tree-branch tree-branch-two"></span>
+      <span class="tree-branch tree-branch-three"></span>
+    </div>
+
+    <div class="rocks" aria-hidden="true">
+      <span class="rock rock-one"></span>
+      <span class="rock rock-two"></span>
+      <span class="rock rock-three"></span>
+      <span class="rock rock-four"></span>
+      <span class="rock rock-five"></span>
+    </div>
+
+    <div class="mountain-trees" aria-hidden="true">
+      <span class="hill-tree hill-tree-one"></span>
+      <span class="hill-tree hill-tree-two"></span>
+      <span class="hill-tree hill-tree-three"></span>
+    </div>
+
+    <div class="engawa" aria-hidden="true">
+      <div class="engawa-rail"></div>
+      <div class="engawa-floor"></div>
+    </div>
+
+    <div class="sanbo-wrap">
+      <div class="sanbo-set">
+        <div class="dango-tower">
+          <div class="dango-row"><span class="dango"></span></div>
+          <div class="dango-row">
+            <span class="dango"></span><span class="dango"></span>
+          </div>
+          <div class="dango-row">
+            <span class="dango"></span><span class="dango"></span
+            ><span class="dango"></span>
+          </div>
+        </div>
+        <div class="sanbo-tray"></div>
+        <div class="sanbo-skirt"></div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
 </html>
