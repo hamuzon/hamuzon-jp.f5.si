@@ -98,6 +98,37 @@
     mix-blend-mode: screen;
   }
 
+  .page-header {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+  }
+
+  .home-button {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.5rem;
+    padding: 0.55rem 0.9rem;
+    border: 1px solid rgba(0, 184, 212, 0.45);
+    border-radius: 999px;
+    background: rgba(0, 184, 212, 0.1);
+    color: var(--text-main);
+    font-weight: 700;
+    font-size: 0.9rem;
+    line-height: 1.3;
+    text-decoration: none;
+    text-align: center;
+    transition: transform 140ms ease, background-color 140ms ease;
+  }
+
+  .home-button:hover {
+    transform: translateY(-2px);
+    background: rgba(0, 184, 212, 0.2);
+  }
+
   h1 {
     text-align: center;
     margin: 0;
@@ -199,6 +230,10 @@
   }
 
   @media (max-width: 600px) {
+    .page-header {
+      gap: 10px;
+    }
+
     .controls {
       grid-template-columns: 1fr;
     }
@@ -224,7 +259,10 @@
 </head>
 <body>
   <div class="container" role="main" aria-label="Discord Snowflake to Timestamp Converter">
-    <h1>Discord Snowflake Timestamp Converter</h1>
+    <div class="page-header">
+      <a class="home-button" href="../index.html">ホームに戻る</a>
+      <h1>Discord Snowflake Timestamp Converter</h1>
+    </div>
 
     <div class="controls" aria-hidden="false">
       <input
