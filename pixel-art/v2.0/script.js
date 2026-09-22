@@ -188,7 +188,7 @@
             return `${d.getFullYear()}-${(d.getMonth()+1).toString().padStart(2,"0")}-${d.getDate().toString().padStart(2,"0")}_${d.getHours().toString().padStart(2,"0")}-${d.getMinutes().toString().padStart(2,"0")}-${d.getSeconds().toString().padStart(2,"0")}`;
         };
         a.href = url;
-        a.download = `${APP_NAME}-V${APP_VERSION}_${ts()}.json`;
+        a.download = `${APP_NAME}-${APP_VERSION}_${ts()}.json`;
         a.click();
         URL.revokeObjectURL(url);
     };
@@ -199,9 +199,11 @@
         ui.id = "img-ui";
         ui.style = "position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#c0c0c0;border:2px outset;padding:12px;z-index:9999;display:flex;align-items:center;gap:8px";
         const sel = document.createElement("select");
+        sel.setAttribute("aria-label", window.i18nGetText("label-img-format"));
         ["png", "jpeg"].forEach(f => { const opt = document.createElement("option"); opt.value = f; opt.textContent = f.toUpperCase(); sel.appendChild(opt); });
         const btn = document.createElement("button");
-        btn.textContent = "保存";
+        btn.setAttribute("data-i18n", "btn-dialog-save");
+        btn.textContent = window.i18nGetText("btn-dialog-save");
         const close = document.createElement("button");
         close.textContent = "×";
         close.onclick = () => ui.remove();
@@ -219,7 +221,10 @@
             cvs.toBlob(b => {
                 const a = document.createElement("a");
                 a.href = URL.createObjectURL(b);
-                a.download = `pixelart.${sel.value}`;
+                const dt = new Date();
+                const pad = n => n.toString().padStart(2,"0");
+                const tsStr = `${dt.getFullYear()}-${pad(dt.getMonth()+1)}-${pad(dt.getDate())}_${pad(dt.getHours())}-${pad(dt.getMinutes())}-${pad(dt.getSeconds())}`;
+                a.download = `${APP_NAME}-${APP_VERSION}_${tsStr}.${sel.value}`;
                 a.click();
                 ui.remove();
             }, `image/${sel.value}`);
@@ -280,6 +285,7 @@
 
     if ($("btn-add-color")) $("btn-add-color").onclick = () => {
         const pk = document.createElement("input"); pk.type = "color";
+        pk.setAttribute("aria-label", window.i18nGetText("label-color-pick"));
         pk.onchange = () => { palette.splice(palette.length - 1, 0, pk.value); currentColorIndex = palette.length - 2; createPalette(); saveToLocal(); };
         pk.click();
     };

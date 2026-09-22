@@ -69,6 +69,7 @@
     if (isTouchDevice) {
       const input = document.createElement("input");
       input.type = "color";
+      input.setAttribute("aria-label", window.i18nGetText("label-color-pick"));
       input.style.display = "none";
       document.body.appendChild(input);
       input.click();
@@ -81,6 +82,7 @@
     } else {
       const input = document.createElement("input");
       input.type = "color";
+      input.setAttribute("aria-label", window.i18nGetText("label-color-pick"));
       input.value = "#ffffff";
       input.style.position = "fixed";
       input.style.left = "-9999px";
@@ -220,6 +222,7 @@
 
     const select = document.createElement("select");
     select.id = "img-format-select";
+    select.setAttribute("aria-label", window.i18nGetText("label-img-format"));
     formats.forEach(f => {
       const option = document.createElement("option");
       option.value = f;
@@ -228,7 +231,8 @@
     });
 
     const saveBtn = document.createElement("button");
-    saveBtn.textContent = "保存";
+    saveBtn.setAttribute("data-i18n", "btn-dialog-save");
+    saveBtn.textContent = window.i18nGetText("btn-dialog-save");
     saveBtn.style.marginLeft = "8px";
 
     const wrapper = document.createElement("div");
@@ -360,7 +364,7 @@
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
     const dt = new Date();
     const pad = n => n.toString().padStart(2, "0");
-    const filename = `${APP_NAME}-VERSION-${APP_VERSION}_${dt.getFullYear()}-${pad(dt.getMonth()+1)}-${pad(dt.getDate())}_${pad(dt.getHours())}-${pad(dt.getMinutes())}-${pad(dt.getSeconds())}.json`;
+    const filename = `${APP_NAME}-${APP_VERSION}_${dt.getFullYear()}-${pad(dt.getMonth()+1)}-${pad(dt.getDate())}_${pad(dt.getHours())}-${pad(dt.getMinutes())}-${pad(dt.getSeconds())}.json`;
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
     a.download = filename;

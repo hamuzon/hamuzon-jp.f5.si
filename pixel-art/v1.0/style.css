@@ -188,7 +188,9 @@ h1 .subtitle {
 
 /* フッター */
 footer {
-  margin-top: 15px;
+  margin-top: 1rem;
+  border-top: 1px solid #808080;
+  padding-top: 10px;
   text-align: center;
   font-size: 14px;
   color: #000080;
@@ -196,19 +198,13 @@ footer {
   user-select: none;
 }
 
-.app-footer {
-  margin-top: 1rem;
-  border-top: 1px solid #808080;
-  padding-top: 10px;
-}
-
-.footer-inner-flex {
+.footer-container {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 10px;
   flex-wrap: wrap;
-  font-size: 12px;
+  font-size: 11px;
 }
 
 /* フッター初期非表示 (JSで制御) */

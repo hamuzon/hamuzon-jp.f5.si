@@ -1,14 +1,12 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta name="description" content="ピクセルアート作成ツールのバージョン1.1です。ドット絵の描画ツールを検索・利用できます。">
-  <link rel="canonical" href="https://hamuzon-jp.f5.si/pixel-art/v1.1/">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Pixel Drawing - v1.1</title>
   <link rel="stylesheet" href="https://unpkg.com/98.css" />
   <link rel="stylesheet" href="style.css" />
-  <link rel="icon" href="../../icon.svg" type="image/svg+xml" />
+  <link rel="icon" href="https://home.hamusata.f5.si/icon.svg" type="image/svg+xml" />
 </head>
 <body>
   <main class="window" role="main" aria-label="ピクセルお絵かきアプリ">
@@ -46,14 +44,14 @@
       <button id="btn-img-save" type="button" data-i18n="btn-img-save">画像保存</button>
 
       <!-- 📂 ファイル選択は非表示 -->
-      <input type="file" id="file-load" accept=".json" hidden />
+      <input type="file" id="file-load" accept=".json" class="hidden" title="Load JSON file" />
 
     </section>
 
-    <footer>
-      <div class="footer-inner-flex">
+    <footer class="footer-container">
+      <div class="footer-content-wrapper">
         <div class="lang-switcher">
-          <select id="lang-select" title="言語選択">
+          <select id="lang-select" title="Language selection">
             <option value="ja">日本語</option>
             <option value="en">English</option>
           </select>
