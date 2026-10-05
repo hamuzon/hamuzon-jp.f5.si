@@ -140,8 +140,11 @@
 /LICENSE                     /                                                       301
 /README.md                   /                                                       301
 
+# ===== Karotter =====
+/karotter                   https://karotter.com/profile/hamusata                    302
 
 # ===== Social Analytics =====
+/krt                         /?utm_source=karotter&utm_medium=social                 302
 /dc                          /?utm_source=discord&utm_medium=social                  302
 /bky                         /?utm_source=bluesky&utm_medium=social                  302
 /tx                          /?utm_source=twitter&utm_medium=social                  302
