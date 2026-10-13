@@ -44,6 +44,19 @@ allTimezones.forEach(tz => {
   timezoneSelect.appendChild(option);
 });
 
+function getHostPreference() {
+  try {
+    const hostname = window.location.hostname;
+    if (hostname === 'hamuzon-jp.f5.si' || hostname.endsWith('.hamuzon-jp.f5.si')) {
+      return 'hamuzon-jp';
+    }
+    if (hostname === 'hamusata.f5.si' || hostname.endsWith('.hamusata.f5.si')) {
+      return 'hamusata';
+    }
+  } catch (e) { }
+  return null;
+}
+
 function pickOne(arr) {
   return arr.length > 0 ? [arr[Math.floor(Math.random() * arr.length)]] : [];
 }
@@ -52,31 +65,50 @@ function getTimeApiEndpoints(targetZone) {
   const tz = targetZone || (timezoneSelect && timezoneSelect.value) || LOCAL_TIMEZONE || 'UTC';
   const timezonesToQuery = Array.from(new Set([tz, 'UTC', 'Asia/Tokyo']));
 
+  const pref = getHostPreference();
+
   const endpoints = [];
   timezonesToQuery.forEach(zone => {
     const encodedZone = encodeURIComponent(zone);
-    const hamuEndpoints = [
-      { url: `https://api-time.hamuzon-jp.f5.si/api/Time/current/zone?timeZone=${encodedZone}`, hint: zone },
-      { url: `https://api-time.hamusata.f5.si/api/Time/current/zone?timeZone=${encodedZone}`, hint: zone }
-    ];
-    const otherEndpoints = [
-      { url: `https://timeapi.io/api/Time/current/zone?timeZone=${encodedZone}`, hint: zone }
-    ];
+    const hamuzonUrl = `https://api-time.hamuzon-jp.f5.si/api/Time/current/zone?timeZone=${encodedZone}`;
+    const hamusataUrl = `https://api-time.hamusata.f5.si/api/Time/current/zone?timeZone=${encodedZone}`;
+    const timeapiUrl = `https://timeapi.io/api/Time/current/zone?timeZone=${encodedZone}`;
 
-    endpoints.push(...pickOne(hamuEndpoints));
-    endpoints.push(...pickOne(otherEndpoints));
+    if (pref === 'hamuzon-jp') {
+      endpoints.push({ url: hamuzonUrl, hint: zone });
+      endpoints.push({ url: hamusataUrl, hint: zone });
+    } else if (pref === 'hamusata') {
+      endpoints.push({ url: hamusataUrl, hint: zone });
+      endpoints.push({ url: hamuzonUrl, hint: zone });
+    } else {
+      endpoints.push(...pickOne([
+        { url: hamuzonUrl, hint: zone },
+        { url: hamusataUrl, hint: zone }
+      ]));
+    }
+    endpoints.push(...pickOne([{ url: timeapiUrl, hint: zone }]));
   });
 
-  endpoints.push(...pickOne([
+  if (pref === 'hamuzon-jp') {
+    endpoints.push({ url: "https://api-time.hamuzon-jp.f5.si/api/Time/?timeZone=UTC", hint: 'UTC' });
+    endpoints.push({ url: "https://api-time.hamusata.f5.si/api/Time/?timeZone=UTC", hint: 'UTC' });
+  } else if (pref === 'hamusata') {
+    endpoints.push({ url: "https://api-time.hamusata.f5.si/api/Time/?timeZone=UTC", hint: 'UTC' });
+    endpoints.push({ url: "https://api-time.hamuzon-jp.f5.si/api/Time/?timeZone=UTC", hint: 'UTC' });
+  } else {
+    endpoints.push(...pickOne([
       { url: "https://api-time.hamuzon-jp.f5.si/api/Time/?timeZone=UTC", hint: 'UTC' },
       { url: "https://api-time.hamusata.f5.si/api/Time/?timeZone=UTC", hint: 'UTC' }
-  ]));
+    ]));
+  }
   return endpoints;
 }
 
 function buildFreshUrl(url) {
-  const cacheBuster = `_=${Date.now()}`;
-  return url.includes('?') ? `${url}&${cacheBuster}` : `${url}?${cacheBuster}`;
+  // api キャッシュ回避Code
+  // const cacheBuster = `_=${Date.now()}`;
+  // return url.includes('?') ? `${url}&${cacheBuster}` : `${url}?${cacheBuster}`;
+  return url;
 }
 
 async function fetchTimeApi(url) {
@@ -310,7 +342,22 @@ window.addEventListener("DOMContentLoaded", async () => {
   timezoneSelect.value = defaultTz;
   await syncTimeFromInternet(defaultTz);
   addTimezone(defaultTz);
-  setInterval(updateClocks, 1000);
+
+  let lastDisplayedSecond = -1;
+  function rafLoop() {
+    if (baseUtcDate && !isNaN(baseUtcDate.getTime())) {
+      const currentTime = (window.performance && window.performance.now) ? performance.now() : Date.now();
+      const elapsed = currentTime - basePerformanceTime;
+      const correctedNow = new Date(baseUtcDate.getTime() + elapsed);
+      const currentSecond = correctedNow.getSeconds();
+      if (currentSecond !== lastDisplayedSecond) {
+        lastDisplayedSecond = currentSecond;
+        updateClocks();
+      }
+    }
+    requestAnimationFrame(rafLoop);
+  }
+  requestAnimationFrame(rafLoop);
 
   let syncIntervalMs = 30 * 60 * 1000;
   if (navigator.connection && (navigator.connection.type === 'wifi' || navigator.connection.type === 'ethernet')) {
