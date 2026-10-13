@@ -12,6 +12,7 @@ async function syncTime() {
 
     for (const url of endpoints) {
         try {
+            const t1 = Date.now();
             const res = await fetch(url);
 
             if (!res.ok) {
@@ -19,6 +20,7 @@ async function syncTime() {
             }
 
             const data = await res.json();
+            const t2 = Date.now();
 
             let serverTime;
 
@@ -30,7 +32,8 @@ async function syncTime() {
                 continue;
             }
 
-            const localTime = Date.now();
+            // RTTの中間点をローカル時刻の推定値とする
+            const localTime = (t1 + t2) / 2;
 
             offset = serverTime - localTime;
             return;
