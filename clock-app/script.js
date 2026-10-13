@@ -5,9 +5,9 @@ let offset = 0;
 
 async function syncTime() {
     const endpoints = [
-        'https://timeapi.io/api/Time/current/zone?timeZone=UTC',
+        'https://api-time.hamuzon-jp.f5.si/api/ip',
         'https://api-time.hamusata.f5.si/api/ip',
-        'https://api-time.hamuzon-jp.f5.si/api/ip'
+        'https://timeapi.io/api/Time/current/zone?timeZone=UTC'
     ];
 
     for (const url of endpoints) {
