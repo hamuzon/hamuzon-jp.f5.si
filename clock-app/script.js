@@ -4,23 +4,42 @@ const elDate = document.getElementById('date');
 let offset = 0;
 
 async function syncTime() {
-    try {
-        const res = await fetch(
-            'https://worldtimeapi.org/api/ip'
-        );
+    const endpoints = [
+        'https://timeapi.io/api/Time/current/zone?timeZone=UTC',
+        'https://api-time.hamusata.f5.si/api/ip',
+        'https://api-time.hamuzon-jp.f5.si/api/ip'
+    ];
 
-        const data = await res.json();
+    for (const url of endpoints) {
+        try {
+            const res = await fetch(url);
 
-        const serverTime = new Date(
-            data.datetime
-        ).getTime();
+            if (!res.ok) {
+                continue;
+            }
 
-        const localTime = Date.now();
+            const data = await res.json();
 
-        offset = serverTime - localTime;
-    } catch {
-        offset = 0;
+            let serverTime;
+
+            if (data.datetime) {
+                serverTime = new Date(data.datetime).getTime();
+            } else if (data.dateTime) {
+                serverTime = new Date(`${data.dateTime}Z`).getTime();
+            } else {
+                continue;
+            }
+
+            const localTime = Date.now();
+
+            offset = serverTime - localTime;
+            return;
+        } catch {
+            // 次のエンドポイントを試します
+        }
     }
+
+    offset = 0;
 }
 
 function nowTime() {
