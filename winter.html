@@ -13,134 +13,258 @@
 <meta name="twitter:description" content="冬のテーマでまとめたサイト一覧ページです。A winter-themed collection of websites and tools." />
 <link rel="icon" href="icon.svg" type="image/svg+xml" />
 <style>
-  *, *::before, *::after { box-sizing: border-box; }
-  html, body {
-    margin: 0; padding: 0;
-    font-family: 'Inter', 'Segoe UI', 'Hiragino Kaku Gothic ProN', sans-serif;
-    background: linear-gradient(to bottom, #e0f7fa 0%, #90caf9 100%);
-    min-height: 100vh; color: #333;
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
   }
+
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', 'Segoe UI', 'Hiragino Kaku Gothic ProN', sans-serif;
+    background: linear-gradient(
+      180deg,
+      #e0f7fa 0%,
+      #bce3fb 45%,
+      #90caf9 100%
+    );
+    background-attachment: fixed;
+    min-height: 100vh;
+    color: #072a4a;
+  }
+
   .container {
     width: 90%;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 2rem 1rem;
+    padding: 2.5rem 1rem;
     position: relative;
     z-index: 10;
   }
+
   h1 {
     text-align: center;
-    font-size: 2rem;
-    color: #f0f0f0;
-    text-shadow: 0 0 8px rgba(0,0,0,0.7);
+    font-size: 2.2rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
     margin-bottom: 2rem;
   }
+
   h1 a.tpww {
-    color: #fff8dd;
+    color: #072a4a;
     text-decoration: none;
     cursor: pointer;
+    text-shadow:
+      0 1px 3px rgba(255, 255, 255, 0.95),
+      0 0 18px rgba(255, 255, 255, 0.8);
+    transition:
+      color 0.25s ease,
+      text-shadow 0.25s ease;
   }
-  h1 a.tpww:hover { text-decoration: underline; }
+
+  h1 a.tpww:hover {
+    color: #0284c7;
+    text-decoration: underline;
+    text-shadow:
+      0 2px 6px rgba(255, 255, 255, 1),
+      0 0 20px rgba(186, 230, 253, 0.9);
+  }
+
   ul {
     padding: 0;
     margin: 0;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 1rem;
+    gap: 1.1rem;
     list-style: none;
   }
-  li { margin: 0; }
+
+  li {
+    margin: 0;
+  }
+
   a {
     display: block;
-    background: rgba(20,20,20,0.15);
-    -webkit-backdrop-filter: blur(12px);
-    backdrop-filter: blur(12px);
-    color: #ddd;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.52) 0%,
+      rgba(255, 255, 255, 0.28) 100%
+    );
+    -webkit-backdrop-filter: blur(14px) saturate(160%);
+    backdrop-filter: blur(14px) saturate(160%);
+    color: #072a4a;
     text-decoration: none;
-    padding: 1rem;
+    padding: 1.15rem 1.3rem;
     border-radius: 16px;
     font-size: 1rem;
     font-weight: 600;
-    border: 1px solid rgba(255,255,255,0.12);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.35);
-    transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    line-height: 1.45;
+    border: 1px solid rgba(255, 255, 255, 0.75);
+    box-shadow:
+      0 6px 20px rgba(12, 74, 110, 0.12),
+      inset 0 1px 1px rgba(255, 255, 255, 0.85),
+      inset 0 -1px 1px rgba(255, 255, 255, 0.25);
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+    transition:
+      background 0.25s ease,
+      transform 0.25s ease,
+      box-shadow 0.25s ease,
+      border-color 0.25s ease,
+      color 0.25s ease;
     word-break: break-word;
   }
+
   a:hover {
-    background: rgba(30,30,30,0.3);
-    transform: translateY(-4px);
-    box-shadow: 0 6px 18px rgba(0,0,0,0.5);
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.75) 0%,
+      rgba(255, 255, 255, 0.45) 100%
+    );
+    color: #0284c7;
+    border-color: rgba(255, 255, 255, 0.95);
+    transform: translateY(-3px);
+    box-shadow:
+      0 10px 26px rgba(12, 74, 110, 0.18),
+      0 0 16px rgba(255, 255, 255, 0.6),
+      inset 0 1px 2px rgba(255, 255, 255, 0.95);
   }
+
   footer {
     text-align: center;
-    padding: 1rem;
-    color: #f0f0f0;
+    padding: 2.5rem 1rem 1.5rem;
+    color: #0f375a;
     font-size: 0.85rem;
+    position: relative;
+    z-index: 10;
+    line-height: 1.7;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.7);
   }
-  footer a { color: #fff8dd; text-decoration: underline; }
-  #public-site-list { display: none; }
+
+  footer a {
+    display: inline;
+    background: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    padding: 0;
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+    color: #0284c7;
+    text-decoration: underline;
+    font-weight: 600;
+    font-size: inherit;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.7);
+  }
+
+  footer a:hover {
+    background: none;
+    box-shadow: none;
+    transform: none;
+    color: #0369a1;
+  }
+
   #winter-toggle {
     position: fixed;
     top: 1rem;
     right: 1rem;
     z-index: 10000;
-    background: rgba(0,0,0,0.5);
-    color: #fff;
-    border: none;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.65) 0%,
+      rgba(255, 255, 255, 0.35) 100%
+    );
+    -webkit-backdrop-filter: blur(12px) saturate(160%);
+    backdrop-filter: blur(12px) saturate(160%);
+    color: #072a4a;
+    border: 1px solid rgba(255, 255, 255, 0.8);
     border-radius: 20px;
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
+    padding: 0.5rem 1.15rem;
+    font-size: 0.95rem;
+    font-weight: 600;
     cursor: pointer;
-    transition: background 0.3s ease;
+    box-shadow:
+      0 4px 16px rgba(12, 74, 110, 0.14),
+      inset 0 1px 1px rgba(255, 255, 255, 0.85);
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+    transition:
+      background 0.25s ease,
+      transform 0.25s ease,
+      box-shadow 0.25s ease,
+      border-color 0.25s ease,
+      color 0.25s ease;
   }
-  #winter-toggle:hover { background: rgba(0,0,0,0.7); }
-  #winterCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
-  @media (max-width:480px) {
-    h1 { font-size: 1.5rem; }
-    footer { font-size: 0.75rem; }
-    ul { grid-template-columns: 1fr !important; }
-    #winter-toggle { font-size: 0.85rem; padding: 0.4rem 0.8rem; }
-    #footer-hamuzon { display: none; }
-    .footer-notice { display: block; padding: 0.5rem; color: #f0f0f0; }
+
+  #winter-toggle:hover {
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.85) 0%,
+      rgba(255, 255, 255, 0.5) 100%
+    );
+    color: #0284c7;
+    border-color: rgba(255, 255, 255, 1);
+    box-shadow: 0 6px 20px rgba(14, 116, 144, 0.22);
+    transform: scale(1.03);
+  }
+
+  #winter-toggle.off {
+    background: rgba(241, 245, 249, 0.65);
+    color: #64748b;
+    border-color: rgba(203, 213, 225, 0.7);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+    text-shadow: none;
+  }
+
+  #winterCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  @media (max-width: 480px) {
+    h1 {
+      font-size: 1.6rem;
+    }
+
+    footer {
+      font-size: 0.78rem;
+    }
+
+    ul {
+      grid-template-columns: 1fr !important;
+    }
+
+    #winter-toggle {
+      font-size: 0.85rem;
+      padding: 0.4rem 0.9rem;
+    }
   }
 </style>
 </head>
 <body>
 
 <canvas id="winterCanvas"></canvas>
-<button id="winter-toggle">雪ON</button>
+<button id="winter-toggle" type="button" aria-label="雪のアニメーション切り替え">雪ON</button>
 
 <div class="container">
   <h1><a href="./98" class="tpww">Website List</a></h1>
-  
   <ul id="links"></ul>
 </div>
 
-  <footer>
-    <p>
-      &copy; <span id="year-range"></span>
-      <a href="https://hamuzon-jp.f5.si">@hamuzon</a>
-    </p>
-  </footer>
+<footer>
+  <p>
+    &copy; <span id="year-range"></span>
+    <a href="https://hamuzon-jp.f5.si">@hamuzon</a>
+  </p>
+</footer>
 
 <script src="script.js"></script>
 <script src="winter.js"></script>
-
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  // 雪ON/OFF
-  const toggleBtn = document.getElementById('winter-toggle');
-  if (!toggleBtn) return;
-  let winterOn = true;
-  toggleBtn.addEventListener('click', () => {
-    winterOn = !winterOn;
-    if (window.winterControl) {
-      winterOn ? window.winterControl.show() : window.winterControl.hide();
-    }
-    toggleBtn.textContent = winterOn ? '雪ON' : '雪OFF';
-  });
-});
-</script>
 
 </body>
 </html>
