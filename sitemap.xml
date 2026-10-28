@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<escape><?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://birthday.hamuzon-jp.f5.si/</loc></url>
   <url><loc>https://calendar.hamuzon-jp.f5.si/</loc></url>
@@ -12,9 +12,6 @@
   <url><loc>https://expo-countdown.hamuzon-jp.f5.si/2027/en/</loc></url>
   <url><loc>https://expo-countdown.hamuzon-jp.f5.si/2030/ja/</loc></url>
   <url><loc>https://expo-countdown.hamuzon-jp.f5.si/2030/en/</loc></url>
-  <url><loc>https://olympic-countdown.hamuzon-jp.f5.si/</loc></url>
-  <url><loc>https://video-hub.hamuzon-jp.f5.si/</loc></url>
-  <url><loc>https://text-counter.hamuzon-jp.f5.si/</loc></url>
   <url><loc>https://hamuzon-jp.f5.si/</loc></url>
   <url><loc>https://hamuzon-jp.f5.si/aprilfool</loc></url>
   <url><loc>https://hamuzon-jp.f5.si/UUID</loc></url>
@@ -72,4 +69,8 @@
   <url><loc>https://hamuzon-jp.f5.si/todo/v1.0/</loc></url>
   <url><loc>https://hamuzon-jp.f5.si/WORLD-time/</loc></url>
   <url><loc>https://hamuzon-jp.f5.si/tsukimi/</loc></url>
-</urlset>
+  <url><loc>https://now.hamuzon-jp.f5.si/</loc></url>
+  <url><loc>https://olympic-countdown.hamuzon-jp.f5.si/</loc></url>
+  <url><loc>https://text-counter.hamuzon-jp.f5.si/</loc></url>
+  <url><loc>https://video-hub.hamuzon-jp.f5.si/</loc></url>
+</urlset></escape>
