@@ -29,14 +29,13 @@
     return Math.floor(random(min, max));
   }
 
-  // 節分カラー（福豆・赤鬼・青鬼）
   function getSetsubunColor() {
     const colors = [
-      'rgba(255, 235, 190, 1)', // 福豆（クリーム色）
-      'rgba(255, 235, 190, 1)',
-      'rgba(255, 235, 190, 1)', // 豆の比率を高めに
-      'rgba(255, 60, 60, 1)',   // 赤鬼
-      'rgba(60, 100, 255, 1)',  // 青鬼
+      '#d8bd83',
+      '#c9a66b',
+      '#b9955d',
+      '#e0c999',
+      '#c5a36b',
     ];
     return colors[Math.floor(Math.random() * colors.length)];
   }
@@ -229,7 +228,6 @@
     }
   }
 
-  // グローバルで制御できるように
   const manager = new FireworksManager();
 
   window.fireworksControl = {
