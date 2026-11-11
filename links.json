@@ -32,5 +32,7 @@
   {"title":"📝 文字数カウンター / Text Count Tool ✏","url":"https://text-counter.hamuzon-jp.f5.si/"},
   {"title":"🎋 短冊メーカー / Tanzaku Maker ✨","url":"/tanzaku/"},
   {"title":"お月見🎑 / tsukimi🎑","url":"/tsukimi/"},
-  {"title":"UUID Generator / UUIDジェネレーター","url":"/UUID"}
+  {"title":"UUID Generator / UUIDジェネレーター","url":"/UUID"},
+  {"title":"⌚ストップウォッチ / Stopwatch ⏰️","url":"https://time-tools.hamuzon-jp.f5.si/stopwatch/"},
+  {"title":"⌛️タイマー / Timer ⏲️","url":"https://time-tools.hamuzon-jp.f5.si/timer/"}
 ]
