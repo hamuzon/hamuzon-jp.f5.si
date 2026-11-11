@@ -131,6 +131,15 @@ input[type="number"] {
   margin-bottom: 24px;
 }
 
+#footer-copy {
+  text-align: center;
+  font-size: 0.9em;
+}
+
+#footer-copy .link {
+  color: inherit;
+}
+
 .buttons button {
   background: #68D391;
   color: #3B2F2F;

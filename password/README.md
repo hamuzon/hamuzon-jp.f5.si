@@ -35,8 +35,8 @@
 
 ---
 
-## ONLINE場でのの使い方
-1. [password](https://hamuzon-jp.f5.si/password/) にアクセス
+## 使い方
+1. [password](https://hamuzon.github.io/password/) にアクセス
 2. 使用したい文字種（小文字、大文字、数字、記号）を選択。  
 3. 判別しづらい文字の除外を切り替え。  
 4. 文字数と生成個数をスライダーまたは数値入力で調整。  

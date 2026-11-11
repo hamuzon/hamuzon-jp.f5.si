@@ -122,7 +122,8 @@ saveBtn.addEventListener("click", () => {
   const h = String(now.getHours()).padStart(2, "0");
   const mi = String(now.getMinutes()).padStart(2, "0");
   const s = String(now.getSeconds()).padStart(2, "0");
-  const filename = `password_${y}${mo}${d}${h}${mi}${s}.txt`;
+  const filename = `password-${y}-${mo}-${d}_${h}-${mi}-${s}.txt`;
+
 
   const blob = new Blob([text], { type: "text/plain" });
   const a = document.createElement("a");
@@ -137,3 +138,23 @@ regenBtn.addEventListener("click", generateAndDisplay);
 
 // 最初の生成
 generateAndDisplay();
+
+const footer = document.getElementById("footer-copy");
+const baseYear = 2025;
+const currentYear = new Date().getFullYear();
+const yearString = `${baseYear}${currentYear > baseYear ? "~" + currentYear : ""}`;
+const hostname = location.hostname;
+let footerHTML = "";
+
+if (hostname === "hamuzon.github.io") {
+  footerHTML = `&copy; ${yearString} <a class="link" href="https://hamuzon.github.io" target="_blank" rel="noopener noreferrer">@hamuzon</a> Password Generator`;
+} else if (hostname.includes("hamuzon-jp.f5.si")) {
+  footerHTML = `&copy; ${yearString} <a class="link" href="https://hamuzon-jp.f5.si" target="_blank" rel="noopener noreferrer">@hamuzon</a> Password Generator`;
+} else if (hostname.includes("hamusata.f5.si")) {
+  footerHTML = `&copy; ${yearString} <a class="link" href="https://hamusata.f5.si" target="_blank" rel="noopener noreferrer">@hamusata</a> Password Generator`;
+} else if (hostname.includes("link-s.f5.si")) {
+  footerHTML = `&copy; ${yearString} <a class="link" href="https://hamusata.f5.si" target="_blank" rel="noopener noreferrer">@hamusata</a> Password Generator`;
+} else {
+  footerHTML = `&copy; ${yearString} Password Generator`;
+}
+footer.innerHTML = footerHTML;

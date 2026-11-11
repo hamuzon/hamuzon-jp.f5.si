@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>404 - Not Found / 見つかりません</title>
+  <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+      background: linear-gradient(135deg, #A0E9D5, #F0F4F8);
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      color: #3B2F2F;
+    }
+    .container {
+      max-width: 700px;
+      width: 100%;
+      background: #F0F4F8;
+      border-radius: 12px;
+      padding: 24px 30px;
+      box-shadow: 0 5px 20px rgb(58 47 47 / 0.2);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    h1 {
+      margin-top: 0;
+      margin-bottom: 24px;
+      font-weight: 700;
+      font-size: 3rem;
+      color: #3B2F2F;
+    }
+    p {
+      font-size: 1.1rem;
+      margin: 0.5rem 0;
+      color: #3B2F2F;
+      line-height: 1.6;
+    }
+    .subtext {
+      font-size: 0.95rem;
+      color: #5A4238;
+      margin-bottom: 2.5rem;
+      opacity: 0.8;
+    }
+    a.back {
+      display: inline-block;
+      width: 100%;
+      max-width: 300px;
+      background: #68D391;
+      color: #3B2F2F;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgb(104 211 145 / 0.5);
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    a.back:hover {
+      background: #5A4238;
+      color: #F0F4F8;
+    }
+    @media (max-width: 600px) {
+      .container {
+        padding: 20px;
+      }
+      h1 {
+        font-size: 2.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>404 - error</h1>
+    <p>エラーが発生しました: 見つかりません / Not Found</p>
+    <p class="subtext">Sorry, Not Found.</p>
+    <a id="backLink" class="back" href="/">トップページへ戻る / Back to Home</a>
+  </div>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      if (window.location.hostname === "hamuzon.github.io") {
+        document.getElementById("backLink").href = "https://hamuzon.github.io/password/";
+      }
+    });
+
+    if (window.location.hostname === "hamuzon.github.io" && !window.location.pathname.startsWith("/password/")) {
+      window.location.replace("/password/");
+    }
+  </script>
+</body>
+</html>
