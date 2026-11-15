@@ -33,6 +33,11 @@
   {"title":"🎋 短冊メーカー / Tanzaku Maker ✨","url":"/tanzaku/"},
   {"title":"お月見🎑 / tsukimi🎑","url":"/tsukimi/"},
   {"title":"UUID Generator / UUIDジェネレーター","url":"/UUID"},
+  {"title":"⏱️ TIME tools","url":"https://time-tools.hamuzon-jp.f5.si/"},
   {"title":"⌚ストップウォッチ / Stopwatch ⏰️","url":"https://time-tools.hamuzon-jp.f5.si/stopwatch/"},
-  {"title":"⌛️タイマー / Timer ⏲️","url":"https://time-tools.hamuzon-jp.f5.si/timer/"}
+  {"title":"⌛️タイマー / Timer ⏲️","url":"https://time-tools.hamuzon-jp.f5.si/timer/"},
+  {"title":"⏳カウントダウン / Countdown ⏱️","url":"https://time-tools.hamuzon-jp.f5.si/countdown/"},
+  {"title":"⏰アラーム / Alarm 🔔","url":"https://time-tools.hamuzon-jp.f5.si/alarm/"},
+  {"title":"🌍世界時計 / World Clock 🕒","url":"https://time-tools.hamuzon-jp.f5.si/world-clock/"},
+  {"title":"🍅ポモドーロ / Pomodoro 🍅","url":"https://time-tools.hamuzon-jp.f5.si/pomodoro/"}
 ]
