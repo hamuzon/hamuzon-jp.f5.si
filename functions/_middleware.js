@@ -13,6 +13,11 @@ export async function onRequest(context) {
     return Response.redirect(url.toString(), 308);
   }
 
+  if (url.pathname === "/teapot.html") {
+    url.pathname = "/teapot";
+    return Response.redirect(url.toString(), 308);
+  }
+
   const userAgent = context.request.headers.get("User-Agent") || "";
 
   const isMobile =

@@ -14,7 +14,7 @@ export async function onRequest(context) {
     const jsonBody = JSON.stringify({
       status: 418,
       error: "I'm a teapot",
-      message: "エラーが発生しました: 私はティーポットです"
+      message: "418 I'm a teapot: 私はティーポットです"
     }, null, 2);
 
     return new Response(jsonBody, {
@@ -64,6 +64,14 @@ export async function onRequest(context) {
       width: 140px;
       height: 110px;
       filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.35));
+    }
+
+    #fallback-teapot {
+      display: none;
+    }
+
+    #fallback-teapot.show {
+      display: inline-block;
     }
 
     .steam {
@@ -143,7 +151,8 @@ export async function onRequest(context) {
 <body>
   <div class="container">
     <div class="teapot-wrapper">
-      <svg class="teapot-svg" viewBox="0 0 120 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <img src="/teapot.svg" class="teapot-svg" alt="418 I'm a teapot" onerror="this.remove();document.getElementById('fallback-teapot').classList.add('show');" />
+      <svg id="fallback-teapot" class="teapot-svg" viewBox="0 0 120 100" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path class="steam steam-1" d="M 98 34 Q 102 24 98 14" stroke="#f0f0f0" stroke-width="2.5" stroke-linecap="round"/>
         <path class="steam steam-2" d="M 105 30 Q 109 20 105 10" stroke="#f0f0f0" stroke-width="2.5" stroke-linecap="round"/>
         <path d="M 35 50 C 14 50, 14 74, 35 74" stroke="#f0f0f0" stroke-width="6.5" stroke-linecap="round" fill="none"/>
@@ -156,7 +165,7 @@ export async function onRequest(context) {
       </svg>
     </div>
     <h1>418</h1>
-    <p>エラーが発生しました: 私はティーポットです</p>
+    <p>418 I'm a teapot: 私はティーポットです</p>
     <p class="subtext">Sorry, I'm a teapot.</p>
     <a id="backLink" class="back" href="/">トップページへ戻る</a>
   </div>
