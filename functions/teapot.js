@@ -14,7 +14,7 @@ export async function onRequest(context) {
     const jsonBody = JSON.stringify({
       status: 418,
       error: "I'm a teapot",
-      message: "418 I'm a teapot: 私はティーポットです"
+      message: "エラーが発生しました: 私はティーポットです"
     }, null, 2);
 
     return new Response(jsonBody, {
@@ -31,12 +31,12 @@ export async function onRequest(context) {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>418 I'm a teapot（私はティーポットです）</title>
+  <title>418 I'm a teapot - @hamuzon</title>
 
   <link rel="icon" href="/icon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Potta+One&display=swap" rel="stylesheet">
 
   <style>
     *, *::before, *::after { box-sizing: border-box; }
@@ -44,7 +44,7 @@ export async function onRequest(context) {
     body {
       margin: 0;
       padding: 0;
-      font-family: 'Google Sans', 'Noto Sans JP', 'Inter', 'Segoe UI', sans-serif;
+      font-family: 'Potta One', cursive, sans-serif;
       background: linear-gradient(to bottom, #ffcf91 0%, #a96bf8 100%);
       min-height: 100vh;
       color: #333;
@@ -57,23 +57,22 @@ export async function onRequest(context) {
     }
 
     .teapot-wrapper {
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.75rem;
     }
 
     .teapot-svg {
-      width: 130px;
+      width: 140px;
       height: 110px;
-      filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.35));
+      filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.35));
     }
 
     .steam {
       opacity: 0.8;
-      animation: steamAnim 2.5s infinite ease-in-out;
+      animation: steamAnim 2.4s infinite ease-in-out;
     }
 
     .steam-1 { animation-delay: 0s; }
-    .steam-2 { animation-delay: 0.8s; }
-    .steam-3 { animation-delay: 1.6s; }
+    .steam-2 { animation-delay: 1.2s; }
 
     @keyframes steamAnim {
       0% {
@@ -84,7 +83,7 @@ export async function onRequest(context) {
         opacity: 0.9;
       }
       100% {
-        transform: translateY(-8px);
+        transform: translateY(-10px);
         opacity: 0;
       }
     }
@@ -134,7 +133,7 @@ export async function onRequest(context) {
     }
 
     @media (max-width: 600px) {
-      .teapot-svg { width: 100px; height: 85px; }
+      .teapot-svg { width: 110px; height: 85px; }
       h1 { font-size: 4rem; }
       p { font-size: 1.1rem; }
       .subtext { font-size: 0.9rem; }
@@ -145,24 +144,19 @@ export async function onRequest(context) {
   <div class="container">
     <div class="teapot-wrapper">
       <svg class="teapot-svg" viewBox="0 0 120 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <!-- 湯気 (スチーム) -->
-        <path class="steam steam-1" d="M50 20 Q55 11 50 3" stroke="#f0f0f0" stroke-width="2.5" stroke-linecap="round"/>
-        <path class="steam steam-2" d="M60 22 Q65 13 60 4" stroke="#f0f0f0" stroke-width="2.5" stroke-linecap="round"/>
-        <path class="steam steam-3" d="M70 20 Q75 11 70 3" stroke="#f0f0f0" stroke-width="2.5" stroke-linecap="round"/>
-        <!-- 取っ手 (Handle) -->
-        <path d="M28 44 C8 44 8 76 30 80" stroke="#f0f0f0" stroke-width="7" stroke-linecap="round" fill="none"/>
-        <!-- 注ぎ口 (Spout) -->
-        <path d="M88 64 Q108 60 114 42 Q106 38 94 50 Z" fill="#f0f0f0"/>
-        <!-- ポット本体 (Body) -->
-        <ellipse cx="60" cy="66" rx="35" ry="26" fill="#f0f0f0"/>
-        <!-- 蓋 (Lid) -->
-        <ellipse cx="60" cy="42" rx="20" ry="6" fill="#ffffff"/>
-        <!-- 蓋のつまみ (Knob) -->
-        <circle cx="60" cy="34" r="5" fill="#f0f0f0"/>
+        <path class="steam steam-1" d="M 98 34 Q 102 24 98 14" stroke="#f0f0f0" stroke-width="2.5" stroke-linecap="round"/>
+        <path class="steam steam-2" d="M 105 30 Q 109 20 105 10" stroke="#f0f0f0" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M 35 50 C 14 50, 14 74, 35 74" stroke="#f0f0f0" stroke-width="6.5" stroke-linecap="round" fill="none"/>
+        <path d="M 70 70 C 86 70, 96 56, 100 42 C 94 42, 86 48, 74 54 Z" fill="#f0f0f0"/>
+        <ellipse cx="55" cy="63" rx="28" ry="19" fill="#f0f0f0"/>
+        <path d="M 44 80 Q 55 83 66 80" stroke="rgba(0,0,0,0.15)" stroke-width="3" stroke-linecap="round"/>
+        <ellipse cx="55" cy="46" rx="18" ry="4" fill="#e8e8e8"/>
+        <path d="M 42 46 C 42 38, 68 38, 68 46 Z" fill="#f0f0f0"/>
+        <circle cx="55" cy="34" r="4.5" fill="#f0f0f0"/>
       </svg>
     </div>
     <h1>418</h1>
-    <p>418 I'm a teapot: 私はティーポットです</p>
+    <p>エラーが発生しました: 私はティーポットです</p>
     <p class="subtext">Sorry, I'm a teapot.</p>
     <a id="backLink" class="back" href="/">トップページへ戻る</a>
   </div>

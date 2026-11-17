@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 100" fill="none">
+  <style>
+    .steam {
+      opacity: 0.8;
+      animation: steamAnim 2.4s infinite ease-in-out;
+    }
+    .steam-1 { animation-delay: 0s; }
+    .steam-2 { animation-delay: 1.2s; }
+    @keyframes steamAnim {
+      0% {
+        transform: translateY(0);
+        opacity: 0.2;
+      }
+      50% {
+        opacity: 0.9;
+      }
+      100% {
+        transform: translateY(-10px);
+        opacity: 0;
+      }
+    }
+  </style>
+  <path class="steam steam-1" d="M 98 34 Q 102 24 98 14" stroke="#f0f0f0" stroke-width="2.5" stroke-linecap="round"/>
+  <path class="steam steam-2" d="M 105 30 Q 109 20 105 10" stroke="#f0f0f0" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M 35 50 C 14 50, 14 74, 35 74" stroke="#f0f0f0" stroke-width="6.5" stroke-linecap="round" fill="none"/>
+  <path d="M 70 70 C 86 70, 96 56, 100 42 C 94 42, 86 48, 74 54 Z" fill="#f0f0f0"/>
+  <ellipse cx="55" cy="63" rx="28" ry="19" fill="#f0f0f0"/>
+  <path d="M 44 80 Q 55 83 66 80" stroke="rgba(0,0,0,0.15)" stroke-width="3" stroke-linecap="round"/>
+  <ellipse cx="55" cy="46" rx="18" ry="4" fill="#e8e8e8"/>
+  <path d="M 42 46 C 42 38, 68 38, 68 46 Z" fill="#f0f0f0"/>
+  <circle cx="55" cy="34" r="4.5" fill="#f0f0f0"/>
+</svg>
