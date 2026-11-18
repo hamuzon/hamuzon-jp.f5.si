@@ -4,7 +4,6 @@
   {"title":"🐱 Scratch user @hamuzon","url":"https://scratch.mit.edu/users/hamuzon/","target":"_blank"},
   {"title":"🕰️ TimeZone - Hamuzon","url":"/Time-Zone_app/"},
   {"title":"⏳ Expo Countdown⏰️","url":"https://expo-countdown.hamuzon-jp.f5.si/"},
-  {"title":"🎍 新年までのカウントダウン / New Year Countdown 🌅","url":"/countdown"},
   {"title":"⏰ 時計 / Clock","url":"/clock-app/"},
   {"title":"🔢 Binary⇔Decimal Converter","url":"/bin2dec/"},
   {"title":"🔢 Binary⇔Decimal Converter-old","url":"/bin2dec/old/"},
@@ -40,5 +39,6 @@
   {"title":"⏳カウントダウン / Countdown ⏱️","url":"https://time-tools.hamuzon-jp.f5.si/countdown/"},
   {"title":"⏰アラーム / Alarm 🔔","url":"https://time-tools.hamuzon-jp.f5.si/alarm/"},
   {"title":"🌍世界時計 / World Clock 🕒","url":"https://time-tools.hamuzon-jp.f5.si/world-clock/"},
-  {"title":"🍅ポモドーロ / Pomodoro 🍅","url":"https://time-tools.hamuzon-jp.f5.si/pomodoro/"}
+  {"title":"🍅ポモドーロ / Pomodoro 🍅","url":"https://time-tools.hamuzon-jp.f5.si/pomodoro/"},
+  {"title":"🎍 新年までのカウントダウン / New Year Countdown 🌅","url":"/countdown"}
 ]
