@@ -11,24 +11,20 @@ export async function onRequest(context) {
 
     const baseYear = 2025;
 
-    // ユーザーの推定タイムゾーン（Cloudflareの位置情報、なければAsia/Tokyo）
     const userDefaultTz = request.cf?.timezone || 'Asia/Tokyo';
     const requestedTz = url.searchParams.get('tz');
     const tz = requestedTz || userDefaultTz;
 
-    // ユーザー自身の標準タイムゾーンと同じ場合は URL から消す
     if (requestedTz && requestedTz === userDefaultTz) {
         const cleanUrl = new URL(url);
         cleanUrl.searchParams.delete('tz');
         return Response.redirect(cleanUrl.toString(), 307);
     }
 
-    // 言語判定: ?lang=en で英語、なければ Accept-Language で判定（jaがデフォルト）
     const langParam = url.searchParams.get('lang');
     const acceptLang = request.headers.get('Accept-Language') || '';
     const isJa = langParam ? langParam !== 'en' : acceptLang.toLowerCase().includes('ja');
 
-    // ?lang=ja はデフォルトなので URL から消す（リダイレクト）
     if (langParam === 'ja') {
         const cleanUrl = new URL(url);
         cleanUrl.searchParams.delete('lang');
@@ -41,7 +37,6 @@ export async function onRequest(context) {
     const nextYear = currentYear + 1;
     const yearDisplay = currentYear > baseYear ? `${baseYear} ~ ${currentYear}` : baseYear;
 
-    // i18n
     const t = isJa ? {
         htmlLang: 'ja',
         title: `${nextYear}年カウントダウン`,
@@ -287,7 +282,6 @@ export async function onRequest(context) {
     <script>
         const isJa = ${isJa};
         
-        // 端末（ユーザー）のローカルタイムゾーンを自動検出
         const browserTz = (function() {
             try {
                 return Intl.DateTimeFormat().resolvedOptions().timeZone || 'Asia/Tokyo';
@@ -296,7 +290,6 @@ export async function onRequest(context) {
             }
         })();
 
-        // URLパラメータ指定があればそれを使い、なければユーザー自身のタイムゾーンを使用
         const urlParams = new URLSearchParams(location.search);
         const currentTz = urlParams.get('tz') || browserTz;
 
@@ -304,7 +297,6 @@ export async function onRequest(context) {
         let timeOffset = 0;
         let newYearShown = false;
 
-        // 主要都市・地域の和名辞書
         const CITY_JA = {
             'Asia/Tokyo': '東京（日本）',
             'Asia/Seoul': 'ソウル（韓国）',
@@ -397,7 +389,6 @@ export async function onRequest(context) {
             'UTC': '協定世界時 (UTC)'
         };
 
-        // 地名ラベルの取得（和名辞書にあれば和名、なければ英語都市名を綺麗に整形）
         function getCityDisplayName(z) {
             if (isJa && CITY_JA[z]) return CITY_JA[z];
             const parts = z.split('/');
@@ -405,7 +396,6 @@ export async function onRequest(context) {
             return raw.replace(/_/g, ' ');
         }
 
-        // タイムゾーン詳細情報の取得
         function getTimeZoneInfo(tzName, date) {
             const d = date || new Date();
             try {
@@ -424,7 +414,6 @@ export async function onRequest(context) {
                 const gmt = (offParts.find(function(p) { return p.type === 'timeZoneName'; }) || {}).value || 'GMT+00:00';
                 const utcOffset = gmt.replace('GMT', 'UTC');
 
-                // オフセット（分単位）を計算（ソート用）
                 let minutes = 0;
                 const match = gmt.match(/GMT([+-])(\\d{2}):(\\d{2})/);
                 if (match) {
@@ -454,7 +443,6 @@ export async function onRequest(context) {
             }
         }
 
-        // ===== タイムゾーンリスト（Intl.supportedValuesOf で動的生成 & UTC時差順ソート） =====
         (function() {
             const sel = document.getElementById('tzSelect');
             let zones = [];
@@ -472,7 +460,6 @@ export async function onRequest(context) {
                 return getTimeZoneInfo(z, now);
             });
 
-            // 時差順（西から東: UTC-12 から UTC+14）にソート
             tzList.sort(function(a, b) {
                 if (a.offsetMinutes !== b.offsetMinutes) {
                     return a.offsetMinutes - b.offsetMinutes;
@@ -484,7 +471,6 @@ export async function onRequest(context) {
                 const opt = document.createElement('option');
                 opt.value = info.tz;
 
-                // 例: "UTC+09:00 東京（日本） - 日本標準時 (Asia/Tokyo)"
                 let label = info.utcOffset + ' ' + info.city;
                 if (info.name && info.name !== info.city && info.name !== info.tz) {
                     label += ' - ' + info.name;
@@ -497,7 +483,6 @@ export async function onRequest(context) {
             });
         })();
 
-        // 設定パネル開閉（設定ボタンとヘッダーバッジのどちらを押しても開閉）
         function toggleTzPanel() {
             const panel = document.getElementById('tzPanel');
             panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
@@ -508,7 +493,6 @@ export async function onRequest(context) {
             headerBadgeBtn.addEventListener('click', toggleTzPanel);
         }
 
-        // タイムゾーン変更: ユーザーの端末タイムゾーンと同じなら tz パラメータをURLから消す
         document.getElementById('tzSelect').addEventListener('change', function() {
             const u = new URL(location);
             if (this.value === browserTz) {
@@ -519,7 +503,6 @@ export async function onRequest(context) {
             location.href = u.toString();
         });
 
-        // 言語変更: 日本語なら lang パラメータをURLから消し、英語なら ?lang=en を設定
         const langSel = document.getElementById('langSelect');
         if (langSel) {
             langSel.addEventListener('change', function() {
@@ -533,7 +516,6 @@ export async function onRequest(context) {
             });
         }
 
-        // ===== 時刻同期 =====
         async function syncTime() {
             let hostPref = null;
             try {
@@ -605,7 +587,6 @@ export async function onRequest(context) {
             return new Date(Date.now() + timeOffset);
         }
 
-        // 指定タイムゾーンでの現在時刻パーツを取得
         const tzFormatter = new Intl.DateTimeFormat('en-CA', {
             timeZone: currentTz,
             year: 'numeric', month: '2-digit', day: '2-digit',
@@ -629,7 +610,6 @@ export async function onRequest(context) {
             };
         }
 
-        // 指定タイムゾーンでの「翌年1月1日 00:00:00」のUTCミリ秒を計算
         function getNewYearUtcMs(year) {
             const guessUtc = Date.UTC(year, 0, 1, 0, 0, 0);
             const p = getTzParts(new Date(guessUtc));
@@ -638,15 +618,13 @@ export async function onRequest(context) {
             return guessUtc - offsetMs;
         }
 
-        // ===== カウントダウン更新 =====
         function updateCountdown() {
             const now = getNow();
             const p = getTzParts(now);
             const yr = p.year;
-            const month = p.month - 1; // 0=Jan
+            const month = p.month - 1;
             const day = p.day;
 
-            // 1月1日 = 元旦表示
             const isNewYear = (month === 0 && day === 1);
 
             if (isNewYear && !newYearShown) {
@@ -669,7 +647,6 @@ export async function onRequest(context) {
             }
             if (isNewYear) return;
 
-            // 指定タイムゾーンでの来年1月1日までの残り時間
             const targetMs = getNewYearUtcMs(yr + 1);
             const remaining = targetMs - now.getTime();
 
@@ -706,7 +683,6 @@ export async function onRequest(context) {
             document.querySelector('.nowMinute').textContent = p.minute < 10 ? '0' + p.minute : p.minute;
             document.querySelector('.nowSecond').textContent = p.second < 10 ? '0' + p.second : p.second;
 
-            // ヘッダーのタイムゾーン表示と設定パネル詳細を更新
             const curInfo = getTimeZoneInfo(currentTz, now);
             const headerNameEl = document.getElementById('tzHeaderName');
             if (headerNameEl) {
