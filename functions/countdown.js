@@ -1,81 +1,124 @@
+
 export async function onRequest(context) {
     const { request } = context;
     const url = new URL(request.url);
     const hostname = url.hostname;
 
-    // 末尾スラッシュがある場合はスラッシュなしにリダイレクト
-    if (url.pathname.endsWith('/') && url.pathname !== '/') {
-        const cleanUrl = url.toString().replace(/\/+$/, '');
-        return Response.redirect(cleanUrl, 307);
+    const BASE_YEAR = 2025;
+    const DEFAULT_TZ = 'Asia/Tokyo';
+
+    // URL正規化
+    if (
+        url.pathname !== '/' &&
+        url.pathname.endsWith('/')
+    ) {
+        url.pathname = url.pathname.replace(/\/+$/, '');
+        return Response.redirect(url.toString(), 308);
     }
 
-    const baseYear = 2025;
-
-    const userDefaultTz = request.cf?.timezone || 'Asia/Tokyo';
+    // タイムゾーン取得・検証
+    const userDefaultTz = request.cf?.timezone || DEFAULT_TZ;
     const requestedTz = url.searchParams.get('tz');
-    const tz = requestedTz || userDefaultTz;
 
-    if (requestedTz && requestedTz === userDefaultTz) {
+    let tz = requestedTz || userDefaultTz;
+
+    try {
+        new Intl.DateTimeFormat('en-US', {
+            timeZone: tz
+        });
+    } catch {
+        tz = userDefaultTz;
+    }
+
+    if (requestedTz === userDefaultTz || (requestedTz && requestedTz !== tz)) {
         const cleanUrl = new URL(url);
         cleanUrl.searchParams.delete('tz');
-        return Response.redirect(cleanUrl.toString(), 307);
+        return Response.redirect(cleanUrl.toString(), 308);
     }
 
+    // 言語設定
     const langParam = url.searchParams.get('lang');
     const acceptLang = request.headers.get('Accept-Language') || '';
-    const isJa = langParam ? langParam !== 'en' : acceptLang.toLowerCase().includes('ja');
+
+    const isJa = langParam
+        ? langParam !== 'en'
+        : acceptLang.toLowerCase().includes('ja');
 
     if (langParam === 'ja') {
         const cleanUrl = new URL(url);
         cleanUrl.searchParams.delete('lang');
-        return Response.redirect(cleanUrl.toString(), 307);
+        return Response.redirect(cleanUrl.toString(), 308);
     }
 
-    const currentYear = parseInt(
-        new Intl.DateTimeFormat('en-US', { year: 'numeric', timeZone: tz }).format(new Date())
+    const currentYear = Number(
+        new Intl.DateTimeFormat('en-US', {
+            year: 'numeric',
+            timeZone: tz
+        }).format(new Date())
     );
+
     const nextYear = currentYear + 1;
-    const yearDisplay = currentYear > baseYear ? `${baseYear} ~ ${currentYear}` : baseYear;
+
+    const yearDisplay = currentYear > BASE_YEAR
+        ? `${BASE_YEAR} ~ ${currentYear}`
+        : BASE_YEAR;
 
     const t = isJa ? {
         htmlLang: 'ja',
         title: `${nextYear}年カウントダウン`,
-        pageTitle: `${nextYear}年カウントダウン！`,
+        pageTitle: `${nextYear}年カウントダウン`,
         desc: `${nextYear}年（来年）の元旦までの残り時間をリアルタイムでカウントダウン表示します。`,
-        ogTitle: `${nextYear}年カウントダウン！`,
-        ogDesc: `来年 (${nextYear})年の元旦までの残り時間をリアルタイムでカウントダウン！`,
         countText: `${nextYear}年`,
         countLabel: 'まで残り',
-        dayUnit: '日',
-        tzLabel: '<i class="material-icons" style="font-size:1.15rem;vertical-align:text-bottom;">language</i> タイムゾーンを選択',
-        tzCurrent: `現在: ${tz}`,
-        settingsTitle: '設定',
-        langLabel: '<i class="material-icons" style="font-size:1.15rem;vertical-align:text-bottom;">translate</i> 言語を選択',
-        nowSep: { y: '年 / ', m: '月 / ', d: '日' },
+        day: '日',
+        hour: '時間',
+        minute: '分',
+        second: '秒',
+        millisecond: 'ミリ秒',
+        now: '現在時刻',
+        settings: '設定',
+        timezone: 'タイムゾーン',
+        language: '言語',
+        selected: '選択中',
+        localTime: '現地時間',
+        close: '閉じる',
+        newYear: 'あけましておめでとうございます！',
+        newYearSub: '素晴らしい一年になりますように。',
+        footer: 'New Year Countdown'
     } : {
         htmlLang: 'en',
         title: `Countdown to ${nextYear}`,
-        pageTitle: `Countdown to ${nextYear}!`,
+        pageTitle: `Countdown to ${nextYear}`,
         desc: `Real-time countdown to New Year's Day ${nextYear}.`,
-        ogTitle: `Countdown to ${nextYear}!`,
-        ogDesc: `Real-time countdown to New Year ${nextYear}!`,
-        countText: `${nextYear}`,
-        countLabel: 'Time Remaining',
-        dayUnit: 'd',
-        tzLabel: '<i class="material-icons" style="font-size:1.15rem;vertical-align:text-bottom;">language</i> Select Timezone',
-        tzCurrent: `Current: ${tz}`,
-        settingsTitle: 'Settings',
-        langLabel: '<i class="material-icons" style="font-size:1.15rem;vertical-align:text-bottom;">translate</i> Select Language',
-        nowSep: { y: '/', m: '/', d: '' },
+        countText: String(nextYear),
+        countLabel: 'TIME REMAINING',
+        day: 'DAYS',
+        hour: 'HOURS',
+        minute: 'MINUTES',
+        second: 'SECONDS',
+        millisecond: 'MS',
+        now: 'CURRENT TIME',
+        settings: 'Settings',
+        timezone: 'Timezone',
+        language: 'Language',
+        selected: 'Selected',
+        localTime: 'Local time',
+        close: 'Close',
+        newYear: 'Happy New Year!',
+        newYearSub: 'Wishing you a wonderful year.',
+        footer: 'New Year Countdown'
     };
 
-    let copyrightContent = "";
-    if (hostname.includes("hamusata.f5.si")) {
-        copyrightContent = `&copy; ${yearDisplay} New Year Countdown <a href="https://hamusata.f5.si" target="_blank" rel="noopener noreferrer">@hamusata</a>`;
-    } else if (hostname.includes("hamuzon-jp.f5.si")) {
-        copyrightContent = `&copy; ${yearDisplay} New Year Countdown <a href="https://hamuzon-jp.f5.si" target="_blank" rel="noopener noreferrer">@hamuzon</a>`;
+    let copyrightContent = '';
+
+    if (hostname.includes('hamusata.f5.si')) {
+        copyrightContent =
+            `&copy; ${yearDisplay} ${t.footer} <a href="https://hamusata.f5.si" target="_blank" rel="noopener noreferrer">@hamusata</a>`;
+    } else if (hostname.includes('hamuzon-jp.f5.si')) {
+        copyrightContent =
+            `&copy; ${yearDisplay} ${t.footer} <a href="https://hamuzon-jp.f5.si" target="_blank" rel="noopener noreferrer">@hamuzon</a>`;
     } else {
-        copyrightContent = `&copy; ${yearDisplay} New Year Countdown`;
+        copyrightContent = `&copy; ${yearDisplay} ${t.footer}`;
     }
 
     const html = `<!DOCTYPE html>
@@ -83,639 +126,1087 @@ export async function onRequest(context) {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>${t.title}</title>
+<meta name="theme-color" content="#080b18">
 <meta name="description" content="${t.desc}">
-<meta property="og:title" content="${t.ogTitle}">
-<meta property="og:description" content="${t.ogDesc}">
+<meta property="og:title" content="${t.title}">
+<meta property="og:description" content="${t.desc}">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary">
+
+<title>${t.title}</title>
+
 <script>
-    const theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    document.documentElement.className = theme;
+(function() {
+    const saved = localStorage.getItem('countdown-theme');
+    const systemDark = matchMedia('(prefers-color-scheme: dark)').matches;
+    document.documentElement.dataset.theme =
+        saved || (systemDark ? 'dark' : 'light');
+})();
 </script>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;700&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
 <style>
-    html { background: #0a0a0a; }
-    html.light { background: #fde2ea; }
-    html.dark { background: #0a0a0a; }
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Noto Sans JP', 'Arial', sans-serif; }
+:root {
+    color-scheme: dark;
+    --bg: #080b18;
+    --text: #f8fafc;
+    --muted: #94a3b8;
+    --panel: rgba(255,255,255,.07);
+    --panel-border: rgba(255,255,255,.12);
+    --accent: #8b5cf6;
+    --accent2: #06b6d4;
+    --shadow: rgba(0,0,0,.3);
+}
+
+:root[data-theme="light"] {
+    color-scheme: light;
+    --bg: #f5f1ff;
+    --text: #29243a;
+    --muted: #77718b;
+    --panel: rgba(255,255,255,.55);
+    --panel-border: rgba(255,255,255,.8);
+    --accent: #7c3aed;
+    --accent2: #0891b2;
+    --shadow: rgba(91,70,140,.12);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    min-height: 100%;
+    background: var(--bg);
+}
+
+body {
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 110px 20px 95px;
+    overflow-x: hidden;
+    color: var(--text);
+    font-family: 'Noto Sans JP', sans-serif;
+    background:
+        radial-gradient(ellipse at 15% 15%, rgba(124,58,237,.25), transparent 45%),
+        radial-gradient(ellipse at 85% 75%, rgba(6,182,212,.20), transparent 45%),
+        radial-gradient(ellipse at 50% 50%, rgba(236,72,153,.10), transparent 60%),
+        var(--bg);
+    transition: background .3s, color .3s;
+}
+
+button, select {
+    font: inherit;
+}
+
+button {
+    color: inherit;
+}
+
+header {
+    position: fixed;
+    z-index: 20;
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 76px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px 180px;
+    background: var(--panel);
+    border-bottom: 1px solid var(--panel-border);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+}
+
+#page_title {
+    font-size: clamp(1.1rem, 3vw, 1.8rem);
+    font-weight: 800;
+    text-align: center;
+    letter-spacing: .04em;
+}
+
+.headerControls {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.headerBtn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 40px;
+    padding: 7px 13px;
+    border-radius: 999px;
+    border: 1px solid var(--panel-border);
+    background: var(--panel);
+    cursor: pointer;
+    transition: .2s;
+}
+
+.headerBtn:hover {
+    background: rgba(139,92,246,.2);
+    transform: translateY(-2px);
+}
+
+.headerBtn .material-icons {
+    font-size: 19px;
+}
+
+#tzHeaderName {
+    font-size: .8rem;
+    font-weight: 700;
+}
+
+.settingsIconBtn {
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--panel-border);
+    border-radius: 50%;
+    background: var(--panel);
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.settingsIconBtn:hover {
+    transform: rotate(45deg);
+    background: rgba(139,92,246,.2);
+}
+
+.countdownBlock {
+    width: 100%;
+    max-width: 1100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 16px;
+    animation: appear .8s ease both;
+}
+
+@keyframes appear {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.countText {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(3rem, 11vw, 7rem);
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: .04em;
+    background: linear-gradient(
+        110deg,
+        #22d3ee,
+        #818cf8,
+        #c084fc,
+        #f472b6,
+        #22d3ee
+    );
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradient 12s ease infinite;
+}
+
+@keyframes gradient {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+.countLabel {
+    font-size: clamp(.95rem, 3vw, 1.3rem);
+    font-weight: 700;
+    letter-spacing: .2em;
+    color: var(--muted);
+}
+
+.countdown {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    flex-wrap: wrap;
+    gap: clamp(8px, 2vw, 18px);
+    width: 100%;
+    margin: 15px 0;
+}
+
+.time-unit {
+    min-width: clamp(75px, 14vw, 135px);
+    padding: 20px 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    border-radius: 18px;
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    box-shadow: 0 10px 35px var(--shadow);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    transition: transform .2s, background .2s;
+}
+
+.time-unit:hover {
+    transform: translateY(-5px);
+}
+
+.time-unit > span:first-child {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(2rem, 6vw, 4.2rem);
+    font-weight: 700;
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.countSmall {
+    color: var(--muted);
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: .12em;
+}
+
+.nowTime {
+    margin-top: 12px;
+    padding: 13px 22px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    border: 1px solid var(--panel-border);
+    border-radius: 999px;
+    background: var(--panel);
+    color: var(--muted);
+    font-family: 'Orbitron', 'Noto Sans JP', sans-serif;
+    font-size: clamp(.8rem, 2.5vw, 1.15rem);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+.nowTime > span {
+    color: var(--text);
+}
+
+.nowTime .nowLabel {
+    margin-right: 8px;
+    color: var(--muted);
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: .75em;
+}
+
+footer {
+    position: fixed;
+    z-index: 10;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 17px 10px;
+    text-align: center;
+    font-size: .85rem;
+    color: var(--muted);
+    background: var(--panel);
+    border-top: 1px solid var(--panel-border);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+}
+
+footer a {
+    color: var(--text);
+    font-weight: 800;
+    text-decoration: none;
+}
+
+footer a:hover {
+    color: var(--accent2);
+}
+
+#tzPanel {
+    display: none;
+    position: fixed;
+    z-index: 50;
+    top: 85px;
+    right: 20px;
+    width: min(380px, calc(100vw - 30px));
+    max-height: calc(100dvh - 110px);
+    overflow-y: auto;
+    padding: 22px;
+    border-radius: 20px;
+    background: var(--bg);
+    color: var(--text);
+    border: 1px solid var(--panel-border);
+    box-shadow: 0 20px 70px var(--shadow);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    animation: panelAppear .2s ease;
+}
+
+@keyframes panelAppear {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.panelHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 22px;
+}
+
+.panelHeader h2 {
+    font-size: 1.2rem;
+}
+
+#panelClose {
+    width: 34px;
+    height: 34px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--panel);
+    cursor: pointer;
+}
+
+.panelLabel {
+    display: block;
+    margin: 18px 0 9px;
+    font-weight: 700;
+    font-size: .9rem;
+}
+
+#tzPanel select {
+    width: 100%;
+    min-height: 45px;
+    padding: 10px;
+    border: 1px solid var(--panel-border);
+    border-radius: 10px;
+    background: var(--panel);
+    color: var(--text);
+    outline: none;
+}
+
+#tzPanel select:focus {
+    border-color: var(--accent);
+}
+
+#tzPanel select option {
+    background: var(--bg);
+    color: var(--text);
+}
+
+.panelDetail {
+    margin-top: 12px;
+    padding: 13px;
+    border-radius: 12px;
+    background: var(--panel);
+    color: var(--muted);
+    font-size: .83rem;
+    line-height: 1.8;
+    overflow-wrap: anywhere;
+}
+
+.panelDivider {
+    margin: 20px 0;
+    border: 0;
+    border-top: 1px solid var(--panel-border);
+}
+
+.newYearBlock {
+    padding: 35px 20px;
+    border-radius: 25px;
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    box-shadow: 0 15px 50px var(--shadow);
+    font-size: clamp(1.1rem, 4vw, 1.7rem);
+    line-height: 2;
+    animation: appear 1s ease both;
+}
+
+.newYearYear {
+    display: block;
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(3rem, 12vw, 7rem);
+    font-weight: 800;
+    background: linear-gradient(120deg, #22d3ee, #a78bfa, #f472b6);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+@media (max-width: 650px) {
     body {
-        min-height: 100dvh; display: flex; flex-direction: column;
-        justify-content: center; align-items: center; text-align: center;
-        line-height: 1.4; overflow-x: hidden; font-weight: 500;
-        transition: background-color 0.3s, color 0.3s;
-        font-size: clamp(0.9rem, 1.5vw, 1.1rem); background-attachment: fixed;
+        padding: 100px 12px 85px;
     }
-    .light body {
-        background: radial-gradient(ellipse 80% 60% at 70% 20%, rgba(175, 109, 255, 0.85), transparent 68%),
-            radial-gradient(ellipse 70% 60% at 20% 80%, rgba(255, 100, 180, 0.75), transparent 68%),
-            radial-gradient(ellipse 60% 50% at 60% 65%, rgba(255, 235, 170, 0.98), transparent 68%),
-            radial-gradient(ellipse 65% 40% at 50% 60%, rgba(120, 190, 255, 0.3), transparent 68%),
-            linear-gradient(180deg, #f7eaff 0%, #fde2ea 100%);
-        color: #333;
-    }
-    .dark body {
-        background-color: #0a0a0a;
-        background-image: radial-gradient(ellipse at 20% 30%, rgba(56, 189, 248, 0.4) 0%, transparent 60%),
-            radial-gradient(ellipse at 80% 70%, rgba(139, 92, 246, 0.3) 0%, transparent 70%),
-            radial-gradient(ellipse at 60% 20%, rgba(236, 72, 153, 0.25) 0%, transparent 50%),
-            radial-gradient(ellipse at 40% 80%, rgba(34, 197, 94, 0.2) 0%, transparent 65%);
-        color: #fff;
-    }
+
     header {
-        position: fixed; top: 0; width: 100%; padding: 1rem 0;
-        background: rgba(255,255,255,0.05);
-        -webkit-backdrop-filter: blur(12px);
-        backdrop-filter: blur(12px);
-        z-index: 10;
+        min-height: 68px;
+        justify-content: flex-start;
+        padding: 12px 12px;
     }
-    #page_title { font-size: clamp(1.2rem, 4vw, 2.2rem); font-weight: 600; }
-    .countText {
-        font-size: clamp(2.5rem, 10vw, 5rem); font-weight: bold;
-        background: linear-gradient(45deg, #0089ff, #0040ff, #b03bff, #f23bff, #ff4ad2, #ff2626, #fc8c1c, #f6fc47, #6cf542, #42f566, #0089ff, #0040ff, #b03bff, #f23bff, #ff4ad2, #ff2626, #fc8c1c, #f6fc47, #6cf542, #42f566);
-        background-size: 1500% 1500%;
-        -webkit-background-clip: text;
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
-        animation: bggradient 30s linear infinite;
-        -webkit-user-select: none;
-        user-select: none;
-        margin-bottom: 0.2em;
+
+    #page_title {
+        max-width: calc(100% - 135px);
+        font-size: 1rem;
+        text-align: left;
     }
-    @keyframes bggradient { 0% { background-position: 0% 100%; } 100% { background-position: 83% 100%; } }
-    .countLabel { font-size: clamp(1.2rem, 5vw, 2.5rem); font-weight: bold; margin-bottom: 0.5em; color: inherit; }
-    .countSmall { font-size: 0.65em; font-weight: bold; color: inherit; }
-    .countdown {
-        font-family: 'Orbitron', 'Noto Sans JP', sans-serif;
-        font-size: clamp(2.5rem, 13vw, 7rem); font-weight: bold; color: inherit;
-        margin-bottom: 0.3em; line-height: 1; display: flex; flex-wrap: wrap;
-        justify-content: center; align-items: center; gap: 0.2em 0.4em;
-    }
-    .nowTime {
-        font-family: 'Orbitron', 'Noto Sans JP', sans-serif;
-        font-size: clamp(0.9rem, 4vw, 2rem); font-weight: bold; color: inherit;
-        margin-top: 0.3em; margin-bottom: 1em;
-    }
-    footer {
-        position: fixed; bottom: 0; left: 0; width: 100%; text-align: center;
-        padding: clamp(0.8rem, 2vw, 1.2rem) 0; font-size: clamp(0.8rem, 2vw, 1rem);
-        color: inherit; background: rgba(255,255,255,0.05);
-        -webkit-backdrop-filter: blur(12px);
-        backdrop-filter: blur(12px);
-        border-top: 1px solid rgba(255,255,255,0.2);
-    }
-    footer a { color: inherit; text-decoration: none; font-weight: bold; }
-    @media(max-width: 480px) { .countdown { font-size: clamp(2rem, 15vw, 4rem); } }
-    .time-unit { display: inline-flex; align-items: baseline; white-space: nowrap; }
-    .countdownBlock { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; }
+
     .headerControls {
-        position: fixed; top: 0.6rem; right: 1rem;
-        display: inline-flex; align-items: center; gap: 0.4rem; z-index: 20;
+        right: 10px;
+        gap: 5px;
     }
-    .tzHeaderBtn {
-        background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2);
-        padding: 0.3rem 0.75rem; border-radius: 9999px; color: inherit;
-        font-size: clamp(0.75rem, 1.8vw, 0.9rem); font-weight: 600; cursor: pointer;
-        display: inline-flex; align-items: center; gap: 0.3rem;
-        -webkit-backdrop-filter: blur(8px);
-        backdrop-filter: blur(8px);
-        transition: background 0.2s, border-color 0.2s;
+
+    .headerBtn {
+        min-height: 36px;
+        padding: 6px 9px;
     }
-    .tzHeaderBtn:hover { background: rgba(255, 255, 255, 0.2); border-color: rgba(255, 255, 255, 0.35); }
-    .light .tzHeaderBtn { background: rgba(0, 0, 0, 0.05); border-color: rgba(0, 0, 0, 0.12); }
-    .light .tzHeaderBtn:hover { background: rgba(0, 0, 0, 0.1); }
-    .headerBtnIcon { font-size: 1.1rem; vertical-align: middle; }
+
+    #tzHeaderName {
+        max-width: 95px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
     .settingsIconBtn {
-        background: none; border: none; cursor: pointer; color: inherit;
-        font-size: 1.5rem; display: flex; align-items: center;
+        width: 36px;
+        height: 36px;
     }
-    .settingsIconBtn i { font-size: 1.8rem; }
+
+    .time-unit {
+        min-width: calc(33.333% - 12px);
+        padding: 15px 7px;
+        border-radius: 14px;
+    }
+
+    .time-unit > span:first-child {
+        font-size: clamp(1.7rem, 9vw, 3rem);
+    }
+
+    .countdown {
+        gap: 9px;
+    }
+
+    .nowTime {
+        border-radius: 14px;
+        padding: 12px;
+    }
+
     #tzPanel {
-        display: none; position: fixed; top: 3.5rem; right: 1rem;
-        background: rgba(30,30,30,0.95);
-        -webkit-backdrop-filter: blur(12px);
-        backdrop-filter: blur(12px);
-        color: #fff; padding: 1rem 1.2rem; border-radius: 12px; z-index: 30;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-        min-width: 320px; max-width: 92vw; max-height: 80vh;
-        overflow-y: auto; text-align: left;
+        top: 75px;
+        right: 10px;
     }
-    .panelLabel { font-weight: bold; display: block; margin-bottom: 0.4rem; }
-    .panelIcon { font-size: 1.15rem; vertical-align: text-bottom; }
-    .panelDetail { margin-top: 0.7rem; font-size: 0.85rem; line-height: 1.5; opacity: 0.9; }
-    .panelDivider {
-        border: none; border-top: 1px solid rgba(255,255,255,0.15);
-        margin: 1rem 0 0.8rem 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+        scroll-behavior: auto !important;
     }
-    #tzPanel select {
-        width: 100%; padding: 0.5rem; border-radius: 6px;
-        border: 1px solid #555; background: #222; color: #fff; font-size: 0.9rem;
-    }
-    .light #tzPanel { background: rgba(255,255,255,0.95) !important; color: #333 !important; }
-    .light #tzPanel select { background: #f5f5f5; color: #333; border-color: #ccc; }
-    .light .panelDivider { border-top-color: rgba(0,0,0,0.12); }
-    .newYearBlock {
-        font-size: clamp(1.5rem, 6vw, 3.5rem);
-        line-height: 1.6;
-        text-align: center;
-    }
-    .newYearYear {
-        font-size: clamp(2rem, 8vw, 5rem);
-    }
+}
 </style>
 </head>
+
 <body>
-    <header>
-        <h1 id="page_title">${t.pageTitle}</h1>
-        <div class="headerControls">
-            <button id="tzHeaderBtn" title="${t.settingsTitle}" class="tzHeaderBtn">
-                <i class="material-icons headerBtnIcon">schedule</i> <span id="tzHeaderName">${tz}</span>
-            </button>
-            <button id="tzSettingsBtn" title="${t.settingsTitle}" class="settingsIconBtn">
-                <i class="material-icons">settings</i>
-            </button>
-        </div>
-    </header>
 
-    <!-- 設定パネル -->
-    <div id="tzPanel">
-        <label for="tzSelect" class="panelLabel">${t.tzLabel}</label>
-        <select id="tzSelect"></select>
-        <div id="tzCurrentDetail" class="panelDetail">${t.tzCurrent}</div>
+<header>
+    <h1 id="page_title">${t.pageTitle}</h1>
 
-        <hr class="panelDivider">
+    <div class="headerControls">
+        <button id="tzHeaderBtn" class="headerBtn" type="button"
+            title="${t.timezone}" aria-label="${t.timezone}">
+            <i class="material-icons">schedule</i>
+            <span id="tzHeaderName"></span>
+        </button>
 
-        <label for="langSelect" class="panelLabel">${t.langLabel}</label>
-        <select id="langSelect">
-            <option value="ja" ${isJa ? 'selected' : ''}>日本語 (Japanese)</option>
-            <option value="en" ${!isJa ? 'selected' : ''}>English</option>
-        </select>
+        <button id="tzSettingsBtn" class="settingsIconBtn" type="button"
+            title="${t.settings}" aria-label="${t.settings}"
+            aria-expanded="false">
+            <i class="material-icons">settings</i>
+        </button>
+    </div>
+</header>
+
+<div id="tzPanel" role="dialog" aria-label="${t.settings}">
+    <div class="panelHeader">
+        <h2>${t.settings}</h2>
+        <button id="panelClose" type="button" aria-label="${t.close}">
+            <i class="material-icons">close</i>
+        </button>
     </div>
 
-    <div class="countdownBlock">
-        <span class="countText">${t.countText}</span>
-        <span class="countLabel">${t.countLabel}</span>
+    <label for="tzSelect" class="panelLabel">${t.timezone}</label>
+    <select id="tzSelect"></select>
+    <div id="tzCurrentDetail" class="panelDetail"></div>
 
-        <div class="countdown">
-            <div class="time-unit"><span class="days">0</span><span class="countSmall">${t.dayUnit}</span></div>
-            <div class="time-unit"><span class="hours">00</span> :</div>
-            <div class="time-unit"><span class="minutes">00</span> :</div>
-            <div class="time-unit"><span class="seconds">00</span> .</div>
-            <div class="time-unit"><span class="milliseconds">00</span></div>
+    <hr class="panelDivider">
+
+    <label for="langSelect" class="panelLabel">${t.language}</label>
+    <select id="langSelect">
+        <option value="ja" ${isJa ? 'selected' : ''}>日本語 (Japanese)</option>
+        <option value="en" ${!isJa ? 'selected' : ''}>English</option>
+    </select>
+</div>
+
+<main class="countdownBlock">
+    <div class="countText">${t.countText}</div>
+    <div class="countLabel">${t.countLabel}</div>
+
+    <div class="countdown" aria-live="off">
+        <div class="time-unit">
+            <span class="days">0</span>
+            <span class="countSmall">${t.day}</span>
         </div>
 
-        <div class="nowTime">
-            <span class="nowYear">0</span>${t.nowSep.y}
-            <span class="nowMonth">0</span>${t.nowSep.m}
-            <span class="nowDay">0</span>${t.nowSep.d}&nbsp;
-            <span class="nowHour">00</span> :
-            <span class="nowMinute">00</span> :
-            <span class="nowSecond">00</span>
+        <div class="time-unit">
+            <span class="hours">00</span>
+            <span class="countSmall">${t.hour}</span>
+        </div>
+
+        <div class="time-unit">
+            <span class="minutes">00</span>
+            <span class="countSmall">${t.minute}</span>
+        </div>
+
+        <div class="time-unit">
+            <span class="seconds">00</span>
+            <span class="countSmall">${t.second}</span>
+        </div>
+
+        <div class="time-unit">
+            <span class="milliseconds">00</span>
+            <span class="countSmall">${t.millisecond}</span>
         </div>
     </div>
 
-    <footer id="footer-copy">
-        ${copyrightContent}
-    </footer>
+    <div class="nowTime">
+        <span class="nowLabel">${t.now}</span>
+        <span class="nowYear">0000</span>/<span class="nowMonth">00</span>/<span class="nowDay">00</span>
+        &nbsp;
+        <span class="nowHour">00</span>:<span class="nowMinute">00</span>:<span class="nowSecond">00</span>
+    </div>
+</main>
 
-    <script>
-        const isJa = ${isJa};
-        
-        const browserTz = (function() {
-            try {
-                return Intl.DateTimeFormat().resolvedOptions().timeZone || 'Asia/Tokyo';
-            } catch(e) {
-                return 'Asia/Tokyo';
+<footer>
+    ${copyrightContent}
+</footer>
+
+<script>
+'use strict';
+
+const IS_JA = ${isJa};
+const CURRENT_TZ = ${JSON.stringify(tz)};
+
+const browserTz = (() => {
+    try {
+        return Intl.DateTimeFormat().resolvedOptions().timeZone || 'Asia/Tokyo';
+    } catch {
+        return 'Asia/Tokyo';
+    }
+})();
+
+const urlParams = new URLSearchParams(location.search);
+const currentTz = urlParams.get('tz') || CURRENT_TZ;
+
+let timeOffset = 0;
+let newYearShown = false;
+let lastSecond = -1;
+let lastYearNum = 0;
+
+const CITY_JA = {
+    'Asia/Tokyo': '東京（日本）',
+    'Asia/Seoul': 'ソウル（韓国）',
+    'Asia/Shanghai': '北京 / 上海（中国）',
+    'Asia/Hong_Kong': '香港',
+    'Asia/Taipei': '台北（台湾）',
+    'Asia/Singapore': 'シンガポール',
+    'Asia/Manila': 'マニラ（フィリピン）',
+    'Asia/Bangkok': 'バンコク（タイ）',
+    'Asia/Jakarta': 'ジャカルタ（インドネシア）',
+    'Asia/Kolkata': 'デリー / インド',
+    'Asia/Dubai': 'ドバイ（UAE）',
+    'Asia/Vladivostok': 'ウラジオストク（ロシア）',
+    'Europe/London': 'ロンドン（イギリス）',
+    'Europe/Paris': 'パリ（フランス）',
+    'Europe/Berlin': 'ベルリン（ドイツ）',
+    'Europe/Rome': 'ローマ（イタリア）',
+    'Europe/Moscow': 'モスクワ（ロシア）',
+    'Europe/Kyiv': 'キーウ（ウクライナ）',
+    'America/New_York': 'ニューヨーク（米国東部）',
+    'America/Chicago': 'シカゴ（米国中部）',
+    'America/Denver': 'デンバー（米国山岳部）',
+    'America/Los_Angeles': 'ロサンゼルス（米国西部）',
+    'Pacific/Honolulu': 'ホノルル（ハワイ）',
+    'America/Toronto': 'トロント（カナダ）',
+    'America/Vancouver': 'バンクーバー（カナダ）',
+    'America/Sao_Paulo': 'サンパウロ（ブラジル）',
+    'Africa/Cairo': 'カイロ（エジプト）',
+    'Africa/Johannesburg': 'ヨハネスブルグ（南アフリカ）',
+    'Australia/Sydney': 'シドニー（豪州東部）',
+    'Australia/Perth': 'パース（豪州西部）',
+    'Pacific/Auckland': 'オークランド（ニュージーランド）',
+    'UTC': '協定世界時 (UTC)'
+};
+
+function getCityDisplayName(zone) {
+    if (IS_JA && CITY_JA[zone]) return CITY_JA[zone];
+
+    return zone.split('/').pop().replace(/_/g, ' ');
+}
+
+function getTzParts(date) {
+    const parts = tzFormatter.formatToParts(date);
+
+    const get = type => {
+        const item = parts.find(p => p.type === type);
+        return Number(item?.value || 0);
+    };
+
+    return {
+        year: get('year'),
+        month: get('month'),
+        day: get('day'),
+        hour: get('hour'),
+        minute: get('minute'),
+        second: get('second')
+    };
+}
+
+const tzFormatter = new Intl.DateTimeFormat('en-CA', {
+    timeZone: currentTz,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hourCycle: 'h23'
+});
+
+function getTimeZoneInfo(zone, date = new Date()) {
+    try {
+        const parts = new Intl.DateTimeFormat(
+            IS_JA ? 'ja-JP' : 'en-US',
+            {
+                timeZone: zone,
+                timeZoneName: 'long',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hourCycle: 'h23'
             }
-        })();
+        ).formatToParts(date);
 
-        const urlParams = new URLSearchParams(location.search);
-        const currentTz = urlParams.get('tz') || browserTz;
+        const get = type =>
+            parts.find(p => p.type === type)?.value || '';
 
-        let lastYearNum = 0;
-        let timeOffset = 0;
-        let newYearShown = false;
+        const offsetParts = new Intl.DateTimeFormat('en-US', {
+            timeZone: zone,
+            timeZoneName: 'longOffset'
+        }).formatToParts(date);
 
-        const CITY_JA = {
-            'Asia/Tokyo': '東京（日本）',
-            'Asia/Seoul': 'ソウル（韓国）',
-            'Asia/Shanghai': '北京 / 上海（中国）',
-            'Asia/Hong_Kong': '香港',
-            'Asia/Taipei': '台北（台湾）',
-            'Asia/Singapore': 'シンガポール',
-            'Asia/Manila': 'マニラ（フィリピン）',
-            'Asia/Bangkok': 'バンコク（タイ）',
-            'Asia/Jakarta': 'ジャカルタ（インドネシア）',
-            'Asia/Ho_Chi_Minh': 'ホーチミン（ベトナム）',
-            'Asia/Kolkata': 'デリー / インド',
-            'Asia/Dhaka': 'ダッカ（バングラデシュ）',
-            'Asia/Karachi': 'カラチ（パキスタン）',
-            'Asia/Kathmandu': 'カトマンズ（ネパール）',
-            'Asia/Yangon': 'ヤンゴン（ミャンマー）',
-            'Asia/Colombo': 'コロンボ（スリランカ）',
-            'Asia/Dubai': 'ドバイ（UAE）',
-            'Asia/Riyadh': 'リヤド（サウジアラビア）',
-            'Asia/Tehran': 'テヘラン（イラン）',
-            'Asia/Jerusalem': 'エルサレム（イスラエル）',
-            'Asia/Vladivostok': 'ウラジオストク（ロシア）',
-            'Asia/Ulaanbaatar': 'ウランバートル（モンゴル）',
-            'Asia/Almaty': 'アルマティ（カザフスタン）',
-            'Asia/Tashkent': 'タシケント（ウズベキスタン）',
-            'Asia/Kamchatka': 'カムチャツカ（ロシア）',
-            'Europe/London': 'ロンドン（イギリス）',
-            'Europe/Dublin': 'ダブリン（アイルランド）',
-            'Europe/Paris': 'パリ（フランス）',
-            'Europe/Berlin': 'ベルリン（ドイツ）',
-            'Europe/Rome': 'ローマ（イタリア）',
-            'Europe/Madrid': 'マドリード（スペイン）',
-            'Europe/Lisbon': 'リスボン（ポルトガル）',
-            'Europe/Amsterdam': 'アムステルダム（オランダ）',
-            'Europe/Brussels': 'ブリュッセル（ベルギー）',
-            'Europe/Zurich': 'チューリッヒ（スイス）',
-            'Europe/Vienna': 'ウィーン（オーストリア）',
-            'Europe/Stockholm': 'ストックホルム（スウェーデン）',
-            'Europe/Oslo': 'オスロ（ノルウェー）',
-            'Europe/Copenhagen': 'コペンハーゲン（デンマーク）',
-            'Europe/Helsinki': 'ヘルシンキ（フィンランド）',
-            'Europe/Warsaw': 'ワルシャワ（ポーランド）',
-            'Europe/Prague': 'プラハ（チェコ）',
-            'Europe/Budapest': 'ブダペスト（ハンガリー）',
-            'Europe/Athens': 'アテネ（ギリシャ）',
-            'Europe/Bucharest': 'ブカレスト（ルーマニア）',
-            'Europe/Moscow': 'モスクワ（ロシア）',
-            'Europe/Kiev': 'キーウ（ウクライナ）',
-            'Europe/Kyiv': 'キーウ（ウクライナ）',
-            'Europe/Istanbul': 'イスタンブール（トルコ）',
-            'America/New_York': 'ニューヨーク（米国東部）',
-            'America/Detroit': 'デトロイト（米国東部）',
-            'America/Chicago': 'シカゴ（米国中部）',
-            'America/Denver': 'デンバー（米国山岳部）',
-            'America/Phoenix': 'フェニックス（アリゾナ州）',
-            'America/Los_Angeles': 'ロサンゼルス（米国西部）',
-            'America/Anchorage': 'アンカレッジ（アラスカ）',
-            'Pacific/Honolulu': 'ホノルル（ハワイ）',
-            'America/Toronto': 'トロント（カナダ）',
-            'America/Vancouver': 'バンクーバー（カナダ）',
-            'America/Montreal': 'モントリオール（カナダ）',
-            'America/Mexico_City': 'メキシコシティ（メキシコ）',
-            'America/Sao_Paulo': 'サンパウロ（ブラジル）',
-            'America/Buenos_Aires': 'ブエノスアイレス（アルゼンチン）',
-            'America/Argentina/Buenos_Aires': 'ブエノスアイレス（アルゼンチン）',
-            'America/Santiago': 'サンティアゴ（チリ）',
-            'America/Bogota': 'ボゴタ（コロンビア）',
-            'America/Lima': 'リマ（ペルー）',
-            'America/Caracas': 'カラカス（ベネズエラ）',
-            'America/Havana': 'ハバナ（キューバ）',
-            'America/Panama': 'パナマ',
-            'Africa/Cairo': 'カイロ（エジプト）',
-            'Africa/Johannesburg': 'ヨハネスブルグ（南アフリカ）',
-            'Africa/Nairobi': 'ナイロビ（ケニア）',
-            'Africa/Lagos': 'ラゴス（ナイジェリア）',
-            'Africa/Casablanca': 'カサブランカ（モロッコ）',
-            'Africa/Accra': 'アクラ（ガーナ）',
-            'Africa/Addis_Ababa': 'アディスアベバ（エチオピア）',
-            'Australia/Sydney': 'シドニー（豪州東部）',
-            'Australia/Melbourne': 'メルボルン（豪州東部）',
-            'Australia/Brisbane': 'ブリスベン（豪州）',
-            'Australia/Perth': 'パース（豪州西部）',
-            'Australia/Adelaide': 'アデレード（豪州中部）',
-            'Australia/Darwin': 'ダーウィン（豪州北部）',
-            'Pacific/Auckland': 'オークランド（ニュージーランド）',
-            'Pacific/Fiji': 'フィジー',
-            'Pacific/Guam': 'グアム',
-            'Pacific/Tahiti': 'タヒチ',
-            'Pacific/Noumea': 'ニューカレドニア',
-            'UTC': '協定世界時 (UTC)'
-        };
+        const gmt =
+            offsetParts.find(p => p.type === 'timeZoneName')?.value ||
+            'GMT+00:00';
 
-        function getCityDisplayName(z) {
-            if (isJa && CITY_JA[z]) return CITY_JA[z];
-            const parts = z.split('/');
-            const raw = parts[parts.length - 1];
-            return raw.replace(/_/g, ' ');
-        }
-
-        function getTimeZoneInfo(tzName, date) {
-            const d = date || new Date();
-            try {
-                const parts = new Intl.DateTimeFormat(isJa ? 'ja-JP' : 'en-US', {
-                    timeZone: tzName,
-                    timeZoneName: 'long',
-                    hour: '2-digit', minute: '2-digit', second: '2-digit',
-                    hourCycle: 'h23'
-                }).formatToParts(d);
-                const tzLong = (parts.find(function(p) { return p.type === 'timeZoneName'; }) || {}).value || '';
-                const h = (parts.find(function(p) { return p.type === 'hour'; }) || {}).value || '00';
-                const m = (parts.find(function(p) { return p.type === 'minute'; }) || {}).value || '00';
-                const s = (parts.find(function(p) { return p.type === 'second'; }) || {}).value || '00';
-
-                const offParts = new Intl.DateTimeFormat('en-US', { timeZone: tzName, timeZoneName: 'longOffset' }).formatToParts(d);
-                const gmt = (offParts.find(function(p) { return p.type === 'timeZoneName'; }) || {}).value || 'GMT+00:00';
-                const utcOffset = gmt.replace('GMT', 'UTC');
-
-                let minutes = 0;
+        return {
+            tz: zone,
+            city: getCityDisplayName(zone),
+            name: get('timeZoneName'),
+            utcOffset: gmt.replace('GMT', 'UTC'),
+            offsetMinutes: (() => {
                 const match = gmt.match(/GMT([+-])(\\d{2}):(\\d{2})/);
-                if (match) {
-                    const sign = match[1] === '-' ? -1 : 1;
-                    minutes = sign * (parseInt(match[2], 10) * 60 + parseInt(match[3], 10));
-                }
+                if (!match) return 0;
 
-                return {
-                    tz: tzName,
-                    city: getCityDisplayName(tzName),
-                    name: tzLong,
-                    utcOffset: utcOffset,
-                    offsetMinutes: minutes,
-                    time: h + ':' + m + ':' + s,
-                    shortTime: h + ':' + m
-                };
-            } catch(e) {
-                return {
-                    tz: tzName,
-                    city: tzName,
-                    name: tzName,
-                    utcOffset: 'UTC',
-                    offsetMinutes: 0,
-                    time: '--:--:--',
-                    shortTime: '--:--'
-                };
-            }
+                const sign = match[1] === '-' ? -1 : 1;
+                return sign * (
+                    Number(match[2]) * 60 +
+                    Number(match[3])
+                );
+            })(),
+            time: get('hour') + ':' + get('minute') + ':' + get('second')
+        };
+    } catch {
+        return {
+            tz: zone,
+            city: zone,
+            name: zone,
+            utcOffset: 'UTC',
+            offsetMinutes: 0,
+            time: '--:--:--'
+        };
+    }
+}
+
+// タイムゾーンリスト
+(function initTimezoneList() {
+    const select = document.getElementById('tzSelect');
+
+    let zones = [];
+
+    try {
+        zones = Intl.supportedValuesOf('timeZone');
+    } catch {}
+
+    if (!zones.length) {
+        zones = [
+            'UTC',
+            'Asia/Tokyo',
+            'America/New_York',
+            'Europe/London',
+            'Europe/Paris',
+            'Asia/Singapore',
+            'Australia/Sydney'
+        ];
+    }
+
+    if (!zones.includes('UTC')) zones.push('UTC');
+
+    const now = new Date();
+
+    const infos = zones.map(zone =>
+        getTimeZoneInfo(zone, now)
+    );
+
+    infos.sort((a, b) =>
+        a.offsetMinutes - b.offsetMinutes ||
+        a.city.localeCompare(b.city)
+    );
+
+    infos.forEach(info => {
+        const option = document.createElement('option');
+
+        option.value = info.tz;
+        option.textContent =
+            info.utcOffset + ' ' +
+            info.city + ' (' + info.tz + ')';
+
+        option.selected = info.tz === currentTz;
+
+        select.appendChild(option);
+    });
+})();
+
+// 設定パネル
+const panel = document.getElementById('tzPanel');
+const settingsBtn = document.getElementById('tzSettingsBtn');
+
+function togglePanel(force) {
+    const open = typeof force === 'boolean'
+        ? force
+        : panel.style.display !== 'block';
+
+    panel.style.display = open ? 'block' : 'none';
+    settingsBtn.setAttribute('aria-expanded', String(open));
+}
+
+settingsBtn.addEventListener('click', () => togglePanel());
+
+document.getElementById('tzHeaderBtn')
+    .addEventListener('click', () => togglePanel());
+
+document.getElementById('panelClose')
+    .addEventListener('click', () => togglePanel(false));
+
+document.addEventListener('keydown', event => {
+    if (event.key === 'Escape') togglePanel(false);
+});
+
+document.addEventListener('click', event => {
+    if (
+        panel.style.display === 'block' &&
+        !panel.contains(event.target) &&
+        !settingsBtn.contains(event.target) &&
+        !document.getElementById('tzHeaderBtn').contains(event.target)
+    ) {
+        togglePanel(false);
+    }
+});
+
+// タイムゾーン変更
+document.getElementById('tzSelect')
+    .addEventListener('change', function() {
+        const next = new URL(location.href);
+
+        if (this.value === browserTz) {
+            next.searchParams.delete('tz');
+        } else {
+            next.searchParams.set('tz', this.value);
         }
 
-        (function() {
-            const sel = document.getElementById('tzSelect');
-            let zones = [];
-            try {
-                if (typeof Intl !== 'undefined' && typeof Intl.supportedValuesOf === 'function') {
-                    zones = Intl.supportedValuesOf('timeZone');
-                }
-            } catch(e) {}
-            if (zones.length === 0) {
-                zones = ['UTC','Asia/Tokyo','America/New_York','Europe/London','Europe/Paris','Asia/Singapore','Australia/Sydney'];
-            }
+        location.href = next.toString();
+    });
 
-            const now = new Date();
-            const tzList = zones.map(function(z) {
-                return getTimeZoneInfo(z, now);
+// 言語変更
+document.getElementById('langSelect')
+    .addEventListener('change', function() {
+        const next = new URL(location.href);
+
+        if (this.value === 'ja') {
+            next.searchParams.delete('lang');
+        } else {
+            next.searchParams.set('lang', this.value);
+        }
+
+        location.href = next.toString();
+    });
+
+// 時刻同期
+async function syncTime() {
+    const encTz = encodeURIComponent(currentTz);
+
+    const hostPref = location.hostname.includes('hamuzon-jp.f5.si')
+        ? 'hamuzon-jp'
+        : 'hamusata';
+
+    const hamuzonEndpoints = [
+        'https://api-time.hamuzon-jp.f5.si/api/?timeZone=' + encTz,
+        'https://api-time.hamuzon-jp.f5.si/api/time',
+        'https://api-time.hamuzon-jp.f5.si/'
+    ];
+
+    const hamusataEndpoints = [
+        'https://api-time.hamusata.f5.si/api/?timeZone=' + encTz,
+        'https://api-time.hamusata.f5.si/api/time',
+        'https://api-time.hamusata.f5.si/'
+    ];
+
+    const externalEndpoint =
+        'https://timeapi.io/api/Time/current/zone?timeZone=' + encTz;
+
+    const endpoints = hostPref === 'hamuzon-jp'
+        ? [...hamuzonEndpoints, ...hamusataEndpoints, externalEndpoint]
+        : [...hamusataEndpoints, ...hamuzonEndpoints, externalEndpoint];
+
+    function parseData(data) {
+        if (!data) return null;
+
+        if (typeof data.unix_ms === 'number') return data.unix_ms;
+        if (typeof data.unixtime === 'number') return data.unixtime * 1000;
+        if (typeof data.timestamp === 'number') return data.timestamp * 1000;
+
+        if (data.utc_datetime) return Date.parse(data.utc_datetime);
+        if (data.dateTime) return Date.parse(data.dateTime);
+
+        return null;
+    }
+
+    for (const endpoint of endpoints) {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 5000);
+
+        try {
+            const sent = Date.now();
+
+            const response = await fetch(endpoint, {
+                cache: 'no-store',
+                signal: controller.signal
             });
 
-            tzList.sort(function(a, b) {
-                if (a.offsetMinutes !== b.offsetMinutes) {
-                    return a.offsetMinutes - b.offsetMinutes;
-                }
-                return a.city.localeCompare(b.city);
-            });
+            const received = Date.now();
 
-            tzList.forEach(function(info) {
-                const opt = document.createElement('option');
-                opt.value = info.tz;
+            if (!response.ok) continue;
 
-                let label = info.utcOffset + ' ' + info.city;
-                if (info.name && info.name !== info.city && info.name !== info.tz) {
-                    label += ' - ' + info.name;
-                }
-                label += ' (' + info.tz + ')';
+            const data = await response.json();
+            const serverMs = parseData(data);
 
-                opt.textContent = label;
-                if (info.tz === currentTz) opt.selected = true;
-                sel.appendChild(opt);
-            });
-        })();
+            if (!Number.isFinite(serverMs)) continue;
 
-        function toggleTzPanel() {
-            const panel = document.getElementById('tzPanel');
-            panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+            timeOffset = serverMs + (received - sent) / 2 - received;
+            return true;
+        } catch {
+            // 次のAPIを試す
+        } finally {
+            clearTimeout(timeout);
         }
-        document.getElementById('tzSettingsBtn').addEventListener('click', toggleTzPanel);
-        const headerBadgeBtn = document.getElementById('tzHeaderBtn');
-        if (headerBadgeBtn) {
-            headerBadgeBtn.addEventListener('click', toggleTzPanel);
-        }
+    }
 
-        document.getElementById('tzSelect').addEventListener('change', function() {
-            const u = new URL(location);
-            if (this.value === browserTz) {
-                u.searchParams.delete('tz');
-            } else {
-                u.searchParams.set('tz', this.value);
-            }
-            location.href = u.toString();
-        });
+    return false;
+}
 
-        const langSel = document.getElementById('langSelect');
-        if (langSel) {
-            langSel.addEventListener('change', function() {
-                const u = new URL(location);
-                if (this.value === 'ja') {
-                    u.searchParams.delete('lang');
-                } else {
-                    u.searchParams.set('lang', this.value);
-                }
-                location.href = u.toString();
-            });
-        }
+function getNow() {
+    return new Date(Date.now() + timeOffset);
+}
 
-        async function syncTime() {
-            let hostPref = null;
-            try {
-                const hn = location.hostname;
-                if (hn.includes('hamuzon-jp.f5.si')) hostPref = 'hamuzon-jp';
-                else if (hn.includes('hamusata.f5.si')) hostPref = 'hamusata';
-            } catch(e) {}
+// 新年のUTC時刻を計算
+function getNewYearUtcMs(year) {
+    const guess = Date.UTC(year, 0, 1);
 
-            const encTz = encodeURIComponent(currentTz || 'UTC');
+    const parts = getTzParts(new Date(guess));
 
-            const parseData = function(d) {
-                if (!d) return null;
-                if (typeof d.unix_ms === 'number') return d.unix_ms;
-                if (typeof d.unixtime === 'number') return d.unixtime * 1000;
-                if (typeof d.timestamp === 'number') return d.timestamp * 1000;
-                if (d.utc_datetime) return Date.parse(d.utc_datetime);
-                if (d.dateTime) {
-                    const dt = String(d.dateTime).trim();
-                    if (/[Zz]|[+-]\d{2}/.test(dt)) return Date.parse(dt);
-                    try {
-                        const guessUtc = Date.parse(dt + 'Z');
-                        const p = getTzParts(new Date(guessUtc));
-                        const localAsUtc = Date.UTC(p.year, p.month - 1, p.day, p.hour, p.minute, p.second);
-                        return guessUtc - (localAsUtc - guessUtc);
-                    } catch(e) {
-                        return Date.parse(dt + 'Z');
-                    }
-                }
-                return null;
-            };
+    const localAsUtc = Date.UTC(
+        parts.year,
+        parts.month - 1,
+        parts.day,
+        parts.hour,
+        parts.minute,
+        parts.second
+    );
 
-            const hamuzonEndpoints = [
-                'https://api-time.hamuzon-jp.f5.si/api/?timeZone=' + encTz,
-                'https://api-time.hamuzon-jp.f5.si/api/time',
-                'https://api-time.hamuzon-jp.f5.si/'
-            ];
-            const hamusataEndpoints = [
-                'https://api-time.hamusata.f5.si/api/?timeZone=' + encTz,
-                'https://api-time.hamusata.f5.si/api/time',
-                'https://api-time.hamusata.f5.si/'
-            ];
-            const externalEndpoint = 'https://timeapi.io/api/Time/current/zone?timeZone=' + encTz;
+    const offset = localAsUtc - guess;
 
-            let urls = [];
-            if (hostPref === 'hamuzon-jp') {
-                urls = hamuzonEndpoints.concat(hamusataEndpoints).concat([externalEndpoint]);
-            } else if (hostPref === 'hamusata') {
-                urls = hamusataEndpoints.concat(hamuzonEndpoints).concat([externalEndpoint]);
-            } else {
-                urls = hamuzonEndpoints.concat(hamusataEndpoints).concat([externalEndpoint]);
-            }
+    return guess - offset;
+}
 
-            for (let i = 0; i < urls.length; i++) {
-                try {
-                    const sendTime = Date.now();
-                    const res = await fetch(urls[i], { cache: 'no-store' });
-                    const receiveTime = Date.now();
-                    const data = await res.json();
-                    const serverMs = parseData(data);
-                    if (!serverMs || isNaN(serverMs)) continue;
-                    const rtt = receiveTime - sendTime;
-                    timeOffset = serverMs + rtt / 2 - receiveTime;
-                    return;
-                } catch (_) {}
-            }
+// DOM更新
+function updateCountdown() {
+    const now = getNow();
+    const parts = getTzParts(now);
+
+    const year = parts.year;
+
+    if (parts.month === 1 && parts.day === 1) {
+        if (!newYearShown) {
+            newYearShown = true;
+
+            const title = IS_JA
+                ? year + '年 あけましておめでとう！'
+                : 'Happy New Year ' + year + '!';
+
+            document.querySelector('.countLabel').textContent = '';
+
+            document.querySelector('.countdown').innerHTML =
+                '<div class="newYearBlock">' +
+                '<div>' + (IS_JA ? '🎉 新年（元旦）になりました！ 🎉' : '🎉 Happy New Year! 🎉') + '</div>' +
+                '<span class="newYearYear">' + year + (IS_JA ? '年' : '') + '</span>' +
+                '<div>${t.newYear}</div>' +
+                '<div style="font-size:.75em;color:var(--muted)">${t.newYearSub}</div>' +
+                '</div>';
+
+            document.querySelector('.countText').textContent = '';
+            document.querySelector('.nowTime').style.display = 'none';
+
+            document.getElementById('page_title').textContent = title;
+            document.title = title;
         }
 
-        function getNow() {
-            return new Date(Date.now() + timeOffset);
-        }
+        return;
+    }
 
-        const tzFormatter = new Intl.DateTimeFormat('en-CA', {
-            timeZone: currentTz,
-            year: 'numeric', month: '2-digit', day: '2-digit',
-            hour: '2-digit', minute: '2-digit', second: '2-digit',
-            hourCycle: 'h23'
-        });
+    const target = getNewYearUtcMs(year + 1);
+    const remaining = Math.max(0, target - now.getTime());
 
-        function getTzParts(date) {
-            const parts = tzFormatter.formatToParts(date);
-            const g = function(type) {
-                const item = parts.find(function(p) { return p.type === type; });
-                return parseInt(item ? item.value : '0', 10);
-            };
-            return {
-                year: g('year'),
-                month: g('month'),
-                day: g('day'),
-                hour: g('hour'),
-                minute: g('minute'),
-                second: g('second')
-            };
-        }
+    const days = Math.floor(remaining / 86400000);
+    const hours = Math.floor(remaining / 3600000) % 24;
+    const minutes = Math.floor(remaining / 60000) % 60;
+    const seconds = Math.floor(remaining / 1000) % 60;
+    const milliseconds = Math.floor((remaining % 1000) / 10);
 
-        function getNewYearUtcMs(year) {
-            const guessUtc = Date.UTC(year, 0, 1, 0, 0, 0);
-            const p = getTzParts(new Date(guessUtc));
-            const localAsUtc = Date.UTC(p.year, p.month - 1, p.day, p.hour, p.minute, p.second);
-            const offsetMs = localAsUtc - guessUtc;
-            return guessUtc - offsetMs;
-        }
+    document.querySelector('.days').textContent = days;
+    document.querySelector('.hours').textContent = String(hours).padStart(2, '0');
+    document.querySelector('.minutes').textContent = String(minutes).padStart(2, '0');
+    document.querySelector('.seconds').textContent = String(seconds).padStart(2, '0');
+    document.querySelector('.milliseconds').textContent = String(milliseconds).padStart(2, '0');
 
-        function updateCountdown() {
-            const now = getNow();
-            const p = getTzParts(now);
-            const yr = p.year;
-            const month = p.month - 1;
-            const day = p.day;
+    if (lastYearNum !== year + 1) {
+        lastYearNum = year + 1;
 
-            const isNewYear = (month === 0 && day === 1);
+        const countText = IS_JA
+            ? (year + 1) + '年'
+            : String(year + 1);
 
-            if (isNewYear && !newYearShown) {
-                newYearShown = true;
-                const dispYear = yr;
-                const msg1 = isJa ? '🎉 新年（元旦）になりました！ 🎉' : '🎉 Happy New Year! 🎉';
-                const msg2 = isJa ? 'あけましておめでとうございます！' : 'Wishing you a wonderful year!';
-                const titleMsg = isJa ? (dispYear + '年 あけましておめでとう！') : ('Happy New Year ' + dispYear + '!');
-                document.querySelector('.countLabel').textContent = '';
-                document.querySelector('.countdown').innerHTML =
-                    '<div class="newYearBlock">' +
-                    msg1 + '<br>' +
-                    '<span class="newYearYear">' + dispYear + (isJa ? '年' : '') + '</span><br>' +
-                    msg2 +
-                    '</div>';
-                document.querySelector('.countText').textContent = '';
-                document.getElementById('page_title').textContent = titleMsg;
-                document.title = titleMsg;
-                return;
-            }
-            if (isNewYear) return;
+        const title = IS_JA
+            ? (year + 1) + '年カウントダウン'
+            : 'Countdown to ' + (year + 1);
 
-            const targetMs = getNewYearUtcMs(yr + 1);
-            const remaining = targetMs - now.getTime();
+        document.querySelector('.countText').textContent = countText;
+        document.getElementById('page_title').textContent = title;
+        document.title = title;
+    }
+}
 
-            const days = Math.floor(remaining / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((remaining / (1000 * 60 * 60)) % 24);
-            const minutes = Math.floor((remaining / (1000 * 60)) % 60);
-            const seconds = Math.floor((remaining / 1000) % 60);
-            const milliseconds = Math.floor((remaining / 10) % 100);
+function updateNowTime() {
+    const now = getNow();
+    const p = getTzParts(now);
 
-            document.querySelector('.days').textContent = days;
-            document.querySelector('.hours').textContent = hours < 10 ? '0' + hours : hours;
-            document.querySelector('.minutes').textContent = minutes < 10 ? '0' + minutes : minutes;
-            document.querySelector('.seconds').textContent = seconds < 10 ? '0' + seconds : seconds;
-            document.querySelector('.milliseconds').textContent = milliseconds < 10 ? '0' + milliseconds : milliseconds;
+    const set = (selector, value) => {
+        document.querySelector(selector).textContent = value;
+    };
 
-            const nextYearNum = yr + 1;
-            if (lastYearNum !== nextYearNum) {
-                lastYearNum = nextYearNum;
-                const countTxt = isJa ? (nextYearNum + '年') : String(nextYearNum);
-                const titleTxt = isJa ? (nextYearNum + '年カウントダウン！') : ('Countdown to ' + nextYearNum + '!');
-                document.querySelector('.countText').textContent = countTxt;
-                document.getElementById('page_title').textContent = titleTxt;
-                document.title = titleTxt;
-            }
-        }
+    set('.nowYear', p.year);
+    set('.nowMonth', String(p.month).padStart(2, '0'));
+    set('.nowDay', String(p.day).padStart(2, '0'));
+    set('.nowHour', String(p.hour).padStart(2, '0'));
+    set('.nowMinute', String(p.minute).padStart(2, '0'));
+    set('.nowSecond', String(p.second).padStart(2, '0'));
 
-        function updateNowTime() {
-            const now = getNow();
-            const p = getTzParts(now);
-            document.querySelector('.nowYear').textContent = p.year;
-            document.querySelector('.nowMonth').textContent = p.month;
-            document.querySelector('.nowDay').textContent = p.day;
-            document.querySelector('.nowHour').textContent = p.hour < 10 ? '0' + p.hour : p.hour;
-            document.querySelector('.nowMinute').textContent = p.minute < 10 ? '0' + p.minute : p.minute;
-            document.querySelector('.nowSecond').textContent = p.second < 10 ? '0' + p.second : p.second;
+    const info = getTimeZoneInfo(currentTz, now);
 
-            const curInfo = getTimeZoneInfo(currentTz, now);
-            const headerNameEl = document.getElementById('tzHeaderName');
-            if (headerNameEl) {
-                let badgeText = curInfo.city;
-                if (curInfo.utcOffset) {
-                    badgeText += ' [' + curInfo.utcOffset + ']';
-                }
-                headerNameEl.textContent = badgeText;
-            }
+    const badge = document.getElementById('tzHeaderName');
 
-            const detailEl = document.getElementById('tzCurrentDetail');
-            if (detailEl) {
-                let dText = '<b>' + (isJa ? '選択中' : 'Selected') + ':</b> ' + curInfo.city + '<br>';
-                dText += curInfo.name + ' (' + curInfo.utcOffset + ')<br>';
-                dText += '<span style="opacity:0.75;">' + currentTz + '</span><br>';
-                dText += '<i class="material-icons" style="font-size:1rem;vertical-align:text-bottom;">schedule</i> ' + (isJa ? '現地時間' : 'Local time') + ': ' + curInfo.time;
-                detailEl.innerHTML = dText;
-            }
-        }
+    badge.textContent =
+        info.city + ' [' + info.utcOffset + ']';
 
-        setInterval(updateCountdown, 10);
-        setInterval(updateNowTime, 1000);
+    const detail = document.getElementById('tzCurrentDetail');
+
+    detail.textContent =
+        '${t.selected}: ' + info.city + ' / ' +
+        info.name + ' (' + info.utcOffset + ') / ' +
+        currentTz + ' / ${t.localTime}: ' + info.time;
+}
+
+// 描画ループ
+function animationLoop() {
+    const now = getNow();
+    const milliseconds = now.getMilliseconds();
+
+    // ミリ秒は100ms単位で更新
+    const tick = Math.floor(milliseconds / 100);
+
+    if (tick !== lastSecond) {
+        lastSecond = tick;
         updateCountdown();
-        updateNowTime();
-        syncTime();
-        setInterval(syncTime, 30 * 60 * 1000);
-    </script>
+    }
+}
+
+function clockLoop() {
+    updateNowTime();
+}
+
+updateCountdown();
+updateNowTime();
+
+setInterval(animationLoop, 50);
+setInterval(clockLoop, 1000);
+
+// 初回同期・30分ごとの再同期
+syncTime();
+setInterval(syncTime, 30 * 60 * 1000);
+</script>
+
 </body>
 </html>`;
 
     return new Response(html, {
         headers: {
-            "content-type": "text/html;charset=UTF-8",
-        },
+            'Content-Type': 'text/html; charset=UTF-8',
+            'Cache-Control': 'no-store',
+            'X-Content-Type-Options': 'nosniff',
+            'Referrer-Policy': 'strict-origin-when-cross-origin'
+        }
     });
 }
