@@ -1301,7 +1301,7 @@ export async function onRequest(context) {
         sel.appendChild(utcGroup);
 
         const tzList = zones
-            .filter(z => z !== 'UTC' && z !== 'Asia/Tokyo')
+            .filter(z => z !== 'UTC')
             .map(z => getTimeZoneInfo(z, now));
 
         tzList.sort((a, b) => {
@@ -1326,10 +1326,15 @@ export async function onRequest(context) {
             sel.appendChild(opt);
         });
 
-        if (currentTz !== 'UTC' && !zones.includes(currentTz)) {
+        if (
+            currentTz !== 'UTC' &&
+            currentTz !== 'Asia/Tokyo' &&
+            !zones.includes(currentTz)
+        ) {
             const opt = document.createElement('option');
             opt.value = currentTz;
-            opt.textContent = currentTz;
+            const currentInfo = getTimeZoneInfo(currentTz, now);
+            opt.textContent = currentInfo.city + ' - ' + currentInfo.utcOffset;
             opt.selected = true;
             sel.insertBefore(opt, sel.firstChild);
         }
